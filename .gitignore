@@ -1,6 +1,13 @@
-# Original proprietary application and installation media: never commit.
+# 原始软件和安装介质永远不应提交。
 pt/
 pt_install/
 
-# Local emulator configuration, captures, and reverse-engineering scratch data.
+# 本地模拟器配置、截图与逆向分析临时数据。
 .local-analysis/
+
+# 本地构建、部署目录与个人 CMake 配置。
+/build*/
+/out/
+/dist/
+CMakeUserPresets.json
+*.user

@@ -50,13 +50,15 @@ ninja --version
 & .\scripts\Enter-QtEnv.ps1 -QtPrefix 'D:\Qt\6.12.0\msvc2022_64'
 ```
 
-正式项目建立后，构建方式统一使用 CMake；下面命令需要项目已有根 `CMakeLists.txt`，不能把尚未建立的工程当作已经存在：
+正式项目已建立根 `CMakeLists.txt` 与 Debug/Release 预设。推荐构建及测试方式：
 
 ```powershell
-cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
-ctest --test-dir build --output-on-failure
+cmake --preset debug
+cmake --build --preset debug
+ctest --preset debug
 ```
+
+包含中文的 Windows PowerShell 5.1 脚本使用 UTF-8 BOM 保存，避免系统默认代码页导致语法错误；`Enter-QtEnv.ps1` 已在当前 PowerShell 5.1 环境验证。
 
 ## 已完成的验证
 
