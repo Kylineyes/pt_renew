@@ -1,0 +1,6 @@
+# Original proprietary application and installation media: never commit.
+pt/
+pt_install/
+
+# Local emulator configuration, captures, and reverse-engineering scratch data.
+.local-analysis/
