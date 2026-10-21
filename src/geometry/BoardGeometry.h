@@ -19,6 +19,8 @@ QRectF primitiveBounds(const BoardDocument& board, PrimitiveId id);
 int primitiveLayer(const BoardDocument& board, PrimitiveId id);
 PrimitiveSource primitiveSource(const BoardDocument& board, PrimitiveId id);
 QString primitiveDescription(const BoardDocument& board, PrimitiveId id);
+QRectF componentBounds(const BoardDocument& board, qsizetype index);
+QString componentDescription(const BoardDocument& board, qsizetype index);
 
 // 缓存包围盒粗筛，候选再做轮廓精测，不按包围盒直接选中圆弧内部空白。
 class BoardHitTester {

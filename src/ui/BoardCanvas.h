@@ -1,6 +1,7 @@
 #pragma once
 
 #include "geometry/BoardGeometry.h"
+#include "domain/Measurement.h"
 #include <QPointF>
 #include <QSet>
 #include <QWidget>
@@ -29,11 +30,20 @@ public:
     qsizetype overlapPosition() const { return m_hitPosition; }
     void clearSelection();
     void selectNextOverlap();
+    bool focusComponent(qsizetype index);
+    std::optional<qsizetype> focusedComponent() const { return m_focusedComponent; }
+    void centerOn(const QPointF& position);
+    void setMeasurementMode(bool enabled);
+    bool measurementMode() const { return m_measurementMode; }
+    std::optional<Measurement> measurement() const { return m_measurement; }
+    std::optional<QPointF> measurementStart() const { return m_measurementStart; }
+    void clearMeasurement();
 
 signals:
     void legacyMenuRequested(const QString& key);
     void viewChanged();
     void selectionChanged();
+    void measurementChanged();
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -60,6 +70,11 @@ private:
     QList<PrimitiveId> m_hits;
     qsizetype m_hitPosition = -1;
     std::optional<QPointF> m_lastPickScreen;
+    std::optional<qsizetype> m_focusedComponent;
+    QRectF m_componentBox;
+    bool m_measurementMode=false;
+    std::optional<QPointF> m_measurementStart;
+    std::optional<Measurement> m_measurement;
 };
 
 }

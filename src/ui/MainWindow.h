@@ -13,6 +13,7 @@ class QPlainTextEdit;
 namespace pt {
 
 class BoardCanvas;
+class ComponentBrowser;
 
 class MainWindow final : public QMainWindow {
     Q_OBJECT
@@ -33,11 +34,15 @@ private:
     void clearFileInfo();
     void updateViewStatus();
     void updateSelectionInfo();
+    void updateMeasurementInfo();
     BoardCanvas* m_canvas = nullptr;
     QDockWidget* m_infoDock = nullptr;
     QPlainTextEdit* m_infoText = nullptr;
     QDockWidget* m_selectionDock = nullptr;
     QPlainTextEdit* m_selectionText = nullptr;
+    ComponentBrowser* m_componentBrowser=nullptr;
+    QDockWidget* m_measureDock=nullptr;
+    QPlainTextEdit* m_measureText=nullptr;
     QLabel* m_viewStatus = nullptr;
     QHash<QString, QAction*> m_actions;
     QHash<QString, QMenu*> m_menus;

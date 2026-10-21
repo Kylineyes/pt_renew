@@ -22,8 +22,12 @@ BoardCanvas::BoardCanvas(QWidget* parent) : QWidget(parent) {
 
 void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
     m_document = std::move(document);
+    m_panning=false;
     m_hitTester.setDocument(m_document);
     clearSelection();
+    m_measurementMode=false;
+    setCursor(Qt::ArrowCursor);
+    clearMeasurement();
     m_boardBounds = m_document ? m_document->bounds() : QRectF();
     resetView();
 }
@@ -60,6 +64,7 @@ QPointF BoardCanvas::screenToBoard(const QPointF& point) const {
 
 void BoardCanvas::clearSelection() {
     m_selection.reset(); m_hits.clear(); m_hitPosition=-1; m_lastPickScreen.reset();
+    m_focusedComponent.reset(); m_componentBox={};
     update();
     emit selectionChanged();
 }
@@ -69,6 +74,42 @@ void BoardCanvas::selectNextOverlap() {
     m_hitPosition=(m_hitPosition+1)%m_hits.size();
     m_selection=m_hits[m_hitPosition];
     update(); emit selectionChanged();
+}
+
+void BoardCanvas::centerOn(const QPointF& position) {
+    if (!std::isfinite(position.x()) || !std::isfinite(position.y())) return;
+    const auto center=m_document?m_boardBounds.center():QPointF();
+    const qreal scale=baseScale()*m_zoom;
+    m_pan=QPointF((center.x()-position.x())*scale,(position.y()-center.y())*scale);
+    m_lastPickScreen.reset();
+    update(); emit viewChanged();
+}
+
+bool BoardCanvas::focusComponent(qsizetype index) {
+    if (!m_document || index<0 || index>=m_document->components.size()) return false;
+    setMeasurementMode(false);
+    clearSelection();
+    m_componentBox=componentBounds(*m_document,index);
+    m_focusedComponent=index;
+    const qreal fit=qMin(qMax(1,width()-100)/qMax(1.0,m_componentBox.width()),
+                        qMax(1,height()-100)/qMax(1.0,m_componentBox.height()));
+    m_zoom=std::clamp(fit/baseScale(),0.125,16.0);
+    centerOn(m_componentBox.center());
+    emit selectionChanged();
+    return true;
+}
+
+void BoardCanvas::setMeasurementMode(bool enabled) {
+    m_measurementMode=enabled && m_document!=nullptr;
+    m_measurementStart.reset();
+    if (m_measurementMode) clearSelection();
+    setCursor(m_measurementMode?Qt::CrossCursor:Qt::ArrowCursor);
+    update(); emit measurementChanged();
+}
+
+void BoardCanvas::clearMeasurement() {
+    m_measurementStart.reset(); m_measurement.reset();
+    update(); emit measurementChanged();
 }
 
 void BoardCanvas::resizeEvent(QResizeEvent* event) {
@@ -138,7 +179,26 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
             painter.setPen(pen);
             painter.drawPath(primitiveOutline(*m_document,*m_selection));
         }
+        if (m_focusedComponent) {
+            QPen pen(QColor(250,250,250)); pen.setCosmetic(true); pen.setWidthF(2); pen.setStyle(Qt::DashLine);
+            painter.setPen(pen); painter.setBrush(Qt::NoBrush); painter.drawRect(m_componentBox);
+        }
         painter.restore();
+        // 测量覆盖层在屏幕坐标中绘制，线宽和端点标记不随缩放增粗。
+        if (m_measurement) {
+            painter.setPen(QPen(QColor(120,235,215),2,Qt::DashLine));
+            const QPointF a=boardToScreen(m_measurement->start), b=boardToScreen(m_measurement->end);
+            painter.drawLine(a,b);
+            for (const auto& p : {a,b}) {
+                painter.drawLine(p-QPointF(5,0),p+QPointF(5,0));
+                painter.drawLine(p-QPointF(0,5),p+QPointF(0,5));
+            }
+        }
+        if (m_measurementStart) {
+            painter.setPen(QPen(QColor(120,235,215),2));
+            const auto p=boardToScreen(*m_measurementStart);
+            painter.drawEllipse(p,5,5);
+        }
         painter.setPen(QColor(214,220,229));
         painter.fillRect(QRect(8, 6, width()-16, 28), QColor(26,30,35,230));
         painter.drawText(QRect(16,6,width()-32,28), Qt::AlignVCenter,
@@ -149,12 +209,15 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第三阶段：只读选择与属性查看\n"
-                       "Ctrl+O 打开板图；单击图元查看属性，尚不支持编辑或保存。\n"
+        QStringLiteral("第四阶段：只读检索与测量\n"
+                       "Ctrl+O 打开板图；Ctrl+F 检索元件，画布内 Ctrl+M 两点测量。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
 
 void BoardCanvas::keyPressEvent(QKeyEvent* event) {
+    if (m_measurementMode && event->key()==Qt::Key_Escape && event->modifiers()==Qt::NoModifier) {
+        setMeasurementMode(false); event->accept(); return;
+    }
     // 兼容字母只在画布焦点内生效，不截获文件名或属性编辑框输入。
     if (event->modifiers() == Qt::NoModifier) {
         if (event->key() == Qt::Key_PageUp) { zoomIn(); event->accept(); return; }
@@ -182,6 +245,17 @@ void BoardCanvas::wheelEvent(QWheelEvent* event) {
 void BoardCanvas::mousePressEvent(QMouseEvent* event) {
     setFocus(Qt::MouseFocusReason);
     if (event->button()==Qt::LeftButton && m_document) {
+        if (m_measurementMode) {
+            const auto position=screenToBoard(event->position());
+            if (m_measurementStart) {
+                m_measurement=Measurement{*m_measurementStart,position};
+                m_measurementStart.reset();
+            } else {
+                m_measurement.reset(); m_measurementStart=position;
+            }
+            update(); emit measurementChanged(); event->accept(); return;
+        }
+        m_focusedComponent.reset(); m_componentBox={};
         const auto hits=m_hitTester.hitTest(screenToBoard(event->position()),6.0/(baseScale()*m_zoom),m_visibleLayers);
         const bool samePlace=m_lastPickScreen && (event->position()-*m_lastPickScreen).manhattanLength()<=4;
         const bool cycle=samePlace && hits==m_hits && !hits.isEmpty() && m_hitPosition>=0;
@@ -219,7 +293,7 @@ void BoardCanvas::mouseMoveEvent(QMouseEvent* event) {
 void BoardCanvas::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::MiddleButton && m_panning) {
         m_panning = false;
-        unsetCursor();
+        setCursor(m_measurementMode?Qt::CrossCursor:Qt::ArrowCursor);
         event->accept();
         return;
     }
