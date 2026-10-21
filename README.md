@@ -2,7 +2,7 @@
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
-当前为第五阶段：支持 PCB **只读预览、图元选择与属性查看、元件检索定位、两点自由取点测量**，以及 **LIB 封装库的独立只读浏览**。**尚未实现封装放置、编辑、保存、DRC、布线或生产输出。** 文字与部分轮廓为近似显示，测量未吸附端点，不能用于制造。
+当前为第六阶段（0.6.0）：支持 PCB **只读预览、图元属性、元件定位、两点测量**，以及 **LIB 独立浏览、NET/NETDEF 读取与网表引脚映射**。**尚未实现铜线实际连通/短路检查、封装放置、编辑保存、DRC、自动布线或生产输出。** 字体、部分轮廓和测量仍有近似限制，不可用于制造验收。
 
 ## 开发环境
 
@@ -64,6 +64,28 @@ ctest --preset debug
 & .\build\release\pt-library-check.exe 'D:\库\示例.LIB'
 ```
 
+## 网表与引脚映射（不是铜线连通检查）
+
+- **Ctrl+Shift+N** 或“网络 → 只读载入外部 NET”（画布 N→G）。
+- **Ctrl+Alt+N** 或“网络 → 网络与引脚映射”（画布 N→N）打开面板并聚焦筛选。
+- 选中网络可高亮唯一匹配且无冲突的焊盘；激活节点（如按 Enter）定位到焊盘。
+- 内嵌 NETDEF 与外部 NET 使用来源下拉框切换，**不自动合并**；更换/关闭板图会清除外部网表及高亮。
+- 重复网络名/元件声明、缺失/歧义/跨网冲突会明确报告，不自动猜测或替换封装。
+
+```powershell
+& .\dist\pt-renew.exe 'D:\project\pt_renew\pt\PLACED.PCB' --netlist 'D:\project\pt_renew\pt\DEMO.NET'
+```
+
+当前样例的 36 个声明元件、88 个网络、370 个节点均能唯一映射到焊盘，**不代表这些焊盘之间的铜线已经连通**。本地没有原始 NETDEF 样例，该部分仅由公开结构描述和合成测试验证；元数据保留但未解释。详细语法、EOF 兼容、限制见 [网表兼容说明](docs/netlist-compatibility.md)。
+
+命令行只读诊断（先运行 `Enter-QtEnv.ps1`）：
+
+```powershell
+& .\build\release\pt-netlist-check.exe 'D:\project\pt_renew\pt\DEMO.NET' 'D:\project\pt_renew\pt\PLACED.PCB'
+```
+
+退出码 0 不等于 DRC 通过；必须结合 `board_loaded` 和完整诊断信息判断。工具不会修改输入。
+
 ## 发布目录
 
 在已启用 Qt 开发环境的终端运行：
@@ -88,5 +110,6 @@ windeployqt --release --compiler-runtime --no-translations dist/pt-renew.exe
 - [选择与属性查看](docs/selection-inspector.md)：第三阶段命中规则、重叠切换、属性来源和操作验证。
 - [元件检索与测量](docs/navigation-measure.md)：第四阶段筛选定位、自由取点、快捷键与近似读数限制。
 - [LIB 分析与浏览](docs/library-analysis.md)：第五阶段二进制目录/图元布局、只读窗口、结构诊断及未验证语义。
+- [网表兼容说明](docs/netlist-compatibility.md)：第六阶段 NET/NETDEF、引脚映射、差异/冲突检查与真实验证。
 
 `pt/`、`pt_install/` 和 `.local-analysis/` 永远不应提交。原软件及用户文件不属于本项目自行授权分发的内容。测试使用合成小样例，不提交原软件数据或反编译数据库。

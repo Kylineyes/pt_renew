@@ -9,6 +9,7 @@
 #include "ui/BoardCanvas.h"
 #include "ui/ComponentBrowser.h"
 #include "ui/LibraryBrowser.h"
+#include "ui/NetlistBrowser.h"
 #include <QFutureWatcher>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QAction>
@@ -65,6 +66,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     addDockWidget(Qt::LeftDockWidgetArea,m_componentBrowser);
     tabifyDockWidget(layerDock,m_componentBrowser);
     layerDock->raise();
+    m_netlistBrowser=new NetlistBrowser(this);
+    addDockWidget(Qt::LeftDockWidgetArea,m_netlistBrowser);
+    tabifyDockWidget(m_componentBrowser,m_netlistBrowser);layerDock->raise();
+    connect(m_netlistBrowser,&NetlistBrowser::padsHighlighted,m_canvas,&BoardCanvas::setNetPads);
+    connect(m_netlistBrowser,&NetlistBrowser::padActivated,this,[this](qsizetype index) {
+        if (m_canvas->focusPad(index)) m_canvas->setFocus(Qt::ShortcutFocusReason);
+    });
     m_measureDock=new QDockWidget(QStringLiteral("两点测量（只读）"),this);
     m_measureDock->setObjectName(QStringLiteral("measureDock"));
     m_measureText=new QPlainTextEdit(m_measureDock);
@@ -165,6 +173,14 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("info.file")) {
         m_infoDock->show();
         m_infoDock->raise();
+    } else if (id==QStringLiteral("netlist.load")) {
+        m_netlistBrowser->show();m_netlistBrowser->raise();m_netlistBrowser->chooseFile();
+    } else if (id==QStringLiteral("netlist.browse")) {
+        m_netlistBrowser->focusSearch();
+    } else if (id==QStringLiteral("netlist.clear")) {
+        m_netlistBrowser->clearExternal();
+    } else if (id==QStringLiteral("highlight.reset")) {
+        m_netlistBrowser->clearHighlight();
     } else if (id==QStringLiteral("library.file")) {
         m_libraryBrowser->chooseFile();
     } else if (id==QStringLiteral("library.browse")) {
@@ -192,10 +208,14 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("app.about")) {
         QMessageBox::information(this, QStringLiteral("关于当前阶段"),
             QStringLiteral("C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
-                           "当前支持板图只读预览、选择、元件定位、近似测量和独立 LIB 浏览。\n"
+                           "当前支持板图、LIB 与网表只读查看、引脚映射、选择、定位和近似测量。\n"
                            "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。"));
     }
     statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
+}
+
+void MainWindow::openNetlist(const QString& path) {
+    m_netlistBrowser->show();m_netlistBrowser->raise();m_netlistBrowser->requestFile(path);
 }
 
 void MainWindow::openLibrary(const QString& path) {
@@ -241,6 +261,7 @@ bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& p
     const auto& board = *result.document;
     m_canvas->setDocument(result.document);
     m_componentBrowser->setDocument(result.document);
+    m_netlistBrowser->setBoard(result.document);
     m_actions.value(QStringLiteral("jump.component"))->setEnabled(!board.components.isEmpty());
     m_actions.value(QStringLiteral("info.components"))->setEnabled(true);
     m_actions.value(QStringLiteral("jump.origin"))->setEnabled(true);
@@ -269,11 +290,12 @@ void MainWindow::clearFileInfo() {
     ++m_loadGeneration;
     m_canvas->setDocument(nullptr);
     m_componentBrowser->setDocument(nullptr);
+    m_netlistBrowser->setBoard(nullptr);
     for (const auto& id : {"jump.component","info.components","jump.origin"}) m_actions.value(QString::fromLatin1(id))->setEnabled(false);
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第五阶段支持独立 LIB 只读浏览、检索与测量，不支持编辑或保存。"));
+        "第六阶段支持 NET/NETDEF 只读映射，不支持铜线连通检查、编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
 }

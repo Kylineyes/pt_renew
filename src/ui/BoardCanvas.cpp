@@ -22,6 +22,7 @@ BoardCanvas::BoardCanvas(QWidget* parent) : QWidget(parent) {
 
 void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
     m_document = std::move(document);
+    m_netPads.clear();
     m_panning=false;
     m_hitTester.setDocument(m_document);
     clearSelection();
@@ -30,6 +31,21 @@ void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
     clearMeasurement();
     m_boardBounds = m_document ? m_document->bounds() : QRectF();
     resetView();
+}
+
+void BoardCanvas::setNetPads(const QList<qsizetype>& pads) {
+    m_netPads.clear();QSet<qsizetype> seen;
+    if (m_document) for (const auto index:pads) if (index>=0 && index<m_document->pads.size() && !seen.contains(index)) {
+        seen.insert(index);m_netPads.append(index);
+    }
+    update();
+}
+
+bool BoardCanvas::focusPad(qsizetype index) {
+    if (!m_document || index<0 || index>=m_document->pads.size()) return false;
+    setMeasurementMode(false);clearSelection();
+    centerOn(m_document->pads[index].center);
+    m_selection=PrimitiveId{PrimitiveKind::Pad,index};update();emit selectionChanged();return true;
 }
 
 void BoardCanvas::setLayerVisible(int layer, bool visible) {
@@ -113,6 +129,11 @@ void BoardCanvas::clearMeasurement() {
 }
 
 void BoardCanvas::resizeEvent(QResizeEvent* event) {
+    if (m_document && event->oldSize().isValid()) {
+        const qreal previous=qMin(qMax(1,event->oldSize().width()-80)/qMax(1.0,m_boardBounds.width()),
+                                  qMax(1,event->oldSize().height()-100)/qMax(1.0,m_boardBounds.height()));
+        if (previous>0) m_pan*=baseScale()/previous;
+    }
     QWidget::resizeEvent(event);
     update();
 }
@@ -173,7 +194,12 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
         painter.scale(scale, -scale);
         painter.translate(-m_boardBounds.center());
         drawBoard(painter, *m_document, m_visibleLayers);
-        if (m_selection) {
+        if (!m_netPads.isEmpty()) {
+            QPen netPen(QColor(100,240,220));netPen.setCosmetic(true);netPen.setWidthF(2);
+            painter.setPen(netPen);painter.setBrush(Qt::NoBrush);
+            for (const auto index:m_netPads) if (m_visibleLayers.contains(m_document->pads[index].layer)) painter.drawPath(padOutline(m_document->pads[index]));
+        }
+        if (m_selection && m_visibleLayers.contains(primitiveLayer(*m_document,*m_selection))) {
             painter.setBrush(Qt::NoBrush);
             QPen pen(QColor(250,250,250)); pen.setWidthF(2); pen.setCosmetic(true); pen.setStyle(Qt::DashLine);
             painter.setPen(pen);
@@ -209,8 +235,8 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第五阶段：板图与封装库只读查看\n"
-                       "Ctrl+O 板图，Ctrl+L 封装库；Ctrl+F 元件定位，画布内 Ctrl+M 测量。\n"
+        QStringLiteral("第六阶段：板图、库和网表只读兼容\n"
+                       "Ctrl+O 板图，Ctrl+L 封装库；网络菜单载入 NET，仅映射引脚，不检查铜线连通。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
 

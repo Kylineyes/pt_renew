@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.5.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.6.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,6 +21,12 @@ add_library(pt_core STATIC
     src/domain/BoardDocument.cpp
     src/io/LegacyPcbReader.h
     src/io/LegacyPcbReader.cpp
+    src/io/DosText.h
+    src/domain/Netlist.h
+    src/io/LegacyNetlistReader.h
+    src/io/LegacyNetlistReader.cpp
+    src/application/NetlistMapping.h
+    src/application/NetlistMapping.cpp
     src/domain/FootprintLibrary.h
     src/io/LegacyLibraryReader.h
     src/io/LegacyLibraryReader.cpp
@@ -45,6 +51,8 @@ add_library(pt_ui STATIC
     src/ui/MainWindow.h
     src/ui/ComponentBrowser.h
     src/ui/ComponentBrowser.cpp
+    src/ui/NetlistBrowser.h
+    src/ui/NetlistBrowser.cpp
     src/ui/LibraryBrowser.h
     src/ui/LibraryBrowser.cpp
 )
@@ -57,7 +65,11 @@ add_executable(pt-library-check tools/InspectLibrary.cpp)
 set_target_properties(pt-library-check PROPERTIES WIN32_EXECUTABLE FALSE)
 target_link_libraries(pt-library-check PRIVATE pt_core)
 
-foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check)
+add_executable(pt-netlist-check tools/InspectNetlist.cpp)
+set_target_properties(pt-netlist-check PROPERTIES WIN32_EXECUTABLE FALSE)
+target_link_libraries(pt-netlist-check PRIVATE pt_core)
+
+foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check pt-netlist-check)
     if(MSVC)
         target_compile_options(${target} PRIVATE /utf-8 /W4 /permissive-)
     else()
@@ -108,6 +120,15 @@ if(BUILD_TESTING)
     endif()
     add_test(NAME pt-library-tests COMMAND pt-library-tests -o -,txt -o library-test-results.txt,txt)
     set_tests_properties(pt-library-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-netlist-tests tests/NetlistTests.cpp)
+    set_target_properties(pt-netlist-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-netlist-tests PRIVATE pt_ui Qt6::Test)
+    add_dependencies(pt-netlist-tests pt-netlist-check)
+    if(MSVC)
+        target_compile_options(pt-netlist-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-netlist-tests COMMAND pt-netlist-tests -o -,txt -o netlist-test-results.txt,txt)
+    set_tests_properties(pt-netlist-tests PROPERTIES TIMEOUT 60)
 endif()
 
 install(TARGETS pt-renew RUNTIME DESTINATION .)

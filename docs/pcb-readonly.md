@@ -2,7 +2,7 @@
 
 日期：2026-10-21。开发分支：`feat/pcb-readonly-view`。
 
-> 本文记录第二阶段。第三阶段已加入只读选择、来源信息和属性面板；显示/命中共用几何函数，详见 [选择与属性查看](selection-inspector.md)。
+> 本文记录第二阶段。第三阶段已加入只读选择、来源信息和属性面板；显示/命中共用几何函数，详见 [选择与属性查看](selection-inspector.md)。第六阶段又扩展了尾部 DOS EOF 和受限 NETDEF 支持，见 [网表兼容说明](netlist-compatibility.md)；下文的旧阶段限制不作为最新覆盖范围。
 
 ## 实现范围
 
