@@ -201,10 +201,12 @@ QString primitiveDescription(const BoardDocument& board, PrimitiveId id) {
     text+=QStringLiteral("\n图层编号：%1\n本图元序号：%2\n").arg(primitiveLayer(board,id)).arg(id.index+1);
     const auto source=primitiveSource(board,id);
     if (source.line>0) text+=QStringLiteral("源文件行：%1\n").arg(source.line);
+    if (source.byteOffset>=0) text+=QStringLiteral("源文件字节偏移：0x%1\n").arg(source.byteOffset,0,16);
     if (source.component>=0 && source.component<board.components.size()) {
         const auto& c=board.components[source.component];
         text+=QStringLiteral("\n所属元件：%1\n封装：%2\n注释：%3\n元件原点\n%4\n").arg(c.designator,c.footprint,c.comment,point(c.origin));
-    } else text+=QStringLiteral("\n所属：自由图元\n");
+    } else if (!board.sourceContext.isEmpty()) text+=QStringLiteral("\n来源：%1\n").arg(board.sourceContext);
+    else text+=QStringLiteral("\n所属：自由图元\n");
     return text+QStringLiteral("\n全部属性仅供查看，不可编辑；未建立网络连通性或生产校验。");
 }
 

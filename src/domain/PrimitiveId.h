@@ -17,6 +17,7 @@ struct PrimitiveId {
 struct PrimitiveSource {
     qsizetype line = 0;
     qsizetype component = -1;
+    qint64 byteOffset = -1;
 };
 
 }

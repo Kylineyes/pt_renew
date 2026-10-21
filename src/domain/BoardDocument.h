@@ -44,6 +44,7 @@ struct Component {
 
 struct BoardDocument {
     QString filePath, sha256;
+    QString sourceContext;
     qint64 byteSize = 0;
     QList<Track> tracks;
     QList<Pad> pads;

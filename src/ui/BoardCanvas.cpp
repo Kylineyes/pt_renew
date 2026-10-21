@@ -209,8 +209,8 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第四阶段：只读检索与测量\n"
-                       "Ctrl+O 打开板图；Ctrl+F 检索元件，画布内 Ctrl+M 两点测量。\n"
+        QStringLiteral("第五阶段：板图与封装库只读查看\n"
+                       "Ctrl+O 板图，Ctrl+L 封装库；Ctrl+F 元件定位，画布内 Ctrl+M 测量。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
 
