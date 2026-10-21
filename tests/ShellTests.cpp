@@ -199,7 +199,7 @@ private slots:
         QCOMPARE(canvas->zoom(), 16.0);
     }
 
-    void fileInfoDoesNotPretendToRenderABoard() {
+    void readOnlyBoardKeepsEditingDisabled() {
         QTemporaryDir temporary;
         const QString path = temporary.filePath(QStringLiteral("sample.pcb"));
         QFile file(path);
@@ -209,7 +209,7 @@ private slots:
         pt::MainWindow window;
         QVERIFY(window.inspectFile(path));
         auto* text = window.findChild<QPlainTextEdit*>(QStringLiteral("fileInfoText"));
-        QVERIFY(text->toPlainText().contains(QStringLiteral("尚未解析或显示图元")));
+        QVERIFY(text->toPlainText().contains(QStringLiteral("只读预览")));
         QVERIFY(window.findChild<QAction*>(QStringLiteral("file.close"))->isEnabled());
         QVERIFY(!window.findChild<QAction*>(QStringLiteral("file.save"))->isEnabled());
         window.findChild<QAction*>(QStringLiteral("file.close"))->trigger();

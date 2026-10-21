@@ -1,6 +1,8 @@
 #include "ui/BoardCanvas.h"
 
 #include "application/CommandCatalog.h"
+#include "ui/BoardRenderer.h"
+#include <QResizeEvent>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QPainter>
@@ -15,6 +17,35 @@ BoardCanvas::BoardCanvas(QWidget* parent) : QWidget(parent) {
     setFocusPolicy(Qt::StrongFocus);
     setMinimumSize(360, 280);
     setAccessibleName(QStringLiteral("板图工作区"));
+    for (int layer = 1; layer <= 13; ++layer) m_visibleLayers.insert(layer);
+}
+
+void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
+    m_document = std::move(document);
+    m_boardBounds = m_document ? m_document->bounds() : QRectF();
+    resetView();
+}
+
+void BoardCanvas::setLayerVisible(int layer, bool visible) {
+    if (visible) m_visibleLayers.insert(layer); else m_visibleLayers.remove(layer);
+    update();
+}
+
+qreal BoardCanvas::baseScale() const {
+    if (!m_document) return 1.0;
+    return qMin(qMax(1, width()-80) / qMax(1.0, m_boardBounds.width()),
+                qMax(1, height()-100) / qMax(1.0, m_boardBounds.height()));
+}
+
+QPointF BoardCanvas::boardToScreen(const QPointF& point) const {
+    const QPointF delta = point - (m_document ? m_boardBounds.center() : QPointF());
+    const qreal scale = baseScale() * m_zoom;
+    return QPointF(rect().center()) + m_pan + QPointF(delta.x()*scale, -delta.y()*scale);
+}
+
+void BoardCanvas::resizeEvent(QResizeEvent* event) {
+    QWidget::resizeEvent(event);
+    update();
 }
 
 void BoardCanvas::setGridVisible(bool visible) {
@@ -52,11 +83,13 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(rect(), QColor(26, 30, 35));
     const QPointF origin = QPointF(rect().center()) + m_pan;
     if (m_gridVisible) {
-        qreal spacing = 24.0 * m_zoom;
+        qreal spacing = (m_document ? 100.0 * baseScale() : 24.0) * m_zoom;
         while (spacing < 8.0) spacing *= 2.0;
+        while (spacing > 64.0) spacing /= 2.0;
+        const QPointF gridOrigin = m_document ? boardToScreen(QPointF()) : origin;
         painter.setPen(QColor(65, 72, 81));
-        for (qreal x = std::fmod(origin.x(), spacing); x < width(); x += spacing) {
-            for (qreal y = std::fmod(origin.y(), spacing); y < height(); y += spacing) {
+        for (qreal x = std::fmod(gridOrigin.x(), spacing); x < width(); x += spacing) {
+            for (qreal y = std::fmod(gridOrigin.y(), spacing); y < height(); y += spacing) {
                 painter.drawPoint(QPointF(x, y));
             }
         }
@@ -64,12 +97,26 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.setPen(QColor(163, 173, 185));
     painter.drawLine(origin + QPointF(-12, 0), origin + QPointF(12, 0));
     painter.drawLine(origin + QPointF(0, -12), origin + QPointF(0, 12));
+    if (m_document) {
+        painter.save();
+        painter.translate(QPointF(rect().center()) + m_pan);
+        const qreal scale = baseScale() * m_zoom;
+        painter.scale(scale, -scale);
+        painter.translate(-m_boardBounds.center());
+        drawBoard(painter, *m_document, m_visibleLayers);
+        painter.restore();
+        painter.setPen(QColor(214,220,229));
+        painter.fillRect(QRect(8, 6, width()-16, 28), QColor(26,30,35,230));
+        painter.drawText(QRect(16,6,width()-32,28), Qt::AlignVCenter,
+            QStringLiteral("只读预览 · %1 个图元 · 文字与部分焊盘轮廓为近似显示 · 不可用于生产输出").arg(m_document->primitiveCount()));
+        return;
+    }
     const QRect banner(20, 20, std::max(100, width() - 40), 100);
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第一阶段：命令与视图骨架\n"
-                       "文件打开目前仅显示格式信息，尚未解析或绘制板图图元。\n"
+        QStringLiteral("第二阶段：PCB 只读预览\n"
+                       "Ctrl+O 打开板图；支持基本图元与元件，尚不支持编辑或保存。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
 
