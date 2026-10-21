@@ -208,6 +208,33 @@ QString primitiveDescription(const BoardDocument& board, PrimitiveId id) {
     return text+QStringLiteral("\n全部属性仅供查看，不可编辑；未建立网络连通性或生产校验。");
 }
 
+QRectF componentBounds(const BoardDocument& board, qsizetype index) {
+    if (index<0 || index>=board.components.size()) return {};
+    QRectF bounds;
+    auto include=[&](PrimitiveKind kind, qsizetype count) {
+        for (qsizetype i=0;i<count;++i) {
+            const PrimitiveId id{kind,i};
+            if (primitiveSource(board,id).component!=index) continue;
+            const auto box=primitiveBounds(board,id);
+            if (!box.isEmpty()) bounds=bounds.isEmpty()?box:bounds.united(box);
+        }
+    };
+    include(PrimitiveKind::Track,board.tracks.size()); include(PrimitiveKind::Pad,board.pads.size());
+    include(PrimitiveKind::Via,board.vias.size()); include(PrimitiveKind::Arc,board.arcs.size());
+    include(PrimitiveKind::Fill,board.fills.size()); include(PrimitiveKind::Text,board.texts.size());
+    // 无可见文字或几何的元件仍能按已记录原点定位，不伪造封装尺寸。
+    return bounds.isEmpty()?centered(board.components[index].origin,1,1):bounds;
+}
+
+QString componentDescription(const BoardDocument& board, qsizetype index) {
+    if (index<0 || index>=board.components.size()) return QStringLiteral("尚未定位元件。");
+    const auto& c=board.components[index];
+    return QStringLiteral("类型：元件定位\n标号：%1\n封装：%2\n注释：%3\n元件原点\n%4\n放置属性：%5（原值）\n\n"
+        "仅定位视图，不移动元件。定位框包括标签，可能大于实际封装；隐藏图层不会自动开启。\n"
+        "没有图元的元件按原点定位，不能由此推断封装尺寸。\n\n全部属性只读。")
+        .arg(c.designator,c.footprint,c.comment,point(c.origin)).arg(c.placement);
+}
+
 void BoardHitTester::setDocument(std::shared_ptr<const BoardDocument> document) {
     m_document=std::move(document);
     m_items.clear();

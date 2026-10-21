@@ -51,11 +51,15 @@ const QList<MenuSpec>& commandCatalog() {
         {QStringLiteral("I"), QStringLiteral("信息(&I)"), {
             command("info.file", "板图信息面板(&S)", {}, true),
             command("info.selection", "图元属性面板(&P)", {"Ctrl+I"}, true),
-            command("info.board", "板图尺寸(&B)"), command("info.components", "元件信息(&C)"),
+            command("measure.toggle", "两点只读测量(&M)", {"Ctrl+M"}, true, true),
+            command("measure.clear", "清除测量(&R)", {}, true),
+            command("measure.info", "测量结果面板(&D)", {}, true),
+            command("info.board", "板图尺寸(&B)"), command("info.components", "元件列表(&C)", {}, true),
             command("app.about", "关于当前阶段(&A)", {}, true)}},
         {QStringLiteral("J"), QStringLiteral("跳转(&J)"), {
-            command("jump.component", "跳转到元件(&C)"), command("jump.net", "跳转到网络(&N)"),
-            command("jump.origin", "跳转到原点(&O)")}},
+            command("jump.component", "检索并定位元件(&C)", {"Ctrl+F"}, true),
+            command("jump.net", "跳转到网络(&N)"),
+            command("jump.origin", "跳转到原点(&O)", {"Ctrl+Home"}, true)}},
         {QStringLiteral("L"), QStringLiteral("封装库(&L)"), {
             command("library.browse", "浏览封装(&B)"), command("library.file", "选择封装库(&F)"),
             command("library.add", "添加封装(&A)"), command("library.merge", "合并封装库(&M)")}},
