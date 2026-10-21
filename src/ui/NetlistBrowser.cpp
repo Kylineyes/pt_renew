@@ -1,0 +1,135 @@
+#include "ui/NetlistBrowser.h"
+#include "io/LegacyNetlistReader.h"
+#include <QFileDialog>
+#include <QComboBox>
+#include <QFutureWatcher>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QPlainTextEdit>
+#include <QPushButton>
+#include <QSignalBlocker>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QSplitter>
+#include <QtConcurrent/QtConcurrentRun>
+
+namespace pt {
+NetlistBrowser::NetlistBrowser(QWidget* parent):QDockWidget(QStringLiteral("网表与引脚映射（只读）"),parent) {
+    setObjectName(QStringLiteral("netlistDock"));
+    auto* content=new QWidget(this);auto* layout=new QVBoxLayout(content);
+    auto* buttons=new QHBoxLayout;
+    m_open=new QPushButton(QStringLiteral("打开 NET…"),content);m_open->setObjectName(QStringLiteral("netlistOpen"));
+    m_clear=new QPushButton(QStringLiteral("移除外部网表"),content);m_clear->setObjectName(QStringLiteral("netlistClear"));
+    buttons->addWidget(m_open);buttons->addWidget(m_clear);layout->addLayout(buttons);
+    m_source=new QComboBox(content);m_source->setObjectName(QStringLiteral("netlistSource"));layout->addWidget(m_source);
+    m_status=new QLabel(content);m_status->setObjectName(QStringLiteral("netlistStatus"));m_status->setWordWrap(true);m_status->setTextFormat(Qt::PlainText);layout->addWidget(m_status);
+    m_search=new QLineEdit(content);m_search->setObjectName(QStringLiteral("netlistSearch"));m_search->setPlaceholderText(QStringLiteral("按网络名筛选"));m_search->setClearButtonEnabled(true);layout->addWidget(m_search);
+    auto* split=new QSplitter(Qt::Vertical,content);
+    m_nets=new QListWidget(split);m_nets->setObjectName(QStringLiteral("netlistNets"));
+    m_nodes=new QListWidget(split);m_nodes->setObjectName(QStringLiteral("netlistNodes"));
+    m_details=new QPlainTextEdit(split);m_details->setObjectName(QStringLiteral("netlistDetails"));m_details->setReadOnly(true);
+    split->setSizes({180,160,240});layout->addWidget(split,1);setWidget(content);
+    connect(m_open,&QPushButton::clicked,this,&NetlistBrowser::chooseFile);
+    connect(m_clear,&QPushButton::clicked,this,&NetlistBrowser::clearExternal);
+    connect(m_source,&QComboBox::currentIndexChanged,this,[this](int index) {
+        if (index>=0 && m_source->itemData(index).toInt()>=0) { m_useExternal=m_source->itemData(index).toInt()==1;rebuild(); }
+    });
+    connect(m_search,&QLineEdit::textChanged,this,&NetlistBrowser::filter);
+    connect(m_nets,&QListWidget::currentRowChanged,this,[this] { showCurrent(); });
+    connect(m_nodes,&QListWidget::itemActivated,this,[this](QListWidgetItem* item) {
+        const auto pad=item->data(Qt::UserRole).toLongLong();if (pad>=0) emit padActivated(pad);
+    });
+    rebuild();
+}
+void NetlistBrowser::setBoard(std::shared_ptr<const BoardDocument> board) {
+    ++m_generation;m_board=std::move(board);m_external.reset();m_error.clear();rebuild();
+}
+void NetlistBrowser::chooseFile() {
+    if (m_loading) return;
+    const auto path=QFileDialog::getOpenFileName(this,QStringLiteral("只读载入 Protel 网表"),{},QStringLiteral("Protel 网表 (*.net *.NET);;所有文件 (*)"));
+    if (!path.isEmpty()) requestFile(path);
+}
+void NetlistBrowser::requestFile(const QString& path) {
+    if (m_loading) return;
+    ++m_generation;const auto generation=m_generation;m_external.reset();m_error.clear();rebuild();
+    m_loading=true;m_open->setEnabled(false);m_clear->setEnabled(true);m_status->setText(QStringLiteral("正在后台读取网表；移除外部网表可放弃结果。"));
+    auto* watcher=new QFutureWatcher<NetlistReadResult>(this);
+    connect(watcher,&QFutureWatcher<NetlistReadResult>::finished,this,[this,watcher,generation] {
+        const auto result=watcher->result();watcher->deleteLater();m_loading=false;m_open->setEnabled(true);
+        if (generation==m_generation) apply(result); else rebuild();
+    });
+    watcher->setFuture(QtConcurrent::run([path] { return LegacyNetlistReader::readFile(path); }));
+}
+bool NetlistBrowser::loadFile(const QString& path) { if (m_loading) return false; ++m_generation;return apply(LegacyNetlistReader::readFile(path)); }
+bool NetlistBrowser::apply(const NetlistReadResult& result) {
+    m_external=result.netlist;m_useExternal=true;m_error=result.error;rebuild();emit netlistLoaded(result.succeeded());return result.succeeded();
+}
+void NetlistBrowser::clearExternal() { ++m_generation;m_external.reset();m_error.clear();rebuild(); }
+void NetlistBrowser::focusSearch() { show();raise();m_search->setFocus(Qt::ShortcutFocusReason);m_search->selectAll(); }
+void NetlistBrowser::clearHighlight() {
+    m_nets->setCurrentRow(-1);m_nodes->clear();emit padsHighlighted({});
+}
+void NetlistBrowser::rebuild() {
+    emit padsHighlighted({});
+    const auto internal=m_board?m_board->embeddedNetlist:nullptr;
+    if (!m_external) m_useExternal=false;
+    if (!internal && m_external) m_useExternal=true;
+    m_active=m_useExternal?m_external:internal;
+    {
+        QSignalBlocker block(m_source);m_source->clear();
+        if (internal) m_source->addItem(QStringLiteral("板内 NETDEF（不与外部自动合并）"),0);
+        if (m_external) m_source->addItem(QStringLiteral("外部 NET（不与板内自动合并）"),1);
+        if (m_source->count()==0) m_source->addItem(QStringLiteral("尚无网络来源"),-1);
+        m_source->setCurrentIndex(qMax(0,m_source->findData(m_useExternal?1:0)));
+    }
+    m_mapping=m_active?mapNetlist(*m_active,m_board.get()):NetlistMapping();
+    {QSignalBlocker block(m_nets);m_nets->clear();for (qsizetype i=0;i<m_mapping.nets.size();++i) {
+        const auto& net=m_mapping.nets[i];auto* item=new QListWidgetItem(QStringLiteral("%1（%2 显式节点）").arg(net.name).arg(net.nodes.size()),m_nets);item->setData(Qt::UserRole,i);
+    }}
+    m_clear->setEnabled(m_external!=nullptr || m_loading);
+    m_search->clear();filter();showCurrent();
+}
+void NetlistBrowser::filter() {
+    int count=0;QListWidgetItem* first=nullptr;
+    for (int i=0;i<m_nets->count();++i) {
+        auto* item=m_nets->item(i);const auto index=item->data(Qt::UserRole).toLongLong();
+        const bool match=m_mapping.nets[index].name.contains(m_search->text(),Qt::CaseInsensitive);
+        item->setHidden(!match);if (match) { ++count;if (!first) first=item; }
+    }
+    QString text;
+    if (m_active) text=QStringLiteral("%1：%2\n网络匹配 %3 / %4；唯一映射 %5，缺失 %6，歧义 %7，冲突节点 %8。\n仅引脚归属映射，不是铜线连通性检查。")
+        .arg(m_active->embedded?QStringLiteral("内嵌 NETDEF"):QStringLiteral("外部 NET"),m_active->filePath).arg(count).arg(m_mapping.nets.size())
+        .arg(m_mapping.resolved).arg(m_mapping.missing).arg(m_mapping.ambiguous).arg(m_mapping.conflicting);
+    else text=QStringLiteral("尚无网表。可打开外部 NET；载入含 NETDEF 的板图后自动查看内嵌网络。");
+    if (!m_board && m_active) text.prepend(QStringLiteral("未载入板图：仅查看声明，未执行焊盘映射。\n"));
+    if (!m_error.isEmpty()) text.prepend(QStringLiteral("载入失败：%1\n").arg(m_error));
+    m_status->setText(text);
+    if (!first) { m_nets->setCurrentRow(-1);showCurrent(); }
+    else if (!m_nets->currentItem() || m_nets->currentItem()->isHidden()) m_nets->setCurrentItem(first);
+}
+void NetlistBrowser::showCurrent() {
+    m_nodes->clear();emit padsHighlighted({});
+    QString details=QStringLiteral("只读引脚归属映射；未计算铜线实际连通、短路或 DRC。\n"
+        "网络名、元件标号和引脚名精确区分大小写匹配；不拆分含多个连字符的标识，冲突/歧义节点不自动高亮。\n");
+    if (m_active) {
+        details+=QStringLiteral("\n来源摘要：%1\n声明元件：%2\n").arg(m_active->sha256).arg(m_active->components.size());
+        for (const auto& warning:m_active->warnings) details+=warning+QLatin1Char('\n');
+        for (const auto& issue:m_mapping.diagnostics) details+=issue+QLatin1Char('\n');
+    }
+    auto* item=m_nets->currentItem();
+    if (m_active && item && !item->isHidden()) {
+        const auto index=item->data(Qt::UserRole).toLongLong();const auto& net=m_mapping.nets[index];
+        QString nodesText=QStringLiteral("网络：%1\n源行：%2\n\n").arg(net.name).arg(m_active->nets[index].sourceLine);
+        if (!m_active->nets[index].metadata.isEmpty()) nodesText+=QStringLiteral("附加元数据 %1 字节已保留但未解释。\n").arg(m_active->nets[index].metadata.size());
+        for (const auto& node:net.nodes) {
+            auto* row=new QListWidgetItem(node.token+QStringLiteral(" — ")+node.status,m_nodes);
+            row->setToolTip(QStringLiteral("源行 %1：%2").arg(node.sourceLine).arg(node.status));
+            row->setData(Qt::UserRole,node.pads.size()==1&&!node.ambiguous&&!node.conflicting?node.pads.first():qsizetype(-1));
+        }
+        nodesText+=QStringLiteral("激活唯一匹配节点可居中查看，隐藏图层不会自动开启；高亮只标识焊盘，不绘制代表实际布线的连线。\n\n");
+        details.prepend(nodesText);emit padsHighlighted(net.uniquePads);
+    }
+    m_details->setPlainText(details);
+}
+}

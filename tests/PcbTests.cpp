@@ -79,7 +79,7 @@ private slots:
 
     void rejectsMalformedRecords_data() {
         QTest::addColumn<QByteArray>("records");
-        QTest::newRow("unknown") << QByteArray("NETDEF\nGND\n");
+        QTest::newRow("unknown") << QByteArray("UNKNOWN\nGND\n");
         QTest::newRow("bad-number") << QByteArray("FT\n0 0 bad 10 1 1\n");
         QTest::newRow("bad-count") << QByteArray("FT\n0 0 10 10 1 1 9 10\n");
         QTest::newRow("integer-overflow") << QByteArray("FT\n99999999999999 0 10 10 1 1\n");

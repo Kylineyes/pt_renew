@@ -1,4 +1,6 @@
 #include "io/LegacyPcbReader.h"
+#include "io/LegacyNetlistReader.h"
+#include "io/DosText.h"
 #include <QCryptographicHash>
 #include <QFile>
 #include <QFileInfo>
@@ -32,6 +34,20 @@ public:
                     if (!line().trimmed().isEmpty()) fail(QStringLiteral("ENDPCB 后仍有数据。"));
                 }
                 break;
+            }
+            if (tag=="NETDEF") {
+                if (inComponent) fail(QStringLiteral("NETDEF 不能出现在元件内部。"));
+                const auto sectionStart=m_offset;
+                const auto result=LegacyNetlistReader::readEmbedded(m_bytes,m_offset,m_line);
+                if (!result.error.isEmpty()) throw ParseError{result.error};
+                m_offset=result.nextOffset; m_line=result.nextLine;
+                if (!m_netlist) { m_netlist=std::make_shared<Netlist>(); m_netlist->embedded=true; }
+                m_netNodes+=result.net.nodes.size();m_netBytes+=result.nextOffset-sectionStart;
+                if (m_netNodes>200000 || m_netlist->nets.size()>=20000 || m_netBytes>8*1024*1024) fail(QStringLiteral("NETDEF 网络或节点超过安全限制。"));
+                if (!result.net.metadata.isEmpty()) m_board->warnings.append(QStringLiteral("NETDEF %1 的附加元数据已保留，尚未解释。").arg(result.net.name));
+                m_netlist->nets.append(result.net);
+                ++m_board->recordCounts[QStringLiteral("NETDEF")];
+                continue;
             }
             if (tag == "COMP") {
                 if (inComponent) fail(QStringLiteral("不允许嵌套 COMP。"));
@@ -124,6 +140,7 @@ public:
             }
         }
         if (m_nonAscii) m_board->warnings.append(QStringLiteral("发现非 ASCII 字节，旧代码页尚未确认，相关字符暂以替代符显示。"));
+        m_board->embeddedNetlist=m_netlist;
         return m_board;
     }
 private:
@@ -183,16 +200,27 @@ private:
     qsizetype m_offset = 0, m_line = 0, m_records = 0, m_fieldCount = 0;
     bool m_nonAscii = false, m_extraTrackField = false;
     std::shared_ptr<BoardDocument> m_board = std::make_shared<BoardDocument>();
+    std::shared_ptr<Netlist> m_netlist;
+    qsizetype m_netNodes=0,m_netBytes=0;
 };
 }
 
 BoardReadResult LegacyPcbReader::parse(const QByteArray& bytes, const QString& source) {
     if (bytes.size() > maximumBytes) return {{}, QStringLiteral("文件超过 64 MiB 安全限制。")};
     if (bytes.contains('\0')) return {{}, QStringLiteral("PCB 文本中不允许二进制零字节。")};
+    const auto end=dosTextEnd(bytes);
+    if (end<0) return {{},QStringLiteral("DOS EOF 后存在非空白数据，禁止截断板图。")};
+    const auto textBytes=bytes.left(end);
     try {
-        auto board = Reader(bytes).run();
+        auto board = Reader(textBytes).run();
         board->filePath = source; board->byteSize = bytes.size();
         board->sha256 = QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex());
+        if (board->embeddedNetlist) {
+            auto netlist=std::make_shared<Netlist>(*board->embeddedNetlist);
+            netlist->filePath=source; netlist->sha256=board->sha256; netlist->sourceBytes=bytes;
+            netlist->warnings.append(QStringLiteral("NETDEF 来自公开结构描述和合成测试，本地原始 PCB 尚无可用实例对照；元数据未作电气解释。"));
+            board->embeddedNetlist=netlist;
+        }
         return {board, {}};
     } catch (const ParseError& error) {
         return {{}, error.message};
