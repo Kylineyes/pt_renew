@@ -36,8 +36,8 @@ const QList<MenuSpec>& commandCatalog() {
             command("edit.pad", "编辑焊盘(&P)"), command("edit.track", "编辑走线(&T)"),
             command("edit.string", "编辑文字(&S)")}},
         {QStringLiteral("F"), QStringLiteral("文件(&F)"), {
-            command("file.inspect", "打开文件信息（只读）(&L)", {"Ctrl+O"}, true),
-            command("file.close", "关闭文件信息(&C)", {"Ctrl+W"}, true),
+            command("file.open", "打开板图（只读）(&L)", {"Ctrl+O"}, true),
+            command("file.close", "关闭板图(&C)", {"Ctrl+W"}, true),
             command("file.save", "保存板图(&S)", {"Ctrl+S"}),
             command("app.exit", "退出程序(&Q)", {"Alt+F4"}, true)}},
         {QStringLiteral("G"), QStringLiteral("网格(&G)"), {
@@ -70,7 +70,7 @@ const QList<MenuSpec>& commandCatalog() {
         {QStringLiteral("R"), QStringLiteral("重复(&R)"), {
             command("edit.repeat", "重复上一操作(&R)")}},
         {QStringLiteral("S"), QStringLiteral("设置(&S)"), {
-            command("setup.keys", "快捷键与宏(&K)"), command("setup.layers", "图层设置(&L)"),
+            command("setup.keys", "快捷键与宏(&K)"), command("setup.layers", "图层显隐面板(&L)", {}, true),
             command("setup.options", "编辑选项(&O)")}},
         {QStringLiteral("U"), QStringLiteral("恢复(&U)"), {
             command("edit.undelete", "恢复删除(&U)")}},

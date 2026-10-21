@@ -1,5 +1,6 @@
 #pragma once
 
+#include "domain/BoardDocument.h"
 #include <QHash>
 #include <QMainWindow>
 
@@ -18,11 +19,14 @@ class MainWindow final : public QMainWindow {
 public:
     explicit MainWindow(QWidget* parent = nullptr);
     bool inspectFile(const QString& path);
+    void requestOpenFile(const QString& path);
 
 signals:
     void commandInvoked(const QString& id);
+    void boardLoadFinished(bool succeeded);
 
 private:
+    bool applyReadResult(const BoardReadResult& result, const QString& path);
     void createMenus();
     void executeCommand(const QString& id);
     void showLegacyMenu(const QString& key);
@@ -34,6 +38,8 @@ private:
     QLabel* m_viewStatus = nullptr;
     QHash<QString, QAction*> m_actions;
     QHash<QString, QMenu*> m_menus;
+    quint64 m_loadGeneration = 0;
+    bool m_loading = false;
 };
 
 }
