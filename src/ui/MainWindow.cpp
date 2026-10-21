@@ -8,6 +8,7 @@
 #include <QPixmap>
 #include "ui/BoardCanvas.h"
 #include "ui/ComponentBrowser.h"
+#include "ui/LibraryBrowser.h"
 #include <QFutureWatcher>
 #include <QtConcurrent/QtConcurrentRun>
 #include <QAction>
@@ -76,6 +77,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_viewStatus = new QLabel(this);
     m_viewStatus->setObjectName(QStringLiteral("viewStatus"));
     statusBar()->addPermanentWidget(m_viewStatus);
+    m_libraryBrowser=new LibraryBrowser(this);
     createMenus();
     clearFileInfo();
     updateViewStatus();
@@ -163,6 +165,10 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("info.file")) {
         m_infoDock->show();
         m_infoDock->raise();
+    } else if (id==QStringLiteral("library.file")) {
+        m_libraryBrowser->chooseFile();
+    } else if (id==QStringLiteral("library.browse")) {
+        m_libraryBrowser->showBrowser();
     } else if (id == QStringLiteral("jump.component") || id==QStringLiteral("info.components")) {
         m_componentBrowser->focusSearch();
     } else if (id == QStringLiteral("jump.origin")) {
@@ -186,10 +192,14 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("app.about")) {
         QMessageBox::information(this, QStringLiteral("关于当前阶段"),
             QStringLiteral("C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
-                           "当前支持只读预览、图元选择、元件检索定位和自由取点测量。\n"
+                           "当前支持板图只读预览、选择、元件定位、近似测量和独立 LIB 浏览。\n"
                            "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。"));
     }
     statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
+}
+
+void MainWindow::openLibrary(const QString& path) {
+    m_libraryBrowser->showBrowser(); m_libraryBrowser->requestLibrary(path);
 }
 
 void MainWindow::requestOpenFile(const QString& path) {
@@ -263,7 +273,7 @@ void MainWindow::clearFileInfo() {
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第四阶段支持只读检索、定位与测量，不支持编辑或保存。"));
+        "第五阶段支持独立 LIB 只读浏览、检索与测量，不支持编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
 }

@@ -14,6 +14,7 @@ namespace pt {
 
 class BoardCanvas;
 class ComponentBrowser;
+class LibraryBrowser;
 
 class MainWindow final : public QMainWindow {
     Q_OBJECT
@@ -21,6 +22,7 @@ public:
     explicit MainWindow(QWidget* parent = nullptr);
     bool inspectFile(const QString& path);
     void requestOpenFile(const QString& path);
+    void openLibrary(const QString& path);
 
 signals:
     void commandInvoked(const QString& id);
@@ -41,6 +43,7 @@ private:
     QDockWidget* m_selectionDock = nullptr;
     QPlainTextEdit* m_selectionText = nullptr;
     ComponentBrowser* m_componentBrowser=nullptr;
+    LibraryBrowser* m_libraryBrowser=nullptr;
     QDockWidget* m_measureDock=nullptr;
     QPlainTextEdit* m_measureText=nullptr;
     QLabel* m_viewStatus = nullptr;

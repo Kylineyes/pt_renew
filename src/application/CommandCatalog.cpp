@@ -61,7 +61,8 @@ const QList<MenuSpec>& commandCatalog() {
             command("jump.net", "跳转到网络(&N)"),
             command("jump.origin", "跳转到原点(&O)", {"Ctrl+Home"}, true)}},
         {QStringLiteral("L"), QStringLiteral("封装库(&L)"), {
-            command("library.browse", "浏览封装(&B)"), command("library.file", "选择封装库(&F)"),
+            command("library.browse", "封装库只读浏览(&B)", {"Ctrl+L"}, true),
+            command("library.file", "打开 LIB（只读）(&F)", {"Ctrl+Shift+L"}, true),
             command("library.add", "添加封装(&A)"), command("library.merge", "合并封装库(&M)")}},
         {QStringLiteral("M"), QStringLiteral("移动(&M)"), {
             command("move.component", "移动元件(&C)"), command("move.pad", "移动焊盘(&P)"),
