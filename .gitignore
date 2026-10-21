@@ -1,0 +1,113 @@
+# 原始软件和安装介质永远不应提交。
+pt/
+pt_install/
+
+# 本地模拟器配置、截图与逆向分析临时数据。
+.local-analysis/
+
+# 构建、部署目录及误放在仓库根目录的 Qt SDK。
+/build*/
+/out/
+/dist/
+/Qt/
+/qt-sdk/
+cmake-build-*/
+
+# CMake、CTest 和 Ninja 生成文件；共享 CMakePresets.json 应提交。
+CMakeUserPresets.json
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+cmake_uninstall.cmake
+install_manifest.txt
+CTestTestfile.cmake
+DartConfiguration.tcl
+Testing/
+compile_commands.json
+build.ninja
+rules.ninja
+.ninja_deps
+.ninja_log
+
+# Qt 的 moc、uic、rcc 与缓存产物；保留 .ui、.qrc、.ts 等源文件。
+*_autogen/
+moc_*.cpp
+moc_*.h
+moc_predefs.h
+*.moc
+ui_*.h
+qrc_*.cpp
+*.rcc
+*.qm
+*.qmlc
+*.jsc
+
+# qmake 生成的本地配置与分模式 Makefile。
+.qmake.cache
+.qmake.stash
+Makefile.Debug
+Makefile.Release
+
+# C/C++ 编译、链接与调试产物。
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.so
+*.so.*
+*.dylib
+*.exe
+*.exp
+*.pdb
+*.idb
+*.ilk
+*.ipdb
+*.iobj
+*.pch
+*.gch
+*.res
+*.tlog
+*.lastbuildstate
+
+# IDE 个人配置与索引；不整体忽略可共享的 .vscode/ 和工程文件。
+.vs/
+.idea/
+.qtcreator/
+.qtc_clangd/
+.cache/clangd/
+ipch/
+*.user
+*.pro.user.*
+*.qbs.user.*
+*.qmlproject.user.*
+CMakeLists.txt.user.*
+*.suo
+*.sln.docstates
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# 覆盖率、性能分析和测试运行目录。
+/coverage/
+/test-results/
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+
+# 本地日志、崩溃转储、编辑器备份和系统杂项。
+*.log
+*.dmp
+*.stackdump
+*.tmp
+*.temp
+*.bak
+*~
+*.swp
+*.swo
+Thumbs.db
+Desktop.ini
+.DS_Store

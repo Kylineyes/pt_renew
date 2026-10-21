@@ -1,0 +1,113 @@
+cmake_minimum_required(VERSION 3.24)
+project(PtRenew VERSION 0.5.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Widgets Concurrent)
+include(CTest)
+
+add_library(pt_core STATIC
+    src/application/CommandCatalog.cpp
+    src/application/CommandCatalog.h
+    src/application/ComponentTableModel.h
+    src/application/ComponentTableModel.cpp
+    src/domain/Measurement.h
+    src/domain/DocumentInfo.h
+    src/domain/PrimitiveId.h
+    src/domain/BoardDocument.h
+    src/domain/BoardDocument.cpp
+    src/io/LegacyPcbReader.h
+    src/io/LegacyPcbReader.cpp
+    src/domain/FootprintLibrary.h
+    src/io/LegacyLibraryReader.h
+    src/io/LegacyLibraryReader.cpp
+    src/io/LegacyPcbInspector.cpp
+    src/io/LegacyPcbInspector.h
+)
+target_include_directories(pt_core PUBLIC src)
+target_link_libraries(pt_core PUBLIC Qt6::Core)
+
+add_library(pt_geometry STATIC
+    src/geometry/BoardGeometry.h
+    src/geometry/BoardGeometry.cpp
+)
+target_link_libraries(pt_geometry PUBLIC pt_core Qt6::Gui)
+
+add_library(pt_ui STATIC
+    src/ui/BoardCanvas.cpp
+    src/ui/BoardCanvas.h
+    src/ui/BoardRenderer.h
+    src/ui/BoardRenderer.cpp
+    src/ui/MainWindow.cpp
+    src/ui/MainWindow.h
+    src/ui/ComponentBrowser.h
+    src/ui/ComponentBrowser.cpp
+    src/ui/LibraryBrowser.h
+    src/ui/LibraryBrowser.cpp
+)
+target_link_libraries(pt_ui PUBLIC pt_geometry Qt6::Widgets Qt6::Concurrent)
+
+qt_add_executable(pt-renew WIN32 src/main.cpp)
+target_link_libraries(pt-renew PRIVATE pt_ui)
+
+add_executable(pt-library-check tools/InspectLibrary.cpp)
+set_target_properties(pt-library-check PROPERTIES WIN32_EXECUTABLE FALSE)
+target_link_libraries(pt-library-check PRIVATE pt_core)
+
+foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check)
+    if(MSVC)
+        target_compile_options(${target} PRIVATE /utf-8 /W4 /permissive-)
+    else()
+        target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
+    endif()
+endforeach()
+
+if(BUILD_TESTING)
+    find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
+    qt_add_executable(pt-shell-tests tests/ShellTests.cpp)
+    set_target_properties(pt-shell-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-shell-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-shell-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-shell-tests COMMAND pt-shell-tests -o -,txt -o shell-test-results.txt,txt)
+    set_tests_properties(pt-shell-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-pcb-tests tests/PcbTests.cpp)
+    set_target_properties(pt-pcb-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-pcb-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-pcb-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-pcb-tests COMMAND pt-pcb-tests -o -,txt -o pcb-test-results.txt,txt)
+    set_tests_properties(pt-pcb-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-selection-tests tests/SelectionTests.cpp)
+    set_target_properties(pt-selection-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-selection-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-selection-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-selection-tests COMMAND pt-selection-tests -o -,txt -o selection-test-results.txt,txt)
+    set_tests_properties(pt-selection-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-navigation-tests tests/NavigationTests.cpp)
+    set_target_properties(pt-navigation-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-navigation-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-navigation-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-navigation-tests COMMAND pt-navigation-tests -o -,txt -o navigation-test-results.txt,txt)
+    set_tests_properties(pt-navigation-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-library-tests tests/LibraryTests.cpp)
+    set_target_properties(pt-library-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-library-tests PRIVATE pt_ui Qt6::Test)
+    add_dependencies(pt-library-tests pt-library-check)
+    if(MSVC)
+        target_compile_options(pt-library-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-library-tests COMMAND pt-library-tests -o -,txt -o library-test-results.txt,txt)
+    set_tests_properties(pt-library-tests PROPERTIES TIMEOUT 60)
+endif()
+
+install(TARGETS pt-renew RUNTIME DESTINATION .)
