@@ -22,12 +22,21 @@ BoardCanvas::BoardCanvas(QWidget* parent) : QWidget(parent) {
 
 void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
     m_document = std::move(document);
+    m_hitTester.setDocument(m_document);
+    clearSelection();
     m_boardBounds = m_document ? m_document->bounds() : QRectF();
     resetView();
 }
 
 void BoardCanvas::setLayerVisible(int layer, bool visible) {
     if (visible) m_visibleLayers.insert(layer); else m_visibleLayers.remove(layer);
+    if (m_selection && m_document && !visible && primitiveLayer(*m_document,*m_selection)==layer) {
+        clearSelection();
+    } else {
+        // 图层集合改变后，旧的重叠候选列表不再可靠。
+        m_hits.clear(); m_hitPosition=-1; m_lastPickScreen.reset();
+        emit selectionChanged();
+    }
     update();
 }
 
@@ -41,6 +50,25 @@ QPointF BoardCanvas::boardToScreen(const QPointF& point) const {
     const QPointF delta = point - (m_document ? m_boardBounds.center() : QPointF());
     const qreal scale = baseScale() * m_zoom;
     return QPointF(rect().center()) + m_pan + QPointF(delta.x()*scale, -delta.y()*scale);
+}
+
+QPointF BoardCanvas::screenToBoard(const QPointF& point) const {
+    const qreal scale=baseScale()*m_zoom;
+    const QPointF delta=point-QPointF(rect().center())-m_pan;
+    return (m_document?m_boardBounds.center():QPointF())+QPointF(delta.x()/scale,-delta.y()/scale);
+}
+
+void BoardCanvas::clearSelection() {
+    m_selection.reset(); m_hits.clear(); m_hitPosition=-1; m_lastPickScreen.reset();
+    update();
+    emit selectionChanged();
+}
+
+void BoardCanvas::selectNextOverlap() {
+    if (!m_document || m_hits.isEmpty()) return;
+    m_hitPosition=(m_hitPosition+1)%m_hits.size();
+    m_selection=m_hits[m_hitPosition];
+    update(); emit selectionChanged();
 }
 
 void BoardCanvas::resizeEvent(QResizeEvent* event) {
@@ -104,6 +132,12 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
         painter.scale(scale, -scale);
         painter.translate(-m_boardBounds.center());
         drawBoard(painter, *m_document, m_visibleLayers);
+        if (m_selection) {
+            painter.setBrush(Qt::NoBrush);
+            QPen pen(QColor(250,250,250)); pen.setWidthF(2); pen.setCosmetic(true); pen.setStyle(Qt::DashLine);
+            painter.setPen(pen);
+            painter.drawPath(primitiveOutline(*m_document,*m_selection));
+        }
         painter.restore();
         painter.setPen(QColor(214,220,229));
         painter.fillRect(QRect(8, 6, width()-16, 28), QColor(26,30,35,230));
@@ -115,8 +149,8 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第二阶段：PCB 只读预览\n"
-                       "Ctrl+O 打开板图；支持基本图元与元件，尚不支持编辑或保存。\n"
+        QStringLiteral("第三阶段：只读选择与属性查看\n"
+                       "Ctrl+O 打开板图；单击图元查看属性，尚不支持编辑或保存。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
 
@@ -147,6 +181,20 @@ void BoardCanvas::wheelEvent(QWheelEvent* event) {
 
 void BoardCanvas::mousePressEvent(QMouseEvent* event) {
     setFocus(Qt::MouseFocusReason);
+    if (event->button()==Qt::LeftButton && m_document) {
+        const auto hits=m_hitTester.hitTest(screenToBoard(event->position()),6.0/(baseScale()*m_zoom),m_visibleLayers);
+        const bool samePlace=m_lastPickScreen && (event->position()-*m_lastPickScreen).manhattanLength()<=4;
+        const bool cycle=samePlace && hits==m_hits && !hits.isEmpty() && m_hitPosition>=0;
+        m_hits=hits;
+        m_lastPickScreen=event->position();
+        if (m_hits.isEmpty()) { clearSelection(); }
+        else {
+            m_hitPosition=cycle?(m_hitPosition+1)%m_hits.size():0;
+            m_selection=m_hits[m_hitPosition];
+            update(); emit selectionChanged();
+        }
+        event->accept(); return;
+    }
     if (event->button() == Qt::MiddleButton) {
         m_panning = true;
         m_lastMouse = event->position();

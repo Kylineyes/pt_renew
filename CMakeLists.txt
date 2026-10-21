@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.2.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.3.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,6 +13,7 @@ add_library(pt_core STATIC
     src/application/CommandCatalog.cpp
     src/application/CommandCatalog.h
     src/domain/DocumentInfo.h
+    src/domain/PrimitiveId.h
     src/domain/BoardDocument.h
     src/domain/BoardDocument.cpp
     src/io/LegacyPcbReader.h
@@ -23,6 +24,12 @@ add_library(pt_core STATIC
 target_include_directories(pt_core PUBLIC src)
 target_link_libraries(pt_core PUBLIC Qt6::Core)
 
+add_library(pt_geometry STATIC
+    src/geometry/BoardGeometry.h
+    src/geometry/BoardGeometry.cpp
+)
+target_link_libraries(pt_geometry PUBLIC pt_core Qt6::Gui)
+
 add_library(pt_ui STATIC
     src/ui/BoardCanvas.cpp
     src/ui/BoardCanvas.h
@@ -31,12 +38,12 @@ add_library(pt_ui STATIC
     src/ui/MainWindow.cpp
     src/ui/MainWindow.h
 )
-target_link_libraries(pt_ui PUBLIC pt_core Qt6::Widgets Qt6::Concurrent)
+target_link_libraries(pt_ui PUBLIC pt_geometry Qt6::Widgets Qt6::Concurrent)
 
 qt_add_executable(pt-renew WIN32 src/main.cpp)
 target_link_libraries(pt-renew PRIVATE pt_ui)
 
-foreach(target pt_core pt_ui pt-renew)
+foreach(target pt_core pt_geometry pt_ui pt-renew)
     if(MSVC)
         target_compile_options(${target} PRIVATE /utf-8 /W4 /permissive-)
     else()
@@ -62,6 +69,14 @@ if(BUILD_TESTING)
     endif()
     add_test(NAME pt-pcb-tests COMMAND pt-pcb-tests -o -,txt -o pcb-test-results.txt,txt)
     set_tests_properties(pt-pcb-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-selection-tests tests/SelectionTests.cpp)
+    set_target_properties(pt-selection-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-selection-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-selection-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-selection-tests COMMAND pt-selection-tests -o -,txt -o selection-test-results.txt,txt)
+    set_tests_properties(pt-selection-tests PROPERTIES TIMEOUT 60)
 endif()
 
 install(TARGETS pt-renew RUNTIME DESTINATION .)

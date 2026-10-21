@@ -36,6 +36,14 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     m_infoText->setMinimumWidth(280);
     m_infoDock->setWidget(m_infoText);
     addDockWidget(Qt::RightDockWidgetArea, m_infoDock);
+    m_selectionDock=new QDockWidget(QStringLiteral("图元属性（只读）"),this);
+    m_selectionDock->setObjectName(QStringLiteral("selectionDock"));
+    m_selectionText=new QPlainTextEdit(m_selectionDock);
+    m_selectionText->setObjectName(QStringLiteral("selectionText"));
+    m_selectionText->setReadOnly(true);
+    m_selectionDock->setWidget(m_selectionText);
+    addDockWidget(Qt::RightDockWidgetArea,m_selectionDock);
+    splitDockWidget(m_infoDock,m_selectionDock,Qt::Vertical);
     auto* layerDock = new QDockWidget(QStringLiteral("图层显隐"), this);
     layerDock->setObjectName(QStringLiteral("layerDock"));
     auto* layers = new QListWidget(layerDock);
@@ -57,6 +65,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     createMenus();
     clearFileInfo();
     updateViewStatus();
+    updateSelectionInfo();
+    connect(m_canvas, &BoardCanvas::selectionChanged, this, &MainWindow::updateSelectionInfo);
     connect(m_canvas, &BoardCanvas::legacyMenuRequested, this, &MainWindow::showLegacyMenu);
     connect(m_canvas, &BoardCanvas::viewChanged, this, &MainWindow::updateViewStatus);
     m_canvas->setFocus();
@@ -83,6 +93,10 @@ void MainWindow::createMenus() {
                 }
                 action->setShortcuts(keys);
                 action->setShortcutContext(Qt::WindowShortcut);
+                if (command.id.startsWith(QStringLiteral("selection."))) {
+                    action->setShortcutContext(Qt::WidgetShortcut);
+                    m_canvas->addAction(action);
+                }
                 if (!command.implemented) {
                     action->setText(command.text + QStringLiteral("（未实现）"));
                     action->setToolTip(QStringLiteral("已保留命令入口，当前阶段尚未实现此业务。"));
@@ -127,13 +141,19 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("info.file")) {
         m_infoDock->show();
         m_infoDock->raise();
+    } else if (id == QStringLiteral("selection.clear")) {
+        m_canvas->clearSelection();
+    } else if (id == QStringLiteral("selection.next")) {
+        m_canvas->selectNextOverlap();
+    } else if (id == QStringLiteral("info.selection")) {
+        m_selectionDock->show(); m_selectionDock->raise();
     } else if (id == QStringLiteral("setup.layers")) {
         auto* dock = findChild<QDockWidget*>(QStringLiteral("layerDock"));
         dock->show(); dock->raise();
     } else if (id == QStringLiteral("app.about")) {
         QMessageBox::information(this, QStringLiteral("关于当前阶段"),
             QStringLiteral("C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
-                           "当前支持基本图元、元件与图层的只读预览。\n"
+                           "当前支持基本图元、元件与图层的只读预览、选择和属性查看。\n"
                            "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。"));
     }
     statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
@@ -204,9 +224,29 @@ void MainWindow::clearFileInfo() {
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第二阶段支持基本图元预览，不支持编辑或保存。"));
+        "第三阶段支持只读预览与图元选择，不支持编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
+}
+
+void MainWindow::updateSelectionInfo() {
+    const auto id=m_canvas->selection();
+    m_actions.value(QStringLiteral("selection.clear"))->setEnabled(id.has_value());
+    m_actions.value(QStringLiteral("selection.next"))->setEnabled(m_canvas->overlapCount()>1);
+    if (!id || !m_canvas->document()) {
+        m_selectionText->setPlainText(QStringLiteral("尚未选择图元。\n\n单击画布中的图元查看尺寸和来源。\n"
+            "同位置再次单击或 Ctrl+Tab 切换本次点击的重叠候选。\n"
+            "画布内 Esc 或单击空白处清除选择。\n\n"
+            "钻孔内点击归属焊盘/过孔对象；文字按近似包围框选择。\n全部属性只读。"));
+    } else {
+        QString info=primitiveDescription(*m_canvas->document(),*id);
+        info.prepend(QStringLiteral("本次命中：%1 / %2\n图层：%3\n\n")
+            .arg(m_canvas->overlapPosition()>=0?m_canvas->overlapPosition()+1:1)
+            .arg(qMax<qsizetype>(1,m_canvas->overlapCount()))
+            .arg(layerName(primitiveLayer(*m_canvas->document(),*id))));
+        m_selectionText->setPlainText(info);
+        m_selectionDock->show();
+    }
 }
 
 void MainWindow::updateViewStatus() {

@@ -32,6 +32,8 @@ const QList<MenuSpec>& commandCatalog() {
             command("delete.pad", "删除焊盘(&P)"), command("delete.track", "删除走线(&T)"),
             command("delete.via", "删除过孔(&V)")}},
         {QStringLiteral("E"), QStringLiteral("编辑(&E)"), {
+            command("selection.clear", "清除只读选择(&C)", {"Esc"}, true),
+            command("selection.next", "切换重叠图元(&N)", {"Ctrl+Tab"}, true),
             command("edit.arc", "编辑圆弧(&A)"), command("edit.component", "编辑元件(&C)"),
             command("edit.pad", "编辑焊盘(&P)"), command("edit.track", "编辑走线(&T)"),
             command("edit.string", "编辑文字(&S)")}},
@@ -47,7 +49,8 @@ const QList<MenuSpec>& commandCatalog() {
             command("highlight.connection", "高亮连接(&C)"), command("highlight.net", "高亮网络(&N)"),
             command("highlight.reset", "清除高亮(&R)")}},
         {QStringLiteral("I"), QStringLiteral("信息(&I)"), {
-            command("info.file", "文件信息面板(&S)", {}, true),
+            command("info.file", "板图信息面板(&S)", {}, true),
+            command("info.selection", "图元属性面板(&P)", {"Ctrl+I"}, true),
             command("info.board", "板图尺寸(&B)"), command("info.components", "元件信息(&C)"),
             command("app.about", "关于当前阶段(&A)", {}, true)}},
         {QStringLiteral("J"), QStringLiteral("跳转(&J)"), {
