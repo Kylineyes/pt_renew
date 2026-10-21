@@ -1,5 +1,6 @@
 #pragma once
 
+#include "domain/PrimitiveId.h"
 #include <QList>
 #include <QPointF>
 #include <QRectF>
@@ -17,20 +18,23 @@ struct Track {
     int width = 0, layer = 1;
     // 部分实测文件有第七字段，先原样保留，尚不推断其电气语义。
     std::optional<int> extra;
+    PrimitiveSource source;
 };
 struct Pad {
     QPointF center;
     int width = 0, height = 0, shape = 1, drill = 0, planeFlags = 0, layer = 13;
     QString name;
+    PrimitiveSource source;
 };
-struct Via { QPointF center; int diameter = 0, drill = 0; };
-struct Arc { QPointF center; int radius = 0, quadrants = 15, width = 0, layer = 7; };
-struct Fill { QRectF rectangle; int layer = 1; };
+struct Via { QPointF center; int diameter = 0, drill = 0; PrimitiveSource source; };
+struct Arc { QPointF center; int radius = 0, quadrants = 15, width = 0, layer = 7; PrimitiveSource source; };
+struct Fill { QRectF rectangle; int layer = 1; PrimitiveSource source; };
 struct BoardText {
     QPointF position;
     int height = 0, direction = 0, stroke = 0, layer = 7;
     bool mirrored = false;
     QString value;
+    PrimitiveSource source;
 };
 struct Component {
     QString designator, footprint, comment;

@@ -7,7 +7,7 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("pt-renew"));
-    QCoreApplication::setApplicationVersion(QStringLiteral("0.2.0"));
+    QCoreApplication::setApplicationVersion(QStringLiteral("0.3.0"));
     QCoreApplication::setOrganizationName(QStringLiteral("PtRenew"));
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("AUTOTRAX 重建工程：菜单、快捷键与 PCB 只读预览。"));

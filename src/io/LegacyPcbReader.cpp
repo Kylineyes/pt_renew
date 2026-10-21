@@ -22,6 +22,8 @@ public:
         while (m_offset < m_bytes.size()) {
             const auto tag = line().trimmed();
             if (tag.isEmpty()) continue;
+            const qsizetype recordLine = m_line;
+            const PrimitiveSource source{recordLine, inComponent ? m_board->components.size()-1 : -1};
             if (++m_records > maximumRecords) fail(QStringLiteral("记录数超过 200000 的安全限制。"));
             if (tag == "ENDPCB") {
                 if (inComponent) fail(QStringLiteral("元件尚未以 ENDCOMP 结束。"));
@@ -37,7 +39,9 @@ public:
                 Component c;
                 c.designator = textLine(); c.footprint = textLine(); c.comment = textLine();
                 auto comment = textFields(); comment.value = c.comment;
+                comment.source = {m_line, m_board->components.size()};
                 auto designator = textFields(); designator.value = c.designator;
+                designator.source = {m_line, m_board->components.size()};
                 const auto v = numbers(5);
                 coordinate(v[0]); coordinate(v[1]);
                 if ((v[2] != 1 && v[2] != 2) || (v[3] != 1 && v[3] != 2)) fail(QStringLiteral("不支持的元件文字显隐状态。"));
@@ -67,6 +71,7 @@ public:
                 positive(v[4]); layer(v[5]);
                 Track track{{qreal(v[0]), qreal(v[1])}, {qreal(v[2]), qreal(v[3])}, v[4], v[5], {}};
                 if (m_fieldCount == 7) { track.extra = v[6]; m_extraTrackField = true; }
+                track.source = source;
                 m_board->tracks.append(track);
                 break;
             }
@@ -76,21 +81,21 @@ public:
                 if (v[4] < 1 || v[4] > 4) fail(QStringLiteral("尚不支持此焊盘形状。"));
                 if (v[5] < 0 || v[5] > qMin(v[2], v[3])) fail(QStringLiteral("焊盘孔径超出焊盘尺寸。"));
                 if (v[6] < 0 || v[6] > 255) fail(QStringLiteral("焊盘平面标志超出范围。"));
-                m_board->pads.append({{qreal(v[0]), qreal(v[1])}, v[2], v[3], v[4], v[5], v[6], v[7], textLine()});
+                m_board->pads.append({{qreal(v[0]), qreal(v[1])}, v[2], v[3], v[4], v[5], v[6], v[7], textLine(), source});
                 break;
             }
             case 'V': {
                 const auto v = numbers(4);
                 coordinate(v[0]); coordinate(v[1]); positive(v[2]);
                 if (v[3] < 0 || v[3] > v[2]) fail(QStringLiteral("过孔孔径超出外径。"));
-                m_board->vias.append({{qreal(v[0]), qreal(v[1])}, v[2], v[3]});
+                m_board->vias.append({{qreal(v[0]), qreal(v[1])}, v[2], v[3], source});
                 break;
             }
             case 'A': {
                 const auto v = numbers(6);
                 coordinate(v[0]); coordinate(v[1]); positive(v[2]); positive(v[4]); layer(v[5]);
                 if (v[3] < 1 || v[3] > 15) fail(QStringLiteral("圆弧象限掩码必须为 1 至 15。"));
-                m_board->arcs.append({{qreal(v[0]), qreal(v[1])}, v[2], v[3], v[4], v[5]});
+                m_board->arcs.append({{qreal(v[0]), qreal(v[1])}, v[2], v[3], v[4], v[5], source});
                 break;
             }
             case 'F': {
@@ -98,11 +103,11 @@ public:
                 for (int i = 0; i < 4; ++i) coordinate(v[i]);
                 layer(v[4]);
                 if (v[0] == v[2] || v[1] == v[3]) fail(QStringLiteral("填充矩形的宽高必须非零。"));
-                m_board->fills.append({QRectF(QPointF(v[0], v[1]), QPointF(v[2], v[3])).normalized(), v[4]});
+                m_board->fills.append({QRectF(QPointF(v[0], v[1]), QPointF(v[2], v[3])).normalized(), v[4], source});
                 break;
             }
             case 'S': {
-                auto t = textFields(); t.value = textLine(); m_board->texts.append(t);
+                auto t = textFields(); t.source = source; t.value = textLine(); m_board->texts.append(t);
                 break;
             }
             }

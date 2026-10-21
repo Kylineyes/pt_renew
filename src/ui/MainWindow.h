@@ -32,9 +32,12 @@ private:
     void showLegacyMenu(const QString& key);
     void clearFileInfo();
     void updateViewStatus();
+    void updateSelectionInfo();
     BoardCanvas* m_canvas = nullptr;
     QDockWidget* m_infoDock = nullptr;
     QPlainTextEdit* m_infoText = nullptr;
+    QDockWidget* m_selectionDock = nullptr;
+    QPlainTextEdit* m_selectionText = nullptr;
     QLabel* m_viewStatus = nullptr;
     QHash<QString, QAction*> m_actions;
     QHash<QString, QMenu*> m_menus;

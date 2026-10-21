@@ -1,7 +1,6 @@
 #include "ui/BoardRenderer.h"
-#include <QFontDatabase>
+#include "geometry/BoardGeometry.h"
 #include <QPainter>
-#include <QPolygonF>
 #include <algorithm>
 #include <cmath>
 
@@ -30,7 +29,7 @@ void drawBoard(QPainter& painter, const BoardDocument& board, const QSet<int>& v
     const auto inverse = painter.worldTransform().inverted(&invertible);
     const QRectF viewport = invertible ? inverse.mapRect(QRectF(painter.viewport())).normalized() : board.bounds();
     auto inView = [&](const QRectF& bounds) { return viewport.intersects(bounds.normalized().adjusted(-1, -1, 1, 1)); };
-    for (int layer : {11,12,9,10,5,4,3,2,6,1,13,8,7}) {
+    for (int layer : boardLayerDrawOrder) {
         if (!visible.contains(layer)) continue;
         const QColor color = layerColor(layer);
         painter.setPen(Qt::NoPen); painter.setBrush(color);
@@ -50,11 +49,7 @@ void drawBoard(QPainter& painter, const BoardDocument& board, const QSet<int>& v
             const QRectF box(arc.center.x() - arc.radius, arc.center.y() - arc.radius, 2.0 * arc.radius, 2.0 * arc.radius);
             if (!inView(box.adjusted(-arc.width,-arc.width,arc.width,arc.width))) continue;
             painter.setPen(QPen(color, arc.width, Qt::SolidLine, Qt::RoundCap));
-            // Qt 的圆弧角度按逻辑坐标的 Y 向下解释，当前变换为 Y 向上，故取负角度。
-            if (arc.quadrants == 15) painter.drawEllipse(box);
-            else for (int quadrant = 0; quadrant < 4; ++quadrant) {
-                if (arc.quadrants & (1 << quadrant)) painter.drawArc(box, -quadrant * 90 * 16, -90 * 16);
-            }
+            painter.drawPath(arcCenterline(arc));
         }
         painter.setPen(Qt::NoPen); painter.setBrush(color);
         for (const auto& pad : board.pads) {
@@ -62,19 +57,7 @@ void drawBoard(QPainter& painter, const BoardDocument& board, const QSet<int>& v
             const qreal x = pad.center.x(), y = pad.center.y(), w = pad.width, h = pad.height;
             const QRectF box(x-w/2, y-h/2, w,h);
             if (!inView(box)) continue;
-            if (pad.shape == 1) painter.drawRoundedRect(box, qMin(w,h)/2, qMin(w,h)/2, Qt::AbsoluteSize);
-            else if (pad.shape == 2) painter.drawRect(box);
-            else if (pad.shape == 4) {
-                // 形状 4 的原始倒角参数尚未恢复，当前仅作预览近似。
-                const qreal radius = qMin(w,h)/4;
-                painter.drawRoundedRect(box, radius, radius, Qt::AbsoluteSize);
-            } else {
-                const qreal bevelX = w * (1.0 - 1.0/std::sqrt(2.0));
-                const qreal bevelY = h * (1.0 - 1.0/std::sqrt(2.0));
-                const qreal l=box.left(), r=box.right(), t=box.top(), b=box.bottom();
-                painter.drawPolygon(QPolygonF{{l+bevelX,t},{r-bevelX,t},{r,t+bevelY},{r,b-bevelY},
-                    {r-bevelX,b},{l+bevelX,b},{l,b-bevelY},{l,t+bevelY}});
-            }
+            painter.drawPath(padOutline(pad));
         }
         if (layer == 13) {
             for (const auto& via : board.vias) {
@@ -91,9 +74,7 @@ void drawBoard(QPainter& painter, const BoardDocument& board, const QSet<int>& v
             if (text.mirrored) painter.scale(-1,1);
             painter.rotate(text.direction * 90);
             painter.scale(text.height / 100.0, -text.height / 100.0);
-            auto font = QFontDatabase::systemFont(QFontDatabase::FixedFont);
-            font.setPixelSize(100);
-            painter.setFont(font); painter.setPen(color);
+            painter.setFont(boardTextFont()); painter.setPen(color);
             painter.drawText(QPointF(0,0), text.value);
             painter.restore();
         }
