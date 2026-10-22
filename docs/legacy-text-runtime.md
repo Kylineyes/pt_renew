@@ -2,6 +2,26 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
+## verification-31 菜单与键盘静态路径
+
+已从 `d9f9506` 的最新 `origin/dev` 建立 `research/legacy-menu-static`，带入 verification-29/30 尚未提交的记录。离线分析已将菜单文件装载、段解析、绘制调用、主菜单 Enter 入口、KEY 覆盖装载和宏展开路径串联，详细地址、重定位交叉核对及复核工具见 [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)。这些结果仍为静态证据；尚未证明此前场景实际载入菜单、PCB 或宏。
+
+verification-32 仅在新目录和单个连接中检查桌面：`ControlStatus=ready`、generation 1，截图可见 Orca 窗口，但元数据仍报告没有活动窗口及打开的窗口。因焦点观测不一致而停止，未启动 DOSBox、未发送键鼠输入。`runtime_verified` 保持 `false`，产品仍为 0.9.0。
+
+## verification-29 DOSBox 焦点检查
+
+从 `d9f9506` 建立 `research/legacy-menu-keypath`。开始前未发现 DOSBox、AUTOTRAX 或本轮桌面客户端进程；无 DFT 隔离副本为 103 个文件，其文件名集合和 SHA-256 与 verification-20 清单一致。原安装未挂载，本轮仅使用该隔离副本。
+
+新建 `.local-analysis/verification-29/desktop-check/` 和 DOSBox 配置，捕获目录指向该新场景，启动参数为 `PT C21.PCB`。同一 Windows-MCP 连接先查得 `ControlStatus=ready` 并截图；启动后取得标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 和 AUTOTRAX 1.57 启动页。其后一次控制查询返回 `user`、generation 16、`wait_seconds=2.4502866999828257`；等待恢复后调用窗口切换，工具报告切换到 DOSBox。截图显示 DOSBox 小窗口在 Orca 桌面前景，但 MCP 窗口元数据仍报告 `No active window found`、`No windows found`，两类观察不一致，不能据截图单独确认键盘焦点。再次确认 `ready` 后点击截图所示 DOSBox 标题栏 `(300,120)`，工具报告点击成功；后续截图仍可见该 DOSBox 启动页，但窗口焦点状态仍未由工具确认。
+
+因无法交叉确认焦点，停止场景，没有发送 Enter、宏或其他键盘操作；因此没有观察启动页之后的程序行为，不能判断 C21 是否载入，也不能解释菜单/宏响应或此前窗口变化原因。只终止本轮启动的 DOSBox PID 4864 和临时桌面客户端 PID 59956。运行后复核隔离副本仍为 103 个文件且与运行前清单 0 项差异；进程检查未发现 DOSBox、AUTOTRAX 或 Windows-MCP 客户端残留。截图、逐步状态、命令返回、配置和核验留在被 Git 忽略的 `.local-analysis/verification-29/desktop-check/`。
+
+本轮没有取得新的程序行为证据；`runtime_verified` 继续为 `false`，静态工具证据继续标记为 `static_instruction_derivation`。未进行端点拟合、方向/缩放扩展、Qt 字形接入或铜层判定；没有运行构建或 CTest。
+
+## verification-30 桌面控制等待
+
+在 verification-29 之后新建 `.local-analysis/verification-30/scenario/`，并重新核对无 DFT 隔离副本 103 个文件与 verification-20 清单一致；开始时没有 DOSBox、AUTOTRAX 或本轮客户端残留。新 Windows-MCP 连接首次 `ControlStatus` 返回 `user`、generation 2、`wait_seconds=9.98607709998032`。随后仅请求新桌面截图；客户端按门禁最多等待 30 秒，状态未恢复，截图工具未调用。没有启动 DOSBox、没有发送键鼠输入，输入来源未知；停止本轮客户端后进程检查无相关残留。该场景没有新增原程序运行证据。
+
 ## verification-28 LIST_COMPS 只读入口探测
 
 从同步的 `dev`（`e879f7f`）建立 `research/legacy-text-runtime-observation-2`。运行前确认无 DOSBox 残留，并逐项核对无 DFT 隔离副本 103 个文件；`C21.PCB` SHA-256 为 `09f16e0c4fb7e0380e15285b8d610f6963e73ad349c9168cb28626f34c0a3f85`。`TRAXEDIT.KEY` 将 `Alt+F10` 定义为 `LIST_COMPS`，宏序列为 `Esc, Esc, I, C`；`TRAXEDIT.MNU` 的 `Information` 子菜单含 `Components`、`Status`。这些是静态菜单证据，不证明运行响应。
