@@ -2,6 +2,16 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。当前仍未确认原程序载入研究样例，所有笔画结果均为静态推导，`runtime_verified` 保持 `false`。
 
+## 最新 C20 场景尝试
+
+从与 `origin/dev` 同步的 `6b5b22f` 建立 `research/legacy-text-c20-runtime`，先核对输入与遗留进程，再在新的 `.local-analysis/verification-16/` 中启动同连接桌面客户端。首次截图前等待 30 秒，16 次公开 `ControlStatus` 查询始终为 `user`、generation 为 2，倒计时在约 9.50 至 10.00 秒之间反复重置；最后返回 `wait_seconds=9.99860739998985`。这些返回不能识别输入来源。
+
+等待超时后客户端停止；未调用截图、启动 DOSBox 或发送按键，没有重试场景或切换其他桌面入口，也没有修改第三方包、门禁、阈值或 hooks。`C20.PCB` 的启动页之后观察仍未完成，`C21.PCB` 仍未运行；此前 C00 红色 A 画面的证据边界不变。
+
+原目录 99 个文件集合及 SHA-256 在尝试前后均符合基线，隔离三项二进制与 C00/C20/C21 摘要一致。结束时未发现本轮桌面客户端、Windows-MCP 或 DOSBox 进程。日志、输入核验和摘要留在上述本地目录；仅更新研究记录，未重跑构建或 CTest，产品仍为 0.9.0。
+
+下一步仍是在桌面正常空闲后完成 C20 的启动页之后观察，核对菜单、文件名与对象属性，再与 C00/C21 对照。尚未取得新运行证据，不接入 Qt 字形或铜层几何，不扩大方向支持范围。
+
 ## 输入与方向字段
 
 先复用 `.local-analysis/verification-11/runtime/pt/`。单字符 `A` 的配置为 `.local-analysis/verification-12/dosbox-single.conf`，启动命令为 `pt C00.PCB`，两个盘符均只挂载既有隔离 runtime。`C00.PCB` 已复制到隔离目录，SHA-256 为 `96f838cf5e0cb86763357c4a11ec81f7b87053573981afa5df0a0ecbf2e1a1c8`，仍未确认被原程序载入。旧 `dosbox-text.conf` 对应九组混合样例，不作为首次单字符验证入口。
