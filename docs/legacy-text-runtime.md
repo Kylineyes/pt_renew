@@ -2,6 +2,14 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
+## 菜单文件与按键候选
+
+只读检查 verification-20 无 DFT 隔离副本中的 `TRAXEDIT.MNU` 与 `TRAXEDIT.KEY`；两者 SHA-256 均与原安装基线相符。MNU 的 `#MAIN` 列出 `Information`，其子菜单含 `Board Dimensions` 与 `Status`。KEY 将 `REDRAW` 映射到 `F9`、`RECENTRE` 映射到 `F10`，并有 `LIST_PLANE` 宏序列 `Esc, Esc, I, P`。这些文件说明存在菜单结构和宏定义，不证明程序在先前画面中已载入菜单，亦不代表相应操作已运行成功。
+
+据菜单层级与宏序列，`Esc, Esc, I, B` 是进入 `Information → Board Dimensions` 的待验证命令候选，不是已确认快捷键。本轮在新的 `.local-analysis/verification-22/information-probe/` 中先请求桌面截图；同连接 30 秒内 16 次 `ControlStatus` 查询均为 `user`、generation 为 2，`wait_seconds` 约 9.66 至 10 秒。超时后停止客户端，截图请求未执行，未启动 DOSBox、未发送按键或鼠标操作；输入来源未知，未更改控制门禁。原目录 99 个文件集合与 SHA-256 符合基线，C21.PCB 与场景清单匹配，KEY/MNU 与原安装摘要匹配，无本轮残留进程。返回与摘要留存在被忽略的 `.local-analysis/verification-22/`。
+
+桌面恢复后优先用新连接和新截图，在隔离 C21 无 DFT 场景中执行并观察该候选命令。若菜单确实响应，再检查 `Information` 下的 `Board Dimensions`、`Status` 等信息项是否提供实际板图/载入状态；若不能确认文件名或文字属性，再回到静态读取路径定位可观察入口。此项仍只是静态导出的检查路径，`runtime_verified` 保持 `false`。
+
 ## 无 DFT 场景配对运行
 
 从 `dev` 的 `0575ca3` 建立 `research/legacy-text-defaults-control`，在新的 `.local-analysis/verification-21/without-dft/` 中复制桌面客户端并使用同一 Windows-MCP 连接完成此前缺少的无 DFT 场景。启动前再次逐文件核对 verification-20 两个运行副本：无 DFT 为 103 个文件，有 DFT 为 104 个文件；除后者原样 `TRAXEDIT.DFT`（SHA-256 `df3b18617d7ab58b1f9380437d0e9238b22f55d3f54388b18a7b3f80f6decd8b`）外，其余集合与摘要相符。两份配置都执行 `pt C21.PCB`，模拟器参数和挂载目录配置不变。
