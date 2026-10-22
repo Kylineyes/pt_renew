@@ -104,7 +104,15 @@ ctest --preset debug
 python tools/inspect_legacy_overlays.py 'D:/软件/PT.EXE' 'D:/软件/TRAXEDIT.OVR'
 ```
 
-默认只输出结构摘要，`--detail full` 增加入口和调用候选；不执行或修补原软件。Python 仅用于研究工具，桌面程序不依赖它。格式边界及已验证计数见 [覆盖模块映射](docs/legacy-overlays.md)。原文字形仍未恢复。
+默认只输出结构摘要，`--detail full` 增加入口和调用候选；不执行或修补原软件。Python 仅用于研究工具，桌面程序不依赖它。格式边界及已验证计数见 [覆盖模块映射](docs/legacy-overlays.md)。
+
+后续已定位默认文字笔画表及静态解释路径，可只读核对已知 EXE：
+
+```powershell
+python tools/inspect_legacy_text.py 'D:/软件/PT.EXE'
+```
+
+可选 `--text`、`--height`、`--orientation` 输出供本地对照的静态中心线。原程序单字符行为对照仍待完成，尚未将字形接入桌面程序或铜层分析，详见 [原文字形静态证据](docs/legacy-text.md)。
 
 ## 发布目录
 
@@ -133,6 +141,7 @@ windeployqt --release --compiler-runtime --no-translations dist/pt-renew.exe
 - [网表兼容说明](docs/netlist-compatibility.md)：第六阶段 NET/NETDEF、引脚映射、差异/冲突检查与真实验证。
 - [铜层分析说明](docs/copper-analysis.md)：三态几何接触模型、运行限制和“非 DRC”验收边界。
 - [覆盖模块映射](docs/legacy-overlays.md)：MZ/TPOV 入口、重定位检查、研究工具与字形恢复的证据边界。
+- [原文字形静态证据](docs/legacy-text.md)：默认笔画表、字符指令与旋转镜像、只读检查工具及运行对照限制。
 - [覆盖诊断与文字研究](docs/copper-coverage.md)：第九阶段的未覆盖图元定位、JSON 字段和原文字体研究边界。
 - [铜层圆弧分析](docs/copper-arcs.md)：第八阶段的象限拆分、内外包络、端点假设与验证范围。
 
