@@ -2,6 +2,16 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
+## verification-28 LIST_COMPS 只读入口探测
+
+从同步的 `dev`（`e879f7f`）建立 `research/legacy-text-runtime-observation-2`。运行前确认无 DOSBox 残留，并逐项核对无 DFT 隔离副本 103 个文件；`C21.PCB` SHA-256 为 `09f16e0c4fb7e0380e15285b8d610f6963e73ad349c9168cb28626f34c0a3f85`。`TRAXEDIT.KEY` 将 `Alt+F10` 定义为 `LIST_COMPS`，宏序列为 `Esc, Esc, I, C`；`TRAXEDIT.MNU` 的 `Information` 子菜单含 `Components`、`Status`。这些是静态菜单证据，不证明运行响应。
+
+新连接先取得桌面截图，`ControlStatus=ready`、generation 1；随后启动隔离无 DFT C21 配置，启动前状态为 `ai`、generation 2。核对标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 与 AUTOTRAX 1.57 启动页，聚焦后按 Enter。画面出现灰底、红色 A 轮廓和白色十字，但仍无文件名、对象属性或参考尺标。发送 `Alt+F10` 后截图未见可辨变化，未出现 `COMPONENTS PLACED` 或任何对象列表。
+
+接着按静态宏序列逐步发送。第一个 Esc 后截图仍显示 DOSBox；第二个 Esc 后截图转为两个 Windows Terminal 窗口覆盖前景，DOSBox 窗口不可见。该次 `ControlStatus` 返回仍为 `ready`/`ai`，但画面切换原因未知。由于余下的 `I`、`C` 命令此前已排队，二键仍被发送；这两步不作为 AUTOTRAX 行为证据。随后立即结束客户端；客户端退出后 DOSBox 进程也消失。没有发送保存或编辑命令。
+
+DOSBox 释放文件后复核无 DFT 隔离副本的 103 个文件集合与 SHA-256，均和运行前清单一致；原安装 99 个文件也与基线一致。截图、门禁记录、命令及摘要保存在被 Git 忽略的 `.local-analysis/verification-28/scenario/`。本轮没有确认菜单/列表入口、实际板图载入、文件名或文字对象状态；未进行坐标拟合、Qt 字形接入或铜层判定变更。`runtime_verified` 保持 `false`，静态工具证据仍为 `static_instruction_derivation`；未运行构建或 CTest。
+
 ## verification-27 无 DFT 菜单候选运行
 
 从同步的 `dev`（`69da3fb`）建立 `research/legacy-text-runtime-followup`。先核对原安装 99 个文件及 SHA-256 基线，并逐项核对无 DFT 隔离副本 103 个文件；`C21.PCB` SHA-256 为 `09f16e0c4fb7e0380e15285b8d610f6963e73ad349c9168cb28626f34c0a3f85`。启动配置挂载既有无 DFT 隔离副本，DOSBox 捕获目录设为新场景目录；输入未修改。
