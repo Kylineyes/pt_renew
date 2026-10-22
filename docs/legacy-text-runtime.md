@@ -1,8 +1,70 @@
 # 原文字形运行对照步骤
 
-本步骤接续 [原文字形静态证据](legacy-text.md)。当前仍未确认原程序载入研究样例，所有笔画结果均为静态推导，`runtime_verified` 保持 `false`。
+本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
-## 最新 C20 现场结果
+## verification-27 无 DFT 菜单候选运行
+
+从同步的 `dev`（`69da3fb`）建立 `research/legacy-text-runtime-followup`。先核对原安装 99 个文件及 SHA-256 基线，并逐项核对无 DFT 隔离副本 103 个文件；`C21.PCB` SHA-256 为 `09f16e0c4fb7e0380e15285b8d610f6963e73ad349c9168cb28626f34c0a3f85`。启动配置挂载既有无 DFT 隔离副本，DOSBox 捕获目录设为新场景目录；输入未修改。
+
+前置 verification-25 连接状态为 `ready`、generation 1，并取得空桌面截图后结束连接。verification-26 在新连接取得初始截图，状态为 `ready`；启动请求返回 PID 53476，但客户端随后因将 `command-001-gate.json` 误识别为命令而异常退出，未取得启动后截图或发送键鼠输入。之后未发现该 DOSBox 进程。本次不复用前两轮命令文件，在 verification-27 新连接中重新取初始截图，再于同一连接启动无 DFT 的 C21 场景。
+
+verification-27 初始 `ControlStatus` 为 `ready`、generation 1；启动前为 `ai`、generation 2。启动页截图确认完整标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 和 AUTOTRAX 1.57。点击标题栏聚焦后，逐步核对状态并发送 Enter；后续画面显示灰色背景、红色 A 线条和白色十字，与既有无 DFT 观察相符。该画面没有菜单、文件名、对象属性或参考尺标，不能独立确认 C21 已实际载入。
+
+随后逐键发送候选 `Esc, Esc, I, B`，每键前再次查询状态并在键后截图。四张后续截图均未见可辨画面变化，没有出现 `Information`、`Board Dimensions` 或 `Status` 信息。该候选仍未被验证为菜单快捷序列，也未获得板图载入、文件名或文字对象状态证据。点击 DOSBox 窗口关闭按钮后取得桌面截图；结束时无 DOSBox 或场景客户端残留。原安装 99 个文件与基线一致，无 DFT 隔离副本 103 个文件的集合与 SHA-256 也与运行前清单完全一致。
+
+本地命令、逐步返回、门禁状态、截图及运行摘要保存在被 Git 忽略的 `.local-analysis/verification-27/scenario/`；此前启动中断记录在 `.local-analysis/verification-25/` 和 `.local-analysis/verification-26/`。本轮没有保存、编辑或修改输入，也没有进行端点拟合、方向/缩放对照、Qt 字形接入或铜层判定变更。`runtime_verified` 继续为 `false`，静态工具证据继续标记为 `static_instruction_derivation`；未运行构建或 CTest。
+
+## 菜单文件与按键候选
+
+只读检查 verification-20 无 DFT 隔离副本中的 `TRAXEDIT.MNU` 与 `TRAXEDIT.KEY`；两者 SHA-256 均与原安装基线相符。MNU 的 `#MAIN` 列出 `Information`，其子菜单含 `Board Dimensions` 与 `Status`。KEY 将 `REDRAW` 映射到 `F9`、`RECENTRE` 映射到 `F10`，并有 `LIST_PLANE` 宏序列 `Esc, Esc, I, P`。这些文件说明存在菜单结构和宏定义，不证明程序在先前画面中已载入菜单，亦不代表相应操作已运行成功。
+
+据菜单层级与宏序列，`Esc, Esc, I, B` 是进入 `Information → Board Dimensions` 的待验证命令候选，不是已确认快捷键。本轮在新的 `.local-analysis/verification-22/information-probe/` 中先请求桌面截图；同连接 30 秒内 16 次 `ControlStatus` 查询均为 `user`、generation 为 2，`wait_seconds` 约 9.66 至 10 秒。超时后停止客户端，截图请求未执行，未启动 DOSBox、未发送按键或鼠标操作；输入来源未知，未更改控制门禁。原目录 99 个文件集合与 SHA-256 符合基线，C21.PCB 与场景清单匹配，KEY/MNU 与原安装摘要匹配，无本轮残留进程。返回与摘要留存在被忽略的 `.local-analysis/verification-22/`。
+
+桌面恢复后优先用新连接和新截图，在隔离 C21 无 DFT 场景中执行并观察该候选命令。若菜单确实响应，再检查 `Information` 下的 `Board Dimensions`、`Status` 等信息项是否提供实际板图/载入状态；若不能确认文件名或文字属性，再回到静态读取路径定位可观察入口。此项仍只是静态导出的检查路径，`runtime_verified` 保持 `false`。
+
+随后从 `dev` 的 `944c3bf` 建立 `research/legacy-text-information-probe`，在新的 `.local-analysis/verification-23/information-probe/` 中请求先取得桌面截图。30 秒内 16 次 `ControlStatus` 查询均为 `user`、generation 为 2，`wait_seconds` 范围为 8.28 至 9.999 秒；超时后客户端停止，截图请求未执行，也未启动 DOSBox 或发送键鼠操作。输入来源未知，未重试场景或修改门禁。无 DFT 副本 103 个文件与 verification-20 清单匹配，原安装 99 个文件集合及 SHA-256 符合基线，结束时无本轮桌面客户端或 DOSBox 残留。日志和摘要留在被忽略的 `.local-analysis/verification-23/`。候选 `Esc, Esc, I, B` 仍未运行验证。
+
+随后从 `dev` 的 `773c015` 建立 `research/legacy-text-information-probe-2`，在新的 `.local-analysis/verification-24/information-probe/` 中用同一连接成功取得初始桌面截图，初始 `ControlStatus` 为 `ready`、generation 为 1。启动 DOSBox 前的控制检查变为 `user`、generation 为 4；客户端等待 30 秒、16 次查询后超时，最后 `wait_seconds=9.941726699995343`。DOSBox 启动请求未执行，没有发送键鼠输入；输入来源未知。无 DFT 副本 103 个文件与 verification-20 清单匹配，原安装 99 个文件集合与 SHA-256 基线一致，结束时无 DOSBox 或本轮客户端残留。新桌面图、日志和摘要保存在被忽略的 `.local-analysis/verification-24/`。这次与 verification-23 不同，初始截图已取得；菜单候选仍未执行验证。
+
+## 无 DFT 场景配对运行
+
+从 `dev` 的 `0575ca3` 建立 `research/legacy-text-defaults-control`，在新的 `.local-analysis/verification-21/without-dft/` 中复制桌面客户端并使用同一 Windows-MCP 连接完成此前缺少的无 DFT 场景。启动前再次逐文件核对 verification-20 两个运行副本：无 DFT 为 103 个文件，有 DFT 为 104 个文件；除后者原样 `TRAXEDIT.DFT`（SHA-256 `df3b18617d7ab58b1f9380437d0e9238b22f55d3f54388b18a7b3f80f6decd8b`）外，其余集合与摘要相符。两份配置都执行 `pt C21.PCB`，模拟器参数和挂载目录配置不变。
+
+同连接先取得新的桌面截图，再启动 `.local-analysis/verification-20/dosbox-without-dft.conf`。核对完整窗口标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 及 AUTOTRAX 1.57 启动页后，点击标题栏聚焦并按 Enter。`.local-analysis/verification-21/without-dft/result-007.png` 显示灰色背景、红色 A 状线条和白色十字；没有观察到有 DFT 场景 `verification-20/paired-run/result-006.png` 中的黑色背景、灰色参考十字及非对称尺标。两者启动页均显示 `VGA 640x480`，该驱动名称不能区分 DFT 是否读取。发送 F 后 `result-009.png` 画面未见变化；两图摘要不同，不记录为像素完全相同。菜单、实际文件名、文字对象属性和可见图层状态仍未显示。
+
+两次运行使用同一 C21 输入和等价 DOSBox 配置，启动前两个隔离目录唯一文件差异是 DFT，运行后文件清单和摘要仍与各自启动前清单相符。因而可以记录有无 DFT 场景的显示结果不同，且差异与 DFT 文件是否存在相关；但运行发生在不同连接/时刻，不能据此确认原程序读取了 DFT 的哪些内容、定位具体字段或解释菜单为何不可见。命令行中的 `C21.PCB` 也不是实际载入文件名或对象状态的独立证据。
+
+点击新截图中的 DOSBox 关闭按钮后，`result-011.png` 返回桌面，进程核对确认 DOSBox 退出；停止同连接客户端后无本轮 DOSBox 或桌面客户端残留。原安装目录 99 个文件集合与 SHA-256 基线一致。此次只完成默认配置配对观察，未进行端点拟合、方向/缩放检查、Qt 字形接入或铜层判定变更；`runtime_verified` 仍为 `false`。同连接命令、返回、截图及输入清单保存在被忽略的 `.local-analysis/verification-21/without-dft/`，不提交本地证据。
+
+## 默认配置诊断的前序记录
+
+`research/legacy-text-defaults-diagnosis` 基于同步的 `dev`（`a581f67`）。既有 `.local-analysis/verification-11/prepare-text.py` 在建立副本时将 `TRAXEDIT.DFT` 改名为 `TRAXEDIT.OLD`，后续 C00/C20/C21 场景沿用了这个无 DFT 目录。原 DFT 含历史绝对路径、显示及其他默认参数，不能未经核对直接将其视为可复用的应用配置。
+
+为检查配置缺失的影响，在 `.local-analysis/verification-20/` 新建 `runtime-without-dft/pt/` 与 `runtime-with-dft/pt/`，前者复制既有隔离输入，后者额外恢复原样 DFT。启动前逐文件摘要核对表明，两个副本唯一文件差异是 `TRAXEDIT.DFT`，其 SHA-256 为 `df3b18617d7ab58b1f9380437d0e9238b22f55d3f54388b18a7b3f80f6decd8b`。两个 DOSBox 配置均执行 `pt C21.PCB`，C、D 盘均只挂载各自隔离目录；未修改原安装或既有运行目录。
+
+此前在本目录两次尝试取得首张截图，各等待 30 秒、16 次查询均为 `user`，没有截图或启动目标。用户随后再次授权继续，在新的 `paired-run/` 同连接中取得 `ready` 和新桌面截图，启动有 DFT 的副本并核对 AUTOTRAX 1.57 启动页。启动页显示 `VGA 640x480`，但此前无 DFT 的启动页也有该驱动名，因此驱动名本身不能证明 DFT 已成功读取，更不能证明某个具体设置已经生效。
+
+核对标题栏、聚焦并按 Enter 后，`paired-run/result-006.png` 显示**黑色背景、红色 A、灰色参考十字与非对称尺标，以及贯穿视图的白色十字**。这是首次取得参考标记可见的研究画面。菜单、实际文件名和对象属性仍未出现；按 F 后 `result-008.png` 与前图 SHA-256 相同。点击窗口关闭按钮后，`result-010.png` 与进程核对确认 DOSBox 已退出。
+
+接着启动无 DFT 副本之前，控制状态连续 30 秒、16 次查询均为 `user`、generation 为 24，最后 `wait_seconds=5.722367600013968`；超时后连接停止，未执行该次启动请求，输入来源未知。**本轮配对尚未完成**：恢复 DFT 的场景出现了参考标记，但只能与此前不同轮次的灰底场景比较，尚不能把差异归因到 DFT 的某个字段，也没有定位菜单缺失原因。没有修改门禁、阈值、hooks 或第三方包。
+
+前后核验：原目录 99 个文件集合及 SHA-256 符合基线，既有三项二进制与 C00/C20/C21 摘要一致；新建两个副本的完整文件集合与摘要也完全未变，结束时无本轮桌面客户端、Windows-MCP 或 DOSBox 进程。本地保留 `experiment.json`、`inputs-*-before/after.json`、`verification-summary.json`、配置、逐步返回及截图；原文件、配置内容、截图和笔画数据不提交。已有 Ghidra 项目按 `-noanalysis -readOnly` 做了配置与菜单锚点扫描，尚未确认 DFT 读取或缺省初始化路径，静态输出仅留本地。
+
+下一步优先查明菜单、实际载入文件名、文字对象参数和可见图层为何不可见；不要根据本次背景/参考标记差异猜测 DFT 字段或认定对象已载入。原样 DFT 含历史启动路径，须先取得文件和对象状态证据，再进行端点、交点、整数缩放及方向对照。产品仍为 0.9.0，未接入 Qt 字形或铜层模型；前序诊断仅更新研究文档，未重跑构建或 CTest。
+
+## C21 现场结果
+
+在 `research/legacy-text-c21-observation` 分支（基于 `804263a`）取得新的桌面截图，通过同一 Windows-MCP 连接启动隔离 `dosbox-c21.conf`。核对 AUTOTRAX 1.57 启动页后点击标题栏聚焦并按 Enter，局部截图显示灰色背景、红色 A 和白色十字，仍没有菜单、实际文件名、对象属性或 11 层参考尺标。随后发送 Esc、F，下一张截图与此前截图完全相同。
+
+与前次 C20 截图相比，C21 的 A 显示大小和位置不同，但没有独立可见尺标，不能据此拟合比例、验证字高或确认参考走线已加载。参考走线宽度改为 10 仍未让菜单、属性或尺标出现，灰色画面原因继续保留未知。
+
+准备发送 F9 时，操作前 30 秒内 16 次控制查询始终为 `user`、generation 为 20，最后 `wait_seconds=8.987158999952953`；超时后连接停止，未发送 F9，未取得重绘后的截图，也未重试。输入来源未知。当前安装的 Windows-MCP 未提供申请控制权或弹窗批准的公开接口；其公开 `ControlStatus` 只返回状态，正常桌面调用在 `ready` 或 `ai` 时取得控制，不因会话中的授权文字覆盖 `user` 状态。本轮仅只读核对工具注册和状态实现，没有修改包、hooks、门禁或阈值。
+
+`.local-analysis/verification-19/` 保留同连接客户端、逐步命令和返回、截图、输入核验及摘要：`result-003.png` 为启动页，`result-006.png` 为 Enter 之后画面，`result-009.png` 为 Esc、F 之后画面。原目录 99 个文件集合及 SHA-256 前后符合基线，隔离三项二进制与 C00/C20/C21 摘要一致，结束时无本轮桌面客户端、Windows-MCP 或 DOSBox 残留。
+
+本轮已取得 C21 启动页之后的绘制观察，尚未取得完整载入或独立字形对照证据，`runtime_verified` 保持 `false`。下一步应诊断菜单、属性及参考层不可见的原因，取得实际文件和对象状态后再继续字形测量。产品仍为 0.9.0，没有 Qt 或铜层接入变更；仅更新研究文档，未重跑构建或 CTest。
+
+## C20 现场结果
 
 在 `research/legacy-text-c20-live` 分支（基于 `308ddc0`）重新取得 `ControlStatus=ready` 和真实桌面截图。同一连接启动隔离 `dosbox-c20.conf`，核对新的 AUTOTRAX 1.57 启动页，点击标题栏聚焦并按 Enter。后续局部截图出现红色 A 和白色十字，但没有菜单、实际文件名、对象属性或参考尺标。这次已观察到无参考走线配置下启动页之后的绘制，仍不足以确认编辑器完整载入或完成字形对照。
 
