@@ -235,7 +235,7 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第七阶段：只读兼容与受限铜层几何分析\n"
+        QStringLiteral("第八阶段：只读兼容与铜层圆弧分析\n"
                        "Ctrl+O 板图；网络菜单载入 NET，再运行几何分析。不是完整 DRC 或制造验收。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }

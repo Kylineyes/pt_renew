@@ -297,7 +297,7 @@ void MainWindow::clearFileInfo() {
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第七阶段加入受限铜层分析（非完整 DRC），仍不支持编辑或保存。"));
+        "第八阶段扩展铜层圆弧分析（非完整 DRC），仍不支持编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
 }

@@ -67,6 +67,31 @@ void removeHole(Element& item,const QPointF& center,qreal radius) {
     item.inside=item.inside.subtracted(capsule(center,center,radius,true));
     item.outside=item.outside.subtracted(capsule(center,center,radius,false));
 }
+QPainterPath arcQuadrantEnvelope(const Arc& arc,int quadrant,bool outer) {
+    const qreal halfWidth=arc.width/2.0;
+    const qreal pi=std::acos(-1.0);
+    const qreal step=2*pi/circleSides;
+    const qreal cosine=std::cos(step/2);
+    const qreal outerRadius=(arc.radius+halfWidth)/(outer?cosine:1);
+    const qreal innerRadius=qMax<qreal>(0,arc.radius-halfWidth)/(outer?1:cosine);
+    QPolygonF sector;
+    const auto point=[&](qreal radius,int index) {
+        const qreal angle=quadrant*pi/2+index*step;
+        return arc.center+QPointF(radius*std::cos(angle),radius*std::sin(angle));
+    };
+    for (int i=0;i<=circleSides/4;++i) sector.append(point(outerRadius,i));
+    if (innerRadius>0) for (int i=circleSides/4;i>=0;--i) sector.append(point(innerRadius,i));
+    else sector.append(arc.center);
+    QPainterPath result;result.addPolygon(sector);result.closeSubpath();
+    const QPointF endpoints[]{{qreal(arc.radius),0},{0,qreal(arc.radius)},
+                              {-qreal(arc.radius),0},{0,-qreal(arc.radius)}};
+    // 圆环扇区加两端圆头；各象限单独入图，避免隔开的弧段被同一记录隐式连通。
+    for (const int index:{quadrant,(quadrant+1)%4}) {
+        const auto center=arc.center+endpoints[index];
+        result=result.united(capsule(center,center,halfWidth,outer));
+    }
+    return result;
+}
 bool positiveIntersection(const QPainterPath& a,const QPainterPath& b) {
     const auto overlap=a.intersected(b);
     // 明确正面积重叠才是已知连接；相切和零面积退化不算确定边。
@@ -154,7 +179,26 @@ CopperAnalysis analyzeCopper(const BoardDocument& board,const Netlist& netlist,c
         if (fill.rectangle.width()<=0 || fill.rectangle.height()<=0) { unknown(QStringLiteral("铜填充尺寸退化。"));continue; }
         const auto path=rectangle(fill.rectangle);append({path,path,{},mask,-1});
     }
-    for (const auto& arc:board.arcs) if (copperMask(arc.layer) || plane(arc.layer) || arc.layer==13) unknown(QStringLiteral("存在铜层圆弧，当前接触分析不覆盖。"));
+    for (const auto& arc:board.arcs) {
+        if (result.limitReached) break;
+        const auto mask=copperMask(arc.layer);
+        if (!mask) {
+            if (plane(arc.layer) || arc.layer==13) unknown(QStringLiteral("存在平面层或多层编号的圆弧，未建模。"));
+            continue;
+        }
+        if (arc.radius<=0 || arc.width<=0 || arc.quadrants<1 || arc.quadrants>15) {
+            unknown(QStringLiteral("圆弧尺寸或象限掩码无效。"));continue;
+        }
+        const qreal cosine=std::cos(std::acos(-1.0)/circleSides);
+        const qreal innerRadius=qMax<qreal>(0,arc.radius-arc.width/2.0);
+        // 包络过宽时内接环可能分裂；整条弧保留未知，不能把分裂轮廓当作一个明确铜组。
+        if ((arc.radius+arc.width/2.0)*cosine-innerRadius/cosine<=numericalBand) {
+            unknown(QStringLiteral("圆弧线宽相对半径过小，64 边包络无法建立连续内接铜轮廓。"));continue;
+        }
+        for (int quadrant=0;quadrant<4 && !result.limitReached;++quadrant) if (arc.quadrants&(1<<quadrant)) {
+            append({arcQuadrantEnvelope(arc,quadrant,false),arcQuadrantEnvelope(arc,quadrant,true),{},mask,-1});
+        }
+    }
     for (const auto& text:board.texts) if ((copperMask(text.layer) || plane(text.layer) || text.layer==13) && !text.value.isEmpty()) unknown(QStringLiteral("存在铜层文字，原始字形尚未恢复。"));
     result.copperElements=elements.size();
     DisjointSet definite(elements.size()),possible(elements.size());
@@ -212,7 +256,7 @@ CopperAnalysis analyzeCopper(const BoardDocument& board,const Netlist& netlist,c
     std::sort(result.crossNetContacts.begin(),result.crossNetContacts.end(),[](const CopperContact& a,const CopperContact& b) { return a.pads.first()<b.pads.first(); });
     result.limitations=unsupported.values();std::sort(result.limitations.begin(),result.limitations.end());
     result.limitations.prepend(QStringLiteral("按六个铜层及理想镀通孔筒建模；多层有孔焊盘和有效过孔假设为镀通，不验证实际镀层、盲埋孔或负片平面。"));
-    result.limitations.append(QStringLiteral("圆/长圆及钻孔用 64 边内接/外接包络；仅明确正面积接触确认为连接，0.0001 mil 数值带只用于可能接触图。未做生产精度或完整 DRC 验收。"));
+    result.limitations.append(QStringLiteral("圆/长圆、钻孔及圆弧用 64 边内接/外接包络；圆弧按象限拆分并假设圆头端帽；仅明确正面积接触确认为连接，0.0001 mil 数值带只用于可能接触图。未做生产精度或完整 DRC 验收。"));
     return result;
 }
 
