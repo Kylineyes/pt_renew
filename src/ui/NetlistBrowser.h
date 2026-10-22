@@ -19,12 +19,15 @@ public:
     void clearExternal();
     void focusSearch();
     void clearHighlight();
+    void runCopperAnalysis();
+    bool copperAnalysisRunning() const { return m_analyzing; }
     const NetlistMapping& mapping() const { return m_mapping; }
     const Netlist* netlist() const { return m_active.get(); }
 signals:
     void padsHighlighted(const QList<qsizetype>& pads);
     void padActivated(qsizetype index);
     void netlistLoaded(bool success);
+    void copperAnalysisFinished();
 private:
     void rebuild();
     void filter();
@@ -42,6 +45,10 @@ private:
     QLabel* m_status=nullptr;
     QPushButton* m_open=nullptr;
     QPushButton* m_clear=nullptr;
+    QPushButton* m_copper=nullptr;
+    QString m_copperReport;
+    quint64 m_copperGeneration=0;
+    bool m_analyzing=false;
     bool m_loading=false;
     quint64 m_generation=0;
     QString m_error;

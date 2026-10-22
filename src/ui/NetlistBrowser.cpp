@@ -1,5 +1,6 @@
 #include "ui/NetlistBrowser.h"
 #include "io/LegacyNetlistReader.h"
+#include "geometry/CopperConnectivity.h"
 #include <QFileDialog>
 #include <QComboBox>
 #include <QFutureWatcher>
@@ -22,6 +23,9 @@ NetlistBrowser::NetlistBrowser(QWidget* parent):QDockWidget(QStringLiteral("网�
     m_open=new QPushButton(QStringLiteral("打开 NET…"),content);m_open->setObjectName(QStringLiteral("netlistOpen"));
     m_clear=new QPushButton(QStringLiteral("移除外部网表"),content);m_clear->setObjectName(QStringLiteral("netlistClear"));
     buttons->addWidget(m_open);buttons->addWidget(m_clear);layout->addLayout(buttons);
+    m_copper=new QPushButton(QStringLiteral("受限铜层几何分析（非 DRC）"),content);
+    m_copper->setObjectName(QStringLiteral("copperAnalyze"));layout->addWidget(m_copper);
+    connect(m_copper,&QPushButton::clicked,this,&NetlistBrowser::runCopperAnalysis);
     m_source=new QComboBox(content);m_source->setObjectName(QStringLiteral("netlistSource"));layout->addWidget(m_source);
     m_status=new QLabel(content);m_status->setObjectName(QStringLiteral("netlistStatus"));m_status->setWordWrap(true);m_status->setTextFormat(Qt::PlainText);layout->addWidget(m_status);
     m_search=new QLineEdit(content);m_search->setObjectName(QStringLiteral("netlistSearch"));m_search->setPlaceholderText(QStringLiteral("按网络名筛选"));m_search->setClearButtonEnabled(true);layout->addWidget(m_search);
@@ -53,7 +57,7 @@ void NetlistBrowser::chooseFile() {
 void NetlistBrowser::requestFile(const QString& path) {
     if (m_loading) return;
     ++m_generation;const auto generation=m_generation;m_external.reset();m_error.clear();rebuild();
-    m_loading=true;m_open->setEnabled(false);m_clear->setEnabled(true);m_status->setText(QStringLiteral("正在后台读取网表；移除外部网表可放弃结果。"));
+    m_loading=true;m_copper->setEnabled(false);m_open->setEnabled(false);m_clear->setEnabled(true);m_status->setText(QStringLiteral("正在后台读取网表；移除外部网表可放弃结果。"));
     auto* watcher=new QFutureWatcher<NetlistReadResult>(this);
     connect(watcher,&QFutureWatcher<NetlistReadResult>::finished,this,[this,watcher,generation] {
         const auto result=watcher->result();watcher->deleteLater();m_loading=false;m_open->setEnabled(true);
@@ -70,7 +74,25 @@ void NetlistBrowser::focusSearch() { show();raise();m_search->setFocus(Qt::Short
 void NetlistBrowser::clearHighlight() {
     m_nets->setCurrentRow(-1);m_nodes->clear();emit padsHighlighted({});
 }
+void NetlistBrowser::runCopperAnalysis() {
+    if (m_analyzing || m_loading || !m_board || !m_active) return;
+    m_analyzing=true;const auto generation=++m_copperGeneration;
+    m_copperReport=QStringLiteral("正在后台执行受限铜层几何分析……不是完整 DRC。\n");
+    m_copper->setEnabled(false);showCurrent();
+    const auto board=m_board;const auto network=m_active;
+    auto* watcher=new QFutureWatcher<CopperAnalysis>(this);
+    connect(watcher,&QFutureWatcher<CopperAnalysis>::finished,this,[this,watcher,generation,board,network] {
+        const auto report=watcher->result();watcher->deleteLater();m_analyzing=false;
+        m_copper->setEnabled(m_board!=nullptr && m_active!=nullptr && !m_loading);
+        if (generation!=m_copperGeneration) return;
+        m_copperReport=QStringLiteral("板图摘要：%1\n网表摘要：%2\n\n").arg(board->sha256,network->sha256)+copperAnalysisText(report);
+        showCurrent();emit copperAnalysisFinished();
+    });
+    watcher->setFuture(QtConcurrent::run([board,network] { return analyzeCopper(*board,*network); }));
+}
+
 void NetlistBrowser::rebuild() {
+    ++m_copperGeneration;m_copperReport.clear();
     emit padsHighlighted({});
     const auto internal=m_board?m_board->embeddedNetlist:nullptr;
     if (!m_external) m_useExternal=false;
@@ -84,6 +106,7 @@ void NetlistBrowser::rebuild() {
         m_source->setCurrentIndex(qMax(0,m_source->findData(m_useExternal?1:0)));
     }
     m_mapping=m_active?mapNetlist(*m_active,m_board.get()):NetlistMapping();
+    m_copper->setEnabled(m_board!=nullptr && m_active!=nullptr && !m_analyzing && !m_loading);
     {QSignalBlocker block(m_nets);m_nets->clear();for (qsizetype i=0;i<m_mapping.nets.size();++i) {
         const auto& net=m_mapping.nets[i];auto* item=new QListWidgetItem(QStringLiteral("%1（%2 显式节点）").arg(net.name).arg(net.nodes.size()),m_nets);item->setData(Qt::UserRole,i);
     }}
@@ -130,6 +153,7 @@ void NetlistBrowser::showCurrent() {
         nodesText+=QStringLiteral("激活唯一匹配节点可居中查看，隐藏图层不会自动开启；高亮只标识焊盘，不绘制代表实际布线的连线。\n\n");
         details.prepend(nodesText);emit padsHighlighted(net.uniquePads);
     }
+    if (!m_copperReport.isEmpty()) details=m_copperReport+QStringLiteral("\n\n网表映射信息：\n")+details;
     m_details->setPlainText(details);
 }
 }

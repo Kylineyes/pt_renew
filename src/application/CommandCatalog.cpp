@@ -71,6 +71,7 @@ const QList<MenuSpec>& commandCatalog() {
             command("netlist.load", "只读载入外部 NET(&G)", {"Ctrl+Shift+N"}, true),
             command("netlist.browse", "网络与引脚映射(&N)", {"Ctrl+Alt+N"}, true),
             command("netlist.clear", "移除外部网表(&C)", {}, true),
+            command("netlist.copper", "受限铜层几何分析（非 DRC）(&A)", {"Ctrl+Alt+C"}, true),
             command("netlist.drc", "设计规则检查(&D)"),
             command("netlist.autoplace", "自动布局(&A)"), command("netlist.route", "布线(&R)")}},
         {QStringLiteral("P"), QStringLiteral("放置(&P)"), {
