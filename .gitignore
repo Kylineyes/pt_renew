@@ -98,6 +98,10 @@ CMakeLists.txt.user.*
 *.profraw
 *.profdata
 
+# Python 研究工具的本地字节码缓存。
+__pycache__/
+*.py[cod]
+
 # 本地日志、崩溃转储、编辑器备份和系统杂项。
 *.log
 *.dmp
