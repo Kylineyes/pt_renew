@@ -17,6 +17,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QtTest/QTest>
+#include <cmath>
 
 namespace {
 pt::BoardDocument board(int layer=1,int shape=2,int drill=0) {
@@ -93,13 +94,122 @@ private slots:
         b.pads[1].center={40.2,0};QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Separated);
         b.pads[1].center={39,0};QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Connected);
     }
+    void arcMasksKeepDisconnectedQuadrantsSeparate_data() {
+        QTest::addColumn<int>("mask");
+        QTest::addColumn<int>("targetQuadrant");
+        for (int mask=1;mask<=15;++mask) for (int quadrant=0;quadrant<4;++quadrant) {
+            const auto name=QByteArray::number(mask)+"-"+QByteArray::number(quadrant);
+            QTest::newRow(name.constData()) << mask << quadrant;
+        }
+    }
+    void arcMasksKeepDisconnectedQuadrantsSeparate() {
+        QFETCH(int,mask);
+        QFETCH(int,targetQuadrant);
+        int first=0;while (!(mask&(1<<first))) ++first;
+        int reachable=1<<first;
+        for (int step=0;step<4;++step) {
+            const int neighbors=((reachable<<1)|(reachable>>3)|(reachable>>1)|(reachable<<3))&15;
+            reachable|=neighbors&mask;
+        }
+        const qreal diagonal=100/std::sqrt(2.0);
+        const QPointF midpoints[]{{diagonal,diagonal},{-diagonal,diagonal},
+                                 {-diagonal,-diagonal},{diagonal,-diagonal}};
+        const QPointF center(100000,-200000);
+        auto b=board();
+        for (auto& pad:b.pads) { pad.width=4;pad.height=4; }
+        b.pads[0].center=center+midpoints[first];b.pads[1].center=center+midpoints[targetQuadrant];
+        b.arcs.append({center,100,mask,10,1});
+        const auto result=pt::analyzeCopper(b,netlist());
+        QVERIFY(result.coverageComplete);
+        const auto expected=(reachable&(1<<targetQuadrant))?pt::CopperNetState::Connected:pt::CopperNetState::Separated;
+        QCOMPARE(result.nets[0].state,expected);
+    }
+    void arcEndpointsAndLayerIsolation() {
+        auto b=board();b.pads[0].center={100,-8};b.pads[1].center={-8,100};
+        for (auto& pad:b.pads) { pad.width=2;pad.height=2; }
+        b.arcs.append({{0,0},100,1,20,1});
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Connected);
+        b.arcs[0].layer=6;
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Separated);
+        b.arcs[0].layer=7;
+        const auto silk=pt::analyzeCopper(b,netlist());
+        QVERIFY(silk.coverageComplete);QCOMPARE(silk.copperElements,2);
+        QCOMPARE(silk.nets[0].state,pt::CopperNetState::Separated);
+    }
+    void arcInteriorStaysEmptyAndTouchingIsIndeterminate() {
+        auto b=board();b.pads[0].center={100,0};b.pads[1].center={0,0};
+        for (auto& pad:b.pads) { pad.width=2;pad.height=2; }
+        b.arcs.append({{0,0},100,15,20,1});
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Separated);
+        b.pads[1].center={111,0};
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Indeterminate);
+        b.pads[1].center={112,0};
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Separated);
+        b.pads[1].center={110,0};
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Connected);
+    }
+    void arcTrackViaAndContactCandidates() {
+        auto b=board();b.pads[0].center={100,-100};b.pads[1].center={-100,100};b.pads[1].layer=6;
+        b.arcs.append({{0,0},100,1,20,1});
+        b.tracks.append({{100,-100},{100,0},10,1});
+        b.tracks.append({{0,100},{-100,100},10,6});
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Separated);
+        b.vias.append({{0,100},40,10});
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Connected);
+        auto n=netlist();n.nets[0].nodes.removeLast();n.nets.append({QStringLiteral("B"),{{QStringLiteral("U2-1"),1}},1,{}});
+        const auto result=pt::analyzeCopper(b,n);
+        QCOMPARE(result.crossNetContacts.size(),1);
+        QCOMPARE(result.crossNetContacts[0].identities,QStringList({QStringLiteral("U1-1"),QStringLiteral("U2-1")}));
+    }
+    void unsupportedArcsKeepAllNetsIndeterminate_data() {
+        QTest::addColumn<int>("variant");
+        QTest::newRow("zero-radius") << 0;QTest::newRow("zero-width") << 1;
+        QTest::newRow("empty-mask") << 2;QTest::newRow("invalid-mask") << 3;
+        QTest::newRow("thin-envelope") << 4;QTest::newRow("plane") << 5;
+        QTest::newRow("multilayer") << 6;
+    }
+    void unsupportedArcsKeepAllNetsIndeterminate() {
+        QFETCH(int,variant);
+        auto b=board();b.tracks.append({{0,0},{200,0},10,1});
+        pt::Arc arc{{500,500},100,1,10,1};
+        if (variant==0) arc.radius=0;
+        if (variant==1) arc.width=0;
+        if (variant==2) arc.quadrants=0;
+        if (variant==3) arc.quadrants=16;
+        if (variant==4) { arc.radius=1000000;arc.width=1; }
+        if (variant==5) arc.layer=9;
+        if (variant==6) arc.layer=13;
+        b.arcs.append(arc);
+        const auto result=pt::analyzeCopper(b,netlist());
+        QVERIFY(!result.coverageComplete);QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
+    }
+    void wideArcsAndInnerTangencyStayConservative() {
+        auto b=board();b.pads[0].center={100,0};b.pads[1].center={88,0};
+        for (auto& pad:b.pads) { pad.width=2;pad.height=2; }
+        b.arcs.append({{0,0},100,1,20,1});
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Separated);
+        b.pads[1].center={89,0};
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Indeterminate);
+        b.pads[1].center={90,0};
+        QCOMPARE(pt::analyzeCopper(b,netlist()).nets[0].state,pt::CopperNetState::Connected);
+        b.pads[1].center={0,0};b.arcs[0].width=220;
+        const auto wide=pt::analyzeCopper(b,netlist());
+        QVERIFY(wide.coverageComplete);QCOMPARE(wide.nets[0].state,pt::CopperNetState::Connected);
+    }
+    void arcQuadrantsRespectElementBudget() {
+        auto b=board();b.pads[0].center={100,0};b.pads[1].center={-100,0};
+        b.arcs.append({{0,0},100,15,10,1});
+        pt::CopperAnalysisLimits limits;limits.maximumElements=5;
+        const auto result=pt::analyzeCopper(b,netlist(),limits);
+        QVERIFY(result.limitReached);QVERIFY(!result.coverageComplete);
+        QCOMPARE(result.copperElements,5);QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
+    }
     void unsupportedCopperCannotProduceFalseSeparatedResult_data() {
-        QTest::addColumn<int>("variant");QTest::newRow("arc")<<0;QTest::newRow("text")<<1;
+        QTest::addColumn<int>("variant");QTest::newRow("text")<<1;
         QTest::newRow("plane")<<2;QTest::newRow("octagon")<<3;QTest::newRow("plane-flags")<<4;
     }
     void unsupportedCopperCannotProduceFalseSeparatedResult() {
         QFETCH(int,variant);auto b=board();
-        if (variant==0) b.arcs.append({{100,0},100,15,10,1});
         if (variant==1) b.texts.append({{0,0},100,0,10,1,false,QStringLiteral("铜字")});
         if (variant==2) b.fills.append({QRectF(-20,-20,240,40),9});
         if (variant==3) b.pads[0].shape=3;
@@ -108,7 +218,7 @@ private slots:
         QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
     }
     void unsupportedExtraCannotReportAnyNetAsConnectedOrSeparated() {
-        auto b=board();b.tracks.append({{0,0},{200,0},10,1});b.arcs.append({{400,400},100,15,10,6});
+        auto b=board();b.tracks.append({{0,0},{200,0},10,1});b.texts.append({{400,400},100,0,10,6,false,QStringLiteral("未知铜字")});
         const auto result=pt::analyzeCopper(b,netlist());QVERIFY(!result.coverageComplete);
         QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
         QVERIFY(result.nets[0].reason.contains(QStringLiteral("全板铜几何覆盖不完整")));
@@ -168,8 +278,15 @@ private slots:
         const auto result=pt::analyzeCopper(b,netlist(),limits);QVERIFY(result.limitReached);QVERIFY(!result.coverageComplete);
         QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
     }
+    void backgroundUiAndStaleResultProtection_data() {
+        QTest::addColumn<bool>("useArc");
+        QTest::newRow("straight") << false;QTest::newRow("arc") << true;
+    }
     void backgroundUiAndStaleResultProtection() {
-        QTemporaryDir dir;QFile pcb(dir.filePath(QStringLiteral("board.pcb")));QVERIFY(pcb.open(QIODevice::WriteOnly));pcb.write(pcbBytes());pcb.close();
+        QFETCH(bool,useArc);
+        auto input=pcbBytes();
+        if (useArc) input.replace("FT\n0 0 200 0 10 1\n","FA\n100 0 100 3 10 1\n");
+        QTemporaryDir dir;QFile pcb(dir.filePath(QStringLiteral("board.pcb")));QVERIFY(pcb.open(QIODevice::WriteOnly));pcb.write(input);pcb.close();
         QFile net(dir.filePath(QStringLiteral("fixture.net")));QVERIFY(net.open(QIODevice::WriteOnly));net.write(netBytes());net.close();
         pt::MainWindow window;window.show();window.activateWindow();QVERIFY(QTest::qWaitForWindowExposed(&window));QVERIFY(window.inspectFile(pcb.fileName()));
         auto* browser=window.findChild<pt::NetlistBrowser*>();QVERIFY(browser->loadFile(net.fileName()));
@@ -187,7 +304,7 @@ private slots:
         QVERIFY(!window.findChild<QAction*>(QStringLiteral("netlist.drc"))->isEnabled());QVERIFY(!window.findChild<QAction*>(QStringLiteral("file.save"))->isEnabled());
         browser->runCopperAnalysis();browser->setBoard(nullptr);QTRY_VERIFY(!browser->copperAnalysisRunning());
         QCOMPARE(finished.size(),3);QVERIFY(!text->toPlainText().contains(QStringLiteral("支持模型内已连接")));
-        QVERIFY(pcb.open(QIODevice::ReadOnly));QCOMPARE(pcb.readAll(),pcbBytes());
+        QVERIFY(pcb.open(QIODevice::ReadOnly));QCOMPARE(pcb.readAll(),input);
     }
     void cliReportsModelStateAndInvalidInputs() {
         QTemporaryDir dir;QFile pcb(dir.filePath(QStringLiteral("board.pcb")));QVERIFY(pcb.open(QIODevice::WriteOnly));pcb.write(pcbBytes());pcb.close();
@@ -210,6 +327,11 @@ private slots:
         QVERIFY(pcb.open(QIODevice::WriteOnly));auto bytes=pcbBytes();bytes.replace("FT\n0 0 200 0 10 1\n","");pcb.write(bytes);pcb.close();
         process.start(executable,{pcb.fileName(),net.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),2);
         QVERIFY(pcb.open(QIODevice::WriteOnly));bytes.replace("ENDPCB\n","FA\n100 0 100 15 10 1\nENDPCB\n");pcb.write(bytes);pcb.close();
+        process.start(executable,{pcb.fileName(),net.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),0);
+        const auto arcReport=QJsonDocument::fromJson(process.readAllStandardOutput()).object();
+        QVERIFY(arcReport.value(QStringLiteral("coverage_complete")).toBool());
+        QCOMPARE(arcReport.value(QStringLiteral("connected")).toInt(),1);
+        QVERIFY(pcb.open(QIODevice::WriteOnly));bytes.replace("ENDPCB\n","FS\n0 0 100 0 10 1\nUNKNOWN\nENDPCB\n");pcb.write(bytes);pcb.close();
         process.start(executable,{pcb.fileName(),net.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),3);
         process.start(executable,{pcb.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),1);
     }
