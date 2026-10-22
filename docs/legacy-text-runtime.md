@@ -2,6 +2,18 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
+## verification-27 无 DFT 菜单候选运行
+
+从同步的 `dev`（`69da3fb`）建立 `research/legacy-text-runtime-followup`。先核对原安装 99 个文件及 SHA-256 基线，并逐项核对无 DFT 隔离副本 103 个文件；`C21.PCB` SHA-256 为 `09f16e0c4fb7e0380e15285b8d610f6963e73ad349c9168cb28626f34c0a3f85`。启动配置挂载既有无 DFT 隔离副本，DOSBox 捕获目录设为新场景目录；输入未修改。
+
+前置 verification-25 连接状态为 `ready`、generation 1，并取得空桌面截图后结束连接。verification-26 在新连接取得初始截图，状态为 `ready`；启动请求返回 PID 53476，但客户端随后因将 `command-001-gate.json` 误识别为命令而异常退出，未取得启动后截图或发送键鼠输入。之后未发现该 DOSBox 进程。本次不复用前两轮命令文件，在 verification-27 新连接中重新取初始截图，再于同一连接启动无 DFT 的 C21 场景。
+
+verification-27 初始 `ControlStatus` 为 `ready`、generation 1；启动前为 `ai`、generation 2。启动页截图确认完整标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 和 AUTOTRAX 1.57。点击标题栏聚焦后，逐步核对状态并发送 Enter；后续画面显示灰色背景、红色 A 线条和白色十字，与既有无 DFT 观察相符。该画面没有菜单、文件名、对象属性或参考尺标，不能独立确认 C21 已实际载入。
+
+随后逐键发送候选 `Esc, Esc, I, B`，每键前再次查询状态并在键后截图。四张后续截图均未见可辨画面变化，没有出现 `Information`、`Board Dimensions` 或 `Status` 信息。该候选仍未被验证为菜单快捷序列，也未获得板图载入、文件名或文字对象状态证据。点击 DOSBox 窗口关闭按钮后取得桌面截图；结束时无 DOSBox 或场景客户端残留。原安装 99 个文件与基线一致，无 DFT 隔离副本 103 个文件的集合与 SHA-256 也与运行前清单完全一致。
+
+本地命令、逐步返回、门禁状态、截图及运行摘要保存在被 Git 忽略的 `.local-analysis/verification-27/scenario/`；此前启动中断记录在 `.local-analysis/verification-25/` 和 `.local-analysis/verification-26/`。本轮没有保存、编辑或修改输入，也没有进行端点拟合、方向/缩放对照、Qt 字形接入或铜层判定变更。`runtime_verified` 继续为 `false`，静态工具证据继续标记为 `static_instruction_derivation`；未运行构建或 CTest。
+
 ## 菜单文件与按键候选
 
 只读检查 verification-20 无 DFT 隔离副本中的 `TRAXEDIT.MNU` 与 `TRAXEDIT.KEY`；两者 SHA-256 均与原安装基线相符。MNU 的 `#MAIN` 列出 `Information`，其子菜单含 `Board Dimensions` 与 `Status`。KEY 将 `REDRAW` 映射到 `F9`、`RECENTRE` 映射到 `F10`，并有 `LIST_PLANE` 宏序列 `Esc, Esc, I, P`。这些文件说明存在菜单结构和宏定义，不证明程序在先前画面中已载入菜单，亦不代表相应操作已运行成功。
