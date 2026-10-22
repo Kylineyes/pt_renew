@@ -84,6 +84,15 @@ foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check pt-netlist-ch
 endforeach()
 
 if(BUILD_TESTING)
+    find_package(Python3 QUIET COMPONENTS Interpreter)
+    if(Python3_Interpreter_FOUND)
+        add_test(NAME pt-overlay-tests
+            COMMAND "${Python3_EXECUTABLE}" -m unittest discover
+                -s "${CMAKE_CURRENT_SOURCE_DIR}/tests" -p test_legacy_overlays.py)
+        set_tests_properties(pt-overlay-tests PROPERTIES TIMEOUT 30)
+    else()
+        message(STATUS "未找到 Python 3：跳过覆盖模块研究工具测试，Qt 应用构建不受影响。")
+    endif()
     find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
     qt_add_executable(pt-shell-tests tests/ShellTests.cpp)
     set_target_properties(pt-shell-tests PROPERTIES WIN32_EXECUTABLE FALSE)
