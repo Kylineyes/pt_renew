@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.6.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.7.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -39,6 +39,8 @@ target_link_libraries(pt_core PUBLIC Qt6::Core)
 add_library(pt_geometry STATIC
     src/geometry/BoardGeometry.h
     src/geometry/BoardGeometry.cpp
+    src/geometry/CopperConnectivity.h
+    src/geometry/CopperConnectivity.cpp
 )
 target_link_libraries(pt_geometry PUBLIC pt_core Qt6::Gui)
 
@@ -69,7 +71,11 @@ add_executable(pt-netlist-check tools/InspectNetlist.cpp)
 set_target_properties(pt-netlist-check PROPERTIES WIN32_EXECUTABLE FALSE)
 target_link_libraries(pt-netlist-check PRIVATE pt_core)
 
-foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check pt-netlist-check)
+add_executable(pt-copper-check tools/InspectCopper.cpp)
+set_target_properties(pt-copper-check PROPERTIES WIN32_EXECUTABLE FALSE)
+target_link_libraries(pt-copper-check PRIVATE pt_geometry)
+
+foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check pt-netlist-check pt-copper-check)
     if(MSVC)
         target_compile_options(${target} PRIVATE /utf-8 /W4 /permissive-)
     else()
@@ -129,6 +135,15 @@ if(BUILD_TESTING)
     endif()
     add_test(NAME pt-netlist-tests COMMAND pt-netlist-tests -o -,txt -o netlist-test-results.txt,txt)
     set_tests_properties(pt-netlist-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-copper-tests tests/CopperTests.cpp)
+    set_target_properties(pt-copper-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-copper-tests PRIVATE pt_ui Qt6::Test)
+    add_dependencies(pt-copper-tests pt-copper-check)
+    if(MSVC)
+        target_compile_options(pt-copper-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-copper-tests COMMAND pt-copper-tests -o -,txt -o copper-test-results.txt,txt)
+    set_tests_properties(pt-copper-tests PROPERTIES TIMEOUT 60)
 endif()
 
 install(TARGETS pt-renew RUNTIME DESTINATION .)

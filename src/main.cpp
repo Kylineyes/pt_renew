@@ -8,10 +8,10 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("pt-renew"));
-    QCoreApplication::setApplicationVersion(QStringLiteral("0.6.0"));
+    QCoreApplication::setApplicationVersion(QStringLiteral("0.7.0"));
     QCoreApplication::setOrganizationName(QStringLiteral("PtRenew"));
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral("AUTOTRAX 重建工程：板图、封装库与网表的只读查看、引脚映射及测量。"));
+    parser.setApplicationDescription(QStringLiteral("AUTOTRAX 重建工程：只读板图、库、网表及受限铜层几何分析（非完整 DRC）。"));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(QCommandLineOption(QStringLiteral("library"),QStringLiteral("在独立只读窗口打开 LIB，不放置到板图。"),QStringLiteral("路径")));

@@ -177,6 +177,8 @@ void MainWindow::executeCommand(const QString& id) {
         m_netlistBrowser->show();m_netlistBrowser->raise();m_netlistBrowser->chooseFile();
     } else if (id==QStringLiteral("netlist.browse")) {
         m_netlistBrowser->focusSearch();
+    } else if (id==QStringLiteral("netlist.copper")) {
+        m_netlistBrowser->show();m_netlistBrowser->raise();m_netlistBrowser->runCopperAnalysis();
     } else if (id==QStringLiteral("netlist.clear")) {
         m_netlistBrowser->clearExternal();
     } else if (id==QStringLiteral("highlight.reset")) {
@@ -208,7 +210,7 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("app.about")) {
         QMessageBox::information(this, QStringLiteral("关于当前阶段"),
             QStringLiteral("C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
-                           "当前支持板图、LIB 与网表只读查看、引脚映射、选择、定位和近似测量。\n"
+                           "当前支持只读板图/库/网表及受限铜层几何分析；不是完整 DRC。\n"
                            "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。"));
     }
     statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
@@ -295,7 +297,7 @@ void MainWindow::clearFileInfo() {
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第六阶段支持 NET/NETDEF 只读映射，不支持铜线连通检查、编辑或保存。"));
+        "第七阶段加入受限铜层分析（非完整 DRC），仍不支持编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
 }

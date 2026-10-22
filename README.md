@@ -2,7 +2,7 @@
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
-当前为第六阶段（0.6.0）：支持 PCB **只读预览、图元属性、元件定位、两点测量**，以及 **LIB 独立浏览、NET/NETDEF 读取与网表引脚映射**。**尚未实现铜线实际连通/短路检查、封装放置、编辑保存、DRC、自动布线或生产输出。** 字体、部分轮廓和测量仍有近似限制，不可用于制造验收。
+当前为第七阶段（0.7.0）：支持 PCB/LIB/NET 只读查看、引脚映射，以及**受限铜层几何分析（非完整 DRC）**。铜层分析只对已支持几何建立保守接触图；**只要整个板图几何覆盖不完整，所有网络均显示“无法确定”，不因局部路径看似相连而报通过。** 没有实现完整 DRC、断短路确认、布线、封装放置、编辑保存或生产输出。
 
 ## 开发环境
 
@@ -86,6 +86,14 @@ ctest --preset debug
 
 退出码 0 不等于 DRC 通过；必须结合 `board_loaded` 和完整诊断信息判断。工具不会修改输入。
 
+可选运行受限铜层接触分析：网络面板按钮、“网络 → 受限铜层几何分析”（画布 **N→A**）、**Ctrl+Alt+C** 共用同一入口。命令行：
+
+```powershell
+& .\build\release\pt-copper-check.exe 'D:\project\pt_renew\pt\PLACED.PCB' 'D:\project\pt_renew\pt\DEMO.NET'
+```
+
+此分析**不是 DRC**。退出码 0 也不代表生产通过；`3` 表示存在未覆盖几何或无法判定内容，须以完整 JSON 限制/分网说明为准。铜层模型和样例结果见 [铜层分析说明](docs/copper-analysis.md)。
+
 ## 发布目录
 
 在已启用 Qt 开发环境的终端运行：
@@ -111,5 +119,6 @@ windeployqt --release --compiler-runtime --no-translations dist/pt-renew.exe
 - [元件检索与测量](docs/navigation-measure.md)：第四阶段筛选定位、自由取点、快捷键与近似读数限制。
 - [LIB 分析与浏览](docs/library-analysis.md)：第五阶段二进制目录/图元布局、只读窗口、结构诊断及未验证语义。
 - [网表兼容说明](docs/netlist-compatibility.md)：第六阶段 NET/NETDEF、引脚映射、差异/冲突检查与真实验证。
+- [铜层分析说明](docs/copper-analysis.md)：第七阶段的三态几何接触模型、运行限制和“非 DRC”验收边界。
 
 `pt/`、`pt_install/` 和 `.local-analysis/` 永远不应提交。原软件及用户文件不属于本项目自行授权分发的内容。测试使用合成小样例，不提交原软件数据或反编译数据库。
