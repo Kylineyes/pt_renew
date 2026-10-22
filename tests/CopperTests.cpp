@@ -7,6 +7,8 @@
 #include <QAction>
 #include <QFile>
 #include <QMenu>
+#include <QListWidget>
+#include <QLabel>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSignalSpy>
@@ -278,6 +280,86 @@ private slots:
         const auto result=pt::analyzeCopper(b,netlist(),limits);QVERIFY(result.limitReached);QVERIFY(!result.coverageComplete);
         QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
     }
+    void coverageIssuesKeepPrimitiveAndSourceIdentity() {
+        auto b=board();
+        b.tracks.append({{0,0},{200,0},10,1,0,{21,0}});
+        b.pads[1].shape=3;b.pads[1].source.line=32;
+        b.vias.append({{0,100},40,0,{43,-1}});
+        b.fills.append({QRectF(0,0,20,20),9,{54,-1}});
+        b.arcs.append({{0,0},1000000,15,1,1,{65,0}});
+        b.texts.append({{100,100},100,0,10,6,false,QStringLiteral("COPPER"),{76,1}});
+        b.texts.append({{100,200},100,0,10,7,false,QStringLiteral("SILK"),{87,-1}});
+        const auto result=pt::analyzeCopper(b,netlist());
+        QVERIFY(!result.coverageComplete);QCOMPARE(result.coverageIssueCount,6);QCOMPARE(result.coverageIssues.size(),6);
+        const pt::PrimitiveKind kinds[]{pt::PrimitiveKind::Track,pt::PrimitiveKind::Pad,pt::PrimitiveKind::Via,
+                                       pt::PrimitiveKind::Fill,pt::PrimitiveKind::Arc,pt::PrimitiveKind::Text};
+        const int layers[]{1,1,13,9,1,6};
+        for (qsizetype i=0;i<result.coverageIssues.size();++i) {
+            const auto& issue=result.coverageIssues[i];
+            QCOMPARE(issue.primitive.kind,kinds[i]);QCOMPARE(issue.layer,layers[i]);
+            QCOMPARE(issue.source.line,21+11*i);
+            QCOMPARE(issue.primitive.index,i==1?1:0);
+            QVERIFY(!issue.reason.isEmpty());
+        }
+        const auto& textIssue=result.coverageIssues.last();
+        QCOMPARE(textIssue.source.component,1);QVERIFY(textIssue.object.contains(QStringLiteral("COPPER")));
+        QVERIFY(pt::copperCoverageIssueText(textIssue).contains(QStringLiteral("源行 76")));
+        QVERIFY(pt::copperAnalysisText(result).contains(QStringLiteral("覆盖诊断：6 条")));
+    }
+    void coverageIssueListIsBoundedWithoutDiscardingCount() {
+        auto b=board();
+        for (int i=0;i<205;++i) b.texts.append({{qreal(i),0},100,0,10,1,false,QString(500,QLatin1Char('X')),{100+i,-1}});
+        const auto result=pt::analyzeCopper(b,netlist());
+        QCOMPARE(result.coverageIssueCount,205);QCOMPARE(result.coverageIssues.size(),pt::maximumCopperCoverageIssues);
+        QVERIFY(result.coverageIssues.first().object.size()<120);
+        QVERIFY(pt::copperAnalysisText(result).contains(QStringLiteral("省略 5 条")));
+        QCOMPARE(result.nets[0].state,pt::CopperNetState::Indeterminate);
+    }
+    void resourceDiagnosticsDoNotInventPrimitiveIdentity() {
+        auto b=board();b.tracks.append({{0,0},{200,0},10,1,{}, {23,-1}});
+        pt::CopperAnalysisLimits limits;limits.maximumElements=0;
+        const auto elementLimit=pt::analyzeCopper(b,netlist(),limits);
+        QCOMPARE(elementLimit.coverageIssues.size(),1);
+        QCOMPARE(elementLimit.coverageIssues[0].primitive.kind,pt::PrimitiveKind::Track);
+        QCOMPARE(elementLimit.coverageIssues[0].source.line,23);
+        limits={};limits.maximumPairChecks=0;
+        const auto pairLimit=pt::analyzeCopper(b,netlist(),limits);
+        QCOMPARE(pairLimit.coverageIssues.size(),1);QCOMPARE(pairLimit.coverageIssues[0].primitive.index,-1);
+        QCOMPARE(pairLimit.coverageIssues[0].source.line,0);
+    }
+    void coverageUiLocatesTextAndClearsStaleEntries() {
+        QTemporaryDir dir;
+        auto input=pcbBytes();input.replace("ENDPCB\n","FS\n100 100 100 0 10 6\nCOPPER\nENDPCB\n");
+        const auto parsed=pt::LegacyPcbReader::parse(input);QVERIFY(parsed.succeeded());
+        QFile pcb(dir.filePath(QStringLiteral("board.pcb")));QVERIFY(pcb.open(QIODevice::WriteOnly));pcb.write(input);pcb.close();
+        QFile net(dir.filePath(QStringLiteral("fixture.net")));QVERIFY(net.open(QIODevice::WriteOnly));net.write(netBytes());net.close();
+        pt::MainWindow window;window.show();window.activateWindow();QVERIFY(QTest::qWaitForWindowExposed(&window));
+        QVERIFY(window.inspectFile(pcb.fileName()));
+        auto* browser=window.findChild<pt::NetlistBrowser*>();QVERIFY(browser->loadFile(net.fileName()));
+        auto* issues=browser->findChild<QListWidget*>(QStringLiteral("copperCoverageIssues"));QVERIFY(issues);
+        auto* box=browser->findChild<QWidget*>(QStringLiteral("copperCoverageBox"));QVERIFY(box->isHidden());
+        QSignalSpy finished(browser,&pt::NetlistBrowser::copperAnalysisFinished);
+        browser->runCopperAnalysis();QTRY_COMPARE(finished.size(),1);
+        QCOMPARE(issues->count(),1);QVERIFY(box->isVisible());
+        QVERIFY(issues->item(0)->text().contains(QStringLiteral("COPPER")));
+        const auto textSource=parsed.document->texts[0].source;
+        QVERIFY(issues->item(0)->text().contains(QStringLiteral("源行 %1").arg(textSource.line)));
+        auto* canvas=window.findChild<pt::BoardCanvas*>();canvas->setLayerVisible(6,false);canvas->setMeasurementMode(true);
+        QVERIFY(QTest::qWaitForWindowActive(&window));issues->setCurrentRow(0);issues->setFocus();QTest::keyClick(issues,Qt::Key_Return);
+        QTRY_VERIFY(canvas->selection().has_value());QCOMPARE(canvas->selection()->kind,pt::PrimitiveKind::Text);
+        QCOMPARE(canvas->selection()->index,0);QVERIFY(!canvas->layerVisible(6));QVERIFY(!canvas->measurementMode());
+        const auto selectedBounds=pt::primitiveBounds(*parsed.document,{pt::PrimitiveKind::Text,0});
+        QVERIFY((canvas->boardToScreen(selectedBounds.center())-QPointF(canvas->rect().center())).manhattanLength()<1);
+        auto* properties=window.findChild<QPlainTextEdit*>(QStringLiteral("selectionText"));
+        QVERIFY(properties->toPlainText().contains(QStringLiteral("COPPER")));
+        QVERIFY(!canvas->focusPrimitive({pt::PrimitiveKind::Text,999}));
+        browser->runCopperAnalysis();QCOMPARE(issues->count(),0);QVERIFY(box->isHidden());
+        browser->clearExternal();QTRY_VERIFY(!browser->copperAnalysisRunning());
+        QCOMPARE(finished.size(),1);QCOMPARE(issues->count(),0);QVERIFY(box->isHidden());
+        QVERIFY(browser->loadFile(net.fileName()));browser->runCopperAnalysis();QTRY_COMPARE(finished.size(),2);
+        QCOMPARE(issues->count(),1);browser->setBoard(nullptr);QCOMPARE(issues->count(),0);QVERIFY(box->isHidden());
+        QVERIFY(pcb.open(QIODevice::ReadOnly));QCOMPARE(pcb.readAll(),input);
+    }
     void backgroundUiAndStaleResultProtection_data() {
         QTest::addColumn<bool>("useArc");
         QTest::newRow("straight") << false;QTest::newRow("arc") << true;
@@ -324,6 +406,13 @@ private slots:
         QVERIFY(!extendedReport.value(QStringLiteral("coverage_complete")).toBool());
         QCOMPARE(extendedReport.value(QStringLiteral("connected")).toInt(),0);
         QCOMPARE(extendedReport.value(QStringLiteral("indeterminate")).toInt(),1);
+        QCOMPARE(extendedReport.value(QStringLiteral("coverage_issue_count")).toInt(),1);
+        QCOMPARE(extendedReport.value(QStringLiteral("coverage_issues_omitted")).toInt(),0);
+        const auto trackIssue=extendedReport.value(QStringLiteral("coverage_issues")).toArray().first().toObject();
+        QCOMPARE(trackIssue.value(QStringLiteral("kind")).toString(),QStringLiteral("track"));
+        QCOMPARE(trackIssue.value(QStringLiteral("primitive_number_1_based")).toInt(),1);
+        QCOMPARE(trackIssue.value(QStringLiteral("source_line")).toInt(),24);
+        QCOMPARE(trackIssue.value(QStringLiteral("layer")).toInt(),1);
         QVERIFY(pcb.open(QIODevice::WriteOnly));auto bytes=pcbBytes();bytes.replace("FT\n0 0 200 0 10 1\n","");pcb.write(bytes);pcb.close();
         process.start(executable,{pcb.fileName(),net.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),2);
         QVERIFY(pcb.open(QIODevice::WriteOnly));bytes.replace("ENDPCB\n","FA\n100 0 100 15 10 1\nENDPCB\n");pcb.write(bytes);pcb.close();
@@ -333,6 +422,11 @@ private slots:
         QCOMPARE(arcReport.value(QStringLiteral("connected")).toInt(),1);
         QVERIFY(pcb.open(QIODevice::WriteOnly));bytes.replace("ENDPCB\n","FS\n0 0 100 0 10 1\nUNKNOWN\nENDPCB\n");pcb.write(bytes);pcb.close();
         process.start(executable,{pcb.fileName(),net.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),3);
+        const auto textReport=QJsonDocument::fromJson(process.readAllStandardOutput()).object();
+        const auto textIssue=textReport.value(QStringLiteral("coverage_issues")).toArray().first().toObject();
+        QCOMPARE(textIssue.value(QStringLiteral("kind")).toString(),QStringLiteral("text"));
+        QVERIFY(textIssue.value(QStringLiteral("object")).toString().contains(QStringLiteral("UNKNOWN")));
+        QVERIFY(textIssue.value(QStringLiteral("source_line")).toInt()>0);
         process.start(executable,{pcb.fileName()});QVERIFY(process.waitForFinished(15000));QCOMPARE(process.exitCode(),1);
     }
 };

@@ -26,6 +26,7 @@ public:
 signals:
     void padsHighlighted(const QList<qsizetype>& pads);
     void padActivated(qsizetype index);
+    void primitiveActivated(pt::PrimitiveId id);
     void netlistLoaded(bool success);
     void copperAnalysisFinished();
 private:
@@ -41,6 +42,9 @@ private:
     bool m_useExternal=true;
     QListWidget* m_nets=nullptr;
     QListWidget* m_nodes=nullptr;
+    QWidget* m_coverageBox=nullptr;
+    QLabel* m_coverageStatus=nullptr;
+    QListWidget* m_coverageIssues=nullptr;
     QPlainTextEdit* m_details=nullptr;
     QLabel* m_status=nullptr;
     QPushButton* m_open=nullptr;

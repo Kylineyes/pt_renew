@@ -73,6 +73,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     connect(m_netlistBrowser,&NetlistBrowser::padActivated,this,[this](qsizetype index) {
         if (m_canvas->focusPad(index)) m_canvas->setFocus(Qt::ShortcutFocusReason);
     });
+    connect(m_netlistBrowser,&NetlistBrowser::primitiveActivated,this,[this](PrimitiveId id) {
+        if (m_canvas->focusPrimitive(id)) {
+            m_selectionDock->show();m_selectionDock->raise();
+            m_canvas->setFocus(Qt::ShortcutFocusReason);
+            statusBar()->showMessage(QStringLiteral("已定位未覆盖图元；仅改变视图与选择，隐藏图层保持关闭。"),8000);
+        }
+    });
     m_measureDock=new QDockWidget(QStringLiteral("两点测量（只读）"),this);
     m_measureDock->setObjectName(QStringLiteral("measureDock"));
     m_measureText=new QPlainTextEdit(m_measureDock);
@@ -297,7 +304,7 @@ void MainWindow::clearFileInfo() {
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第八阶段扩展铜层圆弧分析（非完整 DRC），仍不支持编辑或保存。"));
+        "第九阶段增加未覆盖图元诊断与定位（非完整 DRC），仍不支持编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
 }

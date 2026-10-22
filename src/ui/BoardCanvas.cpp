@@ -41,11 +41,17 @@ void BoardCanvas::setNetPads(const QList<qsizetype>& pads) {
     update();
 }
 
-bool BoardCanvas::focusPad(qsizetype index) {
-    if (!m_document || index<0 || index>=m_document->pads.size()) return false;
+bool BoardCanvas::focusPrimitive(PrimitiveId id) {
+    if (!m_document || primitiveLayer(*m_document,id)==0) return false;
+    const auto bounds=primitiveBounds(*m_document,id);
+    if (!bounds.isValid()) return false;
     setMeasurementMode(false);clearSelection();
-    centerOn(m_document->pads[index].center);
-    m_selection=PrimitiveId{PrimitiveKind::Pad,index};update();emit selectionChanged();return true;
+    centerOn(bounds.center());
+    m_selection=id;update();emit selectionChanged();return true;
+}
+
+bool BoardCanvas::focusPad(qsizetype index) {
+    return focusPrimitive({PrimitiveKind::Pad,index});
 }
 
 void BoardCanvas::setLayerVisible(int layer, bool visible) {
@@ -235,7 +241,7 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第八阶段：只读兼容与铜层圆弧分析\n"
+        QStringLiteral("第九阶段：只读兼容与铜层覆盖诊断\n"
                        "Ctrl+O 板图；网络菜单载入 NET，再运行几何分析。不是完整 DRC 或制造验收。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }

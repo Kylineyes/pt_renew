@@ -32,8 +32,19 @@ NetlistBrowser::NetlistBrowser(QWidget* parent):QDockWidget(QStringLiteral("网�
     auto* split=new QSplitter(Qt::Vertical,content);
     m_nets=new QListWidget(split);m_nets->setObjectName(QStringLiteral("netlistNets"));
     m_nodes=new QListWidget(split);m_nodes->setObjectName(QStringLiteral("netlistNodes"));
+    m_coverageBox=new QWidget(split);m_coverageBox->setObjectName(QStringLiteral("copperCoverageBox"));
+    auto* coverageLayout=new QVBoxLayout(m_coverageBox);coverageLayout->setContentsMargins(0,0,0,0);
+    m_coverageStatus=new QLabel(m_coverageBox);m_coverageStatus->setObjectName(QStringLiteral("copperCoverageStatus"));
+    m_coverageStatus->setWordWrap(true);m_coverageStatus->setTextFormat(Qt::PlainText);coverageLayout->addWidget(m_coverageStatus);
+    m_coverageIssues=new QListWidget(m_coverageBox);m_coverageIssues->setObjectName(QStringLiteral("copperCoverageIssues"));
+    m_coverageIssues->setAccessibleName(QStringLiteral("未覆盖图元，双击或 Enter 定位"));coverageLayout->addWidget(m_coverageIssues);
+    m_coverageBox->hide();
+    connect(m_coverageIssues,&QListWidget::itemActivated,this,[this](QListWidgetItem* item) {
+        const auto index=item->data(Qt::UserRole).toLongLong();
+        if (index>=0) emit primitiveActivated({static_cast<PrimitiveKind>(item->data(Qt::UserRole+1).toInt()),index});
+    });
     m_details=new QPlainTextEdit(split);m_details->setObjectName(QStringLiteral("netlistDetails"));m_details->setReadOnly(true);
-    split->setSizes({180,160,240});layout->addWidget(split,1);setWidget(content);
+    split->setSizes({150,100,170,220});layout->addWidget(split,1);setWidget(content);
     connect(m_open,&QPushButton::clicked,this,&NetlistBrowser::chooseFile);
     connect(m_clear,&QPushButton::clicked,this,&NetlistBrowser::clearExternal);
     connect(m_source,&QComboBox::currentIndexChanged,this,[this](int index) {
@@ -77,6 +88,7 @@ void NetlistBrowser::clearHighlight() {
 void NetlistBrowser::runCopperAnalysis() {
     if (m_analyzing || m_loading || !m_board || !m_active) return;
     m_analyzing=true;const auto generation=++m_copperGeneration;
+    m_coverageIssues->clear();m_coverageBox->hide();
     m_copperReport=QStringLiteral("正在后台执行受限铜层几何分析……不是完整 DRC。\n");
     m_copper->setEnabled(false);showCurrent();
     const auto board=m_board;const auto network=m_active;
@@ -86,6 +98,15 @@ void NetlistBrowser::runCopperAnalysis() {
         m_copper->setEnabled(m_board!=nullptr && m_active!=nullptr && !m_loading);
         if (generation!=m_copperGeneration) return;
         m_copperReport=QStringLiteral("板图摘要：%1\n网表摘要：%2\n\n").arg(board->sha256,network->sha256)+copperAnalysisText(report);
+        m_coverageStatus->setText(QStringLiteral("未覆盖图元：%1 条诊断，列出 %2 条；双击或 Enter 定位，隐藏图层不会自动开启。")
+            .arg(report.coverageIssueCount).arg(report.coverageIssues.size()));
+        for (const auto& issue:report.coverageIssues) {
+            auto* item=new QListWidgetItem(copperCoverageIssueText(issue),m_coverageIssues);
+            item->setToolTip(item->text());item->setData(Qt::UserRole,qlonglong(issue.primitive.index));
+            item->setData(Qt::UserRole+1,static_cast<int>(issue.primitive.kind));
+            if (issue.primitive.index<0) item->setFlags(item->flags()&~Qt::ItemIsSelectable);
+        }
+        m_coverageBox->setVisible(!report.coverageIssues.isEmpty());
         showCurrent();emit copperAnalysisFinished();
     });
     watcher->setFuture(QtConcurrent::run([board,network] { return analyzeCopper(*board,*network); }));
@@ -93,6 +114,7 @@ void NetlistBrowser::runCopperAnalysis() {
 
 void NetlistBrowser::rebuild() {
     ++m_copperGeneration;m_copperReport.clear();
+    m_coverageIssues->clear();m_coverageBox->hide();
     emit padsHighlighted({});
     const auto internal=m_board?m_board->embeddedNetlist:nullptr;
     if (!m_external) m_useExternal=false;

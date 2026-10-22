@@ -35,11 +35,31 @@ int main(int argc,char** argv) {
         for (const auto& identity:contact.identities) identities.append(identity);
         contacts.append(QJsonObject{{"nets",QJsonArray::fromStringList(contact.nets)},{"pad_numbers_1_based",indices},{"pad_identities",identities}});
     }
+    QJsonArray coverageIssues;
+    for (const auto& issue:result.coverageIssues) {
+        QString kind;
+        switch (issue.primitive.kind) {
+        case pt::PrimitiveKind::Track:kind=QStringLiteral("track");break;
+        case pt::PrimitiveKind::Pad:kind=QStringLiteral("pad");break;
+        case pt::PrimitiveKind::Via:kind=QStringLiteral("via");break;
+        case pt::PrimitiveKind::Arc:kind=QStringLiteral("arc");break;
+        case pt::PrimitiveKind::Fill:kind=QStringLiteral("fill");break;
+        case pt::PrimitiveKind::Text:kind=QStringLiteral("text");break;
+        }
+        if (issue.primitive.index<0) kind=QStringLiteral("analysis");
+        coverageIssues.append(QJsonObject{{"kind",kind},{"primitive_number_1_based",qint64(issue.primitive.index+1)},
+            {"layer",issue.layer},{"source_line",qint64(issue.source.line)},
+            {"component_number_1_based",qint64(issue.source.component+1)},
+            {"object",issue.object},{"reason",issue.reason}});
+    }
     const QJsonObject output{{"board_sha256",board.document->sha256},{"netlist_sha256",network->sha256},
         {"coverage_complete",result.coverageComplete},{"limit_reached",result.limitReached},{"connected",connected},
         {"separated",separated},{"indeterminate",unknown},{"cross_net_contact_groups",qint64(result.crossNetContacts.size())},
         {"modeled_copper_elements",qint64(result.copperElements)},
         {"pair_checks",qint64(result.pairChecks)},{"nets",nets},{"cross_net_contacts",contacts},
+        {"coverage_issue_count",qint64(result.coverageIssueCount)},
+        {"coverage_issues_omitted",qint64(result.coverageIssueCount-result.coverageIssues.size())},
+        {"coverage_issues",coverageIssues},
         {"limitations",QJsonArray::fromStringList(result.limitations)},
         {"notice",QStringLiteral("理想镀通孔及受限几何模型，不是完整 DRC；退出码 0 也不代表制造验收通过。")}};
     std::cout<<QJsonDocument(output).toJson().constData();

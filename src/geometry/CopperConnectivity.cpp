@@ -1,4 +1,5 @@
 #include "geometry/CopperConnectivity.h"
+#include "geometry/BoardGeometry.h"
 
 #include <QHash>
 #include <QElapsedTimer>
@@ -122,40 +123,62 @@ CopperAnalysis analyzeCopper(const BoardDocument& board,const Netlist& netlist,c
     CopperAnalysis result;QElapsedTimer timer;timer.start();
     QList<Element> elements;QHash<qsizetype,qsizetype> padElements;
     QSet<QString> unsupported;
-    auto unknown=[&](const QString& reason) { result.coverageComplete=false;unsupported.insert(reason); };
-    auto append=[&](Element item) {
+    auto unknown=[&](const QString& reason,PrimitiveId primitive=PrimitiveId{}) {
+        result.coverageComplete=false;unsupported.insert(reason);++result.coverageIssueCount;
+        if (result.coverageIssues.size()>=maximumCopperCoverageIssues) return;
+        QString object;
+        switch (primitive.kind) {
+        case PrimitiveKind::Track:object=QStringLiteral("走线");break;
+        case PrimitiveKind::Pad:object=QStringLiteral("焊盘");break;
+        case PrimitiveKind::Via:object=QStringLiteral("过孔");break;
+        case PrimitiveKind::Arc:object=QStringLiteral("圆弧");break;
+        case PrimitiveKind::Fill:object=QStringLiteral("填充");break;
+        case PrimitiveKind::Text:object=QStringLiteral("文字");break;
+        }
+        if (primitive.index<0) object=QStringLiteral("分析任务");
+        else object+=QStringLiteral(" #%1").arg(primitive.index+1);
+        if (primitive.kind==PrimitiveKind::Text && primitive.index>=0 && primitive.index<board.texts.size()) {
+            const auto& text=board.texts[primitive.index].value;
+            object+=QStringLiteral("「%1%2」").arg(text.left(80),text.size()>80?QStringLiteral("……"):QString());
+        }
+        result.coverageIssues.append({primitive,primitiveSource(board,primitive),primitiveLayer(board,primitive),object,reason});
+    };
+    auto append=[&](Element item,PrimitiveId primitive) {
         if (timer.elapsed()>=qMax<qint64>(0,limits.maximumMilliseconds)) {
-            result.limitReached=true;unknown(QStringLiteral("几何构建超过时间预算，结果不完整。"));return;
+            result.limitReached=true;unknown(QStringLiteral("几何构建超过时间预算，结果不完整。"),primitive);return;
         }
         if (elements.size()>=qMax<qsizetype>(0,limits.maximumElements)) {
-            result.limitReached=true;unknown(QStringLiteral("铜图元超过分析数量上限。"));return;
+            result.limitReached=true;unknown(QStringLiteral("铜图元超过分析数量上限。"),primitive);return;
         }
-        if (item.inside.isEmpty() || item.outside.isEmpty()) { unknown(QStringLiteral("铜图元没有可验证的正面积轮廓。"));return; }
+        if (item.inside.isEmpty() || item.outside.isEmpty()) { unknown(QStringLiteral("铜图元没有可验证的正面积轮廓。"),primitive);return; }
         item.bounds=item.outside.boundingRect().adjusted(-numericalBand,-numericalBand,numericalBand,numericalBand);
         item.outside=expanded(item.outside);
         if (item.pad>=0) padElements.insert(item.pad,elements.size());
         elements.append(std::move(item));
     };
-    for (const auto& track:board.tracks) {
+    for (qsizetype i=0;i<board.tracks.size();++i) {
         if (result.limitReached) break;
+        const auto& track=board.tracks[i];
+        const PrimitiveId primitive{PrimitiveKind::Track,i};
         const int mask=copperMask(track.layer);
-        if (!mask) { if (plane(track.layer) || track.layer==13) unknown(QStringLiteral("存在平面层或多层编号的走线，未建模。"));continue; }
-        if (track.extra.has_value()) unknown(QStringLiteral("铜层走线含未解释的第七附加字段，几何分组仅供诊断。"));
-        if (track.width<=0) { unknown(QStringLiteral("走线尺寸无效。"));continue; }
-        append({capsule(track.start,track.end,track.width/2.0,false),capsule(track.start,track.end,track.width/2.0,true),{},mask,-1});
+        if (!mask) { if (plane(track.layer) || track.layer==13) unknown(QStringLiteral("存在平面层或多层编号的走线，未建模。"),primitive);continue; }
+        if (track.extra.has_value()) unknown(QStringLiteral("铜层走线含未解释的第七附加字段，几何分组仅供诊断。"),primitive);
+        if (track.width<=0) { unknown(QStringLiteral("走线尺寸无效。"),primitive);continue; }
+        append({capsule(track.start,track.end,track.width/2.0,false),capsule(track.start,track.end,track.width/2.0,true),{},mask,-1},primitive);
     }
     for (qsizetype i=0;i<board.pads.size();++i) {
         if (result.limitReached) break;
         const auto& pad=board.pads[i];
+        const PrimitiveId primitive{PrimitiveKind::Pad,i};
         int mask=copperMask(pad.layer);
         if (pad.layer==13) {
-            if (pad.drill<=0) { unknown(QStringLiteral("多层无孔焊盘的跨层关系未知。"));continue; }
+            if (pad.drill<=0) { unknown(QStringLiteral("多层无孔焊盘的跨层关系未知。"),primitive);continue; }
             mask=allCopperLayers;
         }
-        if (!mask) { if (plane(pad.layer)) unknown(QStringLiteral("存在平面层焊盘，未建模。"));continue; }
-        if (pad.width<=0 || pad.height<=0 || pad.drill<0 || pad.drill>=qMin(pad.width,pad.height)) { unknown(QStringLiteral("焊盘外形或孔径退化。"));continue; }
-        if (pad.shape!=1 && pad.shape!=2) { unknown(QStringLiteral("铜层八角/圆角或其他焊盘轮廓尚未精确支持。"));continue; }
-        if (pad.planeFlags>1) unknown(QStringLiteral("焊盘平面连接标志尚未解释，不能确认负片平面连通。"));
+        if (!mask) { if (plane(pad.layer)) unknown(QStringLiteral("存在平面层焊盘，未建模。"),primitive);continue; }
+        if (pad.width<=0 || pad.height<=0 || pad.drill<0 || pad.drill>=qMin(pad.width,pad.height)) { unknown(QStringLiteral("焊盘外形或孔径退化。"),primitive);continue; }
+        if (pad.shape!=1 && pad.shape!=2) { unknown(QStringLiteral("铜层八角/圆角或其他焊盘轮廓尚未精确支持。"),primitive);continue; }
+        if (pad.planeFlags>1) unknown(QStringLiteral("焊盘平面连接标志尚未解释，不能确认负片平面连通。"),primitive);
         Element item;item.layers=mask;item.pad=i;
         if (pad.shape==2) item.inside=item.outside=rectangle(QRectF(pad.center-QPointF(pad.width/2.0,pad.height/2.0),QSizeF(pad.width,pad.height)));
         else {
@@ -164,42 +187,52 @@ CopperAnalysis analyzeCopper(const BoardDocument& board,const Netlist& netlist,c
             item.inside=capsule(pad.center-delta,pad.center+delta,radius,false);
             item.outside=capsule(pad.center-delta,pad.center+delta,radius,true);
         }
-        removeHole(item,pad.center,pad.drill/2.0);append(std::move(item));
+        removeHole(item,pad.center,pad.drill/2.0);append(std::move(item),primitive);
     }
-    for (const auto& via:board.vias) {
+    for (qsizetype i=0;i<board.vias.size();++i) {
         if (result.limitReached) break;
-        if (via.diameter<=0 || via.drill<=0 || via.drill>=via.diameter) { unknown(QStringLiteral("过孔尺寸退化或无孔，跨层关系未知。"));continue; }
+        const auto& via=board.vias[i];
+        const PrimitiveId primitive{PrimitiveKind::Via,i};
+        if (via.diameter<=0 || via.drill<=0 || via.drill>=via.diameter) { unknown(QStringLiteral("过孔尺寸退化或无孔，跨层关系未知。"),primitive);continue; }
         Element item{capsule(via.center,via.center,via.diameter/2.0,false),capsule(via.center,via.center,via.diameter/2.0,true),{},allCopperLayers,-1};
-        removeHole(item,via.center,via.drill/2.0);append(std::move(item));
+        removeHole(item,via.center,via.drill/2.0);append(std::move(item),primitive);
     }
-    for (const auto& fill:board.fills) {
+    for (qsizetype i=0;i<board.fills.size();++i) {
         if (result.limitReached) break;
+        const auto& fill=board.fills[i];
+        const PrimitiveId primitive{PrimitiveKind::Fill,i};
         const auto mask=copperMask(fill.layer);
-        if (!mask) { if (plane(fill.layer) || fill.layer==13) unknown(QStringLiteral("存在平面层/多层填充，未建模。"));continue; }
-        if (fill.rectangle.width()<=0 || fill.rectangle.height()<=0) { unknown(QStringLiteral("铜填充尺寸退化。"));continue; }
-        const auto path=rectangle(fill.rectangle);append({path,path,{},mask,-1});
+        if (!mask) { if (plane(fill.layer) || fill.layer==13) unknown(QStringLiteral("存在平面层/多层填充，未建模。"),primitive);continue; }
+        if (fill.rectangle.width()<=0 || fill.rectangle.height()<=0) { unknown(QStringLiteral("铜填充尺寸退化。"),primitive);continue; }
+        const auto path=rectangle(fill.rectangle);append({path,path,{},mask,-1},primitive);
     }
-    for (const auto& arc:board.arcs) {
+    for (qsizetype i=0;i<board.arcs.size();++i) {
         if (result.limitReached) break;
+        const auto& arc=board.arcs[i];
+        const PrimitiveId primitive{PrimitiveKind::Arc,i};
         const auto mask=copperMask(arc.layer);
         if (!mask) {
-            if (plane(arc.layer) || arc.layer==13) unknown(QStringLiteral("存在平面层或多层编号的圆弧，未建模。"));
+            if (plane(arc.layer) || arc.layer==13) unknown(QStringLiteral("存在平面层或多层编号的圆弧，未建模。"),primitive);
             continue;
         }
         if (arc.radius<=0 || arc.width<=0 || arc.quadrants<1 || arc.quadrants>15) {
-            unknown(QStringLiteral("圆弧尺寸或象限掩码无效。"));continue;
+            unknown(QStringLiteral("圆弧尺寸或象限掩码无效。"),primitive);continue;
         }
         const qreal cosine=std::cos(std::acos(-1.0)/circleSides);
         const qreal innerRadius=qMax<qreal>(0,arc.radius-arc.width/2.0);
         // 包络过宽时内接环可能分裂；整条弧保留未知，不能把分裂轮廓当作一个明确铜组。
         if ((arc.radius+arc.width/2.0)*cosine-innerRadius/cosine<=numericalBand) {
-            unknown(QStringLiteral("圆弧线宽相对半径过小，64 边包络无法建立连续内接铜轮廓。"));continue;
+            unknown(QStringLiteral("圆弧线宽相对半径过小，64 边包络无法建立连续内接铜轮廓。"),primitive);continue;
         }
         for (int quadrant=0;quadrant<4 && !result.limitReached;++quadrant) if (arc.quadrants&(1<<quadrant)) {
-            append({arcQuadrantEnvelope(arc,quadrant,false),arcQuadrantEnvelope(arc,quadrant,true),{},mask,-1});
+            append({arcQuadrantEnvelope(arc,quadrant,false),arcQuadrantEnvelope(arc,quadrant,true),{},mask,-1},primitive);
         }
     }
-    for (const auto& text:board.texts) if ((copperMask(text.layer) || plane(text.layer) || text.layer==13) && !text.value.isEmpty()) unknown(QStringLiteral("存在铜层文字，原始字形尚未恢复。"));
+    for (qsizetype i=0;i<board.texts.size();++i) {
+        const auto& text=board.texts[i];
+        if ((copperMask(text.layer) || plane(text.layer) || text.layer==13) && !text.value.isEmpty())
+            unknown(QStringLiteral("存在铜层文字，原始字形尚未恢复。"),{PrimitiveKind::Text,i});
+    }
     result.copperElements=elements.size();
     DisjointSet definite(elements.size()),possible(elements.size());
     QList<qsizetype> order(elements.size());std::iota(order.begin(),order.end(),qsizetype(0));
@@ -260,6 +293,11 @@ CopperAnalysis analyzeCopper(const BoardDocument& board,const Netlist& netlist,c
     return result;
 }
 
+QString copperCoverageIssueText(const CopperCoverageIssue& issue) {
+    const auto source=issue.source.line>0?QStringLiteral("源行 %1").arg(issue.source.line):QStringLiteral("无源行");
+    return QStringLiteral("%1；层 %2；%3：%4").arg(issue.object).arg(issue.layer).arg(source,issue.reason);
+}
+
 QString copperAnalysisText(const CopperAnalysis& analysis) {
     QString result=QStringLiteral("受限铜层几何分析（不是完整 DRC）\n支持覆盖：%1；资源限制：%2\n已建模铜对象：%3；候选比较：%4\n\n")
         .arg(analysis.coverageComplete?QStringLiteral("完整支持模型"):QStringLiteral("存在未覆盖内容"))
@@ -272,6 +310,10 @@ QString copperAnalysisText(const CopperAnalysis& analysis) {
     }
     result+=QStringLiteral("网络汇总：支持模型内连接 %1，仍分离 %2，无法确定 %3\n跨网铜接触候选组 %4（未确认短路，清单见报告下方）\n\n")
         .arg(connected).arg(separated).arg(indeterminate).arg(analysis.crossNetContacts.size());
+    result+=QStringLiteral("覆盖诊断：%1 条，列出 %2 条，省略 %3 条。达到资源限制时不代表已扫描所有图元。\n")
+        .arg(analysis.coverageIssueCount).arg(analysis.coverageIssues.size()).arg(analysis.coverageIssueCount-analysis.coverageIssues.size());
+    for (const auto& issue:analysis.coverageIssues) result+=copperCoverageIssueText(issue)+QLatin1Char('\n');
+    result+=QLatin1Char('\n');
     for (const auto& net:analysis.nets) result+=QStringLiteral("%1：%2；有效焊盘 %3；明确铜组 %4 / 可能铜组 %5\n%6\n\n")
         .arg(net.name,stateText(net.state)).arg(net.padCount).arg(net.definiteGroups).arg(net.possibleGroups).arg(net.reason);
     result+=QStringLiteral("跨网络明确铜接触候选组：%1\n").arg(analysis.crossNetContacts.size());
