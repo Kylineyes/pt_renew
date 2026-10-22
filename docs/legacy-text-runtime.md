@@ -2,7 +2,17 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
-## 最新默认配置诊断
+## 无 DFT 场景配对运行
+
+从 `dev` 的 `0575ca3` 建立 `research/legacy-text-defaults-control`，在新的 `.local-analysis/verification-21/without-dft/` 中复制桌面客户端并使用同一 Windows-MCP 连接完成此前缺少的无 DFT 场景。启动前再次逐文件核对 verification-20 两个运行副本：无 DFT 为 103 个文件，有 DFT 为 104 个文件；除后者原样 `TRAXEDIT.DFT`（SHA-256 `df3b18617d7ab58b1f9380437d0e9238b22f55d3f54388b18a7b3f80f6decd8b`）外，其余集合与摘要相符。两份配置都执行 `pt C21.PCB`，模拟器参数和挂载目录配置不变。
+
+同连接先取得新的桌面截图，再启动 `.local-analysis/verification-20/dosbox-without-dft.conf`。核对完整窗口标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 及 AUTOTRAX 1.57 启动页后，点击标题栏聚焦并按 Enter。`.local-analysis/verification-21/without-dft/result-007.png` 显示灰色背景、红色 A 状线条和白色十字；没有观察到有 DFT 场景 `verification-20/paired-run/result-006.png` 中的黑色背景、灰色参考十字及非对称尺标。两者启动页均显示 `VGA 640x480`，该驱动名称不能区分 DFT 是否读取。发送 F 后 `result-009.png` 画面未见变化；两图摘要不同，不记录为像素完全相同。菜单、实际文件名、文字对象属性和可见图层状态仍未显示。
+
+两次运行使用同一 C21 输入和等价 DOSBox 配置，启动前两个隔离目录唯一文件差异是 DFT，运行后文件清单和摘要仍与各自启动前清单相符。因而可以记录有无 DFT 场景的显示结果不同，且差异与 DFT 文件是否存在相关；但运行发生在不同连接/时刻，不能据此确认原程序读取了 DFT 的哪些内容、定位具体字段或解释菜单为何不可见。命令行中的 `C21.PCB` 也不是实际载入文件名或对象状态的独立证据。
+
+点击新截图中的 DOSBox 关闭按钮后，`result-011.png` 返回桌面，进程核对确认 DOSBox 退出；停止同连接客户端后无本轮 DOSBox 或桌面客户端残留。原安装目录 99 个文件集合与 SHA-256 基线一致。此次只完成默认配置配对观察，未进行端点拟合、方向/缩放检查、Qt 字形接入或铜层判定变更；`runtime_verified` 仍为 `false`。同连接命令、返回、截图及输入清单保存在被忽略的 `.local-analysis/verification-21/without-dft/`，不提交本地证据。
+
+## 默认配置诊断的前序记录
 
 `research/legacy-text-defaults-diagnosis` 基于同步的 `dev`（`a581f67`）。既有 `.local-analysis/verification-11/prepare-text.py` 在建立副本时将 `TRAXEDIT.DFT` 改名为 `TRAXEDIT.OLD`，后续 C00/C20/C21 场景沿用了这个无 DFT 目录。原 DFT 含历史绝对路径、显示及其他默认参数，不能未经核对直接将其视为可复用的应用配置。
 
@@ -16,7 +26,7 @@
 
 前后核验：原目录 99 个文件集合及 SHA-256 符合基线，既有三项二进制与 C00/C20/C21 摘要一致；新建两个副本的完整文件集合与摘要也完全未变，结束时无本轮桌面客户端、Windows-MCP 或 DOSBox 进程。本地保留 `experiment.json`、`inputs-*-before/after.json`、`verification-summary.json`、配置、逐步返回及截图；原文件、配置内容、截图和笔画数据不提交。已有 Ghidra 项目按 `-noanalysis -readOnly` 做了配置与菜单锚点扫描，尚未确认 DFT 读取或缺省初始化路径，静态输出仅留本地。
 
-下一步先运行尚未启动的 `dosbox-without-dft.conf`，与有 DFT 场景比较背景及参考标记，再核对实际文件名、文字对象参数和图层状态。原样 DFT 含历史启动路径，命令行指定 C21 不足以单独确认实际载入文件；不能用参考形状代替对象状态。只有这些前提建立后才开始端点、交点、整数缩放及方向对照。产品仍为 0.9.0，未接入 Qt 字形或铜层模型；本轮仅更新研究文档，未重跑构建或 CTest。
+下一步优先查明菜单、实际载入文件名、文字对象参数和可见图层为何不可见；不要根据本次背景/参考标记差异猜测 DFT 字段或认定对象已载入。原样 DFT 含历史启动路径，须先取得文件和对象状态证据，再进行端点、交点、整数缩放及方向对照。产品仍为 0.9.0，未接入 Qt 字形或铜层模型；前序诊断仅更新研究文档，未重跑构建或 CTest。
 
 ## C21 现场结果
 
