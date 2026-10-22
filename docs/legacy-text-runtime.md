@@ -12,6 +12,8 @@
 
 随后从 `dev` 的 `944c3bf` 建立 `research/legacy-text-information-probe`，在新的 `.local-analysis/verification-23/information-probe/` 中请求先取得桌面截图。30 秒内 16 次 `ControlStatus` 查询均为 `user`、generation 为 2，`wait_seconds` 范围为 8.28 至 9.999 秒；超时后客户端停止，截图请求未执行，也未启动 DOSBox 或发送键鼠操作。输入来源未知，未重试场景或修改门禁。无 DFT 副本 103 个文件与 verification-20 清单匹配，原安装 99 个文件集合及 SHA-256 符合基线，结束时无本轮桌面客户端或 DOSBox 残留。日志和摘要留在被忽略的 `.local-analysis/verification-23/`。候选 `Esc, Esc, I, B` 仍未运行验证。
 
+随后从 `dev` 的 `773c015` 建立 `research/legacy-text-information-probe-2`，在新的 `.local-analysis/verification-24/information-probe/` 中用同一连接成功取得初始桌面截图，初始 `ControlStatus` 为 `ready`、generation 为 1。启动 DOSBox 前的控制检查变为 `user`、generation 为 4；客户端等待 30 秒、16 次查询后超时，最后 `wait_seconds=9.941726699995343`。DOSBox 启动请求未执行，没有发送键鼠输入；输入来源未知。无 DFT 副本 103 个文件与 verification-20 清单匹配，原安装 99 个文件集合与 SHA-256 基线一致，结束时无 DOSBox 或本轮客户端残留。新桌面图、日志和摘要保存在被忽略的 `.local-analysis/verification-24/`。这次与 verification-23 不同，初始截图已取得；菜单候选仍未执行验证。
+
 ## 无 DFT 场景配对运行
 
 从 `dev` 的 `0575ca3` 建立 `research/legacy-text-defaults-control`，在新的 `.local-analysis/verification-21/without-dft/` 中复制桌面客户端并使用同一 Windows-MCP 连接完成此前缺少的无 DFT 场景。启动前再次逐文件核对 verification-20 两个运行副本：无 DFT 为 103 个文件，有 DFT 为 104 个文件；除后者原样 `TRAXEDIT.DFT`（SHA-256 `df3b18617d7ab58b1f9380437d0e9238b22f55d3f54388b18a7b3f80f6decd8b`）外，其余集合与摘要相符。两份配置都执行 `pt C21.PCB`，模拟器参数和挂载目录配置不变。
