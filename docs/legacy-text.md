@@ -69,6 +69,8 @@ JSON 标记 `evidence: "static_instruction_derivation"` 和 `runtime_verified: f
 
 已建立原程序隔离副本及包含单字符、相邻字符、空白、非 12 倍数高度、旋转和镜像的九组样例，并启动 DOSBox-X。桌面工具反复返回 `USER_CONTROL`，没有取得应用画面或完成交互，因此**未确认样例被原程序载入，也未完成单字符对照**。后续需在桌面可用时继续该对照，再决定是否实现任何字形功能。
 
+后续 `research/legacy-text-runtime` 分支再次探测桌面，仍返回 `USER_CONTROL`，本轮未启动 DOSBox。已准备 16 个独立样例并补充 [运行对照步骤](legacy-text-runtime.md)，证据留在 `.local-analysis/verification-12/`。须先验证 PCB 文件方向字段到内部方向位的映射；既有九组样例中的文件方向值 `32` 尚未证明能被原程序接受，不能直接当作已建立的 Y 镜像输入。
+
 完整本地证据位于 `.local-analysis/verification-11/`：OVR 绘图调用索引、Ghidra 定向导出、指令清单、表范围核对、静态推导结果、隔离副本与样例、桌面工具返回结果及构建/测试日志。原始 Ghidra 项目按 `-noanalysis -readOnly` 复用，没有修改原软件或提交数据库。
 
 Debug、Release 均构建成功，各 9 组 CTest 全部通过（既有 QtTest 各 232 项、覆盖工具 16 项及文字工具 14 项）。九组真实文字 CLI 请求全部成功，99 个原始文件的 SHA-256 与既有基线及文件集合一致。Qt 应用行为没有变化，本轮未重复既有 GUI 验收；原 DOS 程序的行为对照仍按上述限制保留未完成。
