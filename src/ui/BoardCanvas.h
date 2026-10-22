@@ -21,6 +21,10 @@ public:
     void resetView();
     void setDocument(std::shared_ptr<const BoardDocument> document);
     const BoardDocument* document() const { return m_document.get(); }
+    void setNetPads(const QList<qsizetype>& pads);
+    const QList<qsizetype>& netPads() const { return m_netPads; }
+    bool focusPrimitive(PrimitiveId id);
+    bool focusPad(qsizetype index);
     void setLayerVisible(int layer, bool visible);
     bool layerVisible(int layer) const { return m_visibleLayers.contains(layer); }
     QPointF boardToScreen(const QPointF& point) const;
@@ -75,6 +79,7 @@ private:
     bool m_measurementMode=false;
     std::optional<QPointF> m_measurementStart;
     std::optional<Measurement> m_measurement;
+    QList<qsizetype> m_netPads;
 };
 
 }

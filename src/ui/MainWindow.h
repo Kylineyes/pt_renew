@@ -15,6 +15,7 @@ namespace pt {
 class BoardCanvas;
 class ComponentBrowser;
 class LibraryBrowser;
+class NetlistBrowser;
 
 class MainWindow final : public QMainWindow {
     Q_OBJECT
@@ -23,6 +24,7 @@ public:
     bool inspectFile(const QString& path);
     void requestOpenFile(const QString& path);
     void openLibrary(const QString& path);
+    void openNetlist(const QString& path);
 
 signals:
     void commandInvoked(const QString& id);
@@ -44,6 +46,7 @@ private:
     QPlainTextEdit* m_selectionText = nullptr;
     ComponentBrowser* m_componentBrowser=nullptr;
     LibraryBrowser* m_libraryBrowser=nullptr;
+    NetlistBrowser* m_netlistBrowser=nullptr;
     QDockWidget* m_measureDock=nullptr;
     QPlainTextEdit* m_measureText=nullptr;
     QLabel* m_viewStatus = nullptr;

@@ -1,4 +1,5 @@
 #include "io/LegacyPcbInspector.h"
+#include "io/DosText.h"
 
 #include <QCryptographicHash>
 #include <QFile>
@@ -27,8 +28,11 @@ InspectionResult LegacyPcbInspector::inspect(const QString& filePath) {
     if (bytes.contains('\0')) {
         return {{}, QStringLiteral("文件含有二进制零字节，不属于当前支持的 PCB 文本格式。")};
     }
-    const qsizetype firstNewline = bytes.indexOf('\n');
-    const QByteArray header = bytes.left(firstNewline < 0 ? bytes.size() : firstNewline).trimmed();
+    const auto textEnd=dosTextEnd(bytes);
+    if (textEnd<0) return {{},QStringLiteral("DOS EOF 后存在非空白数据，不能截断探测。")};
+    const auto textBytes=bytes.left(textEnd);
+    const qsizetype firstNewline = textBytes.indexOf('\n');
+    const QByteArray header = textBytes.left(firstNewline < 0 ? textBytes.size() : firstNewline).trimmed();
     if (header != "PCB FILE 4") {
         return {{}, QStringLiteral("不支持此文件头，目前只探测 PCB FILE 4 文本文件。")};
     }
@@ -43,10 +47,10 @@ InspectionResult LegacyPcbInspector::inspect(const QString& filePath) {
     // 逐行扫描，避免将大量空行展开为海量 QByteArray 对象。
     QByteArray lastNonEmpty;
     qsizetype offset = 0;
-    while (offset < bytes.size()) {
-        const qsizetype newline = bytes.indexOf('\n', offset);
-        const qsizetype end = newline < 0 ? bytes.size() : newline;
-        const QByteArray marker = bytes.mid(offset, end - offset).trimmed();
+    while (offset < textBytes.size()) {
+        const qsizetype newline = textBytes.indexOf('\n', offset);
+        const qsizetype end = newline < 0 ? textBytes.size() : newline;
+        const QByteArray marker = textBytes.mid(offset, end - offset).trimmed();
         if (!marker.isEmpty()) lastNonEmpty = marker;
         if (markers.contains(marker)) {
             ++info.markerCounts[QString::fromLatin1(marker)];

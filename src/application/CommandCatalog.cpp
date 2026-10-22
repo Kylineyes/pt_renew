@@ -47,7 +47,7 @@ const QList<MenuSpec>& commandCatalog() {
             command("grid.snap", "捕捉网格(&S)")}},
         {QStringLiteral("H"), QStringLiteral("高亮(&H)"), {
             command("highlight.connection", "高亮连接(&C)"), command("highlight.net", "高亮网络(&N)"),
-            command("highlight.reset", "清除高亮(&R)")}},
+            command("highlight.reset", "清除网络焊盘高亮(&R)", {}, true)}},
         {QStringLiteral("I"), QStringLiteral("信息(&I)"), {
             command("info.file", "板图信息面板(&S)", {}, true),
             command("info.selection", "图元属性面板(&P)", {"Ctrl+I"}, true),
@@ -68,7 +68,11 @@ const QList<MenuSpec>& commandCatalog() {
             command("move.component", "移动元件(&C)"), command("move.pad", "移动焊盘(&P)"),
             command("move.track", "移动走线(&T)"), command("move.break", "打断走线(&B)")}},
         {QStringLiteral("N"), QStringLiteral("网络(&N)"), {
-            command("netlist.load", "读取网表(&G)"), command("netlist.drc", "设计规则检查(&D)"),
+            command("netlist.load", "只读载入外部 NET(&G)", {"Ctrl+Shift+N"}, true),
+            command("netlist.browse", "网络与引脚映射(&N)", {"Ctrl+Alt+N"}, true),
+            command("netlist.clear", "移除外部网表(&C)", {}, true),
+            command("netlist.copper", "受限铜层几何分析（非 DRC）(&A)", {"Ctrl+Alt+C"}, true),
+            command("netlist.drc", "设计规则检查(&D)"),
             command("netlist.autoplace", "自动布局(&A)"), command("netlist.route", "布线(&R)")}},
         {QStringLiteral("P"), QStringLiteral("放置(&P)"), {
             command("place.arc", "放置圆弧(&A)"), command("place.component", "放置元件(&C)"),

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "domain/PrimitiveId.h"
+#include "domain/Netlist.h"
 #include <QList>
 #include <QPointF>
 #include <QRectF>
@@ -55,6 +56,7 @@ struct BoardDocument {
     QList<Component> components;
     QMap<QString, qsizetype> recordCounts;
     QStringList warnings;
+    std::shared_ptr<const Netlist> embeddedNetlist;
 
     QRectF bounds() const;
     qsizetype primitiveCount() const;
