@@ -1,6 +1,12 @@
 # 原文字形运行对照步骤
 
-本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
+本步骤接续 [原文字形静态证据](legacy-text.md)。verification-35 已实际显示主菜单、Information 和 Status，工作文件名为 `C21.PCB`、`Strings=1`，并保留同轮配置加载及 C21 文件打开日志。样例中的四条 FT 参考走线未体现于 Status 的 `Tracks=0`，完整载入、文字对象属性及独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
+
+## verification-35 直接操作的菜单与文件状态证据
+
+用户授权代理直接截图和控制桌面后，从 `0f91ece` 建立独立分支，创建全新无 DFT 隔离副本，按同一连接逐步完成启动页、主菜单、Information、Status 观察。Status 显示 `C21.PCB`、`Strings=1`，同轮 DOSBox 日志记录本轮配置加载、PT 执行及 C21 打开请求。普通字母 Shortcut、输入法候选和修饰键事件的区别得到现场记录；ASCII 状态下 `Shift+I`、`Shift+S` 实际进入 Information 和 Status，未测试宏。详见 [现场验证与证据边界](legacy-menu-live-verification.md)。
+
+输入中 `FS=1、FT=4`，Status 却为 `Strings=1、Tracks=0`，因此没有声称样例完整载入。取得 Status 证据后，窗口放大出现重绘问题，恢复尺寸后前景变为 Orca，停止键盘交互；关闭前又遇到 30 秒 user 门禁超时，未执行关闭动作。客户端退出后核对 PID、父进程和配置命令行，仅终止本轮 DOSBox，最终无相关残留；原安装 99 项及新旧各 103 项副本前后摘要一致。文字对象属性、参考走线差异和独立字形对照仍未完成，`runtime_verified=false`。
 
 ## verification-34 启动日志准备与门禁停止
 
