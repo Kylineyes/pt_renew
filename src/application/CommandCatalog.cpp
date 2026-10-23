@@ -52,6 +52,7 @@ const QList<MenuSpec>& commandCatalog() {
             command("info.file", "板图信息面板(&S)", {}, true),
             command("info.selection", "图元属性面板(&P)", {"Ctrl+I"}, true),
             command("measure.toggle", "两点只读测量(&M)", {"Ctrl+M"}, true, true),
+            command("measure.snap", "测量时捕捉几何端点(&E)", {"Ctrl+Shift+M"}, true, true),
             command("measure.clear", "清除测量(&R)", {}, true),
             command("measure.info", "测量结果面板(&D)", {}, true),
             command("info.board", "板图尺寸(&B)"), command("info.components", "元件列表(&C)", {}, true),

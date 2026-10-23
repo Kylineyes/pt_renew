@@ -8,7 +8,7 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("pt-renew"));
-    QCoreApplication::setApplicationVersion(QStringLiteral("0.9.0"));
+    QCoreApplication::setApplicationVersion(QStringLiteral("0.10.0"));
     QCoreApplication::setOrganizationName(QStringLiteral("PtRenew"));
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("AUTOTRAX 重建工程：只读板图、库、网表及受限铜层几何分析（非完整 DRC）。"));
