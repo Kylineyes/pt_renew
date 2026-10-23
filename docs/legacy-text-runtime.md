@@ -2,6 +2,12 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
+## verification-34 启动日志准备与门禁停止
+
+从 `a5c2bde` 分发运行日志验证和离线配置复核，已核对本机 `[log] logfile`、类别等级与 `[dos] log console` 的定义，来源和配置加载规则的证据边界见 [DOSBox 日志与配置证据](legacy-dosbox-configuration.md)。已准备保持原模拟器参数的隔离配置及独立 stdout/stderr 路径；这些准备不代表日志方案已实际执行。
+
+运行 worker 的唯一连接在首次截图前连续 16 次取得 `ControlStatus=user`、generation 2，30 秒截止后停止。未调用截图、未启动 DOSBox、未发送键鼠输入，未生成目标日志；原安装 99 项及新旧两份 103 项副本前后摘要均一致，本轮客户端/MCP 进程已退出。详见 [启动日志验证记录](legacy-dosbox-startup-validation.md)。黑色客户区原因、实际配置加载来源和菜单/对象参数仍未知，`runtime_verified=false`；后续在控制可用的新场景执行已准备的日志方案。
+
 ## verification-33 子 agent 验证与验收
 
 从 `050c713` 分发独立静态复核和运行验证任务，分别见 [Information、Status 与宏键静态复核](legacy-menu-static-validation.md) 和 [原菜单运行核验与桌面观测诊断](legacy-menu-runtime-validation.md)。静态复核确认菜单分派与宏初始化，修正 Status 的文件名为去目录后名称与扩展名，并细化单个 Esc 取消输出的条件。
