@@ -1,12 +1,18 @@
 # 原文字形运行对照步骤
 
-本步骤接续 [原文字形静态证据](legacy-text.md)。verification-35 已实际显示主菜单、Information 和 Status，工作文件名为 `C21.PCB`、`Strings=1`，并保留同轮配置加载及 C21 文件打开日志。样例中的四条 FT 参考走线未体现于 Status 的 `Tracks=0`，完整载入、文字对象属性及独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
+本步骤接续 [原文字形静态证据](legacy-text.md)。verification-35 已实际显示主菜单、Information 和 Status，工作文件名为 `C21.PCB`、`Strings=1`，并保留同轮配置加载及 C21 文件打开日志。verification-36 进一步取得文字属性：内容 `A`、高度 `240`、线宽 `1`；复核两轮原图后确认 `Tracks=4`，前版读成 0 的记录已修正。独立尺标、笔画端点与方向对照仍未完成，工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
+
+## verification-36 文字对象属性与中断恢复
+
+在相同无 DFT 隔离条件下，进入 Edit → String，移动光标并按 Enter 选中文字，取得属性框截图；随后单个 Esc 取消，没有修改字段。Status 再次显示 `C21.PCB`、`Strings=1`、`Tracks=4`。后续准备从 Status 返回时，Windows-MCP 控制状态连续 30 秒为 user，取消动作未发送；核对归属后仅清理本轮 DOSBox，前后输入摘要一致。
+
+pi 在整理汇总时因旧会话 JSONL 文件不存在而报 `ENOENT`，正式文档和提交尚未生成。恢复后已依据保留的逐步返回、前景 PID、原始截图和摘要生成本地汇总，修正 Tracks 误读。完整事实、可复现索引和限制见 [文字对象现场验证](legacy-text-object-verification.md)。这次证据确认内容、高度和线宽，尚未确认原点、方向、参考层显示或中心线几何。
 
 ## verification-35 直接操作的菜单与文件状态证据
 
 用户授权代理直接截图和控制桌面后，从 `0f91ece` 建立独立分支，创建全新无 DFT 隔离副本，按同一连接逐步完成启动页、主菜单、Information、Status 观察。Status 显示 `C21.PCB`、`Strings=1`，同轮 DOSBox 日志记录本轮配置加载、PT 执行及 C21 打开请求。普通字母 Shortcut、输入法候选和修饰键事件的区别得到现场记录；ASCII 状态下 `Shift+I`、`Shift+S` 实际进入 Information 和 Status，未测试宏。详见 [现场验证与证据边界](legacy-menu-live-verification.md)。
 
-输入中 `FS=1、FT=4`，Status 却为 `Strings=1、Tracks=0`，因此没有声称样例完整载入。取得 Status 证据后，窗口放大出现重绘问题，恢复尺寸后前景变为 Orca，停止键盘交互；关闭前又遇到 30 秒 user 门禁超时，未执行关闭动作。客户端退出后核对 PID、父进程和配置命令行，仅终止本轮 DOSBox，最终无相关残留；原安装 99 项及新旧各 103 项副本前后摘要一致。文字对象属性、参考走线差异和独立字形对照仍未完成，`runtime_verified=false`。
+输入中 `FS=1、FT=4`，复核后的 Status 为 `Strings=1、Tracks=4`；计数一致不等于全部字段和几何完整核验。取得 Status 证据后，窗口放大出现重绘问题，恢复尺寸后前景变为 Orca，停止键盘交互；关闭前又遇到 30 秒 user 门禁超时，未执行关闭动作。客户端退出后核对 PID、父进程和配置命令行，仅终止本轮 DOSBox，最终无相关残留；原安装 99 项及新旧各 103 项副本前后摘要一致。本轮尚未完成文字属性和独立字形对照；属性的后续结果见 verification-36，`runtime_verified=false`。
 
 ## verification-34 启动日志准备与门禁停止
 
