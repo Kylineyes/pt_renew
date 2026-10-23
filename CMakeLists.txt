@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.9.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.10.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -39,6 +39,8 @@ target_link_libraries(pt_core PUBLIC Qt6::Core)
 add_library(pt_geometry STATIC
     src/geometry/BoardGeometry.h
     src/geometry/BoardGeometry.cpp
+    src/geometry/EndpointSnapIndex.h
+    src/geometry/EndpointSnapIndex.cpp
     src/geometry/CopperConnectivity.h
     src/geometry/CopperConnectivity.cpp
 )
@@ -130,6 +132,14 @@ if(BUILD_TESTING)
     endif()
     add_test(NAME pt-navigation-tests COMMAND pt-navigation-tests -o -,txt -o navigation-test-results.txt,txt)
     set_tests_properties(pt-navigation-tests PROPERTIES TIMEOUT 60)
+    qt_add_executable(pt-endpoint-snap-tests tests/EndpointSnapTests.cpp)
+    set_target_properties(pt-endpoint-snap-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-endpoint-snap-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-endpoint-snap-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-endpoint-snap-tests COMMAND pt-endpoint-snap-tests -o -,txt -o endpoint-snap-test-results.txt,txt)
+    set_tests_properties(pt-endpoint-snap-tests PROPERTIES TIMEOUT 60)
     qt_add_executable(pt-library-tests tests/LibraryTests.cpp)
     set_target_properties(pt-library-tests PROPERTIES WIN32_EXECUTABLE FALSE)
     target_link_libraries(pt-library-tests PRIVATE pt_ui Qt6::Test)

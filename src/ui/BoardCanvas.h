@@ -1,6 +1,7 @@
 #pragma once
 
 #include "geometry/BoardGeometry.h"
+#include "geometry/EndpointSnapIndex.h"
 #include "domain/Measurement.h"
 #include <QPointF>
 #include <QSet>
@@ -42,6 +43,9 @@ public:
     std::optional<Measurement> measurement() const { return m_measurement; }
     std::optional<QPointF> measurementStart() const { return m_measurementStart; }
     void clearMeasurement();
+    void setMeasurementSnapEnabled(bool enabled);
+    bool measurementSnapEnabled() const { return m_measurementSnap; }
+    std::optional<SnapPoint> snapPreview() const { return m_snapPreview; }
 
 signals:
     void legacyMenuRequested(const QString& key);
@@ -57,10 +61,13 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
+    void leaveEvent(QEvent* event) override;
 
 private:
     qreal baseScale() const;
     void zoomAt(qreal factor, const QPointF& anchor);
+    std::optional<SnapPoint> measurementSnapAt(const QPointF& screen) const;
+    void clearSnapPreview();
     bool m_gridVisible = true;
     bool m_panning = false;
     qreal m_zoom = 1.0;
@@ -79,6 +86,10 @@ private:
     bool m_measurementMode=false;
     std::optional<QPointF> m_measurementStart;
     std::optional<Measurement> m_measurement;
+    bool m_measurementSnap = false;
+    EndpointSnapIndex m_snapIndex;
+    std::optional<SnapPoint> m_snapPreview;
+    std::optional<PrimitiveId> m_startAnchor;
     QList<qsizetype> m_netPads;
 };
 

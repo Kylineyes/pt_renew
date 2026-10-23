@@ -2,7 +2,7 @@
 
 阶段：第四阶段，版本 0.4.0。开发分支：`feat/component-navigation-measure`。
 
-> 第五阶段已加入独立 LIB 只读浏览；本文保留第四阶段范围和验收，最新库格式覆盖见 [LIB 分析与浏览](library-analysis.md)。
+> 第十阶段 0.10.0 已增加可选的 [测量端点捕捉](measurement-snap.md)。本文保留第四阶段默认自由取点的范围和历史验收；第五阶段的独立 LIB 只读浏览见 [LIB 分析与浏览](library-analysis.md)。
 
 ## 元件检索与定位
 

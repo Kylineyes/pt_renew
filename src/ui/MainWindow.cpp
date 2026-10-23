@@ -132,7 +132,7 @@ void MainWindow::createMenus() {
                 }
                 action->setShortcuts(keys);
                 action->setShortcutContext(Qt::WindowShortcut);
-                if (command.id.startsWith(QStringLiteral("selection.")) || command.id==QStringLiteral("measure.toggle") || command.id==QStringLiteral("jump.origin")) {
+                if (command.id.startsWith(QStringLiteral("selection.")) || command.id==QStringLiteral("measure.toggle") || command.id==QStringLiteral("measure.snap") || command.id==QStringLiteral("jump.origin")) {
                     action->setShortcutContext(Qt::WidgetShortcut);
                     m_canvas->addAction(action);
                 }
@@ -201,6 +201,8 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("measure.toggle")) {
         m_canvas->setMeasurementMode(m_actions.value(id)->isChecked());
         m_canvas->setFocus(Qt::ShortcutFocusReason);
+    } else if (id == QStringLiteral("measure.snap")) {
+        m_canvas->setMeasurementSnapEnabled(m_actions.value(id)->isChecked());
     } else if (id == QStringLiteral("measure.clear")) {
         m_canvas->clearMeasurement();
     } else if (id == QStringLiteral("measure.info")) {
@@ -304,7 +306,7 @@ void MainWindow::clearFileInfo() {
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
         "Ctrl+O：打开 PCB 只读预览。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第九阶段增加未覆盖图元诊断与定位（非完整 DRC），仍不支持编辑或保存。"));
+        "第十阶段增加测量端点捕捉，保留受限铜层诊断（非完整 DRC），仍不支持编辑或保存。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
     setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
 }
@@ -340,6 +342,8 @@ void MainWindow::updateMeasurementInfo() {
     const bool active=m_canvas->measurementMode();
     m_actions.value(QStringLiteral("measure.toggle"))->setEnabled(m_canvas->document()!=nullptr);
     m_actions.value(QStringLiteral("measure.toggle"))->setChecked(active);
+    m_actions.value(QStringLiteral("measure.snap"))->setEnabled(m_canvas->document()!=nullptr);
+    m_actions.value(QStringLiteral("measure.snap"))->setChecked(m_canvas->measurementSnapEnabled());
     m_actions.value(QStringLiteral("measure.clear"))->setEnabled(result.has_value() || start.has_value());
     QString text=active?QStringLiteral("测量模式：依次单击两点，画布内 Esc 退出。\n"):QStringLiteral("测量模式已关闭。\n");
     auto unit=[](qreal value) { return QStringLiteral("%1 mil（%2 mm）").arg(QString::number(value,'f',2),QString::number(value*0.0254,'f',4)); };
@@ -350,8 +354,17 @@ void MainWindow::updateMeasurementInfo() {
             .arg(result->end.x(),0,'f',2).arg(result->end.y(),0,'f',2)
             .arg(unit(result->deltaX()),unit(result->deltaY()),unit(result->distance()))
             .arg(result->angleDegrees(),0,'f',2);
+        auto origin = [this](const std::optional<PrimitiveId>& anchor) {
+            if (!anchor || !m_canvas->document()) return QStringLiteral("屏幕自由取点");
+            const auto source = primitiveSource(*m_canvas->document(), *anchor);
+            return QStringLiteral("模型几何捕捉（源文件行 %1）").arg(source.line);
+        };
+        text += QStringLiteral("起点来源：%1\n终点来源：%2\n").arg(origin(result->startAnchor), origin(result->endAnchor));
     } else if (!start) text+=active?QStringLiteral("\n尚无测量结果，请在画布依次单击两点。\n"):QStringLiteral("\n尚无测量结果。请在画布内按 Ctrl+M，或从信息菜单进入两点测量。\n");
-    text+=QStringLiteral("\n屏幕自由取点，未吸附网格或图元端点。\n结果为近似读数，不是 DRC 或制造尺寸验收；不写入板图。\n"
+    text += m_canvas->measurementSnapEnabled()
+        ? QStringLiteral("\n端点捕捉已开启：靠近可见图元的端点或中心时显示黄色方框。\n超出捕捉范围时仍为自由取点，不捕捉网格或文字。\n")
+        : QStringLiteral("\n当前为屏幕自由取点。可在信息菜单开启端点捕捉，或在画布内按 Ctrl+Shift+M。\n");
+    text+=QStringLiteral("结果按当前模型坐标计算；自由取点受屏幕精度影响。\n不是 DRC 或制造尺寸验收；不写入板图。\n"
                         "完成一组后可继续取两点，清除命令删除结果；退出模式保留已完成结果。");
     m_measureText->setPlainText(text);
     if (active) { m_measureDock->show(); m_measureDock->raise(); }
