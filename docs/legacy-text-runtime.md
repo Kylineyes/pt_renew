@@ -2,6 +2,14 @@
 
 本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
 
+## verification-33 子 agent 验证与验收
+
+从 `050c713` 分发独立静态复核和运行验证任务，分别见 [Information、Status 与宏键静态复核](legacy-menu-static-validation.md) 和 [原菜单运行核验与桌面观测诊断](legacy-menu-runtime-validation.md)。静态复核确认菜单分派与宏初始化，修正 Status 的文件名为去目录后名称与扩展名，并细化单个 Esc 取消输出的条件。
+
+运行诊断发现 Windows-MCP 0.8.8 在 `use_ui_tree=false` 时主动跳过窗口枚举，故 verification-29/32 的空窗口元数据不能证明焦点异常。新场景通过完整 UI 快照及 Win32 HWND/PID 观测核对窗口归属；随后单连接启动全新无 DFT 副本，DOSBox 客户区只有黑底与白横线，未取得 AUTOTRAX 启动页，因而停止，未发送键鼠输入。原安装 99 项及既有、新建两份 103 项副本前后摘要均一致，相关进程已退出。
+
+本轮没有取得菜单响应、实际载入文件名或文字对象参数证据，`runtime_verified` 保持 `false`。启动工具将目标 stdout/stderr 丢弃，本轮无法恢复；后续独立场景先补充 DOSBox 自身日志及配置来源，再判断启动阻塞，继续按单连接、逐步截图和控制边界推进。
+
 ## verification-31 菜单与键盘静态路径
 
 已从 `d9f9506` 的最新 `origin/dev` 建立 `research/legacy-menu-static`，带入 verification-29/30 尚未提交的记录。离线分析已将菜单文件装载、段解析、绘制调用、主菜单 Enter 入口、KEY 覆盖装载和宏展开路径串联，详细地址、重定位交叉核对及复核工具见 [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)。这些结果仍为静态证据；尚未证明此前场景实际载入菜单、PCB 或宏。
