@@ -2,6 +2,8 @@
 
 本页接续 [运行对照记录](legacy-text-runtime.md)，记录 verification-31 的离线分析。已定位 `PT.EXE` 的菜单装载、菜单表绘制调用、选择器和宏分派，以及 `TRAXEDIT.OVR` 的 KEY 装载入口和 Information 分支。**这些是指令、文件内容和重定位相互核对的静态证据，没有证明此前 DOSBox 场景实际载入菜单或响应按键。** `runtime_verified` 仍为 `false`，产品仍为 0.9.0。
 
+后续 [verification-35 现场验证](legacy-menu-live-verification.md) 已实际观察到启动页、主菜单、Information 和 Status，并取得 `C21.PCB` 工作文件名及文字计数；以下地址链仍属于静态证据。现场未验证宏展开或文字对象参数，四条 FT 参考走线与 `Tracks=0` 的差异继续保留。
+
 ## 输入与地址约定
 
 从同步的 `origin/dev`（`d9f9506`）建立 `research/legacy-menu-static`，保留原分支未提交的 verification-29/30 文档记录。分析前后核对原安装 99 个文件及完整 SHA-256 清单；无 DFT 隔离副本 103 个文件的集合和摘要也与 verification-20 基线一致。没有执行原安装或修改隔离输入。
