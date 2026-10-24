@@ -113,7 +113,7 @@ python tools/inspect_legacy_overlays.py 'D:/软件/PT.EXE' 'D:/软件/TRAXEDIT.O
 python tools/inspect_legacy_text.py 'D:/软件/PT.EXE'
 ```
 
-可选 `--text`、`--height`、`--orientation` 输出供本地对照的静态中心线。原程序单字符行为对照仍待完成，尚未将字形接入桌面程序或铜层分析，详见 [原文字形静态证据](docs/legacy-text.md)。
+可选 `--text`、`--height`、`--orientation` 输出供本地对照的静态中心线。[受控机器码验证](docs/legacy-text-machine-verification.md) 已比较 21,792 个组合与 105,504 条中心线，未发现差异；完整原程序的独立画面与像素对照仍待完成，尚未将字形接入桌面程序或铜层分析，详见 [原文字形静态证据](docs/legacy-text.md)。
 
 ## 发布目录
 
