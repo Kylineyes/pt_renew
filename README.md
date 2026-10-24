@@ -131,6 +131,7 @@ windeployqt --release --compiler-runtime --no-translations dist/pt-renew.exe
 
 ## 文档与协作
 
+- [新 Agent 交接](HANDOFF.md)：当前进度、验证边界、环境与本地证据路径、接手顺序和后续计划。
 - [协作规范](AGENTS.md)：简体中文、约定式提交、独立分支 → dev → 用户合并 main。
 - [Qt 开发环境](docs/qt-development.md)：安装组件、验证结果和平台限制。
 - [首次调查](docs/initial-assessment.md)：软件身份、DOSBox 与文件现状。
