@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.10.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.11.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,6 +10,8 @@ find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Widgets Concurrent)
 include(CTest)
 
 add_library(pt_core STATIC
+    src/application/BoardEditSession.h
+    src/application/BoardEditSession.cpp
     src/application/CommandCatalog.cpp
     src/application/CommandCatalog.h
     src/application/ComponentTableModel.h
@@ -100,6 +102,14 @@ if(BUILD_TESTING)
         message(STATUS "未找到 Python 3：跳过覆盖模块及文字研究工具测试，Qt 应用构建不受影响。")
     endif()
     find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
+    qt_add_executable(pt-editing-tests tests/EditingTests.cpp)
+    set_target_properties(pt-editing-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-editing-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-editing-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-editing-tests COMMAND pt-editing-tests -o -,txt -o editing-test-results.txt,txt)
+    set_tests_properties(pt-editing-tests PROPERTIES TIMEOUT 90)
     qt_add_executable(pt-shell-tests tests/ShellTests.cpp)
     set_target_properties(pt-shell-tests PROPERTIES WIN32_EXECUTABLE FALSE)
     target_link_libraries(pt-shell-tests PRIVATE pt_ui Qt6::Test)

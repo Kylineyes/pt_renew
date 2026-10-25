@@ -8,15 +8,15 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("pt-renew"));
-    QCoreApplication::setApplicationVersion(QStringLiteral("0.10.0"));
+    QCoreApplication::setApplicationVersion(QStringLiteral("0.11.0"));
     QCoreApplication::setOrganizationName(QStringLiteral("PtRenew"));
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral("AUTOTRAX 重建工程：只读板图、库、网表及受限铜层几何分析（非完整 DRC）。"));
+    parser.setApplicationDescription(QStringLiteral("AUTOTRAX 重建工程：自由走线内存编辑（不支持保存）、只读库/网表及受限铜层分析（非完整 DRC）。"));
     parser.addHelpOption();
     parser.addVersionOption();
     parser.addOption(QCommandLineOption(QStringLiteral("library"),QStringLiteral("在独立只读窗口打开 LIB，不放置到板图。"),QStringLiteral("路径")));
     parser.addOption(QCommandLineOption(QStringLiteral("netlist"),QStringLiteral("只读载入外部 NET；若指定板图则在板图成功载入后映射。"),QStringLiteral("路径")));
-    parser.addPositionalArgument(QStringLiteral("文件"), QStringLiteral("可选：以只读方式打开 PCB FILE 4 板图。"), QStringLiteral("[文件]"));
+    parser.addPositionalArgument(QStringLiteral("文件"), QStringLiteral("可选：只读载入 PCB FILE 4 原件，建立内存工作副本；不支持保存。"), QStringLiteral("[文件]"));
     parser.process(app);
     if (parser.positionalArguments().size() > 1) parser.showHelp(2);
     pt::MainWindow window;

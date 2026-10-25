@@ -22,16 +22,24 @@
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QStatusBar>
+#include <QApplication>
+#include <QCloseEvent>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFormLayout>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSessionManager>
 
 namespace pt {
 
 MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     setObjectName(QStringLiteral("mainWindow"));
-    setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
+    setWindowTitle(QStringLiteral("PT Renew · 内存编辑 · 不支持保存"));
     resize(1440, 850);
     m_canvas = new BoardCanvas(this);
     setCentralWidget(m_canvas);
-    m_infoDock = new QDockWidget(QStringLiteral("板图信息（只读）"), this);
+    m_infoDock = new QDockWidget(QStringLiteral("原输入与工作副本"), this);
     m_infoDock->setObjectName(QStringLiteral("fileInfoDock"));
     m_infoText = new QPlainTextEdit(m_infoDock);
     m_infoText->setObjectName(QStringLiteral("fileInfoText"));
@@ -108,7 +116,18 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     connect(m_canvas, &BoardCanvas::selectionChanged, this, &MainWindow::updateSelectionInfo);
     connect(m_canvas, &BoardCanvas::legacyMenuRequested, this, &MainWindow::showLegacyMenu);
     connect(m_canvas, &BoardCanvas::viewChanged, this, &MainWindow::updateViewStatus);
+    connect(qApp, &QGuiApplication::commitDataRequest, this, [this](QSessionManager& manager) {
+        if (!m_editSession.dirty()) return;
+        ++m_loadGeneration;
+        if (!manager.allowsInteraction() || !confirmDiscard()) manager.cancel();
+    });
+    connect(qApp, &QApplication::focusChanged, this, [this] { updateEditingActions(); });
     m_canvas->setFocus();
+}
+
+MainWindow::~MainWindow() {
+    // QWidget 析构会改变全局焦点；成员销毁前先解除依赖编辑会话和菜单的回调。
+    disconnect(qApp, nullptr, this, nullptr);
 }
 
 void MainWindow::createMenus() {
@@ -132,7 +151,7 @@ void MainWindow::createMenus() {
                 }
                 action->setShortcuts(keys);
                 action->setShortcutContext(Qt::WindowShortcut);
-                if (command.id.startsWith(QStringLiteral("selection.")) || command.id==QStringLiteral("measure.toggle") || command.id==QStringLiteral("measure.snap") || command.id==QStringLiteral("jump.origin")) {
+                if (command.id.startsWith(QStringLiteral("selection.")) || command.id==QStringLiteral("measure.toggle") || command.id==QStringLiteral("measure.snap") || command.id==QStringLiteral("jump.origin") || command.id==QStringLiteral("delete.track") || command.id==QStringLiteral("edit.undo") || command.id==QStringLiteral("edit.redo")) {
                     action->setShortcutContext(Qt::WidgetShortcut);
                     m_canvas->addAction(action);
                 }
@@ -158,11 +177,21 @@ void MainWindow::showLegacyMenu(const QString& key) {
 void MainWindow::executeCommand(const QString& id) {
     emit commandInvoked(id);
     if (id == QStringLiteral("file.open")) {
-        const QString file = QFileDialog::getOpenFileName(this, QStringLiteral("打开旧 PCB（只读预览）"), {},
+        const QString file = QFileDialog::getOpenFileName(this, QStringLiteral("打开旧 PCB 的内存工作副本（不支持保存）"), {},
             QStringLiteral("AUTOTRAX 板图 (*.pcb *.PCB *.abk *.ABK);;所有文件 (*)"));
         if (!file.isEmpty()) requestOpenFile(file);
     } else if (id == QStringLiteral("file.close")) {
-        clearFileInfo();
+        // 先撤销待载入结果，避免读取完成在放弃确认框内再弹出换图确认。
+        ++m_loadGeneration;
+        if (confirmDiscard()) clearFileInfo();
+    } else if (id == QStringLiteral("move.track")) {
+        moveTrackDialog();
+    } else if (id == QStringLiteral("delete.track")) {
+        deleteSelectedTrack();
+    } else if (id == QStringLiteral("edit.undo")) {
+        if (m_editSession.undo()) publishWorkingDocument();
+    } else if (id == QStringLiteral("edit.redo")) {
+        if (m_editSession.redo()) publishWorkingDocument();
     } else if (id == QStringLiteral("app.exit")) {
         close();
     } else if (id == QStringLiteral("view.grid")) {
@@ -219,8 +248,9 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("app.about")) {
         QMessageBox::information(this, QStringLiteral("关于当前阶段"),
             QStringLiteral("C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
-                           "当前支持只读板图/库/网表及受限铜层几何分析；不是完整 DRC。\n"
-                           "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。"));
+                           "当前支持自由走线的内存移动、删除及撤销重做；原输入只读。\n"
+                           "库/网表只读，铜层分析受限，不是完整 DRC。\n"
+                           "文字与部分轮廓为近似显示；不支持保存、另存为、DRC、布线和生产输出。"));
     }
     statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
 }
@@ -234,14 +264,13 @@ void MainWindow::openLibrary(const QString& path) {
 }
 
 void MainWindow::requestOpenFile(const QString& path) {
-    // 同时最多一个解析任务；窗口销毁或关闭文件后，迟到结果不再覆盖界面。
+    // 保留当前工作副本直至读取成功；失败、取消或迟到的结果不能丢弃修改。
     if (m_loading) return;
-    clearFileInfo();
     const quint64 generation = ++m_loadGeneration;
     m_loading = true;
     m_actions.value(QStringLiteral("file.open"))->setEnabled(false);
     m_actions.value(QStringLiteral("file.close"))->setEnabled(true);
-    m_infoText->setPlainText(QStringLiteral("正在后台读取板图，请稍候……\n可用 Ctrl+W 放弃本次载入。"));
+    statusBar()->showMessage(QStringLiteral("正在后台读取板图，当前工作副本仍保留；关闭板图可放弃本次载入。"));
     auto* watcher = new QFutureWatcher<BoardReadResult>(this);
     connect(watcher, &QFutureWatcher<BoardReadResult>::finished, this, [this, watcher, generation, path] {
         const auto result = watcher->result();
@@ -263,55 +292,150 @@ bool MainWindow::inspectFile(const QString& path) {
 
 bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& path) {
     if (!result.succeeded()) {
-        clearFileInfo();
-        statusBar()->showMessage(result.error, 15000);
-        m_infoDock->show();
-        m_infoText->setPlainText(QStringLiteral("探测失败：%1\n\n本次没有载入或修改任何板图。").arg(result.error));
+        statusBar()->showMessage(QStringLiteral("读取失败：%1；当前工作副本和历史已保留。").arg(result.error), 15000);
+        if (!m_editSession.document()) m_infoText->setPlainText(QStringLiteral("探测失败：%1\n未载入板图。").arg(result.error));
+        m_actions.value(QStringLiteral("file.close"))->setEnabled(m_editSession.document()!=nullptr);
         return false;
     }
-    const auto& board = *result.document;
-    m_canvas->setDocument(result.document);
-    m_componentBrowser->setDocument(result.document);
-    m_netlistBrowser->setBoard(result.document);
-    m_actions.value(QStringLiteral("jump.component"))->setEnabled(!board.components.isEmpty());
+    if (!confirmDiscard()) return false;
+    m_editSession.reset(result.document);
+    m_canvas->setDocument(m_editSession.document());
+    m_componentBrowser->setDocument(m_editSession.document());
+    m_netlistBrowser->setBoard(m_editSession.document());
+    m_actions.value(QStringLiteral("jump.component"))->setEnabled(!result.document->components.isEmpty());
     m_actions.value(QStringLiteral("info.components"))->setEnabled(true);
     m_actions.value(QStringLiteral("jump.origin"))->setEnabled(true);
-    QString text = QStringLiteral("只读预览，不支持编辑或保存。\n\n"
-                                  "文件：%1\n格式：PCB FILE 4\n大小：%2 字节\n\nSHA-256：\n%3\n\n"
-                                  "元件：%4\n走线：%5\n焊盘：%6\n过孔：%7\n圆弧：%8\n填充：%9\n文字（含可见元件标签）：%10\n\n"
-                                  "单位：mil（1 mil = 0.0254 mm）\n\n记录数：\n")
-                       .arg(board.filePath).arg(board.byteSize).arg(board.sha256)
-                       .arg(board.components.size()).arg(board.tracks.size()).arg(board.pads.size())
-                       .arg(board.vias.size()).arg(board.arcs.size()).arg(board.fills.size()).arg(board.texts.size());
-    for (auto it = board.recordCounts.cbegin(); it != board.recordCounts.cend(); ++it) {
-        text += QStringLiteral("%1：%2\n").arg(it.key()).arg(it.value());
-    }
-    text += QStringLiteral("\n显示限制：\n仅供只读检查，不可用于生产输出。\n");
-    for (const auto& warning : board.warnings) text += warning + QLatin1Char('\n');
-    m_infoText->setPlainText(text);
-    m_infoDock->show();
-    m_infoDock->raise();
     m_actions.value(QStringLiteral("file.close"))->setEnabled(true);
-    setWindowTitle(QStringLiteral("%1 · 只读板图 · PT Renew").arg(QFileInfo(path).fileName()));
-    statusBar()->showMessage(QStringLiteral("已载入只读板图；请留意显示近似与未支持格式说明。"), 10000);
+    updateFileInfo(); updateEditingActions();
+    m_infoDock->show(); m_infoDock->raise();
+    statusBar()->showMessage(QStringLiteral("已只读载入 %1；可编辑自由走线工作副本，不支持保存。").arg(QFileInfo(path).fileName()), 10000);
     return true;
 }
 
 void MainWindow::clearFileInfo() {
     ++m_loadGeneration;
+    m_editSession.reset();
     m_canvas->setDocument(nullptr);
     m_componentBrowser->setDocument(nullptr);
     m_netlistBrowser->setBoard(nullptr);
     for (const auto& id : {"jump.component","info.components","jump.origin"}) m_actions.value(QString::fromLatin1(id))->setEnabled(false);
     m_infoText->setPlainText(QStringLiteral("尚未打开文件。\n\n"
-        "Ctrl+O：打开 PCB 只读预览。\n"
+        "Ctrl+O：只读载入原件并建立工作副本。\n"
         "画布内按 F，再按 L：同一命令的旧式入口。\n\n"
-        "第十阶段增加测量端点捕捉，保留受限铜层诊断（非完整 DRC），仍不支持编辑或保存。"));
+        "第十一阶段支持自由走线内存移动、删除及撤销重做；保存和另存为尚未实现。"));
     m_actions.value(QStringLiteral("file.close"))->setEnabled(false);
-    setWindowTitle(QStringLiteral("PT Renew · AUTOTRAX 重建 · 只读预览"));
+    setWindowTitle(QStringLiteral("PT Renew · 内存编辑 · 不支持保存"));
+    updateEditingActions(); updateViewStatus();
+}
+
+bool MainWindow::confirmDiscard() {
+    if (!m_editSession.dirty()) return true;
+    QMessageBox box(QMessageBox::Warning, QStringLiteral("放弃工作副本更改？"),
+        QStringLiteral("工作副本已修改，更改仅在内存中。保存和另存为尚未实现。\n放弃后无法恢复这些更改。"), QMessageBox::NoButton, this);
+    box.setObjectName(QStringLiteral("discardChangesDialog"));
+    auto* discard = box.addButton(QStringLiteral("放弃更改"), QMessageBox::DestructiveRole);
+    auto* cancel = box.addButton(QStringLiteral("取消"), QMessageBox::RejectRole);
+    box.setDefaultButton(cancel); box.setEscapeButton(cancel);
+    box.exec();
+    return box.clickedButton() == discard;
+}
+
+void MainWindow::closeEvent(QCloseEvent* event) {
+    ++m_loadGeneration;
+    if (confirmDiscard()) event->accept();
+    else event->ignore();
+}
+
+bool MainWindow::selectedTrackEditable() const {
+    const auto id = m_canvas->selection();
+    return !m_libraryBrowser->isActiveWindow() && id && m_canvas->document()==m_editSession.document().get()
+        && m_editSession.editable(*id, m_editSession.revision())
+        && m_canvas->layerVisible(primitiveLayer(*m_canvas->document(), *id));
+}
+
+void MainWindow::updateEditingActions() {
+    const bool editable = selectedTrackEditable();
+    m_actions.value(QStringLiteral("move.track"))->setEnabled(editable);
+    m_actions.value(QStringLiteral("delete.track"))->setEnabled(editable);
+    const bool boardContext = !m_libraryBrowser->isActiveWindow();
+    m_actions.value(QStringLiteral("edit.undo"))->setEnabled(boardContext && m_editSession.canUndo());
+    m_actions.value(QStringLiteral("edit.redo"))->setEnabled(boardContext && m_editSession.canRedo());
+}
+
+bool MainWindow::moveSelectedTrack(QPointF delta, QString* error) {
+    if (!selectedTrackEditable()) return false;
+    if (!m_editSession.moveTrack(*m_canvas->selection(), m_editSession.revision(), delta, error)) return false;
+    publishWorkingDocument(); return true;
+}
+
+bool MainWindow::deleteSelectedTrack() {
+    if (!selectedTrackEditable()) return false;
+    if (!m_editSession.deleteTrack(*m_canvas->selection(), m_editSession.revision())) return false;
+    publishWorkingDocument(); return true;
+}
+
+void MainWindow::publishWorkingDocument() {
+    m_canvas->setDocument(m_editSession.document(), true);
+    m_componentBrowser->setDocument(m_editSession.document());
+    m_netlistBrowser->setBoard(m_editSession.document(), true);
+    updateFileInfo(); updateEditingActions(); updateViewStatus();
+    statusBar()->showMessage(QStringLiteral("工作副本已更新；选择、测量与铜层结论已清除，外部网表已重新映射。不支持保存。"), 10000);
+}
+
+void MainWindow::moveTrackDialog() {
+    if (!selectedTrackEditable()) return;
+    const auto revision = m_editSession.revision();
+    QDialog dialog(this); dialog.setObjectName(QStringLiteral("moveTrackDialog"));
+    dialog.setWindowTitle(QStringLiteral("移动所选自由走线（仅内存）"));
+    auto* layout = new QFormLayout(&dialog);
+    auto* dx = new QLineEdit(QStringLiteral("0"), &dialog); dx->setObjectName(QStringLiteral("moveDeltaX"));
+    auto* dy = new QLineEdit(QStringLiteral("0"), &dialog); dy->setObjectName(QStringLiteral("moveDeltaY"));
+    layout->addRow(QStringLiteral("ΔX（整数 mil，向右为正）："), dx);
+    layout->addRow(QStringLiteral("ΔY（整数 mil，向上为正）："), dy);
+    auto* error = new QLabel(QStringLiteral("位移范围 ±2000000；端点范围 ±1000000 mil。不支持保存。"), &dialog);
+    error->setWordWrap(true); error->setObjectName(QStringLiteral("moveError")); layout->addRow(error);
+    auto* buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    buttons->button(QDialogButtonBox::Ok)->setText(QStringLiteral("移动"));
+    buttons->button(QDialogButtonBox::Cancel)->setText(QStringLiteral("取消")); layout->addRow(buttons);
+    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    connect(buttons, &QDialogButtonBox::accepted, &dialog, [&] {
+        bool xOk = false, yOk = false;
+        const auto x = dx->text().toLongLong(&xOk), y = dy->text().toLongLong(&yOk);
+        if (!xOk || !yOk || x < -2000000 || x > 2000000 || y < -2000000 || y > 2000000) {
+            error->setText(QStringLiteral("请输入 ±2000000 范围内的整数 mil，不接受小数或非有限值。")); return;
+        }
+        if (revision != m_editSession.revision() || !selectedTrackEditable()) { dialog.reject(); return; }
+        if (x == 0 && y == 0) { dialog.accept(); return; }
+        QString message;
+        if (moveSelectedTrack(QPointF(qreal(x), qreal(y)), &message)) dialog.accept();
+        else error->setText(message);
+    });
+    dialog.exec();
+    m_canvas->setFocus(Qt::ShortcutFocusReason);
+}
+
+void MainWindow::updateFileInfo() {
+    if (!m_editSession.original()) return;
+    const auto& original = *m_editSession.original();
+    const auto& current = *m_editSession.document();
+    QString text = QStringLiteral("当前工作副本：%1\n工作修订：%2\n当前图元：%3；走线：%4\n"
+        "仅所选自由走线可移动/删除；保存和另存为尚未实现。\n\n"
+        "原输入（始终只读，以下不是工作副本的文件摘要）：\n文件：%5\n格式：PCB FILE 4\n原输入大小：%6 字节\n"
+        "原输入 SHA-256：\n%7\n\n原输入记录数：\n")
+        .arg(m_editSession.dirty()?QStringLiteral("已修改（仅内存）"):QStringLiteral("未修改"))
+        .arg(m_editSession.revision()).arg(current.primitiveCount()).arg(current.tracks.size())
+        .arg(original.filePath).arg(original.byteSize).arg(original.sha256);
+    for (auto it = original.recordCounts.cbegin(); it != original.recordCounts.cend(); ++it)
+        text += QStringLiteral("%1：%2\n").arg(it.key()).arg(it.value());
+    text += QStringLiteral("\n单位：mil（1 mil = 0.0254 mm）\n文字与部分轮廓近似，不可用于生产输出。\n");
+    for (const auto& warning : original.warnings) text += warning + QLatin1Char('\n');
+    m_infoText->setPlainText(text);
+    setWindowTitle(QStringLiteral("%1%2 · 工作副本 · 不支持保存 · PT Renew")
+        .arg(QFileInfo(original.filePath).fileName(), m_editSession.dirty()?QStringLiteral(" * 已修改"):QString()));
 }
 
 void MainWindow::updateSelectionInfo() {
+    updateEditingActions();
     const auto id=m_canvas->selection();
     m_actions.value(QStringLiteral("selection.clear"))->setEnabled(id.has_value() || m_canvas->focusedComponent().has_value());
     m_actions.value(QStringLiteral("selection.next"))->setEnabled(m_canvas->overlapCount()>1);
@@ -324,7 +448,7 @@ void MainWindow::updateSelectionInfo() {
         m_selectionText->setPlainText(QStringLiteral("尚未选择图元。\n\n单击画布中的图元查看尺寸和来源。\n"
             "同位置再次单击或 Ctrl+Tab 切换本次点击的重叠候选。\n"
             "画布内 Esc 或单击空白处清除选择。\n\n"
-            "钻孔内点击归属焊盘/过孔对象；文字按近似包围框选择。\n全部属性只读。"));
+            "钻孔内点击归属焊盘/过孔对象；文字按近似包围框选择。\n属性面板只读；可用菜单移动或删除所选自由走线，不支持保存。"));
     } else {
         QString info=primitiveDescription(*m_canvas->document(),*id);
         info.prepend(QStringLiteral("本次命中：%1 / %2\n图层：%3\n\n")
@@ -372,9 +496,10 @@ void MainWindow::updateMeasurementInfo() {
 }
 
 void MainWindow::updateViewStatus() {
-    m_viewStatus->setText(QStringLiteral("缩放 %1%　网格%2　%3　只读预览")
+    m_viewStatus->setText(QStringLiteral("缩放 %1%　网格%2　%3　工作副本%4 · 不支持保存")
         .arg(qRound(m_canvas->zoom() * 100)).arg(m_canvas->gridVisible() ? QStringLiteral("开") : QStringLiteral("关"))
-        .arg(m_canvas->measurementMode()?QStringLiteral("测量取点中"):QStringLiteral("选择模式")));
+        .arg(m_canvas->measurementMode()?QStringLiteral("测量取点中"):QStringLiteral("选择模式"))
+        .arg(m_editSession.dirty()?QStringLiteral("已修改"):QStringLiteral("未修改")));
 }
 
 }

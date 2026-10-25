@@ -44,6 +44,8 @@ struct Component {
 };
 
 struct BoardDocument {
+    // 摘要、字节数与记录数始终描述原输入，工作副本仅更新图元和修订身份。
+    quint64 workingRevision = 0;
     QString filePath, sha256;
     QString sourceContext;
     qint64 byteSize = 0;

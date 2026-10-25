@@ -20,21 +20,25 @@ BoardCanvas::BoardCanvas(QWidget* parent) : QWidget(parent) {
     for (int layer = 1; layer <= 13; ++layer) m_visibleLayers.insert(layer);
 }
 
-void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
+void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document, bool preserveView) {
+    const bool snap = m_measurementSnap;
     m_document = std::move(document);
     m_netPads.clear();
     m_panning=false;
     m_hitTester.setDocument(m_document);
     m_snapIndex.setDocument(m_document.get());
-    m_measurementSnap = false;
+    m_measurementSnap = preserveView && snap;
     clearSnapPreview();
     setMouseTracking(false);
     clearSelection();
     m_measurementMode=false;
     setCursor(Qt::ArrowCursor);
     clearMeasurement();
-    m_boardBounds = m_document ? m_document->bounds() : QRectF();
-    resetView();
+    // 编辑时保留视图变换的参考包围盒，移动边缘走线也不引起缩放或平移跳动。
+    if (!preserveView) {
+        m_boardBounds = m_document ? m_document->bounds() : QRectF();
+        resetView();
+    } else { update(); emit viewChanged(); }
 }
 
 void BoardCanvas::setNetPads(const QList<qsizetype>& pads) {
@@ -194,6 +198,7 @@ void BoardCanvas::centerView() {
 }
 
 void BoardCanvas::resetView() {
+    m_boardBounds = m_document ? m_document->bounds() : QRectF();
     m_zoom = 1.0;
     centerView();
 }
@@ -275,14 +280,17 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
         painter.setPen(QColor(214,220,229));
         painter.fillRect(QRect(8, 6, width()-16, 28), QColor(26,30,35,230));
         painter.drawText(QRect(16,6,width()-32,28), Qt::AlignVCenter,
-            QStringLiteral("只读预览 · %1 个图元 · 文字与部分焊盘轮廓为近似显示 · 不可用于生产输出").arg(m_document->primitiveCount()));
+            (m_document->sourceContext.isEmpty()
+                ? QStringLiteral("当前工作副本 · %1 个图元 · 不支持保存 · 轮廓近似，不可用于生产输出")
+                : QStringLiteral("LIB 只读预览 · %1 个图元 · 未放置到板图，不支持编辑或保存"))
+                .arg(m_document->primitiveCount()));
         return;
     }
     const QRect banner(20, 20, std::max(100, width() - 40), 100);
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第十阶段：只读测量与几何端点捕捉\n"
+        QStringLiteral("第十一阶段：自由走线内存移动、删除与撤销重做；不支持保存\n"
                        "Ctrl+O 板图；网络菜单载入 NET，再运行几何分析。不是完整 DRC 或制造验收。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
