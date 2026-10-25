@@ -2,7 +2,9 @@
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
-当前为第十阶段（0.10.0）：支持 PCB/LIB/NET 只读查看、引脚映射，以及**受限铜层几何分析（非完整 DRC）**，本阶段增加两点测量的可选几何端点捕捉及取点来源。铜层分析只对已支持几何建立保守接触图；**只要整个板图几何覆盖不完整，所有网络均显示“无法确定”，不因局部路径看似相连而报通过。** 没有实现完整 DRC、断短路确认、布线、封装放置、编辑保存或生产输出。
+稳定 `dev` 为第十阶段（0.10.0）：支持 PCB/LIB/NET 只读查看、引脚映射，以及**受限铜层几何分析（非完整 DRC）**，本阶段增加两点测量的可选几何端点捕捉及取点来源。铜层分析只对已支持几何建立保守接触图；**只要整个板图几何覆盖不完整，所有网络均显示“无法确定”，不因局部路径看似相连而报通过。** 没有实现完整 DRC、断短路确认、布线、封装放置、编辑保存或生产输出。
+
+另有 **0.11.0 基础编辑候选**：已有自由走线可在内存中移动、删除及撤销重做，原输入只读，不支持保存。源码已推送至 `Kylineyes/feat-basic-editing`，Debug/Release 自动验证及父工作区集成复验各11/11组通过；独立真实GUI验收在启动前因控制门禁持续 `user` 受阻，候选尚未合入稳定dev或替换发布包。实现见 [候选报告](https://github.com/Kylineyes/pt_renew/blob/b0e5ac7761f13690b5310bbc913ab7bfd2691d08/docs/basic-editing.md)，逐项状态见 [独立验收阻塞报告](docs/basic-editing-acceptance.md)。
 
 ## 开发环境
 
@@ -115,6 +117,8 @@ python tools/inspect_legacy_text.py 'D:/软件/PT.EXE'
 
 可选 `--text`、`--height`、`--orientation` 输出供本地对照的静态中心线。[受控机器码验证](docs/legacy-text-machine-verification.md) 已比较 21,792 个组合与 105,504 条中心线，未发现差异；后续 [边界计算模式补验](docs/legacy-text-boundary-verification.md) 的 1,458 例也全部通过，确认累计边界包含抬笔移动端点，不能等同可见笔画或铜面积。完整原程序的独立画面与像素对照仍待完成，尚未将字形接入桌面程序或铜层分析，详见 [原文字形静态证据](docs/legacy-text.md)。
 
+后续 [32字符对象创建补验](docs/legacy-text-copy-verification.md) 的16个受控用例通过，确认限80、去尾空格、再限32及空串不建对象；[A240后续现场](docs/legacy-text-screen-next.md) 已取得无遮挡笔画和切换当前层后的隐藏/恢复。真实缩放、其他高度/方向变体、导入联合状态及保存仍未完成，`runtime_verified=false`。
+
 ## 发布目录
 
 在已启用 Qt 开发环境的终端运行：
@@ -131,7 +135,7 @@ windeployqt --release --compiler-runtime --no-translations dist/pt-renew.exe
 
 ## 文档与协作
 
-- [当前综合进度](PROGRESS.md)：0.10.0 已交付范围、文字验证成果与缺口、后续提交、子代理失效核查及恢复状态。
+- [当前综合进度](PROGRESS.md)：0.10.0稳定交付、0.11.0候选及GUI阻塞、文字验证成果、分支和子代理最终状态。
 - [新 Agent 交接](HANDOFF.md)：当前进度、验证边界、环境与本地证据路径、接手顺序和后续计划。
 - [协作规范](AGENTS.md)：简体中文、约定式提交、独立分支 → dev → 用户合并 main。
 - [Qt 开发环境](docs/qt-development.md)：安装组件、验证结果和平台限制。
