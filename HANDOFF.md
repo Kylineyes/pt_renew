@@ -6,7 +6,7 @@
 
 稳定 `dev` 产品为 **第十阶段 0.10.0**，采用 C++ / Qt 6，目标是 Windows 桌面的 DOS AUTOTRAX 重建。已经具备 PCB/LIB/NET 只读查看、选择定位、测量、引脚映射、受限铜层分析，以及可选的测量端点捕捉。
 
-**0.11.0 自由走线内存移动/删除、撤销重做、修改状态及分析失效已完成源码和自动验证，但 GUI 启动前控制门禁持续 `user`，仍是独立候选，未合入稳定 `dev` 或覆盖 `dist/`。** 候选提交 `b0e5ac7` 在已推送的 `Kylineyes/feat-basic-editing` 分支，状态与路径见 [PROGRESS.md](PROGRESS.md)。保存/另存为、新增图元、元件放置、布线、完整 DRC 和生产输出尚未实现。
+**0.11.0 自由走线内存移动/删除、撤销重做、修改状态及分析失效已完成源码和自动验证；真实GUI重试已显示部署窗口、原始属性和移动对话框，但首次有效数值输入前门禁持续 `user`，仍是独立候选，未合入稳定 `dev` 或覆盖 `dist/`。** 候选提交 `b0e5ac7` 在已推送的 `Kylineyes/feat-basic-editing` 分支，状态与路径见 [PROGRESS.md](PROGRESS.md)。保存/另存为、新增图元、元件放置、布线、完整 DRC 和生产输出尚未实现。
 
 原文字形已新增32字符对象创建受控验证、无遮挡A240与层显隐现场证据，但完整原程序的缩放、方向和像素验收仍未完成，`runtime_verified=false`。Qt文字仍是系统字体近似，铜层文字仍为覆盖缺口。
 
@@ -129,7 +129,7 @@ Pi `deng/gpt-6.1-sol high` 后续取得无遮挡A240、独立双轴±0.5像素/m
 
 门禁停止后同一预排shell曾错误继续两次宿主点击，相关图排除，原始记录保留；已离线修复停止标记、CLI失败停止和PowerShell退出码保护，没有实际桌面重试。父代理核验379项索引及12张原生图（11接受、1排除）的摘要/尺寸，视觉结论仍由指定截图模型作出。四组输入不变，目标与客户端已退出。
 
-0.11.0候选的独立GUI任务随后重新只读检查，16次/30秒仍为user，因此没有启动产品、截图或输入。候选部署包23文件、来源与副本输入各7文件摘要一致；全部编辑现场项未验证，见 [基础编辑验收阻塞报告](docs/basic-editing-acceptance.md)。稳定版本仍为0.10.0。
+0.11.0候选的独立GUI首次任务只读检查16次/30秒仍为user，因此未启动产品。后续用户要求重试，Pi请求曾因超时和三次连接失败停在任务起点；父代理复用同一会话恢复，实际模型仍为gpt-6.1-sol high。门禁先返回ready，已在仅系统PATH启动真实部署窗口，确认原输入/未修改工作副本、自由走线原始属性(100,100)→(400,500)、500mil以及移动菜单/对话框。完整标题定位失败和Type缺loc两次错误属于工具使用，保留记录后修正；首张其他应用前景图排除。恢复输入连接时31次/60秒user，1.5请求未发送，实际编辑和后续交互未执行。候选部署包23文件、来源与副本输入各7文件不变，本轮目标和客户端已清理；稳定版本仍为0.10.0。详见 [首次阻塞](docs/basic-editing-acceptance.md) 和 [真实窗口重试](docs/basic-editing-acceptance-retry.md)。
 
 ## 6. 当前阻塞、进程与踩过的坑
 
@@ -169,7 +169,7 @@ Pi `deng/gpt-6.1-sol high` 后续取得无遮挡A240、独立双轴±0.5像素/m
 | `verification-41/` | 机器码仿真脚本、矩阵、包装/方向结果及脚本摘要 |
 | `verification-42/` | 边界状态为1的补验矩阵、只读锁屏观察、脚本及结果摘要 |
 
-截图子工作区 `C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/` 保存 `text-screen-acceptance/`、`text-screen-retry-20261025/`、`text-screen-next/` 与 `basic-editing-acceptance/`。对象创建证据在同级 `research-text-copy-glm/.local-analysis/text-object-copy/`；开发候选、合成输入和构建记录在 `feat-basic-editing/.local-analysis/basic-editing/`。父工作区 `.local-analysis/agent-dispatch/` 保存派发与证据审计，`.local-analysis/development-wave/` 保存候选集成复验日志。这些目录均不入Git。
+截图子工作区 `C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/` 保存 `text-screen-acceptance/`、`text-screen-retry-20261025/`、`text-screen-next/`、`basic-editing-acceptance/` 与 `basic-editing-acceptance-retry/`（含两次工具错误恢复子目录）。对象创建证据在同级 `research-text-copy-glm/.local-analysis/text-object-copy/`；开发候选、合成输入和构建记录在 `feat-basic-editing/.local-analysis/basic-editing/`。父工作区 `.local-analysis/agent-dispatch/` 保存派发与证据审计，`.local-analysis/development-wave/` 保存候选集成复验日志。这些目录均不入Git。
 
 0.11.0固定候选为 `C:/Users/rikideng/orca/workspaces/pt_renew/feat-basic-editing/.local-analysis/basic-editing/release-candidate/pt-renew.exe`，SHA-256为 `dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8`。只在对应独立候选分支运行编辑验收；稳定dev源码和既有dist仍为0.10.0。父工作区build目录曾编译0.11.0集成候选，不能因随后切换Git分支就把旧构建产物视为当前dev的构建；重新构建时遵循CMake预设。
 
@@ -252,4 +252,4 @@ python .local-analysis/verification-41/summarize.py
 
 ## 11. 可直接交给新 Agent 的启动提示
 
-> 请继续PT Renew开发。完整阅读AGENTS、PROGRESS和HANDOFF并核对实际分支。稳定dev/发布包仍为0.10.0；0.11.0候选b0e5ac7在已推送的Kylineyes/feat-basic-editing，实现和Debug/Release各11/11自动验证完成，但独立GUI启动前ControlStatus持续user，因此未合入dev或覆盖dist。优先复用Pi gpt-6.1-sol high，用新Task先只读核对门禁，允许后对固定摘要部署包做独立GUI验收；拒绝后停止，不换入口绕过。纯逆向只用Pi glm-5.3 high；32字符创建边界和A240/层显隐已完成，缩放和变体仍缺，runtime_verified=false。用户已授权直接控制，无需反复询问；保护原安装和忽略材料，验证后合并推送dev，不操作main。
+> 请继续PT Renew开发。完整阅读AGENTS、PROGRESS和HANDOFF并核对实际分支。稳定dev/发布包仍为0.10.0；0.11.0候选b0e5ac7在已推送的Kylineyes/feat-basic-editing，实现和Debug/Release各11/11自动验证完成。真实GUI重试已确认部署启动、原始走线属性、移动菜单/对话框，但数值输入前ControlStatus持续user，实际移动和后续交互未验收，尚未合入dev或覆盖dist。复用Pi gpt-6.1-sol high，用新Task只读核对门禁，允许后从固定摘要候选的数值输入与实际编辑继续；工具Type须提供loc或label，动作均受门禁与PID/HWND核对保护。拒绝后停止，不换入口绕过。纯逆向只用Pi glm-5.3 high；32字符创建边界和A240/层显隐已完成，缩放和变体仍缺，runtime_verified=false。用户已授权直接控制，无需反复询问；保护原安装和忽略材料，验证后合并推送dev，不操作main。
