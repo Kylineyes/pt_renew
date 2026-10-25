@@ -2,7 +2,9 @@
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
-当前为第九阶段（0.9.0）：支持 PCB/LIB/NET 只读查看、引脚映射，以及**受限铜层几何分析（非完整 DRC）**，本阶段增加未覆盖图元的来源诊断与只读定位。铜层分析只对已支持几何建立保守接触图；**只要整个板图几何覆盖不完整，所有网络均显示“无法确定”，不因局部路径看似相连而报通过。** 没有实现完整 DRC、断短路确认、布线、封装放置、编辑保存或生产输出。
+稳定 `dev` 为第十阶段（0.10.0）：支持 PCB/LIB/NET 只读查看、引脚映射，以及**受限铜层几何分析（非完整 DRC）**，本阶段增加两点测量的可选几何端点捕捉及取点来源。铜层分析只对已支持几何建立保守接触图；**只要整个板图几何覆盖不完整，所有网络均显示“无法确定”，不因局部路径看似相连而报通过。** 没有实现完整 DRC、断短路确认、布线、封装放置、编辑保存或生产输出。
+
+另有 **0.11.0 基础编辑候选**：已有自由走线可在内存中移动、删除及撤销重做，原输入只读，不支持保存。源码已推送至 `Kylineyes/feat-basic-editing`，Debug/Release 自动验证及父工作区集成复验各11/11组通过；独立真实GUI重试已确认部署启动、原始走线属性和移动菜单/对话框，但数值输入前控制门禁持续 `user`，实际编辑仍未验收，候选尚未合入稳定dev或替换发布包。实现见 [候选报告](https://github.com/Kylineyes/pt_renew/blob/b0e5ac7761f13690b5310bbc913ab7bfd2691d08/docs/basic-editing.md)，逐项状态见 [真实窗口重试报告](docs/basic-editing-acceptance-retry.md)，上轮记录见 [启动前阻塞报告](docs/basic-editing-acceptance.md)。
 
 ## 开发环境
 
@@ -43,7 +45,8 @@ ctest --preset debug
 - **Ctrl+I** 或“信息 → 图元属性面板”恢复属性面板；显示尺寸、源文件行和所属元件，不修改原板图。
 - **Ctrl+F** 或“跳转 → 检索并定位元件”（画布 J→C）：按标号、封装或注释筛选，Enter 定位，不移动元件；画布 **Ctrl+Home** 跳转板坐标原点。
 - 画布 **Ctrl+M** 或“信息 → 两点只读测量”：依次单击两点读取距离、ΔX/ΔY 和方向角；画布 **Esc** 退出模式并保留已完成结果。“清除测量”移除结果。
-- 测量为屏幕自由取点，未吸附网格或端点；只是近似读数，不是 DRC 或生产尺寸校验。
+- 测量默认自由取点；画布 **Ctrl+Shift+M** 或“信息 → 测量时捕捉几何端点”开启捕捉。靠近可见走线端点、焊盘/过孔中心、圆弧端点或填充角点时显示黄色方框，点击使用该模型坐标；超出范围仍为自由取点。
+- 测量面板分别显示两点的实际来源；不捕捉文字、网格或推测的交点，不是 DRC 或生产尺寸校验。详见 [测量端点捕捉](docs/measurement-snap.md)。
 - 未实现的业务明确标注并禁用，不提供伪保存或伪布线。
 
 ## 封装库只读浏览
@@ -112,7 +115,9 @@ python tools/inspect_legacy_overlays.py 'D:/软件/PT.EXE' 'D:/软件/TRAXEDIT.O
 python tools/inspect_legacy_text.py 'D:/软件/PT.EXE'
 ```
 
-可选 `--text`、`--height`、`--orientation` 输出供本地对照的静态中心线。原程序单字符行为对照仍待完成，尚未将字形接入桌面程序或铜层分析，详见 [原文字形静态证据](docs/legacy-text.md)。
+可选 `--text`、`--height`、`--orientation` 输出供本地对照的静态中心线。[受控机器码验证](docs/legacy-text-machine-verification.md) 已比较 21,792 个组合与 105,504 条中心线，未发现差异；后续 [边界计算模式补验](docs/legacy-text-boundary-verification.md) 的 1,458 例也全部通过，确认累计边界包含抬笔移动端点，不能等同可见笔画或铜面积。完整原程序的独立画面与像素对照仍待完成，尚未将字形接入桌面程序或铜层分析，详见 [原文字形静态证据](docs/legacy-text.md)。
+
+后续 [32字符对象创建补验](docs/legacy-text-copy-verification.md) 的16个受控用例通过，确认限80、去尾空格、再限32及空串不建对象；[A240后续现场](docs/legacy-text-screen-next.md) 已取得无遮挡笔画和切换当前层后的隐藏/恢复。真实缩放、其他高度/方向变体、导入联合状态及保存仍未完成，`runtime_verified=false`。
 
 ## 发布目录
 
@@ -130,12 +135,15 @@ windeployqt --release --compiler-runtime --no-translations dist/pt-renew.exe
 
 ## 文档与协作
 
+- [当前综合进度](PROGRESS.md)：0.10.0稳定交付、0.11.0候选及GUI阻塞、文字验证成果、分支和子代理最终状态。
+- [新 Agent 交接](HANDOFF.md)：当前进度、验证边界、环境与本地证据路径、接手顺序和后续计划。
 - [协作规范](AGENTS.md)：简体中文、约定式提交、独立分支 → dev → 用户合并 main。
 - [Qt 开发环境](docs/qt-development.md)：安装组件、验证结果和平台限制。
 - [首次调查](docs/initial-assessment.md)：软件身份、DOSBox 与文件现状。
 - [逆向结构与架构](docs/reverse-architecture.md)：证据、分层、快捷键设计和后续步骤。
 - [PCB 只读预览](docs/pcb-readonly.md)：第二阶段字段布局、扩展属性、渲染与失败策略。
 - [选择与属性查看](docs/selection-inspector.md)：第三阶段命中规则、重叠切换、属性来源和操作验证。
+- [测量端点捕捉](docs/measurement-snap.md)：第十阶段的几何候选、可见层、屏幕半径与取点来源。
 - [元件检索与测量](docs/navigation-measure.md)：第四阶段筛选定位、自由取点、快捷键与近似读数限制。
 - [LIB 分析与浏览](docs/library-analysis.md)：第五阶段二进制目录/图元布局、只读窗口、结构诊断及未验证语义。
 - [网表兼容说明](docs/netlist-compatibility.md)：第六阶段 NET/NETDEF、引脚映射、差异/冲突检查与真实验证。

@@ -1,6 +1,60 @@
 # 原文字形运行对照步骤
 
-本步骤接续 [原文字形静态证据](legacy-text.md)。已观察到原程序在研究样例启动页之后绘制文字，恢复原样默认配置的 C21 场景还显示了参考十字与尺标；实际文件名、对象属性和独立字形对照仍未确认。所有工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
+本步骤接续 [原文字形静态证据](legacy-text.md)。后续 verification-41 已执行原解释器的受控机器码交叉验证：21,792 个输入组合、105,504 条中心线无差异，另核对对象包装和方向函数；见 [机器码验证范围与结果](legacy-text-machine-verification.md)。该实验没有运行完整 DOS/PCB 导入及 VGA 绘图，独立画面对照仍未完成，`runtime_verified=false`。
+
+verification-35 已实际显示主菜单、Information 和 Status，工作文件名为 `C21.PCB`、`Strings=1`，并保留同轮配置加载及 C21 文件打开日志。verification-36 进一步取得文字属性：内容 `A`、高度 `240`、线宽 `1`；复核两轮原图后确认 `Tracks=4`，前版读成 0 的记录已修正。独立尺标、笔画端点与方向对照仍未完成，工具笔画结果仍为静态推导，`runtime_verified` 保持 `false`。
+
+## verification-40 锁屏与 verification-41 受控仿真
+
+新的 C00 场景第一次启动因实验挂载路径错误只进入 COMMAND；修正后目标窗口标题为 PT，但截图为壁纸，原生前景确认是 Windows LockApp。现场键盘输入没有送达目标的证据，停止桌面操作并清理本轮目标。第二次配置写入含 BOM，未取得新的完整启动日志，不能沿用首次日志判断第二次 PT 是否执行。原安装 99 项及副本 103 项文件集合和摘要一致。
+
+随后使用现有 Unicorn 执行原 EXE 的解释器及辅助函数，截获绘线参数，完成字符/缩放/旋转镜像矩阵；对象包装 512 例、方向函数 512 例也核对通过。原程序像素、实际导入变换状态、简化显示和完整字形的现场对照仍待桌面解锁后继续；本轮不改变 Qt 字形或铜层覆盖。详见上述机器码验证记录。
+
+## verification-36 文字对象属性与中断恢复
+
+在相同无 DFT 隔离条件下，进入 Edit → String，移动光标并按 Enter 选中文字，取得属性框截图；随后单个 Esc 取消，没有修改字段。Status 再次显示 `C21.PCB`、`Strings=1`、`Tracks=4`。后续准备从 Status 返回时，Windows-MCP 控制状态连续 30 秒为 user，取消动作未发送；核对归属后仅清理本轮 DOSBox，前后输入摘要一致。
+
+pi 在整理汇总时因旧会话 JSONL 文件不存在而报 `ENOENT`，正式文档和提交尚未生成。恢复后已依据保留的逐步返回、前景 PID、原始截图和摘要生成本地汇总，修正 Tracks 误读。完整事实、可复现索引和限制见 [文字对象现场验证](legacy-text-object-verification.md)。这次证据确认内容、高度和线宽，尚未确认原点、方向、参考层显示或中心线几何。
+
+## verification-35 直接操作的菜单与文件状态证据
+
+用户授权代理直接截图和控制桌面后，从 `0f91ece` 建立独立分支，创建全新无 DFT 隔离副本，按同一连接逐步完成启动页、主菜单、Information、Status 观察。Status 显示 `C21.PCB`、`Strings=1`，同轮 DOSBox 日志记录本轮配置加载、PT 执行及 C21 打开请求。普通字母 Shortcut、输入法候选和修饰键事件的区别得到现场记录；ASCII 状态下 `Shift+I`、`Shift+S` 实际进入 Information 和 Status，未测试宏。详见 [现场验证与证据边界](legacy-menu-live-verification.md)。
+
+输入中 `FS=1、FT=4`，复核后的 Status 为 `Strings=1、Tracks=4`；计数一致不等于全部字段和几何完整核验。取得 Status 证据后，窗口放大出现重绘问题，恢复尺寸后前景变为 Orca，停止键盘交互；关闭前又遇到 30 秒 user 门禁超时，未执行关闭动作。客户端退出后核对 PID、父进程和配置命令行，仅终止本轮 DOSBox，最终无相关残留；原安装 99 项及新旧各 103 项副本前后摘要一致。本轮尚未完成文字属性和独立字形对照；属性的后续结果见 verification-36，`runtime_verified=false`。
+
+## verification-34 启动日志准备与门禁停止
+
+从 `a5c2bde` 分发运行日志验证和离线配置复核，已核对本机 `[log] logfile`、类别等级与 `[dos] log console` 的定义，来源和配置加载规则的证据边界见 [DOSBox 日志与配置证据](legacy-dosbox-configuration.md)。已准备保持原模拟器参数的隔离配置及独立 stdout/stderr 路径；这些准备不代表日志方案已实际执行。
+
+运行 worker 的唯一连接在首次截图前连续 16 次取得 `ControlStatus=user`、generation 2，30 秒截止后停止。未调用截图、未启动 DOSBox、未发送键鼠输入，未生成目标日志；原安装 99 项及新旧两份 103 项副本前后摘要均一致，本轮客户端/MCP 进程已退出。详见 [启动日志验证记录](legacy-dosbox-startup-validation.md)。黑色客户区原因、实际配置加载来源和菜单/对象参数仍未知，`runtime_verified=false`；后续在控制可用的新场景执行已准备的日志方案。
+
+## verification-33 子 agent 验证与验收
+
+从 `050c713` 分发独立静态复核和运行验证任务，分别见 [Information、Status 与宏键静态复核](legacy-menu-static-validation.md) 和 [原菜单运行核验与桌面观测诊断](legacy-menu-runtime-validation.md)。静态复核确认菜单分派与宏初始化，修正 Status 的文件名为去目录后名称与扩展名，并细化单个 Esc 取消输出的条件。
+
+运行诊断发现 Windows-MCP 0.8.8 在 `use_ui_tree=false` 时主动跳过窗口枚举，故 verification-29/32 的空窗口元数据不能证明焦点异常。新场景通过完整 UI 快照及 Win32 HWND/PID 观测核对窗口归属；随后单连接启动全新无 DFT 副本，DOSBox 客户区只有黑底与白横线，未取得 AUTOTRAX 启动页，因而停止，未发送键鼠输入。原安装 99 项及既有、新建两份 103 项副本前后摘要均一致，相关进程已退出。
+
+本轮没有取得菜单响应、实际载入文件名或文字对象参数证据，`runtime_verified` 保持 `false`。启动工具将目标 stdout/stderr 丢弃，本轮无法恢复；后续独立场景先补充 DOSBox 自身日志及配置来源，再判断启动阻塞，继续按单连接、逐步截图和控制边界推进。
+
+## verification-31 菜单与键盘静态路径
+
+已从 `d9f9506` 的最新 `origin/dev` 建立 `research/legacy-menu-static`，带入 verification-29/30 尚未提交的记录。离线分析已将菜单文件装载、段解析、绘制调用、主菜单 Enter 入口、KEY 覆盖装载和宏展开路径串联，详细地址、重定位交叉核对及复核工具见 [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)。这些结果仍为静态证据；尚未证明此前场景实际载入菜单、PCB 或宏。
+
+verification-32 仅在新目录和单个连接中检查桌面：`ControlStatus=ready`、generation 1，截图可见 Orca 窗口，但元数据仍报告没有活动窗口及打开的窗口。因焦点观测不一致而停止，未启动 DOSBox、未发送键鼠输入。`runtime_verified` 保持 `false`，产品仍为 0.9.0。
+
+## verification-29 DOSBox 焦点检查
+
+从 `d9f9506` 建立 `research/legacy-menu-keypath`。开始前未发现 DOSBox、AUTOTRAX 或本轮桌面客户端进程；无 DFT 隔离副本为 103 个文件，其文件名集合和 SHA-256 与 verification-20 清单一致。原安装未挂载，本轮仅使用该隔离副本。
+
+新建 `.local-analysis/verification-29/desktop-check/` 和 DOSBox 配置，捕获目录指向该新场景，启动参数为 `PT C21.PCB`。同一 Windows-MCP 连接先查得 `ControlStatus=ready` 并截图；启动后取得标题 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms` 和 AUTOTRAX 1.57 启动页。其后一次控制查询返回 `user`、generation 16、`wait_seconds=2.4502866999828257`；等待恢复后调用窗口切换，工具报告切换到 DOSBox。截图显示 DOSBox 小窗口在 Orca 桌面前景，但 MCP 窗口元数据仍报告 `No active window found`、`No windows found`，两类观察不一致，不能据截图单独确认键盘焦点。再次确认 `ready` 后点击截图所示 DOSBox 标题栏 `(300,120)`，工具报告点击成功；后续截图仍可见该 DOSBox 启动页，但窗口焦点状态仍未由工具确认。
+
+因无法交叉确认焦点，停止场景，没有发送 Enter、宏或其他键盘操作；因此没有观察启动页之后的程序行为，不能判断 C21 是否载入，也不能解释菜单/宏响应或此前窗口变化原因。只终止本轮启动的 DOSBox PID 4864 和临时桌面客户端 PID 59956。运行后复核隔离副本仍为 103 个文件且与运行前清单 0 项差异；进程检查未发现 DOSBox、AUTOTRAX 或 Windows-MCP 客户端残留。截图、逐步状态、命令返回、配置和核验留在被 Git 忽略的 `.local-analysis/verification-29/desktop-check/`。
+
+本轮没有取得新的程序行为证据；`runtime_verified` 继续为 `false`，静态工具证据继续标记为 `static_instruction_derivation`。未进行端点拟合、方向/缩放扩展、Qt 字形接入或铜层判定；没有运行构建或 CTest。
+
+## verification-30 桌面控制等待
+
+在 verification-29 之后新建 `.local-analysis/verification-30/scenario/`，并重新核对无 DFT 隔离副本 103 个文件与 verification-20 清单一致；开始时没有 DOSBox、AUTOTRAX 或本轮客户端残留。新 Windows-MCP 连接首次 `ControlStatus` 返回 `user`、generation 2、`wait_seconds=9.98607709998032`。随后仅请求新桌面截图；客户端按门禁最多等待 30 秒，状态未恢复，截图工具未调用。没有启动 DOSBox、没有发送键鼠输入，输入来源未知；停止本轮客户端后进程检查无相关残留。该场景没有新增原程序运行证据。
 
 ## verification-28 LIST_COMPS 只读入口探测
 

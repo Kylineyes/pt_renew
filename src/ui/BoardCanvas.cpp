@@ -25,6 +25,10 @@ void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document) {
     m_netPads.clear();
     m_panning=false;
     m_hitTester.setDocument(m_document);
+    m_snapIndex.setDocument(m_document.get());
+    m_measurementSnap = false;
+    clearSnapPreview();
+    setMouseTracking(false);
     clearSelection();
     m_measurementMode=false;
     setCursor(Qt::ArrowCursor);
@@ -55,6 +59,7 @@ bool BoardCanvas::focusPad(qsizetype index) {
 }
 
 void BoardCanvas::setLayerVisible(int layer, bool visible) {
+    clearSnapPreview();
     if (visible) m_visibleLayers.insert(layer); else m_visibleLayers.remove(layer);
     if (m_selection && m_document && !visible && primitiveLayer(*m_document,*m_selection)==layer) {
         clearSelection();
@@ -99,6 +104,7 @@ void BoardCanvas::selectNextOverlap() {
 }
 
 void BoardCanvas::centerOn(const QPointF& position) {
+    clearSnapPreview();
     if (!std::isfinite(position.x()) || !std::isfinite(position.y())) return;
     const auto center=m_document?m_boardBounds.center():QPointF();
     const qreal scale=baseScale()*m_zoom;
@@ -124,17 +130,44 @@ bool BoardCanvas::focusComponent(qsizetype index) {
 void BoardCanvas::setMeasurementMode(bool enabled) {
     m_measurementMode=enabled && m_document!=nullptr;
     m_measurementStart.reset();
+    m_startAnchor.reset();
+    clearSnapPreview();
+    setMouseTracking(m_measurementMode && m_measurementSnap);
     if (m_measurementMode) clearSelection();
     setCursor(m_measurementMode?Qt::CrossCursor:Qt::ArrowCursor);
     update(); emit measurementChanged();
 }
 
 void BoardCanvas::clearMeasurement() {
-    m_measurementStart.reset(); m_measurement.reset();
+    m_measurementStart.reset(); m_measurement.reset(); m_startAnchor.reset();
+    clearSnapPreview();
     update(); emit measurementChanged();
 }
 
+void BoardCanvas::setMeasurementSnapEnabled(bool enabled) {
+    m_measurementSnap = enabled && m_document != nullptr;
+    clearSnapPreview();
+    setMouseTracking(m_measurementMode && m_measurementSnap);
+    update(); emit measurementChanged();
+}
+
+std::optional<SnapPoint> BoardCanvas::measurementSnapAt(const QPointF& screen) const {
+    if (!m_measurementMode || !m_measurementSnap || !m_document) return {};
+    // 捕捉半径保持为10个逻辑像素，不随缩放改变屏幕操作距离。
+    return m_snapIndex.nearest(screenToBoard(screen), 10.0 / (baseScale() * m_zoom), m_visibleLayers);
+}
+
+void BoardCanvas::clearSnapPreview() {
+    if (m_snapPreview) { m_snapPreview.reset(); update(); }
+}
+
+void BoardCanvas::leaveEvent(QEvent* event) {
+    clearSnapPreview();
+    QWidget::leaveEvent(event);
+}
+
 void BoardCanvas::resizeEvent(QResizeEvent* event) {
+    clearSnapPreview();
     if (m_document && event->oldSize().isValid()) {
         const qreal previous=qMin(qMax(1,event->oldSize().width()-80)/qMax(1.0,m_boardBounds.width()),
                                   qMax(1,event->oldSize().height()-100)/qMax(1.0,m_boardBounds.height()));
@@ -154,6 +187,7 @@ void BoardCanvas::zoomIn() { zoomAt(1.25, rect().center()); }
 void BoardCanvas::zoomOut() { zoomAt(0.8, rect().center()); }
 
 void BoardCanvas::centerView() {
+    clearSnapPreview();
     m_pan = {};
     update();
     emit viewChanged();
@@ -165,6 +199,7 @@ void BoardCanvas::resetView() {
 }
 
 void BoardCanvas::zoomAt(qreal factor, const QPointF& anchor) {
+    clearSnapPreview();
     const qreal next = std::clamp(m_zoom * factor, 0.125, 16.0);
     const QPointF center = rect().center();
     const QPointF origin = center + m_pan;
@@ -231,6 +266,12 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
             const auto p=boardToScreen(*m_measurementStart);
             painter.drawEllipse(p,5,5);
         }
+        if (m_snapPreview) {
+            painter.setPen(QPen(QColor(255, 218, 90), 2));
+            painter.setBrush(Qt::NoBrush);
+            const auto point = boardToScreen(m_snapPreview->position);
+            painter.drawRect(QRectF(point - QPointF(6, 6), QSizeF(12, 12)));
+        }
         painter.setPen(QColor(214,220,229));
         painter.fillRect(QRect(8, 6, width()-16, 28), QColor(26,30,35,230));
         painter.drawText(QRect(16,6,width()-32,28), Qt::AlignVCenter,
@@ -241,7 +282,7 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
     painter.fillRect(banner, QColor(26, 30, 35, 235));
     painter.setPen(QColor(214, 220, 229));
     painter.drawText(banner.adjusted(12, 10, -12, -10), Qt::TextWordWrap,
-        QStringLiteral("第九阶段：只读兼容与铜层覆盖诊断\n"
+        QStringLiteral("第十阶段：只读测量与几何端点捕捉\n"
                        "Ctrl+O 板图；网络菜单载入 NET，再运行几何分析。不是完整 DRC 或制造验收。\n"
                        "画布内按 F/P/N 等唤出菜单；滚轮缩放，中键拖动，Esc 返回工作区。"));
 }
@@ -278,12 +319,15 @@ void BoardCanvas::mousePressEvent(QMouseEvent* event) {
     setFocus(Qt::MouseFocusReason);
     if (event->button()==Qt::LeftButton && m_document) {
         if (m_measurementMode) {
-            const auto position=screenToBoard(event->position());
+            const auto snap = measurementSnapAt(event->position());
+            const auto position = snap ? snap->position : screenToBoard(event->position());
+            const auto anchor = snap ? std::optional<PrimitiveId>(snap->primitive) : std::nullopt;
+            clearSnapPreview();
             if (m_measurementStart) {
-                m_measurement=Measurement{*m_measurementStart,position};
-                m_measurementStart.reset();
+                m_measurement=Measurement{*m_measurementStart,position,m_startAnchor,anchor};
+                m_measurementStart.reset(); m_startAnchor.reset();
             } else {
-                m_measurement.reset(); m_measurementStart=position;
+                m_measurement.reset(); m_measurementStart=position; m_startAnchor=anchor;
             }
             update(); emit measurementChanged(); event->accept(); return;
         }
@@ -302,6 +346,7 @@ void BoardCanvas::mousePressEvent(QMouseEvent* event) {
         event->accept(); return;
     }
     if (event->button() == Qt::MiddleButton) {
+        clearSnapPreview();
         m_panning = true;
         m_lastMouse = event->position();
         setCursor(Qt::ClosedHandCursor);
@@ -315,6 +360,12 @@ void BoardCanvas::mouseMoveEvent(QMouseEvent* event) {
     if (m_panning) {
         m_pan += event->position() - m_lastMouse;
         m_lastMouse = event->position();
+        update();
+        event->accept();
+        return;
+    }
+    if (m_measurementMode && m_measurementSnap) {
+        m_snapPreview = measurementSnapAt(event->position());
         update();
         event->accept();
         return;
