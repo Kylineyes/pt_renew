@@ -1,10 +1,12 @@
 # PT Renew
 
+最新接手入口：[本轮会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。
+
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
 稳定 `dev` 为第十阶段（0.10.0）：支持 PCB/LIB/NET 只读查看、引脚映射，以及**受限铜层几何分析（非完整 DRC）**，本阶段增加两点测量的可选几何端点捕捉及取点来源。铜层分析只对已支持几何建立保守接触图；**只要整个板图几何覆盖不完整，所有网络均显示“无法确定”，不因局部路径看似相连而报通过。** 没有实现完整 DRC、断短路确认、布线、封装放置、编辑保存或生产输出。
 
-另有 **0.11.0 基础编辑候选**：已有自由走线可在内存中移动、删除及撤销重做，原输入只读，不支持保存。源码已推送至 `Kylineyes/feat-basic-editing`，Debug/Release 自动验证及父工作区集成复验各11/11组通过；独立真实GUI重试已确认部署启动、原始走线属性和移动菜单/对话框，但数值输入前控制门禁持续 `user`，实际编辑仍未验收，候选尚未合入稳定dev或替换发布包。实现见 [候选报告](https://github.com/Kylineyes/pt_renew/blob/b0e5ac7761f13690b5310bbc913ab7bfd2691d08/docs/basic-editing.md)，逐项状态见 [真实窗口重试报告](docs/basic-editing-acceptance-retry.md)，上轮记录见 [启动前阻塞报告](docs/basic-editing-acceptance.md)。
+另有 **0.11.0 基础编辑候选**：已有自由走线可在内存中移动、删除及撤销重做，原输入只读，不支持保存。源码已推送至 `Kylineyes/feat-basic-editing`，Debug/Release 自动验证及父工作区集成复验各11/11组通过；独立真实GUI后续已取得移动、撤销重做、删除恢复、输入保护、只读隔离、测量/分析更新及主要关闭保护的现场证据；严格文本焦点、旧式菜单/reset/竞态等仍未覆盖，且部分控制争用未等满用户要求的180秒退让，整体验收未通过，候选尚未合入稳定dev或替换发布包。实现见 [候选报告](https://github.com/Kylineyes/pt_renew/blob/b0e5ac7761f13690b5310bbc913ab7bfd2691d08/docs/basic-editing.md)，最新状态见 [实际编辑验收报告](docs/basic-editing-actual-edit-acceptance.md)，历史尝试见 [真实窗口重试](docs/basic-editing-acceptance-retry.md) 和 [启动前阻塞](docs/basic-editing-acceptance.md)。
 
 ## 开发环境
 
