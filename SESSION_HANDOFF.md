@@ -1,8 +1,20 @@
-# 会话交接：异步实验构建与稳定0.10.0
+# 会话交接：异步实验现场阻塞与稳定0.10.0
 
-更新时间：2026-10-26。先读本文和[AGENTS.md](AGENTS.md)。用户本轮明确要求：**稳定产品保持0.10.0，进行整体验收剩余部分。** 不合入0.11.0实现、不替换发布包、不操作main。
+更新时间：2026-10-27。先读本文和[AGENTS.md](AGENTS.md)。用户本轮明确要求：**稳定产品保持0.10.0，进行整体验收剩余部分。** 不合入0.11.0实现、不替换发布包、不操作main。
 
-## 最新开发：独立异步实验构建
+## 最新现场：受控阻塞，存在未退出进程
+
+用户已明确授权“进行下一步，键盘鼠标交给你”，本轮无需重复索取授权。已建立全新Run `run_de333c61159e`、Task `task_173ed3eebb79`、Dispatch `ctx_f4aea03b6bef`，沿用截图Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`，实际环境/JSONL均为`deng/gpt-6.1-sol high`。截图工作区分支`verify/async-experiment-gui`，新证据`.local-analysis/async-experiment-gui/`；父证据为主工作区`.local-analysis/async-experiment-gui-parent/`。
+
+离线驱动最终82/82项通过（含既有61项），父独立复验相同82项并冻结28个源码/配置文件，PowerShell包装解析通过。已绑定新批准`msg_d8e9399a8547`，未复用旧批准或旧任务。实验候选仍为SHA `782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`。
+
+现场实际只启动NET对照：初次非目标前景被阻止，完整退让后专用恢复成功；取得三张有效截图，确认实验标记、合成board/NET_A、1条走线及未修改修订2，再打开原生NET框并读图确认本轮隔离`b.net`路径。关键段提交前`ControlStatus=user`，触发点击`executed=false`，没有B读取请求或门闩。该次中止并消费机会，NET竞争未进入；后续三次到期只读复查仍user，铜层未启动。没有新增迟到结果通过项，也未发现产品淘汰缺陷。
+
+**存在残留：候选PID2020、创建FILETIME134374989405547867；持有者/client PID50048、创建134374989304233763，以及本链其余PID17396/20036/36396/40648仍存，正常关闭未完成。** 失败锁存`a009-net-control-segment`，最后截止`not_before_monotonic=686259.8917363`，busy=false。已明确停止所有后续桌面计划，客户端仅本地inbox空闲，不预排GUI；未强关、未换入口、未重连。不得写成已清理或退出码0。未来恢复须新任务并先核对这些身份/控制状态和生命周期归属，不向已结算旧inbox续投，也不删除live-state清门禁。
+
+父独立核验实验部署22/来源输入3/原固定部署23/原来源输入7/稳定dist22文件集合、大小、SHA前后不变；Guard已持久化90事件/35请求没有提前越过180秒，3张PNG文件头有效；应用仅1运行、无gated请求，未记录run-stopped。[现场报告](docs/async-experiment-gui-acceptance.md)提交`dc77c16334cdc120fe287272f37585e13f7c3e56`；唯一`worker_done failed`回执`msg_3b99780f753e`已接受，终端已明确retain，交付已ack，无待回收工作者终端。父独立审计239项索引文件/3张PNG/12个本地链接有效；额外启动包装进程31708的存活/创建时间也单独记录。稳定源码和dist保持0.10.0，实验源码仍独立，main未操作。
+
+## 上一阶段开发：独立异步实验构建
 
 用户要求进行开发，并在操控鼠标键盘前先告知。已在新隔离工作区`C:/Users/rikideng/orca/workspaces/pt_renew/experiment-async-result-barrier`、分支`experiment/async-result-barrier`完成门闩与时间线实现；代码提交`98a4321`，报告提交`c4e3ec5`，实验分支已推送。该分支从固定编辑候选`b0e5ac7`建立，**不得整体合入稳定dev**。本次dev只集成[实验开发报告](docs/async-experiment-development.md)及进度说明。
 
