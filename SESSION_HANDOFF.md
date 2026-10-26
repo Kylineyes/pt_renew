@@ -10,7 +10,7 @@
 
 本轮产品GUI已经结束。原候选PID27788及独立候选PID31072均由持有的进程句柄确认退出码0；本任务控制客户端正常停止，源输入、隔离输入和候选23/7/7文件集合、字节数及SHA-256前后不变。父代理独立核验迁移前后客户端树及候选共13个原进程身份均已退出。本轮Pi终端保留供接手，不再有后台桌面验收动作。
 
-新报告为[剩余验收](docs/basic-editing-remaining-acceptance.md)，上一轮完整报告为[实际编辑验收](docs/basic-editing-actual-edit-acceptance.md)。本轮最终提交、索引项数和生命周期回执以新报告及Git实际输出为准；不得把文档草稿或`input_accepted`当最终交付。
+新报告为[剩余验收](docs/basic-editing-remaining-acceptance.md)，截图工作者提交`4b418d8653eda539c3c11eb35f39740d8ecdb999`，本Task/Dispatch已收到唯一一次`worker_done failed`并明确保留终端。父交付审计核对**3446项索引文件、76张PNG文件头、12个本地报告链接**均有效。父随后只集成四份验收/进度文档并修正主工作区的证据链接，不集成产品；最终dev提交以Git实际输出为准，不预写文档自身提交号。上一轮完整报告为[实际编辑验收](docs/basic-editing-actual-edit-acceptance.md)。
 
 ## 本轮新增现场结果
 
@@ -63,7 +63,7 @@ GUI及所有控制客户端退出后，父才替换本地验收Guard的通用`CO
 | 固定0.11.0候选 | 开发工作区`.local-analysis/basic-editing/release-candidate/pt-renew.exe` |
 | 候选EXE SHA-256 | `dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8` |
 | 0.10.0发布EXE SHA-256 | `726a44aa5f1b976dcfbffa068c011b99038172a451eb0964cbc853ee3bf20fc1` |
-| 本轮Run/Task/Dispatch | `run_361a6ad63310` / `task_d780e8e2eaad` / `ctx_eff89720518e` |
+| 本轮Run/Task/Dispatch（已结算failed） | `run_361a6ad63310` / `task_d780e8e2eaad` / `ctx_eff89720518e`，不要复用其生命周期ID |
 | 截图Pi终端 | `term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d` |
 | 截图实际Pi会话 | `01a1739a-82f6-76cf-9ffc-c63e95be56d4`，`deng/gpt-6.1-sol high` |
 | 开发Pi终端 | `term_dd341315-769e-48e2-8939-736aa685a21b` |

@@ -8,7 +8,7 @@
 - 工作区：`C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol`；分支：`verify/basic-editing-remaining`，从fetch后的`origin/dev`提交`9b8f1363680009974a85d7b0d09ac9727a9e2d2e`建立。
 - 实际Pi会话：`01a1739a-82f6-76cf-9ffc-c63e95be56d4`，环境、会话JSONL最后模型/推理记录及assistant记录均为`deng/gpt-6.1-sol high`。同会话压缩后再核对，未换模型或新建Task。
 - 固定候选：`b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；EXE SHA-256：`dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8`。
-- 证据根目录：`../.local-analysis/basic-editing-remaining-acceptance/`；下文现场图片均相对其`migration-01/`，实际截图分辨率3840×2160、返回1920×1080、比例2。
+- 证据根目录：`C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/`；下文现场图片均相对其`migration-01/`，实际截图分辨率3840×2160、返回1920×1080、比例2。
 
 只提交本报告；截图、合成输入、工具及日志留在忽略目录。产品源码、候选、发布包和第三方控制包未修改，未合并或推送。原始输入仅用于生成有摘要的新隔离副本，新增竞态副本的预期删除单独记录，不混入固定7文件完整性比较。
 
@@ -18,15 +18,15 @@
 
 截图必须实际含image；`is_error=false`但文本报错、没有图像也停链。输入已执行后截图失败只允许另行观察，不重发输入。Type回执成功同样不能替代核对实际内容。
 
-初版32项离线测试通过；专用恢复/迁移版共52项通过（包含原32项，不加总为84）。实际McpTransport/Controller与假时钟/假工具共用请求层，验证退让、失败锁存、截图空载荷、唯一请求、归属、进程见证及审阅门。材料为[offline-summary.json](../.local-analysis/basic-editing-remaining-acceptance/offline-summary.json)、[recovery-offline-summary.json](../.local-analysis/basic-editing-remaining-acceptance/recovery-offline-summary.json)及其日志/轨迹；这些是驱动测试，不是产品GUI测试。
+初版32项离线测试通过；专用恢复/迁移版共52项通过（包含原32项，不加总为84）。实际McpTransport/Controller与假时钟/假工具共用请求层，验证退让、失败锁存、截图空载荷、唯一请求、归属、进程见证及审阅门。材料为[offline-summary.json](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/offline-summary.json)、[recovery-offline-summary.json](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/recovery-offline-summary.json)及其日志/轨迹；这些是驱动测试，不是产品GUI测试。
 
-父审阅批准`msg_d671d5b82a45`后开始阶段二。PowerShell5最初因包装脚本无UTF-8 BOM解析失败，脚本体未执行、桌面请求0；补BOM、AST核验和离线复验后重新获批。候选启动后前景是QQ，门禁阻止输入并完整退让；没有向QQ发送按键，也未重发Launch。父审阅专用`restore-target`后，批准一次客户端迁移：旧客户端树45596/9776/22864/42192/61044正面退出，新客户端53032完整继承failed、token、截止和全部请求ID，原候选27788/主HWND1183506/FILETIME134374552696214516保持不变。迁移批准以[migration-approval.json](../.local-analysis/basic-editing-remaining-acceptance/migration-approval.json)实文件为准，其`message_id`为`msg_8f16f130b1d0`（父最终预审确认按实文件引用）。之后压缩和全部剩余现场始终沿用该MCP连接。
+父审阅批准`msg_d671d5b82a45`后开始阶段二。PowerShell5最初因包装脚本无UTF-8 BOM解析失败，脚本体未执行、桌面请求0；补BOM、AST核验和离线复验后重新获批。候选启动后前景是QQ，门禁阻止输入并完整退让；没有向QQ发送按键，也未重发Launch。父审阅专用`restore-target`后，批准一次客户端迁移：旧客户端树45596/9776/22864/42192/61044正面退出，新客户端53032完整继承failed、token、截止和全部请求ID，原候选27788/主HWND1183506/FILETIME134374552696214516保持不变。迁移批准以[migration-approval.json](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/migration-approval.json)实文件为准，其`message_id`为`msg_8f16f130b1d0`（父最终预审确认按实文件引用）。之后压缩和全部剩余现场始终沿用该MCP连接。
 
 专用恢复只在冷却到期、外部门禁允许、输入桌面未锁、全桌面PT Renew标题唯一且原PID/HWND/映像/创建时间一致时进行一次App切换并后验。原生文件框存在时不盲目切换。独立第二候选只在原进程持有句柄确认退出并显式retire后启动，同连接冷却和失败状态不清零。
 
 现场必须保留以下驱动/环境问题，不能归为产品缺陷：
 
-- m038回执`CONTROL_PREEMPTED`、`executed_steps=0`未被旧分类自动设为争用截止，但失败锁存有效，后续m039未执行。另行完整180秒零桌面请求后才诊断。原`preempted-retreat.json`因PowerShell5缺TickCount64把单调截止误写180，原件保留；[单调校正](../.local-analysis/basic-editing-remaining-acceptance/preempted-retreat-monotonic-correction.json)依据事件双时钟补正，未把错误元数据当有效截止。
+- m038回执`CONTROL_PREEMPTED`、`executed_steps=0`未被旧分类自动设为争用截止，但失败锁存有效，后续m039未执行。另行完整180秒零桌面请求后才诊断。原`preempted-retreat.json`因PowerShell5缺TickCount64把单调截止误写180，原件保留；[单调校正](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/preempted-retreat-monotonic-correction.json)依据事件双时钟补正，未把错误元数据当有效截止。
 - m025 Ctrl+0及m140 Delete已执行，后置Snapshot返回`CONTROL_UNAVAILABLE`；完整退让后只读恢复，没有重发动作。m133的user同样停链完整退让。
 - m146请求supported路径，但0366图文件名框出现无关中文；来源未知。保留原请求和图像，另行完整180秒退让，压缩后只读诊断，再通过文件列表选择并截图0373核对`supported.pcb`，0385才确认载入。没有将Type成功当加载成功。
 - m188菜单点击已执行，后置Snapshot返回“Previous screenshot flash did not close before capture”，无图像；本轮正确锁存失败，诊断/显式resume后0464单独补观察，没有重发菜单点击。
@@ -54,10 +54,12 @@ NET辅助`completed`仅表示文件打开触发break，不能当产品通过。�
 
 ## 收尾与可复核结论
 
-全部现场已结束，未再发送桌面请求。原候选27788和独立候选31072分别由m179、m194的持有句柄确认退出码0；两次放弃后的post_native失配均保留完整180秒冷却，未重发放弃。m195正常停止原MCP客户端，未新建第三候选。候选23文件、源输入7文件、隔离输入7文件的集合、大小与SHA-256全部不变，见[integrity-result.json](../.local-analysis/basic-editing-remaining-acceptance/integrity-result.json)。本任务完整客户端树与候选13个身份经父按创建时间核对已退出，见[退出审计](../.local-analysis/basic-editing-remaining-acceptance/parent-audits/remaining-process-exit-parent-audit.json)，工作者又以同一创建时间独立核验通过；没有终止其他工程或关闭Pi终端。
+全部现场已结束，未再发送桌面请求。原候选27788和独立候选31072分别由m179、m194的持有句柄确认退出码0；两次放弃后的post_native失配均保留完整180秒冷却，未重发放弃。m195正常停止原MCP客户端，未新建第三候选。候选23文件、源输入7文件、隔离输入7文件的集合、大小与SHA-256全部不变，见[integrity-result.json](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/integrity-result.json)。本任务完整客户端树与候选13个身份经父按创建时间核对已退出，见[退出审计](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/parent-audits/remaining-process-exit-parent-audit.json)，工作者又以同一创建时间独立核验通过；没有终止其他工程或关闭Pi终端。
 
-父确认所有现场进程退出后，备份实际运行的52项版Guard到`provenance/guard-runtime-52.py`，SHA-256为`972c6c008713b681879f5d9c23da16965c6f09043f29b865bdbc11d16bbc4375`，才归档通用`CONTROL_*`分类未来修复。归档后Guard SHA为`d9d65ce0f293a1ea0df50c1a95bba6050d3ee970e230c30abd0d435cfd9d4158`，新增分类器SHA为`bba9238181a2304b5702e812b96eb938260eb4efc182d75518da60396ed747a4`。实际归档路径61项全部通过，0失败/错误/跳过、0真实桌面请求；61为原52项加9项新协议场景，未载入已退出旧实例，也未作产品GUI重验。见[归档记录](../.local-analysis/basic-editing-remaining-acceptance/future-control-archive.json)及[实际回归摘要](../.local-analysis/basic-editing-remaining-acceptance/future-control/archived-summary.json)。
+父确认所有现场进程退出后，备份实际运行的52项版Guard到`provenance/guard-runtime-52.py`，SHA-256为`972c6c008713b681879f5d9c23da16965c6f09043f29b865bdbc11d16bbc4375`，才归档通用`CONTROL_*`分类未来修复。归档后Guard SHA为`d9d65ce0f293a1ea0df50c1a95bba6050d3ee970e230c30abd0d435cfd9d4158`，新增分类器SHA为`bba9238181a2304b5702e812b96eb938260eb4efc182d75518da60396ed747a4`。实际归档路径61项全部通过，0失败/错误/跳过、0真实桌面请求；61为原52项加9项新协议场景，未载入已退出旧实例，也未作产品GUI重验。见[归档记录](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/future-control-archive.json)及[实际回归摘要](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/future-control/archived-summary.json)。
 
-[现场时序审计](../.local-analysis/basic-editing-remaining-acceptance/parent-audits/remaining-live-parent-audit.json)核对已持久化请求、完整退让和输入归属；图像判断仍以本报告及checkpoint为准。[verification-summary.json](../.local-analysis/basic-editing-remaining-acceptance/verification-summary.json)、[证据索引](../.local-analysis/basic-editing-remaining-acceptance/evidence-index.json)和[index-verification.json](../.local-analysis/basic-editing-remaining-acceptance/index-verification.json)记录最终结论、逐项字节数/SHA与复核结果。索引排除自身、验证回执和最终结算回执，避免递归摘要；旧回执、校正、未来修复和父审计均保留。仅文档交付，运行`git diff --check`及本地链接/证据完整性检查后提交，不合并、不推送。
+[现场时序审计](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/parent-audits/remaining-live-parent-audit.json)核对已持久化请求、完整退让和输入归属；图像判断仍以本报告及checkpoint为准。[verification-summary.json](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/verification-summary.json)、[证据索引](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/evidence-index.json)和[index-verification.json](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/index-verification.json)记录最终结论、逐项字节数/SHA与复核结果。索引排除自身、验证回执和最终结算回执，避免递归摘要；旧回执、校正、未来修复和父审计均保留。仅文档交付，运行`git diff --check`及本地链接/证据完整性检查后提交，不合并、不推送。
 
 本轮只补剩余项目，没有重复旧A—F矩阵或重新运行未改动产品的全部Qt/CTest。NET/铜层异步迟到、900000极端可见性和系统会话结束保护仍未验证；离线驱动回归与原产品自动测试均不替代这些实际GUI边界。
+
+截图工作者报告提交`4b418d8653eda539c3c11eb35f39740d8ecdb999`，本Task/Dispatch的唯一`worker_done failed`已接受，Pi终端按要求保留。父独立复核3446项索引文件摘要/尺寸、76张PNG文件头、12个本地链接及23/7/7文件集合均通过；随后仅将本报告及三份根进度文档集成，证据链接指向保留材料的截图工作区，稳定产品和发布包仍为0.10.0。
