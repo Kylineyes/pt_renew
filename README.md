@@ -1,6 +1,6 @@
 # PT Renew
 
-最新接手入口：[本轮会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。
+最新接手入口：[会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。最新任务A已完成[异步迟到结果源码审查与实验设计](docs/async-result-boundaries.md)，明确自动测试与现场观察的边界；本轮未启动GUI，NET/铜层迟到仍未验证，稳定产品保持0.10.0。
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
