@@ -4,7 +4,11 @@
 
 **稳定`dev`产品源码及既有本地发布包保持0.10.0。** 最新工作按临时接手计划任务A完成异步淘汰源码审查与可重复实验设计，不集成0.11.0实现、不替换`dist/`。0.11.0总体验收仍未通过；上一轮已通过项、现场尝试和未覆盖项见[剩余验收报告](docs/basic-editing-remaining-acceptance.md)，此前主要编辑证据见[实际编辑报告](docs/basic-editing-actual-edit-acceptance.md)。
 
-## 最新现场：NET对照前置争用，未完成验收
+## 最新再次接管：原连接持续拒绝键鼠
+
+用户再次授权实际操作后，创建新任务并接管原客户端连接，保留7进程身份及failed/token/seen/冷却，通过新inbox通道提交3次到期只读诊断。三次均user；隐藏进程静置15秒后仍拒绝。未新增键鼠/截图/原生窗口请求或候选启动，正常清理仍未成；没有重跑无变化82项、修改驱动或重连绕门禁。详细接管状态见[交接顶部](SESSION_HANDOFF.md)和[接管续验报告](docs/async-experiment-resume.md)。新任务已failed结算，保留终端和残留身份，未改变固定候选验收结论。
+
+## 上轮现场：NET对照前置争用，未完成验收
 
 用户已授权键鼠，实际执行仍受控制门禁约束。本轮新Task/Dispatch仅启动一个独立实验NET对照进程。实验标记、board/NET_A、修订2/1走线及隔离B路径有3张真实图；提交B前返回user，点击未执行、没有B后台门闩。NET对照中止、NET竞争未进入；三次到期复查仍user，铜层未启动，没有新增迟到结果通过或产品缺陷结论。[现场报告](docs/async-experiment-gui-acceptance.md)已提交`dc77c16`，Task已按failed结算、终端retain；父核对239索引/3PNG/12链接通过。
 

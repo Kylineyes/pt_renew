@@ -2,7 +2,15 @@
 
 更新时间：2026-10-27。先读本文和[AGENTS.md](AGENTS.md)。用户本轮明确要求：**稳定产品保持0.10.0，进行整体验收剩余部分。** 不合入0.11.0实现、不替换发布包、不操作main。
 
-## 最新现场：受控阻塞，存在未退出进程
+## 最新再次接管：原连接仍拒绝键鼠
+
+用户再次明确“你操作电脑进行验收”。本次新Run `run_4b8adf1b5599`、Task `task_92f676d5e13d`、Dispatch `ctx_7072599ead1b`，仍使用原Pi会话及`deng/gpt-6.1-sol high`，分支`verify/async-experiment-resume`，新证据`.local-analysis/async-experiment-resume/`。用户键鼠授权充分，阻塞来自真实ControlStatus，不应要求重复授权。
+
+已核对7个残留进程的创建时间、空inbox及busy=false、28冻结文件摘要和到期截止。父`msg_b2296d95525c`批准新任务接管原连接：旧空inbox归档，旧路径junction指向新目录inbox；新请求携本次Task/Dispatch及r-唯一步骤ID，原client50048/MCP、candidate2020、failed/token/seen/截止全部保留，没有热改源码或重连。连续运行追加事件属本轮明确接管，不覆盖原静态证据。
+
+本次三次到期诊断均user（generation44）；第三次由隐藏pythonw静置15秒后提交，仍拒绝（wait约9.91秒），不能把活动归因用户或认定辅助终端是根因。没有发送键鼠/截图/原生窗口请求，没有启动新候选、没有正常清理。最后截止`691127.2648819`，原失败锁存仍为`a009-net-control-segment`；已停止本次后续自动桌面计划。未来恢复先核对当前新inbox通道及adoption记录，禁止向已结算任务续投、重连清门禁或用其他输入入口绕过。[接管续验报告](docs/async-experiment-resume.md)提交`76f8089744546ef3c3808da3e690f2367676eba5`，唯一worker_done failed=`msg_4d69effa69b4`已接受/ack，终端retain。本轮25项证据及10个报告本地链接核验通过；七个原身份仍存，没有清理成功记录。以下保留上轮现场及精确残留身份。
+
+## 上轮现场：受控阻塞，存在未退出进程
 
 用户已明确授权“进行下一步，键盘鼠标交给你”，本轮无需重复索取授权。已建立全新Run `run_de333c61159e`、Task `task_173ed3eebb79`、Dispatch `ctx_f4aea03b6bef`，沿用截图Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`，实际环境/JSONL均为`deng/gpt-6.1-sol high`。截图工作区分支`verify/async-experiment-gui`，新证据`.local-analysis/async-experiment-gui/`；父证据为主工作区`.local-analysis/async-experiment-gui-parent/`。
 

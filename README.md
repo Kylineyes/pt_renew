@@ -1,6 +1,6 @@
 # PT Renew
 
-最新接手入口：[会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。[独立异步实验构建](docs/async-experiment-development.md)已完成自动验证；获用户键鼠授权后的现场尝试，在NET对照提交前因持续user门禁中止，[现场报告](docs/async-experiment-gui-acceptance.md)记录没有取得迟到结果通过项。候选与控制客户端尚未正常退出，已停止后续桌面计划，残留身份见交接顶部。[固定候选的观察边界](docs/async-result-boundaries.md)不变，稳定产品保持0.10.0。
+最新接手入口：[会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。[独立异步实验构建](docs/async-experiment-development.md)已完成自动验证；获用户键鼠授权后的现场尝试，在NET对照提交前因持续user门禁中止，[现场报告](docs/async-experiment-gui-acceptance.md)记录没有取得迟到结果通过项。再次接管原连接后3次到期检查（含隐藏进程静置）仍拒绝键鼠；候选与控制客户端尚未正常退出，已停止后续桌面计划，残留身份及新通道见交接顶部。[固定候选的观察边界](docs/async-result-boundaries.md)不变，稳定产品保持0.10.0。
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
