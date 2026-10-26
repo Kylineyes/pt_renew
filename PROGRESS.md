@@ -4,7 +4,15 @@
 
 **稳定`dev`产品源码及既有本地发布包保持0.10.0。** 最新工作按临时接手计划任务A完成异步淘汰源码审查与可重复实验设计，不集成0.11.0实现、不替换`dist/`。0.11.0总体验收仍未通过；上一轮已通过项、现场尝试和未覆盖项见[剩余验收报告](docs/basic-editing-remaining-acceptance.md)，此前主要编辑证据见[实际编辑报告](docs/basic-editing-actual-edit-acceptance.md)。
 
-## 最新任务A：异步验收的观察边界
+## 最新开发：独立异步实验构建
+
+实验分支`experiment/async-result-barrier`已推送，代码提交`98a4321`，仅用于独立实验，不合入稳定源码。新增默认关闭的后台单次门闩、同进程事件时间线、专用命名事件控制器、60秒看门狗、持有者退出和取消处理；原NET/铜层淘汰条件保留。详见[实验开发报告](docs/async-experiment-development.md)。
+
+实验Debug/Release各12/12组CTest通过，新增QtTest每配置12项已含于CTest；普通开关OFF的Release相关回归3/3通过。8条自动对照/竞争时间线核对后台进入→程序接口编辑发布→释放→返回→原回调接受/丢弃。独立Release EXE SHA`782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`，部署22文件，证据在同级实验工作区`.local-analysis/async-experiment/`。
+
+本轮没有鼠标键盘或真实GUI验收；用户要求开始此类操作前先告知。固定候选现场结论不变，产品和dist保持0.10.0，dev只集成文档。
+
+## 前一轮任务A：异步验收的观察边界
 
 [异步迟到结果实验协议](docs/async-result-boundaries.md)区分了请求建立、工作线程实际进入、GUI编辑提交、后台返回及丢弃回调。现有自动测试证明回调淘汰，不能证明工作线程与真实GUI编辑执行重叠；按钮禁用和完成信号缺失也不足以证明该时间线。
 

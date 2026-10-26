@@ -1,8 +1,20 @@
-# 会话交接：异步验收实验设计与稳定0.10.0
+# 会话交接：异步实验构建与稳定0.10.0
 
 更新时间：2026-10-26。先读本文和[AGENTS.md](AGENTS.md)。用户本轮明确要求：**稳定产品保持0.10.0，进行整体验收剩余部分。** 不合入0.11.0实现、不替换发布包、不操作main。
 
-## 最新工作：任务A审查与实验设计
+## 最新开发：独立异步实验构建
+
+用户要求进行开发，并在操控鼠标键盘前先告知。已在新隔离工作区`C:/Users/rikideng/orca/workspaces/pt_renew/experiment-async-result-barrier`、分支`experiment/async-result-barrier`完成门闩与时间线实现；代码提交`98a4321`，报告提交`c4e3ec5`，实验分支已推送。该分支从固定编辑候选`b0e5ac7`建立，**不得整体合入稳定dev**。本次dev只集成[实验开发报告](docs/async-experiment-development.md)及进度说明。
+
+开关`PT_ENABLE_ASYNC_EXPERIMENT`默认关闭；开启后只为显式配置的新运行提供单次后台门闩、请求/修订/线程/结果事件、60秒看门狗与持有者退出/取消处理。NET在成功打开副本后读取前等待，铜层在算法预算计时前等待；原代次和身份淘汰条件保留。Python控制器按PID与创建时间核对专用命名事件，不发送桌面输入。
+
+Debug/Release实验各12/12组CTest通过，新实验QtTest每配置12 passed（包含初始化/清理，已含于CTest）；普通开关OFF的Release编辑/NET/铜层3/3组通过。两个配置共8条自动对照/竞争时间线确认工作线程进入后，程序接口编辑先发布新修订，再释放、返回旧结果并由原条件丢弃。测试仅offscreen，不是实际鼠标键盘或固定候选现场证据。
+
+独立Release部署`.local-analysis/async-experiment/release-candidate/pt-renew.exe`共22文件，EXE SHA`782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`。新证据在实验工作区`.local-analysis/async-experiment/`，含逐例事件、输入、副本摘要、构建/测试日志和交付核验。原固定部署23、源输入7、既有隔离输入7、稳定dist22文件集合/大小/SHA与前轮基线一致。
+
+没有派发子代理或创建/复用旧Task/Dispatch，没有鼠标键盘或真实GUI请求。尚未实际验收窗口标识、原生文件框、选线/Delete、最终截图及正常GUI关闭；进行这些操作前须先告知用户并协调桌面。固定候选NET/铜层现场仍未覆盖，0.11.0整体验收仍未通过；稳定产品0.10.0、固定候选和dist不变，main未操作。
+
+## 前一轮：任务A审查与实验设计
 
 已完整读取临时接手计划，并从fetch后的`origin/dev`提交`6256b7bc1b26cd410a8c3d0abfa3d79c656cd000`建立`verify/async-result-boundaries`。新交付为[异步迟到结果实验协议](docs/async-result-boundaries.md)：逐项审查固定`b0e5ac7`的NET代次淘汰、铜层代次/文档/网表身份淘汰，以及现有EditingTests实际证明的边界。
 
