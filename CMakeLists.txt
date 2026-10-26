@@ -9,6 +9,11 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Widgets Concurrent)
 include(CTest)
 
+option(PT_ENABLE_ASYNC_EXPERIMENT "启用独立异步验收门闩与事件记录，禁止用于稳定发布" OFF)
+if(PT_ENABLE_ASYNC_EXPERIMENT AND NOT WIN32)
+    message(FATAL_ERROR "异步实验门闩当前只支持 Windows。")
+endif()
+
 add_library(pt_core STATIC
     src/application/BoardEditSession.h
     src/application/BoardEditSession.cpp
@@ -37,6 +42,10 @@ add_library(pt_core STATIC
 )
 target_include_directories(pt_core PUBLIC src)
 target_link_libraries(pt_core PUBLIC Qt6::Core)
+if(PT_ENABLE_ASYNC_EXPERIMENT)
+    target_sources(pt_core PRIVATE src/experiment/AsyncExperiment.cpp src/experiment/AsyncExperiment.h)
+    target_compile_definitions(pt_core PUBLIC PT_ENABLE_ASYNC_EXPERIMENT=1)
+endif()
 
 add_library(pt_geometry STATIC
     src/geometry/BoardGeometry.h
@@ -102,6 +111,16 @@ if(BUILD_TESTING)
         message(STATUS "未找到 Python 3：跳过覆盖模块及文字研究工具测试，Qt 应用构建不受影响。")
     endif()
     find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
+    if(PT_ENABLE_ASYNC_EXPERIMENT)
+        qt_add_executable(pt-async-experiment-tests tests/AsyncExperimentTests.cpp)
+        set_target_properties(pt-async-experiment-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+        target_link_libraries(pt-async-experiment-tests PRIVATE pt_ui Qt6::Test)
+        if(MSVC)
+            target_compile_options(pt-async-experiment-tests PRIVATE /utf-8 /W4 /permissive-)
+        endif()
+        add_test(NAME pt-async-experiment-tests COMMAND pt-async-experiment-tests -o -,txt -o async-experiment-results.txt,txt)
+        set_tests_properties(pt-async-experiment-tests PROPERTIES TIMEOUT 45 ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    endif()
     qt_add_executable(pt-editing-tests tests/EditingTests.cpp)
     set_target_properties(pt-editing-tests PROPERTIES WIN32_EXECUTABLE FALSE)
     target_link_libraries(pt-editing-tests PRIVATE pt_ui Qt6::Test)

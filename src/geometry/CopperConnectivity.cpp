@@ -1,4 +1,5 @@
 #include "geometry/CopperConnectivity.h"
+#include "experiment/AsyncExperiment.h"
 #include "geometry/BoardGeometry.h"
 
 #include <QHash>
@@ -120,6 +121,7 @@ QString stateText(CopperNetState state) {
 }
 
 CopperAnalysis analyzeCopper(const BoardDocument& board,const Netlist& netlist,const CopperAnalysisLimits& limits) {
+    experiment::checkpoint(QStringLiteral("copper-entry-before-budget"));
     CopperAnalysis result;QElapsedTimer timer;timer.start();
     QList<Element> elements;QHash<qsizetype,qsizetype> padElements;
     QSet<QString> unsupported;

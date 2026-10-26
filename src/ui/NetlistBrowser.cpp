@@ -1,4 +1,5 @@
 #include "ui/NetlistBrowser.h"
+#include "experiment/AsyncExperiment.h"
 #include "io/LegacyNetlistReader.h"
 #include "geometry/CopperConnectivity.h"
 #include <QFileDialog>
@@ -75,12 +76,28 @@ void NetlistBrowser::requestFile(const QString& path) {
     if (m_loading) return;
     ++m_generation;const auto generation=m_generation;m_error.clear();m_notice.clear();rebuild();
     m_loading=true;m_copper->setEnabled(false);m_open->setEnabled(false);m_clear->setEnabled(true);m_status->setText(QStringLiteral("正在后台读取网表；移除外部网表可放弃结果。"));
+    const auto experimentRequest=experiment::begin(QStringLiteral("net"), {
+        {QStringLiteral("generation"), QString::number(generation)},
+        {QStringLiteral("path"), path},
+        {QStringLiteral("revision"), m_board ? QString::number(m_board->workingRevision) : QString()},
+        {QStringLiteral("previous_net_sha256"), m_active ? m_active->sha256 : QString()}});
     auto* watcher=new QFutureWatcher<NetlistReadResult>(this);
-    connect(watcher,&QFutureWatcher<NetlistReadResult>::finished,this,[this,watcher,generation] {
+    connect(watcher,&QFutureWatcher<NetlistReadResult>::finished,this,[this,watcher,generation,experimentRequest] {
         const auto result=watcher->result();watcher->deleteLater();m_loading=false;m_open->setEnabled(true);
+        experiment::callback(experimentRequest, generation==m_generation, {
+            {QStringLiteral("captured_generation"), QString::number(generation)},
+            {QStringLiteral("current_generation"), QString::number(m_generation)},
+            {QStringLiteral("revision"), m_board ? QString::number(m_board->workingRevision) : QString()}});
         if (generation==m_generation) apply(result); else rebuild();
     });
-    watcher->setFuture(QtConcurrent::run([path] { return LegacyNetlistReader::readFile(path); }));
+    watcher->setFuture(QtConcurrent::run([path,experimentRequest] {
+        experiment::Scope scope(experimentRequest);
+        const auto result=LegacyNetlistReader::readFile(path);
+        experiment::returned({{QStringLiteral("success"), result.succeeded()},
+            {QStringLiteral("result_sha256"), result.netlist ? result.netlist->sha256 : QString()},
+            {QStringLiteral("error"), result.error}});
+        return result;
+    }));
 }
 bool NetlistBrowser::loadFile(const QString& path) { if (m_loading) return false; ++m_generation;return apply(LegacyNetlistReader::readFile(path)); }
 bool NetlistBrowser::apply(const NetlistReadResult& result) {
@@ -99,10 +116,19 @@ void NetlistBrowser::runCopperAnalysis() {
     m_copperReport=QStringLiteral("正在后台执行受限铜层几何分析……不是完整 DRC。\n");
     m_copper->setEnabled(false);showCurrent();
     const auto board=m_board;const auto network=m_active;
+    const auto experimentRequest=experiment::begin(QStringLiteral("copper"), {
+        {QStringLiteral("generation"), QString::number(generation)},
+        {QStringLiteral("revision"), QString::number(board->workingRevision)},
+        {QStringLiteral("board_sha256"), board->sha256}, {QStringLiteral("net_sha256"), network->sha256}});
     auto* watcher=new QFutureWatcher<CopperAnalysis>(this);
-    connect(watcher,&QFutureWatcher<CopperAnalysis>::finished,this,[this,watcher,generation,board,network] {
+    connect(watcher,&QFutureWatcher<CopperAnalysis>::finished,this,[this,watcher,generation,board,network,experimentRequest] {
         const auto report=watcher->result();watcher->deleteLater();m_analyzing=false;
         m_copper->setEnabled(m_board!=nullptr && m_active!=nullptr && !m_loading);
+        experiment::callback(experimentRequest, generation==m_copperGeneration && board==m_board && network==m_active, {
+            {QStringLiteral("generation_matches"), generation==m_copperGeneration},
+            {QStringLiteral("board_matches"), board==m_board}, {QStringLiteral("net_matches"), network==m_active},
+            {QStringLiteral("captured_revision"), QString::number(board->workingRevision)},
+            {QStringLiteral("current_revision"), m_board ? QString::number(m_board->workingRevision) : QString()}});
         if (generation!=m_copperGeneration || board!=m_board || network!=m_active) return;
         m_copperReport=QStringLiteral("原板图输入 SHA-256：%1\n当前工作文档修订：%2\n网表摘要：%3\n\n")
             .arg(board->sha256).arg(board->workingRevision).arg(network->sha256)+copperAnalysisText(report);
@@ -117,7 +143,15 @@ void NetlistBrowser::runCopperAnalysis() {
         m_coverageBox->setVisible(!report.coverageIssues.isEmpty());
         showCurrent();emit copperAnalysisFinished();
     });
-    watcher->setFuture(QtConcurrent::run([board,network] { return analyzeCopper(*board,*network); }));
+    watcher->setFuture(QtConcurrent::run([board,network,experimentRequest] {
+        experiment::Scope scope(experimentRequest);
+        const auto result=analyzeCopper(*board,*network);
+        experiment::returned({{QStringLiteral("revision"), QString::number(board->workingRevision)},
+            {QStringLiteral("net_sha256"), network->sha256},
+            {QStringLiteral("copper_elements"), QString::number(result.copperElements)},
+            {QStringLiteral("limit_reached"), result.limitReached}});
+        return result;
+    }));
 }
 
 void NetlistBrowser::rebuild() {

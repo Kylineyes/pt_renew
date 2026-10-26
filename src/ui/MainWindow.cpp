@@ -1,4 +1,5 @@
 #include "ui/MainWindow.h"
+#include "experiment/AsyncExperiment.h"
 
 #include "application/CommandCatalog.h"
 #include "io/LegacyPcbReader.h"
@@ -379,6 +380,11 @@ void MainWindow::publishWorkingDocument() {
     m_componentBrowser->setDocument(m_editSession.document());
     m_netlistBrowser->setBoard(m_editSession.document(), true);
     updateFileInfo(); updateEditingActions(); updateViewStatus();
+    experiment::documentPublished({
+        {QStringLiteral("revision"), QString::number(m_editSession.document()->workingRevision)},
+        {QStringLiteral("tracks"), QString::number(m_editSession.document()->tracks.size())},
+        {QStringLiteral("dirty"), m_editSession.dirty()},
+        {QStringLiteral("net_sha256"), m_netlistBrowser->netlist() ? m_netlistBrowser->netlist()->sha256 : QString()}});
     statusBar()->showMessage(QStringLiteral("工作副本已更新；选择、测量与铜层结论已清除，外部网表已重新映射。不支持保存。"), 10000);
 }
 

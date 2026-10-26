@@ -1,4 +1,5 @@
 #include "io/LegacyNetlistReader.h"
+#include "experiment/AsyncExperiment.h"
 #include "io/DosText.h"
 #include <QCryptographicHash>
 #include <QFile>
@@ -126,6 +127,7 @@ NetlistReadResult LegacyNetlistReader::readFile(const QString& path) {
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) return {{},QStringLiteral("无法读取网表：%1").arg(file.errorString())};
     if (file.size()>maximumBytes) return {{},QStringLiteral("网表超过 8 MiB 限制。")};
+    experiment::checkpoint(QStringLiteral("net-file-open-before-read"));
     const auto bytes=file.read(maximumBytes+1);
     if (file.error()!=QFileDevice::NoError) return {{},QStringLiteral("读取网表失败：%1").arg(file.errorString())};
     return parse(bytes,QFileInfo(file).absoluteFilePath());
