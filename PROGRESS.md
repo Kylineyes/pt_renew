@@ -1,10 +1,16 @@
 # PT Renew 当前进度
 
-更新时间：2026-10-26。最新接手入口为[SESSION_HANDOFF.md](SESSION_HANDOFF.md)，协作规则见[AGENTS.md](AGENTS.md)。
+更新时间：2026-10-27。最新接手入口为[SESSION_HANDOFF.md](SESSION_HANDOFF.md)，协作规则见[AGENTS.md](AGENTS.md)。
 
 **稳定`dev`产品源码及既有本地发布包保持0.10.0。** 最新工作按临时接手计划任务A完成异步淘汰源码审查与可重复实验设计，不集成0.11.0实现、不替换`dist/`。0.11.0总体验收仍未通过；上一轮已通过项、现场尝试和未覆盖项见[剩余验收报告](docs/basic-editing-remaining-acceptance.md)，此前主要编辑证据见[实际编辑报告](docs/basic-editing-actual-edit-acceptance.md)。
 
-## 最新开发：独立异步实验构建
+## 最新现场：NET对照前置争用，未完成验收
+
+用户已授权键鼠，实际执行仍受控制门禁约束。本轮新Task/Dispatch仅启动一个独立实验NET对照进程。实验标记、board/NET_A、修订2/1走线及隔离B路径有3张真实图；提交B前返回user，点击未执行、没有B后台门闩。NET对照中止、NET竞争未进入；三次到期复查仍user，铜层未启动，没有新增迟到结果通过或产品缺陷结论。[现场报告](docs/async-experiment-gui-acceptance.md)已提交`dc77c16`，Task已按failed结算、终端retain；父核对239索引/3PNG/12链接通过。
+
+最终驱动82项离线通过，父独立复验并冻结28文件；这些不代替现场。已停止后续桌面请求，候选PID2020和持有者50048等6个进程身份仍存，**正常关闭未完成**，恢复入口及身份见[交接文档](SESSION_HANDOFF.md)顶部。保护材料集合22/3/23/7/22不变，稳定产品继续0.10.0。
+
+## 上一阶段开发：独立异步实验构建
 
 实验分支`experiment/async-result-barrier`已推送，代码提交`98a4321`，仅用于独立实验，不合入稳定源码。新增默认关闭的后台单次门闩、同进程事件时间线、专用命名事件控制器、60秒看门狗、持有者退出和取消处理；原NET/铜层淘汰条件保留。详见[实验开发报告](docs/async-experiment-development.md)。
 
