@@ -2,9 +2,15 @@
 
 更新时间：2026-10-26。最新接手入口为[SESSION_HANDOFF.md](SESSION_HANDOFF.md)，协作规则见[AGENTS.md](AGENTS.md)。
 
-**稳定`dev`产品源码及既有本地发布包保持0.10.0。** 用户本轮只要求完成0.11.0固定候选的剩余验收，不集成实现、不替换`dist/`。0.11.0总体验收仍未通过；已通过项、现场尝试和未覆盖项见[剩余验收报告](docs/basic-editing-remaining-acceptance.md)，此前主要编辑证据见[实际编辑报告](docs/basic-editing-actual-edit-acceptance.md)。
+**稳定`dev`产品源码及既有本地发布包保持0.10.0。** 最新工作按临时接手计划任务A完成异步淘汰源码审查与可重复实验设计，不集成0.11.0实现、不替换`dist/`。0.11.0总体验收仍未通过；上一轮已通过项、现场尝试和未覆盖项见[剩余验收报告](docs/basic-editing-remaining-acceptance.md)，此前主要编辑证据见[实际编辑报告](docs/basic-editing-actual-edit-acceptance.md)。
 
-## 本轮剩余验收结果
+## 最新任务A：异步验收的观察边界
+
+[异步迟到结果实验协议](docs/async-result-boundaries.md)区分了请求建立、工作线程实际进入、GUI编辑提交、后台返回及丢弃回调。现有自动测试证明回调淘汰，不能证明工作线程与真实GUI编辑执行重叠；按钮禁用和完成信号缺失也不足以证明该时间线。
+
+三项只读可行性审查各执行一次，固定候选GUI尝试0次，NET/铜层现场仍未验证。已写明独立实验构建的门闩位置、正向对照和每类两次上限；尚未实现或运行实验构建。本轮只更新文档和忽略证据，不重跑无变化产品的全部构建/测试，不复用已结算Task/Dispatch。固定候选、来源/既有隔离输入及稳定dist集合分别为23/7/7/22，前后摘要核验留在主工作区`.local-analysis/async-result-boundaries/`。
+
+## 上一轮剩余验收结果
 
 | 范围 | 结果 | 实际边界 |
 | --- | --- | --- |
