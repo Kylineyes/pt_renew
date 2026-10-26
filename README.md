@@ -1,6 +1,6 @@
 # PT Renew
 
-最新接手入口：[会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。最新任务A已完成[异步迟到结果源码审查与实验设计](docs/async-result-boundaries.md)，明确自动测试与现场观察的边界；本轮未启动GUI，NET/铜层迟到仍未验证，稳定产品保持0.10.0。
+最新接手入口：[会话交接：已完成与接下来任务](SESSION_HANDOFF.md)。[独立异步实验构建](docs/async-experiment-development.md)已在单独实验分支实现，Debug/Release各12/12组自动验证通过，尚未进行真实鼠标键盘验收；开始操控前会先告知用户。[固定候选的观察边界](docs/async-result-boundaries.md)继续保留，NET/铜层现场结论不变，稳定产品保持0.10.0。
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。
 
