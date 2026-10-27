@@ -6,7 +6,9 @@
 
 用户实际轻按松开反引号键后，同一原连接诊断`cr120-003-after-physical-key`成功；随后显式resume旧failed并正常stop。客户端50048、服务40648及其关联36396/20036/17396/31708共六个原精确身份均由停止前持有的查询句柄确认exit0，无强制终止。PID2020此前已按用户指令结束并退役，不能恢复。VK192残留曾有直接只读取证，本次恢复依据原Guard实际成功检查，没有重新读取键集合，也没有修改第三方安装或声称完整事件链已修复。详见[控制恢复报告](docs/desktop-control-recovery.md)。下文“原连接仍拒绝／候选仍存”为历史状态。
 
-新Run `run_021d6c33debf`、Task `task_cc0acf5789a3`、Dispatch `ctx_2f2d4d1f3ae1`已向保留Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`派发，沿用`deng/gpt-6.1-sol high`。新分支`verify/async-gui-recovered-120`、新证据`.local-analysis/async-gui-recovered-120/`；先在新副本适配120秒并定向验证、冻结和审阅后，才启动NET／铜层对照与竞争。旧180秒实例已经退出，不能冒称旧代码适配完成；三个旧已结算生命周期不复用。当前这里只记录派发与准备，尚无新GUI通过结论。
+本轮新的验收Run `run_021d6c33debf`、Task `task_cc0acf5789a3`、Dispatch `ctx_2f2d4d1f3ae1`沿用Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`与`deng/gpt-6.1-sol high`。新分支`verify/async-gui-recovered-120`、新证据`.local-analysis/async-gui-recovered-120/`；新驱动副本已实际加载120秒配置，正常动作不增加ControlStatus前检，工具真实拒绝照常停链。4项定向测试和父8项独立检查通过，不重跑旧82项或产品矩阵。
+
+四独立运行已全部执行：NET与铜层正向对照通过；NET竞争因Delete未发布新文档而中止，铜竞争虽发布新修订但门闩内截图CONTROL_UNAVAILABLE后cancel，缺有效release和完整截图，均不得记通过。四候选37300/59728/39768/29708均正常exit0；本轮控制链六个身份也由持有句柄确认exit0，无强制终止。稳定22、固定23、实验22、来源3及新输入3材料前后不变，464事件审计10次120秒停链，截止内零请求。详见[本轮真实GUI验收](docs/async-gui-recovered-120.md)。旧180秒档案和全部failed原件保留；本轮整体未通过，固定0.11.0候选仍未通过，稳定0.10.0不变。所有已结算生命周期禁止复用，后续范围必须另立任务。
 
 ## 最新再次接管：原连接仍拒绝键鼠
 
