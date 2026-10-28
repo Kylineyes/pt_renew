@@ -2,7 +2,7 @@
 
 更新时间：2026-10-28。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。临时简报保存最终Git提交、进程和会话定位；出现差异以最新直接证据为准。本文已压缩历史追加内容，旧交接原文备份在本机忽略目录`handoff-archive/`。
 
-**稳定产品及dist保持0.10.0，固定0.11.0候选及NET／铜层完整竞争验收仍未通过。** 用户交接后要求“继续”，本次从`b085fe2`建立`fix/control-health-sampling`，完成测试窗日志修复、实际健康采样/阶段耗时工具及两个限定现场组。39项相关单元测试全部通过；日志组完整取证通过；健康组确认采样和先心跳后时间修复实际加载，但仍捕获3次真实过期心跳与2次fail-open，控制稳定性未修复。两组窗口、UIA探针和控制链均已正常exit0，当前只作本地报告/整合，无后台桌面动作。产品代码、部署、原始安装及main未修改；最终Git/Task结算见本机临时简报。
+**稳定产品及dist保持0.10.0，固定0.11.0候选及NET／铜层完整竞争验收仍未通过。** 用户交接后要求“继续”，本次从`b085fe2`建立`fix/control-health-sampling`，完成测试窗日志修复、实际健康采样/阶段耗时工具及两个限定现场组。39项相关单元测试全部通过；日志组完整取证通过；健康组确认采样和先心跳后时间修复实际加载，但仍捕获3次真实过期心跳与2次fail-open，控制稳定性未修复。两组窗口、UIA探针和控制链均已正常exit0，两个Task已结算并验收，当前无后台诊断或自动续验计划。产品代码、部署、原始安装及main未修改；最终Git/Task结算见本机临时简报。
 
 ## 当前产品与候选
 
@@ -93,7 +93,7 @@
 | `task_82d78df9e34c` / `ctx_1dbebe2effc3` | failed | `d44ae4e816b9ad6c7884ee5fe3cd28f2e1faafd1` |
 | `task_30f766b66866` / `ctx_900f441db397` | succeeded（限定单组） | `a7110ad5013dd83a5853cf8587ce58c259d4695f` |
 
-此前Run为`run_22b5092f9df3`，唯一worker_done为`msg_921f9165317c`，已结算。本次Run `run_e136aa13bab5`：日志Task `task_d88863b795f8` / `ctx_e09b30cefbe7`已succeeded（限定日志取证），done `msg_a81bde98ca69`已验收ack，提交`b239aba`；健康Task `task_2e0cc599ee61` / 当前`ctx_95024c79b018`现场结束、报告/结算中。初次`ctx_2b320b2960a1`仅agent_readiness超时、无提示/GUI/MCP，失败归档，原会话空闲后显式retry成功，不是额外现场轮次。图像由指定工作者实际读图；父独立核对回调/原工具时序、stderr、采样判定和进程退出。旧PT Renew PID2020及历史VK192处置保持已结算，不重启旧连接、不恢复旧PID、不泛化要求用户按键。
+此前Run为`run_22b5092f9df3`，唯一worker_done为`msg_921f9165317c`，已结算。本次Run `run_e136aa13bab5`：日志Task `task_d88863b795f8` / `ctx_e09b30cefbe7`已succeeded（限定日志取证），done `msg_a81bde98ca69`已验收ack，提交`b239aba`；健康Task `task_2e0cc599ee61` / `ctx_95024c79b018`已succeeded结算（仅采样及有界GUI取证，健康稳定性未过），done `msg_22d186aef34c`已验收ack，提交`85c3f7f`。两个已结算验收终端所有权均明确retain，无reclaimable资源。初次`ctx_2b320b2960a1`仅agent_readiness超时、无提示/GUI/MCP，失败归档，原会话空闲后显式retry成功，不是额外现场轮次。图像由指定工作者实际读图；父独立核对回调/原工具时序、stderr、采样判定和进程退出。旧PT Renew PID2020及历史VK192处置保持已结算，不重启旧连接、不恢复旧PID、不泛化要求用户按键。
 
 | 位置 | 内容 |
 | --- | --- |
@@ -104,7 +104,7 @@
 | 同工作区`.local-analysis/control-physical-geometry/` | 单组223项证据、0/0→1/1图、日志缺口说明及退出证明 |
 | 主工作区`.local-analysis/control-health-sampling/` | 两新组批准、39项测试输出、运行前后材料、父日志/健康/回调审计与两组精确进程句柄exit0见证 |
 | 截图工作区`.local-analysis/control-window-logging/` | 日志组200索引/25链接、两图0/0→1/1、双回调及空stderr、486行trace dropped0 |
-| 截图工作区`.local-analysis/control-health-validation/` | 真实加载采样/修复组，两图/双回调/空stderr、5444采样/32阶段/两fail-open、247057行trace dropped0，退出及根因限制 |
+| 截图工作区`.local-analysis/control-health-validation/` | 228索引/22链接；真实加载采样/修复组，两图/双回调/空stderr、5444采样/32阶段/两fail-open、247057行trace dropped0，退出及根因限制 |
 | 主工作区`.local-analysis/async-race-followup/` | 前轮两竞争中止、部署/安装摘要及591材料审计 |
 | 主工作区`.local-analysis/control-investigation/` | 更早VK192内部残留直接只读取证 |
 
@@ -114,4 +114,4 @@
 
 Qt6.12.0 MSVC x64（`C:/Users/rikideng/Qt/6.12.0/msvc2022_64`）、VS2026/MSVC14.51.36231、CMake/Ninja已具备。已有Python/Unicorn/Capstone，不重复安装无关依赖。系统Python的NumPy/Pillow二进制导入存在兼容问题；本轮图像和控制测试使用已有`C:/Users/rikideng/scoop/persist/uv/tools/versions/windows-mcp/Scripts/python.exe -X utf8`，不为此修全局环境。
 
-新会话先读临时简报确认最终Git与终端，再完整读AGENTS和本文；核对`git status`、`dev/origin/dev`、部署摘要和指定模型。保留验收终端`term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d`属于当前Orca runtime，使用前先枚举确认，不能凭旧句柄推断仍存。所有子代理用Pi，纯逆向`glm-5.3 high`、截图/验收`gpt-6.1-sol high`并核对实际记录；同任务沿用会话。用户在交接后已明确要求“继续”，当前按开头限定范围执行日志和健康诊断；不要仅因读到其他下一阶段计划就自动启动新产品竞争。
+新会话先读临时简报确认最终Git与终端，再完整读AGENTS和本文；核对`git status`、`dev/origin/dev`、部署摘要和指定模型。保留验收终端`term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d`属于当前Orca runtime，使用前先枚举确认，不能凭旧句柄推断仍存。所有子代理用Pi，纯逆向`glm-5.3 high`、截图/验收`gpt-6.1-sol high`并核对实际记录；同任务沿用会话。用户交接后明确要求的日志和健康诊断已完成并结算；新会话按下一阶段计划先做离线研究，不仅因读到计划就自动启动新GUI或产品竞争。
