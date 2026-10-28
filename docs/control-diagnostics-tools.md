@@ -28,7 +28,7 @@ PT Renew的真实GUI验收多次在编辑后的截图阶段遇到控制拒绝。
 
 后续新增[健康日志离线重放](control-offline-replay.md)及`tools/replay_control_health.py`，只读取已保存JSONL，不导入控制包或调用桌面。它按相同旧心跳归并过期采样，计算阶段区间并集，分别保留事后完整阶段与首次过期当时可见的阶段覆盖，并拒绝丢失/未关闭/矛盾输入。新增8项重放测试，合并相关控制测试共47项实际通过；本轮没有新的GUI样本。
 
-后续另准备`tools/control_bitmap_timing.py`，按每次上传汇总DC/DIB准备、memmove、UpdateLayeredWindow及清理时间，不记录像素/坐标或HWND。仅flash模块引用使用代理，共享系统API对象不修改，其他线程继续原调用；`indicator_bitmap_timing=true`必须同时批准健康采样且冻结计时模块摘要，默认不加载。5项假API测试通过，现场尚未执行；具体[30分钟方案](control-bitmap-timing-plan.md)等待用户明确许可。
+后续另准备`tools/control_bitmap_timing.py`，按每次上传汇总DC/DIB准备、memmove、UpdateLayeredWindow及清理时间，不记录像素/坐标或HWND。仅flash模块引用使用代理，共享系统API对象不修改，其他线程继续原调用；`indicator_bitmap_timing=true`必须同时批准健康采样且冻结计时模块摘要，默认不加载。5项假API测试通过；用户明确许可后现场已加载，但在任何有效截图/输入/位图上传前被目标前景及原门禁拦下，故计时功能仍未现场验证。唯一控制链约14分6秒正常全exit0，trace338863行正常关闭dropped0；[本轮结果](control-bitmap-timing.md)记录failed范围，无自动重试。
 
 现场前须先建立具体诊断任务和可审阅计划，并按用户最新要求先说明预计所需时间与操作范围、得到明确许可后再控制电脑。服务启动批准JSON至少包含当前`task_id`、`dispatch_id`、`mode=diagnostics-only`、隔离清单摘要和`launcher_files`；如启用App刷新则额外声明`app_refresh_fix=true`并冻结修复文件。准备命令不会建立MCP、安装钩子或发送输入；serve命令将运行真实控制工具，应遵守用户键鼠授权、拒绝停链、120秒检查间隔、正常退出和进程句柄见证的既有流程。
 
