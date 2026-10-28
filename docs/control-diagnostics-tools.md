@@ -1,12 +1,12 @@
 # 控制诊断工具：当前能力、验证与使用限制
 
-当前稳定产品/dist为0.10.0。工具在独立控制包副本中提供取证，未修改产品或已安装第三方包。最新[限定现场](control-initial-activation.md)的一次原App初始化/精确前景后验、单组图0/0→1/1/双回调/空stderr及4081上传取证通过；2883健康样本仍含2次真实过期、1次fail-open，控制稳定性及历史全部截图根因未解决，固定0.11.0/NET铜竞争未通过。
+当前稳定产品/dist为0.10.0。工具在独立控制包副本中提供取证；本轮新增[默认关闭的原生资源实验](control-bitmap-surface.md)，仅离线验证及冻结候选，尚无真实Win32/GUI结果。产品和已安装第三方包未修改。最新[限定现场](control-initial-activation.md)的一次原App初始化/精确前景后验、单组图0/0→1/1/双回调/空stderr及4081上传取证通过；2883健康样本仍含2次真实过期、1次fail-open，控制稳定性及历史全部截图根因未解决，固定0.11.0/NET铜竞争未通过。
 
 ## 工具和开关
 
 | 文件 | 行为 | 验证边界 |
 | --- | --- | --- |
-| `tools/run_control_diagnostics.py` | `prepare`复制windows_mcp并逐文件验SHA生成manifest；`serve`复验包、Task/Dispatch/mode、manifest和launcher摘要后调用原MCP/ControlToolGate | prepare不创建控制链/钩子；serve会启动真实控制服务，必须在已许可的新现场范围内 |
+| `tools/run_control_diagnostics.py` | `prepare`复制windows_mcp并逐文件验SHA生成manifest；`serve`复验包、Task/Dispatch/mode、manifest和launcher摘要后调用原MCP/ControlToolGate | prepare不创建控制链/钩子；serve会启动真实控制服务。资源实验还要求新许可确认/消息/600与900秒预算、健康条件和已核验源码版本 |
 | `tools/control_diagnostics.py` | 原方法包装追加阶段/原因/status diagnostics，保留原拒绝/异常/输入账本/接管/保持集合，队列有界、独立线程写日志，closed记录dropped | 非原子快照、日志开销影响调度；不记录用户字符或按键值，丢失/写错不能宣称完整因果 |
 | `tools/control_app_refresh.py` | 原switch_app前刷新窗口缓存，继续原窗口过滤/查找/激活/前景后验 | `app_refresh_fix=true`且冻结模块才加载；不改变CanMinimize/CanMaximize枚举要求，不解释全部历史not found |
 | `tools/control_diagnostic_budget.py` | 恢复失败联动refused，停止组，保留冻结一次只读诊断/观察供收尾 | 客户端须调用restored(row)；不能自动重发输入，也不能替已拒绝的组记通过 |
@@ -17,7 +17,10 @@
 | `tools/control_bitmap_timing.py` | flash模块局部API代理，仅指示层线程上传范围每次汇总尺寸/字节、API次数/墙钟耗时/异常 | `indicator_bitmap_timing=true`需同时批准健康采样、冻结模块摘要；共享ctypes/WinDLL对象不改，不记录像素/坐标/HWND |
 | `tools/control_target_activation.py` | 未失败、已绑定/UIA核验目标、组前最多一次原App switch；激活前精确身份/桌面检查，后调用原前景后验 | 客户端独立批准并冻结模块摘要；不直接原生激活、不额外ControlStatus、不清锁存/集合，不在旧失败组补激活或重试 |
 | `tools/analyze_control_uploads.py` | 纯JSONL分析上传发出延迟、采样点裁剪与API集合占时边界；复用健康重放 | 正常schema 1上传专用，需核验同线程/同一时钟/心跳写入路径；上下界不是CPU或预计提速 |
-| `tools/control_bitmap_surface_model.py` | 注入假API的不可变图层资源寿命模型，验证一次创建/复制、逐次完整上传与失败退役 | 没有Win32适配器或serve入口；不能直接作为真实窗口复用功能加载 |
+| `tools/control_bitmap_surface_model.py` | 后端注入的不可变图层寿命核心，验证一次创建/复制、逐次完整上传与失败退役 | 模块本身不加载Win32；原生适配器在单独模块，部分失败实例保持可退役 |
+| `tools/control_bitmap_surface.py` | 私有WinDLL、图层线程上下文接管、DC/DIB账本和所属线程退役，64图层/64MiB预算 | `indicator_bitmap_surface=true`且冻结核心/适配器才安装；需健康采样/修复，和旧bitmap计时互斥；runtime_verified=false |
+| `tools/control_surface_approval.py` | 纯离线核对新客户端/服务批准、真实Pi模型、新目录和冻结文件/包集合；附加资源日志前置检查 | 不是许可来源；旧Task/会话/状态拒绝，不启动桌面 |
+| `tools/audit_control_surfaces.py` | 正常surface JSONL独立寿命/API/账本审计，拒绝矛盾/异常/缺失退役 | 仅内部证据一致性，不替真实图像/回调/性能/健康 |
 
 所有可选运行时包装默认不启用，只在冻结并明确批准的新隔离进程中加载；服务启动后不热改。客户端Task批准与桌面许可是不同证据，批准文件不能替代用户对操作时间/范围的许可。
 
@@ -29,7 +32,7 @@
 
 ## 离线验证与隔离准备
 
-最后实际`tests/test_control_*.py`为**79项全部通过**，证据主`.local-analysis/control-upload-offline-analysis/tests-verified.log`，其中本轮新增18项（上传分析8、资源模型10）。原61项证据`.local-analysis/control-target-activation/tests.log`保留。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
+最后实际`tests/test_control_*.py`为**106项全部通过**，证据主`.local-analysis/control-bitmap-surface/tests-verified.log`，本轮新增27项（原生/原循环17、启动器6、客户端批准4）。冻结客户端另6项定向离线检查在同目录`frozen-client-tests-final.log`，不混入仓库覆盖。上一阶段79项证据`.local-analysis/control-upload-offline-analysis/tests-verified.log`、原61项证据`.local-analysis/control-target-activation/tests.log`保留。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
 
 ```powershell
 & '<MCP环境>/Scripts/python.exe' -X utf8 -m unittest discover -s tests -p 'test_control_*.py' -v
@@ -53,7 +56,8 @@ serve批准至少含`task_id`、`dispatch_id`、`mode=diagnostics-only`、`packa
 | [位图首次](control-bitmap-timing.md)、[user时间线](control-user-timeline.md) | 实际图/输入/上传0，门禁user有最近事件续期证据，服务曾ready，来源未知 |
 | [前景重试](control-bitmap-retry.md)、[初始激活设计](control-target-activation.md) | 前者首图前景Orca/实际call0；后者离线补齐组前激活，不能反推UIA或用户夺焦点 |
 | [最新初始激活现场](control-initial-activation.md) | 原App1/两有效图/双回调/4081上传，7384trace dropped0，全exit0；健康2stale/1fail-open仍存在 |
-| [最新上传离线分析](control-upload-offline-analysis.md) | 同旧心跳的局部上传/阶段并集与API占时边界、假API资源寿命模型完成；无新现场或原生复用实现 |
+| [最新上传离线分析](control-upload-offline-analysis.md) | 同旧心跳的局部上传/阶段并集与API占时边界、假API寿命模型完成；该阶段无新现场 |
+| [原生资源实验](control-bitmap-surface.md) | 适配器/图层接入/独立审计、新许可/身份批准检查及107文件候选冻结完成，离线106+单独5项通过；无真实Win32/GUI/提速证据 |
 
 ## 操作约束
 
