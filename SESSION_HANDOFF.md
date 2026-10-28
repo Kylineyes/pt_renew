@@ -2,9 +2,7 @@
 
 更新时间：2026-10-28。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。临时简报保存最终Git提交、进程和会话定位；出现差异以最新直接证据为准。本文已压缩历史追加内容，旧交接原文备份在本机忽略目录`handoff-archive/`。
 
-**当前续作（用户已明确“继续”）：** 主工作区开发分支`fix/control-health-sampling`，基线`b085fe2`；健康采样/启动器`c20fdfd`、原健康函数对照测试`84947e0`及日志修复`b239aba`已整合，相关39项测试实际全过。Run `run_e136aa13bab5`中日志Task `task_d88863b795f8` / `ctx_e09b30cefbe7`已succeeded结算（`msg_a81bde98ca69`），同原验收Pi会话准备健康Task `task_2e0cc599ee61` / 当前Dispatch `ctx_95024c79b018`；首次就绪超时Dispatch `ctx_2b320b2960a1`未投递提示、无控制链/GUI，已失败归档，待原会话真正空闲后显式retry成功。日志组实际读图0/0→1/1、两回调/空stderr、486行trace closed dropped0 fail-open0，窗口/探针/五链exit0；父独立时间线/退出审计通过，图像由指定工作者读图。健康组尚在准备新副本和批准，不开始产品竞争。稳定/dist仍0.10.0；现场与协调材料见`.local-analysis/control-health-sampling/`。
-
-**稳定产品保持0.10.0。本轮完成控制诊断工具开发和一次限定GUI诊断组验证；固定0.11.0候选及NET／铜层完整竞争验收仍未通过。** 产品代码、既有dist、固定候选、独立实验部署和原始安装未改，main未操作。该句及下文“本轮”均指b085fe2交接已完成的上一轮，当前续作状态见上段。
+**稳定产品及dist保持0.10.0，固定0.11.0候选及NET／铜层完整竞争验收仍未通过。** 用户交接后要求“继续”，本次从`b085fe2`建立`fix/control-health-sampling`，完成测试窗日志修复、实际健康采样/阶段耗时工具及两个限定现场组。39项相关单元测试全部通过；日志组完整取证通过；健康组确认采样和先心跳后时间修复实际加载，但仍捕获3次真实过期心跳与2次fail-open，控制稳定性未修复。两组窗口、UIA探针和控制链均已正常exit0，当前只作本地报告/整合，无后台桌面动作。产品代码、部署、原始安装及main未修改；最终Git/Task结算见本机临时简报。
 
 ## 当前产品与候选
 
@@ -25,9 +23,9 @@
 
 固定源码分支`Kylineyes/feat-basic-editing`在`b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验分支`experiment/async-result-barrier`在`c4e3ec5e82bf1a022e523ec8844d0665d7b93234`，实验代码提交`98a4321`。主build可能仍有历史0.11.0构建，不能凭切分支判断EXE版本，固定部署不得重建覆盖。
 
-## 本轮完成的工具开发
+## 控制诊断工具开发
 
-开发分支为`fix/control-snapshot-diagnostics`，从已推送dev基线`621afcd10478b0051d840765d26b3020aec93c84`建立，按AGENTS仅将允许范围合入dev并推送。最终合并提交见本机临时简报或`git rev-parse dev origin/dev`；main只由用户合并和推送。
+此前`fix/control-snapshot-diagnostics`已合入推送dev=`b085fe2`。此次开发`fix/control-health-sampling`从该基线建立，源码提交`c20fdfd`（实际采样/启动开关）、`84947e0`（原健康函数差分测试）、`b239aba`（测试窗日志/三项测试及报告），完成后按AGENTS整合dev推送，main只由用户操作。
 
 | 文件 | 行为及验证边界 |
 | --- | --- |
@@ -36,11 +34,12 @@
 | `tools/control_app_refresh.py` | 新隔离进程显式批准才启用，在原App切换前刷新窗口列表；原查找、激活和前景后验保持，不改变原窗口过滤 |
 | `tools/control_diagnostic_budget.py` | 目标恢复失败也终止诊断组，保留唯一只读诊断/观察供收尾；不自动重发输入 |
 | `tools/control_geometry.py` | 临时线程DPI上下文读取物理桌面矩形并恢复原上下文；读取/恢复未知则拒绝，避免逻辑rect与物理点击坐标混比 |
-| `tools/control_indicator_health.py` | 离线修正先取now再读并发heartbeat导致伪负年龄的顺序缺陷；保持原1秒阈值与故障拒绝。**尚未现场加载或部署到原安装** |
+| `tools/control_indicator_health.py` | 记录原判定实际采样值、返回值和指示层慢阶段；采样保留原顺序，额外批准才先heartbeat后now。现场已在隔离新进程加载，仍观察真实滞后，原1秒阈值/故障拒绝保持，未部署原安装 |
+| `tools/control_test_window.py` | 新副本修复日志事件名与输入kind冲突，逐行记录真实Tk回调；显式stdout/stderr、异常原堆栈。双回调与原工具时刻/图像/终态共同验证 |
 
-相关`tests/test_control_*.py`共27项通过，使用MCP现有解释器及假窗口/假输入API，未安装真实钩子或发送键鼠；不与工作者定向测试重复累加。测试命令及隔离启动方式见[工具说明](docs/control-diagnostics-tools.md)。源码提交包括`8049668`（隔离诊断/缓存/预算）及`4b3d75d`（物理矩形/健康读取顺序）。第三方安装和77文件隔离包原件前后摘要一致，第三方源码/截图/包副本不入Git。
+相关`tests/test_control_*.py`共39项实际通过，整合输出在主`.local-analysis/control-health-sampling/integrated-tests.log`，不与工作者定向测试重复累加。覆盖原控制拒绝/输入账本、有界日志、缓存/预算、物理矩形、健康原顺序与修复差分、实际采样/阶段及启动选项、测试窗回调/stderr。无真实钩子或键鼠，测试窗子进程测试仅运行命令行异常脚本。命令及隔离方式见[工具说明](docs/control-diagnostics-tools.md)。第三方原安装/副本77文件、稳定22/固定23/实验22部署运行前后文件集合和摘要不变，主`before.json`/`after.json`可核对；忽略材料不入Git。
 
-## 四阶段真实诊断结果
+## 现场诊断结果
 
 所有阶段沿用原Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`与实际核对的`deng/gpt-6.1-sol high`。每阶段独立分支、证据目录、Task/Dispatch和批准文件，运行后不热改。
 
@@ -55,6 +54,10 @@
 
 第三阶段成功截图后两次看门狗直接记录`indicator_ok=false、desktop_ok=true`并fail-open；首条指示层心跳年龄约1.078秒。第二条非原子快照的瞬时心跳年龄较小，不能反推探测时的值。第四阶段未记录fail-open，health读取修复未加载；这些样本仍不足以确定历史所有截图拒绝的根因或证明长期可靠性。
 
+本次[日志修复组](docs/control-window-logging.md)关闭健康开关，在新副本实际读图0/0→1/1、Click和诊断快捷键各一次、两回调时间各落对应原调用区间，stderr空、486行trace closed dropped0/fail-open0。AltF4已正常关闭后目标消失导致本地后验锁存，多余生命周期请求被子进程已退出断言拒绝，WM_CLOSE实际0，失误原件保留。窗口、探针、五链均exit0，父时间线/句柄审计通过。
+
+本次[健康组](docs/control-health-validation.md)明确批准采样和修复，实际installed事件`heartbeat_first=true/phases=true/threshold_seconds=1.0`。首图前本地非目标拦截，完整120秒后恢复成功，同一连接/组实际两张有效图0/0→1/1、两回调完整、stderr空；5444健康样本逐行核对（5441健康、3真实过期，最大约1.0781844秒），32条慢阶段/状态确认，247057行trace closed dropped0。两次watch实测过期约1.0049/1.0193秒、desktop_ok=true并fail-open，恢复另见1.078秒；未出现伪负年龄不能证明长期稳定。phase观察非原子，高频事件/诊断开销显著，不能确定绘制/多图层累计/调度或历史截图因果。关闭前本地拦截未发送AltF4，120秒后精确自建Popen的一次WM_CLOSE仅生命周期，窗口/探针/五链exit0，父样本及退出审计通过。此组只证明采样有效和限定GUI完成，控制健康稳定性未通过。
+
 所有诊断窗口和控制链均已正常退出，无强制终止或后台输入计划。受阻时精确身份的一次WM_CLOSE只用于自建程序的正常生命周期清理，不作GUI输入/验收通过证据，不适用于产品候选或其他工程进程。已退出运行的failed/token/budget/截止和live-state全部归档，不删除、不恢复旧PID、不重连清门禁。
 
 ## 产品验收仍缺什么
@@ -67,8 +70,8 @@
 
 ## 下一阶段计划与验收标准
 
-1. **先修诊断测试窗日志并补完整取证。** 在新副本修正回调记录参数冲突，显式重定向窗口stderr；复用已通过的可缩放UIA前置与物理矩形检查。仅测试新变化，不改旧报告或重跑产品矩阵。
-2. **验证控制健康问题，而非继续碰产品候选。** 为指示层健康探测添加同次采样字段/阶段耗时，区分伪负心跳年龄与真实超过1秒滞后；在新任务和新批准下验证可选读取顺序修复，保留1秒阈值及真正故障拒绝。若记录丢失、图像失败或原因不唯一，结论仍unknown。不得关掉指示层、放宽阈值或切换输入/截图入口绕拒绝。
+1. **先离线研究实际心跳滞后。** 日志修复和健康实际采样已完成。保留本轮原件，按同线程样本及慢阶段时间线分析图层逐帧更新的累计耗时、消息泵/显示器枚举、调度及高频诊断开销；单阶段邻近或总耗时不能确定因果。优先设计无桌面请求的可重放模型或差分，约束性能改动范围，不在活服务热改。
+2. **控制稳定性仍需独立开发和新有界验证。** 先心跳后时间只修伪负年龄，不能消除本组实测约1.005/1.019秒过期；第三个恢复采样约1.078秒。不能通过续写心跳、关指示层、放宽1秒阈值、清状态或切入口规避真正故障拒绝。若要新现场，另Task/批准/冻结/证据，失败不加新连接。无有效图、日志丢失、原因不唯一仍unknown，不把限定GUI成功当长期稳定。
 3. **条件具备后另定有界产品实验范围。** 新Task/Dispatch/批准/证据，冻结候选和输入；引用不变对照。要求同一应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图和最终图共同成立。失败中止并消费机会，额外运行须另有明确范围；实验通过仍不自动让固定候选通过。
 4. **固定候选边界与新产品功能分别安排。** 极端可见性和受控会话测试独立做。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返及原程序重开另立阶段；元件放置、布线、完整DRC、生产输出、干净Windows部署、性能各自规划。
 5. **原字形保持独立研究。** 缩放/完整与简化分派/F/251/252/旋转镜像/笔宽/导入联合状态/保存往返未完成前，继续保留`runtime_verified=false`。
@@ -90,7 +93,7 @@
 | `task_82d78df9e34c` / `ctx_1dbebe2effc3` | failed | `d44ae4e816b9ad6c7884ee5fe3cd28f2e1faafd1` |
 | `task_30f766b66866` / `ctx_900f441db397` | succeeded（限定单组） | `a7110ad5013dd83a5853cf8587ce58c259d4695f` |
 
-本Run为`run_22b5092f9df3`，最后唯一worker_done为`msg_921f9165317c`，父已验收/ack并明确retain原会话。此前固定候选、异步GUI、接管、恢复后四例及自适应续验的全部生命周期也已结算，不续投旧inbox。旧PT Renew PID2020已死亡退役，不再恢复；VK192残留已通过原连接物理释放恢复并正常退出，不再泛化要求用户按键。
+此前Run为`run_22b5092f9df3`，唯一worker_done为`msg_921f9165317c`，已结算。本次Run `run_e136aa13bab5`：日志Task `task_d88863b795f8` / `ctx_e09b30cefbe7`已succeeded（限定日志取证），done `msg_a81bde98ca69`已验收ack，提交`b239aba`；健康Task `task_2e0cc599ee61` / 当前`ctx_95024c79b018`现场结束、报告/结算中。初次`ctx_2b320b2960a1`仅agent_readiness超时、无提示/GUI/MCP，失败归档，原会话空闲后显式retry成功，不是额外现场轮次。图像由指定工作者实际读图；父独立核对回调/原工具时序、stderr、采样判定和进程退出。旧PT Renew PID2020及历史VK192处置保持已结算，不重启旧连接、不恢复旧PID、不泛化要求用户按键。
 
 | 位置 | 内容 |
 | --- | --- |
@@ -99,6 +102,9 @@
 | 同工作区`.local-analysis/control-snapshot-fix/` | 修复验收143项证据 |
 | 同工作区`.local-analysis/control-window-compat/` | UIA/坐标阶段207项证据与两次看门狗轨迹 |
 | 同工作区`.local-analysis/control-physical-geometry/` | 单组223项证据、0/0→1/1图、日志缺口说明及退出证明 |
+| 主工作区`.local-analysis/control-health-sampling/` | 两新组批准、39项测试输出、运行前后材料、父日志/健康/回调审计与两组精确进程句柄exit0见证 |
+| 截图工作区`.local-analysis/control-window-logging/` | 日志组200索引/25链接、两图0/0→1/1、双回调及空stderr、486行trace dropped0 |
+| 截图工作区`.local-analysis/control-health-validation/` | 真实加载采样/修复组，两图/双回调/空stderr、5444采样/32阶段/两fail-open、247057行trace dropped0，退出及根因限制 |
 | 主工作区`.local-analysis/async-race-followup/` | 前轮两竞争中止、部署/安装摘要及591材料审计 |
 | 主工作区`.local-analysis/control-investigation/` | 更早VK192内部残留直接只读取证 |
 
