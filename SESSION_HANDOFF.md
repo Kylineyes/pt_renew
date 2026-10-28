@@ -1,181 +1,109 @@
-# 会话交接：控制恢复与独立异步实验验收
+# PT Renew 开发进度与会话交接
 
-更新时间：2026-10-28。先读本机临时`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，临时文档最新事实优先于本文历史记录。稳定产品保持0.10.0，不合入0.11.0实现、不替换发布包、不操作main。
+更新时间：2026-10-28。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。临时简报保存最终Git提交、进程和会话定位；出现差异以最新直接证据为准。本文已压缩历史追加内容，旧交接原文备份在本机忽略目录`handoff-archive/`。
 
-## 最新：自适应选线续验已结束，两个竞争仍未通过
+**稳定产品保持0.10.0。本轮完成控制诊断工具开发和一次限定GUI诊断组验证；固定0.11.0候选及NET／铜层完整竞争验收仍未通过。** 产品代码、既有dist、固定候选、独立实验部署和原始安装未改，main未操作。用户最新要求是开发收尾并整理交接，当前没有后台诊断或自动续验计划。
 
-用户明确继续后，新Run `run_77f70610bac1`、Task `task_5877c051c786`、Dispatch `ctx_b449da0e783c`沿用原Pi会话和`deng/gpt-6.1-sol high`，在独立分支`verify/async-races-adaptive`只执行NET／铜各一次新竞争，引用上一轮两个有效对照，不重跑对照或改写旧failed。详见[自适应选线续验报告](docs/async-races-adaptive.md)。
+## 当前产品与候选
 
-新驱动按门闩当前有效截图定位线中段、核对1920×1080／桌面3840×2160／比例2，未知和多目标拒绝；12项定向测试通过，历史上下文增强后仅复验其中3项预算测试。新Snapshot本地间隔4秒，工具真实拒绝仍120秒停链、不重试。两次选点都成功真实Delete并发布修订3、dirty、零走线和A来源，但删除后截图分别返回USER_CONTROL／CONTROL_UNAVAILABLE，两次均cancel中止，缺有效gate-released及门闩内编辑图，整体仍failed。事后图确认NET_A保持、旧NET／铜结果未恢复；这些证据仅支持中止路径，不计有效竞争通过，也不能声称4秒节奏修复了控制工具。
-
-两候选66732／54752和本轮六控制链身份均由持有句柄确认正常exit0，无强制终止或后台验收动作。30项冻结文件、稳定22／固定23／实验22／来源3／新输入3材料前后不变；280事件8次120秒停链审计截止内零请求，591索引材料、14张PNG及21本地链接经父独立核验通过。工作者报告提交`c34eec9bb91420e2981411d600d265d2b655ea1d`，唯一worker_done failed=`msg_5b463fee8047`已接受并ack，终端明确retain，生命周期现已结算禁止复用。
-
-下一步应先独立解决控制工具在截图阶段的可靠性与可诊断性，再另定有界竞争验收范围；不能继续用重复候选碰运气、换入口绕拒绝，或把cancel丢弃当有效释放。固定0.11.0总体验收仍未通过，稳定0.10.0和main不变。
-
-## 最新：原连接已恢复并正常退出
-
-用户实际轻按松开反引号键后，同一原连接诊断`cr120-003-after-physical-key`成功；随后显式resume旧failed并正常stop。客户端50048、服务40648及其关联36396/20036/17396/31708共六个原精确身份均由停止前持有的查询句柄确认exit0，无强制终止。PID2020此前已按用户指令结束并退役，不能恢复。VK192残留曾有直接只读取证，本次恢复依据原Guard实际成功检查，没有重新读取键集合，也没有修改第三方安装或声称完整事件链已修复。详见[控制恢复报告](docs/desktop-control-recovery.md)。下文“原连接仍拒绝／候选仍存”为历史状态。
-
-本轮新的验收Run `run_021d6c33debf`、Task `task_cc0acf5789a3`、Dispatch `ctx_2f2d4d1f3ae1`沿用Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`与`deng/gpt-6.1-sol high`。新分支`verify/async-gui-recovered-120`、新证据`.local-analysis/async-gui-recovered-120/`；新驱动副本已实际加载120秒配置，正常动作不增加ControlStatus前检，工具真实拒绝照常停链。4项定向测试和父8项独立检查通过，不重跑旧82项或产品矩阵。
-
-四独立运行已全部执行：NET与铜层正向对照通过；NET竞争因Delete未发布新文档而中止，铜竞争虽发布新修订但门闩内截图CONTROL_UNAVAILABLE后cancel，缺有效release和完整截图，均不得记通过。四候选37300/59728/39768/29708均正常exit0；本轮控制链六个身份也由持有句柄确认exit0，无强制终止。稳定22、固定23、实验22、来源3及新输入3材料前后不变，464事件审计10次120秒停链，截止内零请求。详见[本轮真实GUI验收](docs/async-gui-recovered-120.md)。旧180秒档案和全部failed原件保留；本轮整体未通过，固定0.11.0候选仍未通过，稳定0.10.0不变。所有已结算生命周期禁止复用，后续范围必须另立任务。
-
-## 最新再次接管：原连接仍拒绝键鼠
-
-用户再次明确“你操作电脑进行验收”。本次新Run `run_4b8adf1b5599`、Task `task_92f676d5e13d`、Dispatch `ctx_7072599ead1b`，仍使用原Pi会话及`deng/gpt-6.1-sol high`，分支`verify/async-experiment-resume`，新证据`.local-analysis/async-experiment-resume/`。用户键鼠授权充分，阻塞来自真实ControlStatus，不应要求重复授权。
-
-已核对7个残留进程的创建时间、空inbox及busy=false、28冻结文件摘要和到期截止。父`msg_b2296d95525c`批准新任务接管原连接：旧空inbox归档，旧路径junction指向新目录inbox；新请求携本次Task/Dispatch及r-唯一步骤ID，原client50048/MCP、candidate2020、failed/token/seen/截止全部保留，没有热改源码或重连。连续运行追加事件属本轮明确接管，不覆盖原静态证据。
-
-本次三次到期诊断均user（generation44）；第三次由隐藏pythonw静置15秒后提交，仍拒绝（wait约9.91秒），不能把活动归因用户或认定辅助终端是根因。没有发送键鼠/截图/原生窗口请求，没有启动新候选、没有正常清理。最后截止`691127.2648819`，原失败锁存仍为`a009-net-control-segment`；已停止本次后续自动桌面计划。未来恢复先核对当前新inbox通道及adoption记录，禁止向已结算任务续投、重连清门禁或用其他输入入口绕过。[接管续验报告](docs/async-experiment-resume.md)提交`76f8089744546ef3c3808da3e690f2367676eba5`，唯一worker_done failed=`msg_4d69effa69b4`已接受/ack，终端retain。本轮25项证据及10个报告本地链接核验通过；七个原身份仍存，没有清理成功记录。以下保留上轮现场及精确残留身份。
-
-## 上轮现场：受控阻塞，存在未退出进程
-
-用户已明确授权“进行下一步，键盘鼠标交给你”，本轮无需重复索取授权。已建立全新Run `run_de333c61159e`、Task `task_173ed3eebb79`、Dispatch `ctx_f4aea03b6bef`，沿用截图Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`，实际环境/JSONL均为`deng/gpt-6.1-sol high`。截图工作区分支`verify/async-experiment-gui`，新证据`.local-analysis/async-experiment-gui/`；父证据为主工作区`.local-analysis/async-experiment-gui-parent/`。
-
-离线驱动最终82/82项通过（含既有61项），父独立复验相同82项并冻结28个源码/配置文件，PowerShell包装解析通过。已绑定新批准`msg_d8e9399a8547`，未复用旧批准或旧任务。实验候选仍为SHA `782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`。
-
-现场实际只启动NET对照：初次非目标前景被阻止，完整退让后专用恢复成功；取得三张有效截图，确认实验标记、合成board/NET_A、1条走线及未修改修订2，再打开原生NET框并读图确认本轮隔离`b.net`路径。关键段提交前`ControlStatus=user`，触发点击`executed=false`，没有B读取请求或门闩。该次中止并消费机会，NET竞争未进入；后续三次到期只读复查仍user，铜层未启动。没有新增迟到结果通过项，也未发现产品淘汰缺陷。
-
-**存在残留：候选PID2020、创建FILETIME134374989405547867；持有者/client PID50048、创建134374989304233763，以及本链其余PID17396/20036/36396/40648仍存，正常关闭未完成。** 失败锁存`a009-net-control-segment`，最后截止`not_before_monotonic=686259.8917363`，busy=false。已明确停止所有后续桌面计划，客户端仅本地inbox空闲，不预排GUI；未强关、未换入口、未重连。不得写成已清理或退出码0。未来恢复须新任务并先核对这些身份/控制状态和生命周期归属，不向已结算旧inbox续投，也不删除live-state清门禁。
-
-父独立核验实验部署22/来源输入3/原固定部署23/原来源输入7/稳定dist22文件集合、大小、SHA前后不变；Guard已持久化90事件/35请求没有提前越过180秒，3张PNG文件头有效；应用仅1运行、无gated请求，未记录run-stopped。[现场报告](docs/async-experiment-gui-acceptance.md)提交`dc77c16334cdc120fe287272f37585e13f7c3e56`；唯一`worker_done failed`回执`msg_3b99780f753e`已接受，终端已明确retain，交付已ack，无待回收工作者终端。父独立审计239项索引文件/3张PNG/12个本地链接有效；额外启动包装进程31708的存活/创建时间也单独记录。稳定源码和dist保持0.10.0，实验源码仍独立，main未操作。
-
-## 上一阶段开发：独立异步实验构建
-
-用户要求进行开发，并在操控鼠标键盘前先告知。已在新隔离工作区`C:/Users/rikideng/orca/workspaces/pt_renew/experiment-async-result-barrier`、分支`experiment/async-result-barrier`完成门闩与时间线实现；代码提交`98a4321`，报告提交`c4e3ec5`，实验分支已推送。该分支从固定编辑候选`b0e5ac7`建立，**不得整体合入稳定dev**。本次dev只集成[实验开发报告](docs/async-experiment-development.md)及进度说明。
-
-开关`PT_ENABLE_ASYNC_EXPERIMENT`默认关闭；开启后只为显式配置的新运行提供单次后台门闩、请求/修订/线程/结果事件、60秒看门狗与持有者退出/取消处理。NET在成功打开副本后读取前等待，铜层在算法预算计时前等待；原代次和身份淘汰条件保留。Python控制器按PID与创建时间核对专用命名事件，不发送桌面输入。
-
-Debug/Release实验各12/12组CTest通过，新实验QtTest每配置12 passed（包含初始化/清理，已含于CTest）；普通开关OFF的Release编辑/NET/铜层3/3组通过。两个配置共8条自动对照/竞争时间线确认工作线程进入后，程序接口编辑先发布新修订，再释放、返回旧结果并由原条件丢弃。测试仅offscreen，不是实际鼠标键盘或固定候选现场证据。
-
-独立Release部署`.local-analysis/async-experiment/release-candidate/pt-renew.exe`共22文件，EXE SHA`782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`。新证据在实验工作区`.local-analysis/async-experiment/`，含逐例事件、输入、副本摘要、构建/测试日志和交付核验。原固定部署23、源输入7、既有隔离输入7、稳定dist22文件集合/大小/SHA与前轮基线一致。
-
-没有派发子代理或创建/复用旧Task/Dispatch，没有鼠标键盘或真实GUI请求。尚未实际验收窗口标识、原生文件框、选线/Delete、最终截图及正常GUI关闭；进行这些操作前须先告知用户并协调桌面。固定候选NET/铜层现场仍未覆盖，0.11.0整体验收仍未通过；稳定产品0.10.0、固定候选和dist不变，main未操作。
-
-## 前一轮：任务A审查与实验设计
-
-已完整读取临时接手计划，并从fetch后的`origin/dev`提交`6256b7bc1b26cd410a8c3d0abfa3d79c656cd000`建立`verify/async-result-boundaries`。新交付为[异步迟到结果实验协议](docs/async-result-boundaries.md)：逐项审查固定`b0e5ac7`的NET代次淘汰、铜层代次/文档/网表身份淘汰，以及现有EditingTests实际证明的边界。
-
-现有测试证明请求后编辑、处理完成回调时拒绝旧结果，但没有同步证明编辑时工作线程仍在执行。原生文件框中的oplock、禁用按钮和缺少完成信号不能补作该证据。因此本轮完成三项各一次的只读可行性审查后，固定候选GUI尝试为0；协议已列出T0—T4时间线、独立实验构建的实际工作线程门闩、NET不同指纹对照、每类两次上限和争用停止条件。实验构建尚未实现或执行，结果不得计作固定候选通过。
-
-新证据在主工作区`.local-analysis/async-result-boundaries/`。实际当前Pi为`deng/gpt-6.1-sol high`，已核对环境和会话JSONL；保留截图终端仅只读核对。没有派发子代理，没有创建或复用Run/Task/Dispatch，未投递旧inbox。固定部署23文件、源输入7文件、上一轮隔离输入7文件及稳定dist22文件均保存集合/大小/SHA前后核验；本轮没有启动产品或控制客户端，不能记新增正常退出码。源码匹配按Git换行过滤后对象核验，保留首次直接比较CRLF与LF导致的预检失败原件。
-
-稳定产品保持0.10.0，0.11.0整体验收仍未通过。下一步若实施门闩实验，应从固定候选另建实验分支和部署，按报告冻结新摘要及新执行身份；固定候选现场通过、产品集成与发布仍需独立依据。不重复常规A—F，不操作main。以下保留上一轮现场结论、证据和已结算生命周期。
-
-## 上一轮现场结论
-
-稳定`dev`产品源码和既有`dist/`保持**0.10.0**。固定0.11.0候选的常规编辑和主要保护已有上一轮证据；本轮补齐严格文本焦点、旧式菜单与编辑历史、10000mil远移后的显式reset、五类其他图元只读保护、关闭/换图取消的直接历史截图、选中文件后消失的实际读取失败，以及独立进程菜单退出确认放弃。
-
-**0.11.0整体验收仍未通过。** 铜层迟到结果两次、NET迟到结果一次有界现场尝试没有取得完整竞争时间线；900000mil极端跨度下未直接确认远处属性；系统会话结束仍待受控环境。不能以驱动离线测试或已有产品自动测试替代这些现场边界。上一轮Task因退让不足和截图失败漏停链结算failed，原结论不改写。
-
-本轮产品GUI已经结束。原候选PID27788及独立候选PID31072均由持有的进程句柄确认退出码0；本任务控制客户端正常停止，源输入、隔离输入和候选23/7/7文件集合、字节数及SHA-256前后不变。父代理独立核验迁移前后客户端树及候选共13个原进程身份均已退出。本轮Pi终端保留供接手，不再有后台桌面验收动作。
-
-新报告为[剩余验收](docs/basic-editing-remaining-acceptance.md)，截图工作者提交`4b418d8653eda539c3c11eb35f39740d8ecdb999`，本Task/Dispatch已收到唯一一次`worker_done failed`并明确保留终端。父交付审计核对**3446项索引文件、76张PNG文件头、12个本地报告链接**均有效。父随后只集成四份验收/进度文档并修正主工作区的证据链接，不集成产品；最终dev提交以Git实际输出为准，不预写文档自身提交号。上一轮完整报告为[实际编辑验收](docs/basic-editing-actual-edit-acceptance.md)。
-
-## 本轮新增现场结果
-
-| 项目 | 结论 | 证据与边界 |
+| 对象 | 已完成 | 限制与状态 |
 | --- | --- | --- |
-| 严格文本焦点 | 通过 | 明确点击ΔX，123→Delete空→Ctrl+Z恢复123→Ctrl+Y空；板图几何、5图元/3走线及修订2不变，取消后Undo/Redo禁用；`checkpoint-1.json` |
-| 旧式与现代入口 | 已测范围通过 | M→T与现代菜单打开相同移动框，D→T删除，E→U/E→R撤销重做；移动无独立现代快捷键，记N/A |
-| 10000/10000远移与reset | 通过可视范围 | 移出旧视野后显式reset，可选到(10100,10100)→(10400,10500)、宽10mil/长500mil；Undo原端点clean、Redo远处dirty，底层隐藏保持；`checkpoint-2-3.json` |
-| 900000/900000极端远移 | 部分观察，未完整验证 | 实际提交dirty修订3，100%及底层隐藏保持；reset后图元亚像素，三次未直接命中属性，不外推10000范围的结论 |
-| 五类只读图元 | 通过 | FP自由焊盘、FV过孔、FA圆弧、FF填充、FS文字分别选中后Delete不改6图元/1走线、clean/修订19，移动自由线命令禁用，Undo/Redo禁用；`checkpoint-2-readonly.json` |
-| 定向关闭与换图保护 | 通过已测路径 | Ctrl+W取消、empty换图取消、missing原生拒绝后取消、窗口关闭取消，均有Undo原端点/长500/clean与Redo删除直接图；补足上一轮缺图及受退让偏差影响的路径；`checkpoint-5.json` |
-| 铜层迟到结果 | 未覆盖 | 两次有界尝试未取得运行中→编辑先完成→迟到结果未覆写的完整时间线，不再追加；普通编辑后NET保留、旧结论清空仍有观察 |
-| NET迟到结果 | 未覆盖 | 一次oplock触发真实等待，但前景仍原生文件框，检查阻止画布输入，finally释放后NET正常加载；不是后台迟到时间线 |
-| 选择后文件消失 | 通过第二次路径 | 第一次只触发原生文件框拒绝；第二次WinEvent HIDE删除新副本，Qt实际报找不到文件、当前工作和历史保留，Undo原端点宽10/长500clean、Redo删除dirty；`checkpoint-4-races.json` |
-| 独立菜单退出放弃 | 通过 | 原进程窗口关闭放弃退出0；第二进程dirty后点击文件菜单退出、确认放弃，独立句柄退出0；不与窗口关闭混为同一项 |
-| 系统会话结束 | 未覆盖 | 共享宿主不注销、不关机；需另安排受控环境 |
+| 稳定0.10.0 | PCB/LIB/NET只读查看、图层显隐、缩放平移、选择/定位、两点测量与几何端点捕捉、引脚映射、受限铜层分析 | 铜分析不是完整DRC，文字和部分轮廓有近似 |
+| 固定0.11.0编辑候选 | 单条自由Track整数mil内存移动、删除、Undo/Redo、dirty/clean、关闭/换图保护、派生结果失效、外部NET保留并重新映射 | 独立分支，整体未通过，不合入稳定发行 |
+| 独立异步实验候选 | 默认OFF的`PT_ENABLE_ASYNC_EXPERIMENT`，NET实际读取前和铜算法预算计时前的工作线程门闩、60秒看门狗、请求/线程/修订/回调事件 | 只作实验观察，不能替固定候选记通过 |
+| 原字形研究 | 已有静态/受控执行及部分原程序现场证据 | `runtime_verified=false`；未接入Qt渲染、命中或铜分析 |
 
-上一轮主要移动/删除/Undo/Redo、非法输入拒绝、元件内部图元与LIB隔离、测量清理/重新捕捉、NET映射保留及铜层清空/重算已有证据，无变化时不重跑整套A—F。0.11.0仍不支持新增图元、拖拽、元件移动、保存/另存为、布线、完整DRC或生产输出。
+固定候选没有保存/另存为、新增图元、拖拽、元件移动、布线、完整DRC或生产输出。不要把后续开发计划写成已支持。
 
-## 验收驱动与争用处理
-
-用户已授权桌面控制；其他工程可能争用。检测user、非目标/不稳定前景、锁屏、控制不可用或执行中争用时，立即停链，记录明确的单调时间与墙钟截止，完整退让180秒。截止前不发送输入、截图、ControlStatus或原生桌面请求；单次本地等待不超过45秒以便沟通。到期只读复查允许后才恢复已知目标，仍拒绝则再次退让180秒。不能把user自动归因为人工操作，不能重连清门禁、换入口或修改第三方包绕过。
-
-本轮统一Guard包含请求唯一ID、parent token、并发/排队拒绝、失败锁存和显式诊断/恢复。截图必须有image；即使`is_error=false`，无图或工具错误文字也停止当前链。输入已执行而后置截图失败时只补观察，不能重发移动/删除/关闭。原生对话框同样核对目标PID/HWND/映像；截图3840×2160返回1920×1080时倍率2，坐标以当时实际图像为准。Type需要loc或label，路径使用Windows反斜杠。
-
-初版驱动32项离线通过；专用恢复与状态继承迁移版共52项通过，包含原32项。候选首次启动未前景时，外部门禁ready但本地Guard无法恢复已知目标，形成策略死锁。父审阅后增加专用`restore-target`：完整冷却后、实时外部门禁允许、输入桌面未锁、前景稳定、全桌面PT Renew标题唯一且PID/HWND/映像/创建时间一致，才允许一次App恢复并立即后验；普通输入仍要求目标前景，没有每步自动抢焦点。
-
-运行时没有热更新入口，因此批准过一次正常迁移：旧客户端树正面退出后才建立新客户端，原候选PID/创建时间不变，原failed/token/not_before及全部历史步骤ID完整继承，新连接实际门禁再次核验。后续全部现场沿用该连接。Pi同会话内建压缩保留原session和`deng/gpt-6.1-sol high`，没有另建Task或替换模型。
-
-必须保留的执行边界：
-
-- `CONTROL_PREEMPTED`未被运行版自动设为争用截止，但失败锁存立即阻断后续动作；额外完整180秒静默后才诊断。原PowerShell5缺TickCount64把单调字段误写180，原墙钟有效；原件保留，父从事件双时钟映射生成`manual-control-retreat-m038.json`校正，审计零提前请求。
-- Ctrl+0/Delete后Snapshot的`CONTROL_UNAVAILABLE`、菜单点击后闪烁层未关闭等均正确停链；恢复只补观察，不重复已执行动作。
-- Type请求与实际文件名文字不符，来源未知，按争用完整180秒退让；随后从文件列表选supported并先核对实际文件名，再确认真正载入，不把成功回执当内容正确。
-- NET辅助的原`result.reason`固定写“完成目标编辑后释放”，本次其实只是finally释放，没有画布编辑。保留原件及`factual-correction.json`，该回执不能证明产品竞态通过。
-- 正常退出后的post_native失配也保守停链并完整退让，实际退出用持有句柄核验，退役保留失败与截止，不恢复已退出PID或重发放弃。
-
-GUI及所有控制客户端退出后，父才替换本地验收Guard的通用`CONTROL_*`协议分类。实际运行版备份为`provenance/guard-runtime-52.py`，SHA`972c6c008713b681879f5d9c23da16965c6f09043f29b865bdbc11d16bbc4375`。未来修复在实际归档路径61项离线回归全过（原52项加9项新控制协议场景，不能再加总113），见`future-control/archived-summary.json`及日志。**未来修复未在旧现场实例加载，不构成新GUI验收。** 新运行须核对当前源码与新的审批摘要，不能直接沿用旧批准文件。
-
-## 分支、候选与会话
-
-| 项目 | 定位 |
+| 冻结部署 | EXE SHA-256 |
 | --- | --- |
-| 主工作区 | `C:/Users/rikideng/orca/workspaces/pt_renew/main-2` |
-| 本轮父文档分支 | `docs/basic-editing-remaining-acceptance` |
-| 本轮截图分支 | `verify/basic-editing-remaining`，同级工作区`verify-text-screen-sol` |
-| 产品功能分支 | `Kylineyes/feat-basic-editing`，已推送`b0e5ac7761f13690b5310bbc913ab7bfd2691d08` |
-| 产品开发工作区 | 同级`feat-basic-editing` |
-| 曾验证集成分支 | `integration/basic-editing-wave`，`1422a8d4ab3f7ee804f2224b2e4dd25d17979f2c`，不表示合入dev |
-| 固定0.11.0候选 | 开发工作区`.local-analysis/basic-editing/release-candidate/pt-renew.exe` |
-| 候选EXE SHA-256 | `dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8` |
-| 0.10.0发布EXE SHA-256 | `726a44aa5f1b976dcfbffa068c011b99038172a451eb0964cbc853ee3bf20fc1` |
-| 本轮Run/Task/Dispatch（已结算failed） | `run_361a6ad63310` / `task_d780e8e2eaad` / `ctx_eff89720518e`，不要复用其生命周期ID |
-| 截图Pi终端 | `term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d` |
-| 截图实际Pi会话 | `01a1739a-82f6-76cf-9ffc-c63e95be56d4`，`deng/gpt-6.1-sol high` |
-| 开发Pi终端 | `term_dd341315-769e-48e2-8939-736aa685a21b` |
-| GLM研究Pi终端 | `term_e4974120-7dc9-4ffe-90f5-76c23497ba97` |
+| 主工作区`dist/pt-renew.exe`，22文件 | `726a44aa5f1b976dcfbffa068c011b99038172a451eb0964cbc853ee3bf20fc1` |
+| 同级`feat-basic-editing/.local-analysis/basic-editing/release-candidate/pt-renew.exe`，23文件 | `dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8` |
+| 同级`experiment-async-result-barrier/.local-analysis/async-experiment/release-candidate/pt-renew.exe`，22文件 | `782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac` |
 
-所有子代理使用Pi。纯逆向`glm/glm-5.3 high`，截图及验收`deng/gpt-6.1-sol high`，同任务沿用会话，核对实际JSONL、环境和工具结果。终端句柄属runtime`f95c7627-6971-4200-96a1-284003c521c6`，失效先枚举，不能推断进程已死；模型不可用如实报告，不替换。
+固定源码分支`Kylineyes/feat-basic-editing`在`b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验分支`experiment/async-result-barrier`在`c4e3ec5e82bf1a022e523ec8844d0665d7b93234`，实验代码提交`98a4321`。主build可能仍有历史0.11.0构建，不能凭切分支判断EXE版本，固定部署不得重建覆盖。
 
-## 本机证据与原材料
+## 本轮完成的工具开发
 
-证据在Git忽略目录，远端clone不会带入，禁止强制add。
+开发分支为`fix/control-snapshot-diagnostics`，从已推送dev基线`621afcd10478b0051d840765d26b3020aec93c84`建立，按AGENTS仅将允许范围合入dev并推送。最终合并提交见本机临时简报或`git rev-parse dev origin/dev`；main只由用户合并和推送。
 
-| 根目录（均为上述工作区相对路径） | 内容 |
+| 文件 | 行为及验证边界 |
 | --- | --- |
-| 截图工作区`.local-analysis/basic-editing-remaining-acceptance/` | 本轮全部截图/事件/checkpoint、原32/52项驱动、未来61项、输入摘要、迁移与清理、最终索引 |
-| 同目录`migration-01/` | 主要现场单连接记录；该客户端已经退出，不续发inbox |
-| 同目录`parent-audits/` | 父现场时序、13进程身份退出、离线轨迹、进程见证及同会话压缩审计 |
-| 同目录`race-oplock/`、`race-file-vanish/` | 新副本的文件等待/删除实验，预期删除与固定7输入分开核对 |
-| 截图工作区`.local-analysis/basic-editing-actual-edit-acceptance/` | 上一任务1309项完整证据及4处退让偏差、缺图原件，不覆盖 |
-| 同工作区`.local-analysis/basic-editing-acceptance-retry/`、`basic-editing-acceptance/` | 更早真实窗口重试和启动前阻塞历史 |
-| 编辑工作区`.local-analysis/basic-editing/` | 开发构建/测试、23文件固定候选与7文件来源输入 |
-| 主工作区`.local-analysis/agent-dispatch/` | 自包含任务、父离线/现场/交付审计、归档脚本、协调检查点 |
-| 主工作区`.local-analysis/development-wave/` | 先前父集成Debug/Release复验 |
-| 研究工作区`.local-analysis/text-object-copy/` | 原文字对象16例受控执行与32字符边界 |
-| 截图工作区`.local-analysis/text-screen-next/` | A240/层显隐379项证据与12张原生图 |
+| `tools/control_diagnostics.py` | 对原控制方法附加只读阶段/原因日志和status诊断字段；保留原拒绝、接管、保持集合、心跳阈值与异常。日志有界、独立线程写入、结束记录丢失数量，不记录用户文字或键值 |
+| `tools/run_control_diagnostics.py` | 复制已安装windows-mcp到独立副本并逐文件核验；启动复验任务批准、包清单及启动器摘要，调用原ControlToolGate和原工具 |
+| `tools/control_app_refresh.py` | 新隔离进程显式批准才启用，在原App切换前刷新窗口列表；原查找、激活和前景后验保持，不改变原窗口过滤 |
+| `tools/control_diagnostic_budget.py` | 目标恢复失败也终止诊断组，保留唯一只读诊断/观察供收尾；不自动重发输入 |
+| `tools/control_geometry.py` | 临时线程DPI上下文读取物理桌面矩形并恢复原上下文；读取/恢复未知则拒绝，避免逻辑rect与物理点击坐标混比 |
+| `tools/control_indicator_health.py` | 离线修正先取now再读并发heartbeat导致伪负年龄的顺序缺陷；保持原1秒阈值与故障拒绝。**尚未现场加载或部署到原安装** |
 
-原安装`D:/project/pt_renew/pt`共99文件只读；`pt/`、`pt_install/`、`.local-analysis/`、截图、字体/库、反编译数据库及构建产物永不提交。PT.EXE SHA`abc56e2e8467e608c68a0ddf0b0705e8270c5c60f83f193fa991f10293ece968`，OVR SHA`cab0fc0571c5a295c396bd6479a57f060bb18a01d2c2ffc5b438cc1b65f8a0d8`；偏移不能用于其他版本。运行和写入实验只用新副本。
+相关`tests/test_control_*.py`共27项通过，使用MCP现有解释器及假窗口/假输入API，未安装真实钩子或发送键鼠；不与工作者定向测试重复累加。测试命令及隔离启动方式见[工具说明](docs/control-diagnostics-tools.md)。源码提交包括`8049668`（隔离诊断/缓存/预算）及`4b3d75d`（物理矩形/健康读取顺序）。第三方安装和77文件隔离包原件前后摘要一致，第三方源码/截图/包副本不入Git。
 
-## 仍待完成与下一步
+## 四阶段真实诊断结果
 
-1. **补未覆盖的受控验收。** NET/铜层后台迟到需要可重复的实际竞争时间线；900000极端总览的直接属性仍缺；系统会话结束另在受控环境验证，共享宿主不注销/关机。已通过常规组无源码变化时不重跑。新任务使用新Task/Dispatch，不复用本轮已结算生命周期；保留原Pi会话和明确候选摘要。
-2. **稳定线继续0.10.0。** 本轮只集成验收文档到dev并推送。未来产品集成须另有任务和验证，不能把报告合并当0.11.0实现或发行更新。main仅用户操作。
-3. **原字形现场兼容。** `runtime_verified=false`；32字符对象创建16例、21792组合/105504中心线、1458边界例、无遮挡A240及Top隐藏恢复已有证据。真实缩放、完整/简化分派、F、251/252高度、旋转镜像、笔宽栅格、实际导入联合状态、长文字显示及保存往返仍缺；原字形未接入Qt渲染/命中/铜层。
-4. **新增图元及另存为另立阶段。** 设计可撤销工具和取消状态；保存只写新文件，验证未知字段保留或明确拒绝、往返及原程序重开。元件放置、布线、完整DRC与生产输出各立阶段。
-5. **发行与压力测试。** 干净Windows10/11运行库/部署、最大板图性能、安装包及许可义务仍待完成。
+所有阶段沿用原Pi会话`01a1739a-82f6-76cf-9ffc-c63e95be56d4`与实际核对的`deng/gpt-6.1-sol high`。每阶段独立分支、证据目录、Task/Dispatch和批准文件，运行后不热改。
 
-## 环境与验证
+| 阶段与报告 | 实际结果 | 收尾 |
+| --- | --- | --- |
+| [诊断基线](docs/control-snapshot-diagnostics.md) | failed。初始非前景后App not found；恢复错误未联动预算，唯一diagnose被本地断言拦截；Snapshot/Click/Shortcut均0 | 自建窗口及五控制链exit0；125索引、21链接、565行trace dropped0 |
+| [缓存/预算修复验证](docs/control-snapshot-fix.md) | failed。缓存刷新已加载仍not found；预算修复允许唯一diagnose实际到达控制/原生检查；Snapshot/诊断输入仍0 | 窗口及五链exit0；143索引、21链接、320行trace dropped0 |
+| [兼容窗口验证](docs/control-window-compat.md) | failed。可缩放Tk窗口的UIA/原枚举通过，App恢复和两张Snapshot成功；Click被诊断Guard的DPI混合坐标检查拦截，实际未发送 | 窗口、探针及五链exit0；207索引、23链接、488行trace dropped0 |
+| [物理矩形验证](docs/control-physical-geometry.md) | **限定succeeded**。物理rect正确包含按钮点，真实Click及Ctrl+Shift+F8各一次，首图0/0、最终图1/1；未复现本组工具拒绝 | 窗口、探针及五链exit0；223索引、25链接、561行trace dropped0 |
 
-Qt6.12.0 MSVC x64，SDK`C:/Users/rikideng/Qt/6.12.0/msvc2022_64`，Visual Studio2026/MSVC14.51.36231、CMake/Ninja。已有Python、Unicorn2.1.4、Capstone5.0.7，不重复安装。
+第四阶段通过依据是指定会话和父侧实际读图、原工具调用及物理矩形证据。冻结测试窗逐输入日志存在`record(kind, **fields)`与`kind=`参数重名冲突，GUI先更新成功但输入日志缺行；未捕获stderr堆栈，不得称日志也证明完整逐输入时间线。正常关闭终态日志为1/1，不替代缺失的两条回调记录。旧源码和失败原件保留，未为补日志重跑。
 
-功能分支及父集成的Debug/Release各11/11组CTest已经通过；每配置QtTest270项，Python两组30项，研究工具全集45项有重复包含，不能简单累加。产品源码未改，本轮没有无变化重跑全部产品测试；驱动61项离线不替代产品GUI。
+第三阶段成功截图后两次看门狗直接记录`indicator_ok=false、desktop_ok=true`并fail-open；首条指示层心跳年龄约1.078秒。第二条非原子快照的瞬时心跳年龄较小，不能反推探测时的值。第四阶段未记录fail-open，health读取修复未加载；这些样本仍不足以确定历史所有截图拒绝的根因或证明长期可靠性。
 
-```powershell
-& ./scripts/Enter-QtEnv.ps1
-cmake --preset debug
-cmake --build --preset debug
-$env:QT_QPA_PLATFORM='offscreen'
-ctest --preset debug --output-on-failure
-cmake --preset release
-cmake --build --preset release
-ctest --preset release --output-on-failure
-```
+所有诊断窗口和控制链均已正常退出，无强制终止或后台输入计划。受阻时精确身份的一次WM_CLOSE只用于自建程序的正常生命周期清理，不作GUI输入/验收通过证据，不适用于产品候选或其他工程进程。已退出运行的failed/token/budget/截止和live-state全部归档，不删除、不恢复旧PID、不重连清门禁。
 
-主工作区build目录可能仍是先前0.11.0集成构建，切dev不会自动将二进制降为0.10.0；运行前核对源码和重新构建，固定候选目录不得覆写。真实GUI必须移除offscreen和SDK插件变量，使用部署包自身qwindows；不拿offscreen代替真实窗口。
+## 产品验收仍缺什么
 
-Git提交/合并和开发结果使用简体中文Conventional Commits，独立分支验证后合并推送dev，不强推、不跳钩子。**main仅用户合并、提交和推送。**
+固定编辑候选既有常规编辑、严格文本焦点、旧式/现代菜单、10000mil远移/reset、五类只读图元、定向关闭保护、选后文件消失和独立菜单退出已有实际证据，无源码变化不重跑全套A—F。Debug/Release各11/11组CTest已通过。详见[实际编辑验收](docs/basic-editing-actual-edit-acceptance.md)和[剩余验收](docs/basic-editing-remaining-acceptance.md)。
+
+独立实验Debug/Release各12/12组CTest和普通OFF Release相关3组通过，自动竞争只证明offscreen/程序接口场景；[实验设计](docs/async-result-boundaries.md)与[开发报告](docs/async-experiment-development.md)说明判据。此前NET与铜正向对照真实GUI通过；[恢复后四例](docs/async-gui-recovered-120.md)和[自适应续验](docs/async-races-adaptive.md)中竞争均中止，没有完整有效release及门闩内编辑截图。cancel后旧结果discarded不能补作通过，工具小窗口1/1也不替产品竞争通过。
+
+未覆盖还包括900000mil极端位置的直接属性、受控系统会话结束、原字形完整runtime兼容。共享宿主不注销或关机。
+
+## 下一阶段计划与验收标准
+
+1. **先修诊断测试窗日志并补完整取证。** 在新副本修正回调记录参数冲突，显式重定向窗口stderr；复用已通过的可缩放UIA前置与物理矩形检查。仅测试新变化，不改旧报告或重跑产品矩阵。
+2. **验证控制健康问题，而非继续碰产品候选。** 为指示层健康探测添加同次采样字段/阶段耗时，区分伪负心跳年龄与真实超过1秒滞后；在新任务和新批准下验证可选读取顺序修复，保留1秒阈值及真正故障拒绝。若记录丢失、图像失败或原因不唯一，结论仍unknown。不得关掉指示层、放宽阈值或切换输入/截图入口绕拒绝。
+3. **条件具备后另定有界产品实验范围。** 新Task/Dispatch/批准/证据，冻结候选和输入；引用不变对照。要求同一应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图和最终图共同成立。失败中止并消费机会，额外运行须另有明确范围；实验通过仍不自动让固定候选通过。
+4. **固定候选边界与新产品功能分别安排。** 极端可见性和受控会话测试独立做。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返及原程序重开另立阶段；元件放置、布线、完整DRC、生产输出、干净Windows部署、性能各自规划。
+5. **原字形保持独立研究。** 缩放/完整与简化分派/F/251/252/旋转镜像/笔宽/导入联合状态/保存往返未完成前，继续保留`runtime_verified=false`。
+
+## 用户偏好与执行约束
+
+用户键鼠授权已明确，后续在已授权任务范围内不重复索权。最新要求是**两次拒绝后检查间隔120秒，正常键鼠直接执行，不增加额外ControlStatus预检**；目标归属核对和工具自身拒绝保持。不得把120秒解释成每次正常点击都等120秒。
+
+真实拒绝立停、截止内零输入/截图/ControlStatus/原生桌面请求；到期有界检查并显式恢复，不能把user自动归因为用户正在操作。Snapshot必须有image；动作已执行但后图失败，只补观察，不重发。物理桌面坐标以实际图像原尺寸/倍率及物理rect为准，不能把DPI虚拟化rect直接作输入坐标。GUI关闭后窗口消失的保守锁存由Popen退出见证处理，不恢复已退出目标。
+
+## 生命周期与证据定位
+
+下列四Task均已结算，保留Pi终端不代表任务仍活；禁止复用或重复worker_done：
+
+| Task / Dispatch | 结果 | 工作者报告提交 |
+| --- | --- | --- |
+| `task_bb8bca1bbfb9` / `ctx_5e11c1301247` | failed | `ef26ac5a223aee8d7bcf6eea0e8b460745f092f7` |
+| `task_e389a3ccfaef` / `ctx_1f7869a00c74` | failed | `ac620056b2f43c7430ebc193582958e778bf51be` |
+| `task_82d78df9e34c` / `ctx_1dbebe2effc3` | failed | `d44ae4e816b9ad6c7884ee5fe3cd28f2e1faafd1` |
+| `task_30f766b66866` / `ctx_900f441db397` | succeeded（限定单组） | `a7110ad5013dd83a5853cf8587ce58c259d4695f` |
+
+本Run为`run_22b5092f9df3`，最后唯一worker_done为`msg_921f9165317c`，父已验收/ack并明确retain原会话。此前固定候选、异步GUI、接管、恢复后四例及自适应续验的全部生命周期也已结算，不续投旧inbox。旧PT Renew PID2020已死亡退役，不再恢复；VK192残留已通过原连接物理释放恢复并正常退出，不再泛化要求用户按键。
+
+| 位置 | 内容 |
+| --- | --- |
+| 主工作区`.local-analysis/control-snapshot-diagnostics/` | 四阶段任务/批准、77文件包副本、父离线复现、独立交付审计、新链退出见证 |
+| 截图工作区`.local-analysis/control-snapshot-diagnostics/` | 基线125项证据 |
+| 同工作区`.local-analysis/control-snapshot-fix/` | 修复验收143项证据 |
+| 同工作区`.local-analysis/control-window-compat/` | UIA/坐标阶段207项证据与两次看门狗轨迹 |
+| 同工作区`.local-analysis/control-physical-geometry/` | 单组223项证据、0/0→1/1图、日志缺口说明及退出证明 |
+| 主工作区`.local-analysis/async-race-followup/` | 前轮两竞争中止、部署/安装摘要及591材料审计 |
+| 主工作区`.local-analysis/control-investigation/` | 更早VK192内部残留直接只读取证 |
+
+以上材料、截图、原字体/库、反编译数据库和构建产物不入Git，远端clone不带本机证据。原安装`D:/project/pt_renew/pt`只读，运行和写测试必须用新副本。
+
+## 环境和接手步骤
+
+Qt6.12.0 MSVC x64（`C:/Users/rikideng/Qt/6.12.0/msvc2022_64`）、VS2026/MSVC14.51.36231、CMake/Ninja已具备。已有Python/Unicorn/Capstone，不重复安装无关依赖。系统Python的NumPy/Pillow二进制导入存在兼容问题；本轮图像和控制测试使用已有`C:/Users/rikideng/scoop/persist/uv/tools/versions/windows-mcp/Scripts/python.exe -X utf8`，不为此修全局环境。
+
+新会话先读临时简报确认最终Git与终端，再完整读AGENTS和本文；核对`git status`、`dev/origin/dev`、部署摘要和指定模型。保留验收终端`term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d`属于当前Orca runtime，使用前先枚举确认，不能凭旧句柄推断仍存。所有子代理用Pi，纯逆向`glm-5.3 high`、截图/验收`gpt-6.1-sol high`并核对实际记录；同任务沿用会话。当前用户要求的是交接，**不要仅因读到下一阶段计划就自动启动新GUI或新竞争**。
