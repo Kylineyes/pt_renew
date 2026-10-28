@@ -4,6 +4,7 @@ import sys,types,unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 from control_indicator_health import indicator_healthy, indicator_health_sample, install_indicator_health
 import threading
+from unittest.mock import patch
 
 class HealthTests(unittest.TestCase):
  def make(self,heartbeat=10.):
@@ -28,6 +29,19 @@ class HealthTests(unittest.TestCase):
    obj=self.make();setattr(obj,attr,value);self.assertFalse(indicator_healthy(obj,lambda:10.))
   obj=self.make();obj.thread.is_alive=lambda:False;self.assertFalse(indicator_healthy(obj,lambda:10.))
   self.assertFalse(indicator_healthy(None,lambda:10.))
+ def test_baseline_sample_matches_installed_original_health_function(self):
+  from windows_mcp.desktop import control_overlay
+  for heartbeat in (8.999,9.,10.,10.0001):
+   for state in ('healthy','dead','stopping','error'):
+    with self.subTest(heartbeat=heartbeat,state=state):
+     obj=self.make(heartbeat)
+     if state=='dead':obj.thread.is_alive=lambda:False
+     if state=='stopping':obj.stopping=True
+     if state=='error':obj.error=RuntimeError('失败')
+     with patch.object(control_overlay,'_instance',obj), patch.object(control_overlay,'time',types.SimpleNamespace(monotonic=lambda:10.)):
+      expected=control_overlay.is_healthy()
+     sample=indicator_health_sample(obj,lambda:10.)
+     self.assertEqual(sample['healthy'],expected)
  def test_sample_exposes_the_values_that_caused_original_race(self):
   obj=self.make()
   def clock():obj.heartbeat=10.0001;return 10.
