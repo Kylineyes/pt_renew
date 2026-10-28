@@ -16,6 +16,8 @@
 | `tools/replay_control_health.py` | 纯JSONL离线重放，按相同旧heartbeat归并过期区间，裁剪阶段并集，分开事后完整/当时可见覆盖 | 不导入控制包，拒绝未正常closed、丢失、矛盾/拼接日志；区间墙钟不是CPU归因 |
 | `tools/control_bitmap_timing.py` | flash模块局部API代理，仅指示层线程上传范围每次汇总尺寸/字节、API次数/墙钟耗时/异常 | `indicator_bitmap_timing=true`需同时批准健康采样、冻结模块摘要；共享ctypes/WinDLL对象不改，不记录像素/坐标/HWND |
 | `tools/control_target_activation.py` | 未失败、已绑定/UIA核验目标、组前最多一次原App switch；激活前精确身份/桌面检查，后调用原前景后验 | 客户端独立批准并冻结模块摘要；不直接原生激活、不额外ControlStatus、不清锁存/集合，不在旧失败组补激活或重试 |
+| `tools/analyze_control_uploads.py` | 纯JSONL分析上传发出延迟、采样点裁剪与API集合占时边界；复用健康重放 | 正常schema 1上传专用，需核验同线程/同一时钟/心跳写入路径；上下界不是CPU或预计提速 |
+| `tools/control_bitmap_surface_model.py` | 注入假API的不可变图层资源寿命模型，验证一次创建/复制、逐次完整上传与失败退役 | 没有Win32适配器或serve入口；不能直接作为真实窗口复用功能加载 |
 
 所有可选运行时包装默认不启用，只在冻结并明确批准的新隔离进程中加载；服务启动后不热改。客户端Task批准与桌面许可是不同证据，批准文件不能替代用户对操作时间/范围的许可。
 
@@ -27,7 +29,7 @@
 
 ## 离线验证与隔离准备
 
-最后实际`tests/test_control_*.py`为**61项全部通过**，证据主`.local-analysis/control-target-activation/tests.log`。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
+最后实际`tests/test_control_*.py`为**79项全部通过**，证据主`.local-analysis/control-upload-offline-analysis/tests-verified.log`，其中本轮新增18项（上传分析8、资源模型10）。原61项证据`.local-analysis/control-target-activation/tests.log`保留。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
 
 ```powershell
 & '<MCP环境>/Scripts/python.exe' -X utf8 -m unittest discover -s tests -p 'test_control_*.py' -v
@@ -51,6 +53,7 @@ serve批准至少含`task_id`、`dispatch_id`、`mode=diagnostics-only`、`packa
 | [位图首次](control-bitmap-timing.md)、[user时间线](control-user-timeline.md) | 实际图/输入/上传0，门禁user有最近事件续期证据，服务曾ready，来源未知 |
 | [前景重试](control-bitmap-retry.md)、[初始激活设计](control-target-activation.md) | 前者首图前景Orca/实际call0；后者离线补齐组前激活，不能反推UIA或用户夺焦点 |
 | [最新初始激活现场](control-initial-activation.md) | 原App1/两有效图/双回调/4081上传，7384trace dropped0，全exit0；健康2stale/1fail-open仍存在 |
+| [最新上传离线分析](control-upload-offline-analysis.md) | 同旧心跳的局部上传/阶段并集与API占时边界、假API资源寿命模型完成；无新现场或原生复用实现 |
 
 ## 操作约束
 
