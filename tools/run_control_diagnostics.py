@@ -50,6 +50,14 @@ def serve(package_root, trace_path, approval_path):
     for name,sha in approval['launcher_files'].items():
         if hashlib.sha256((Path(__file__).parent/name).read_bytes()).hexdigest() != sha:
             raise RuntimeError('诊断启动器审阅后变化：'+name)
+    health_sampling = approval.get('indicator_health_sampling', False)
+    health_fix = approval.get('indicator_health_fix', False)
+    if not isinstance(health_sampling, bool) or not isinstance(health_fix, bool):
+        raise RuntimeError('指示层采样和修复选项必须是布尔值')
+    if health_fix and not health_sampling:
+        raise RuntimeError('指示层读取修复必须同时启用实际判定采样')
+    if health_sampling and 'control_indicator_health.py' not in approval['launcher_files']:
+        raise RuntimeError('指示层健康采样未列入批准摘要')
     os.environ.update(ANONYMIZED_TELEMETRY='false', DO_NOT_TRACK='1',
                       WINDOWS_MCP_SCREENSHOT_BACKEND='pillow')
     sys.path.insert(0,str(root))
@@ -66,6 +74,9 @@ def serve(package_root, trace_path, approval_path):
             from control_app_refresh import install_app_refresh
             install_app_refresh(service.Desktop)
             trace.emit('app-refresh-fix-installed', package_source=str(Path(service.__file__).resolve()))
+        if health_sampling:
+            from control_indicator_health import install_indicator_health
+            install_indicator_health(control_overlay, trace, heartbeat_first=health_fix, phases=True)
         from windows_mcp.__main__ import main
         main(['serve'],standalone_mode=False)
     finally:
