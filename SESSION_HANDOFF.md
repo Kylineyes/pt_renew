@@ -1,8 +1,8 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。先读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。上一轮交接已推送`dev=e5340a3`；本轮从该基线完成[最新上传离线分析与资源寿命模型](docs/control-upload-offline-analysis.md)，最终提交以`git log`和本机简报为准。旧版交接备份在`.local-analysis/handoff-archive/`，不删除失败原件。
+更新时间：2026-10-29。先读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。上一轮已推送`dev=705c239`；本轮从该基线完成[原生图层资源实验与待许可候选](docs/control-bitmap-surface.md)，最终提交以`git log`和本机简报为准。[上一阶段离线分析](docs/control-upload-offline-analysis.md)保留原结果。旧版交接备份在`.local-analysis/handoff-archive/`，不删除失败原件。
 
-**稳定产品及dist仍为0.10.0。固定0.11.0候选和NET／铜层完整竞争验收仍未通过。最新完成的是控制诊断工具与限定自建窗口取证：一次原App初始化、单组GUI和4081条位图上传记录通过；真实心跳滞后仍存在，控制稳定性尚未修复。所有现场窗口、探针与控制链已正常退出，全部Task均结算，无后台诊断或自动续验。本轮追加的是纯离线上传边界分析与假API资源模型，尚无Win32复用适配器或性能改善现场证据。**
+**稳定产品及dist仍为0.10.0。固定0.11.0候选和NET／铜层完整竞争验收仍未通过。最新完成的是控制诊断工具与限定自建窗口取证：一次原App初始化、单组GUI和4081条位图上传记录通过；真实心跳滞后仍存在，控制稳定性尚未修复。所有现场窗口、探针与控制链已正常退出，全部Task均结算，无后台诊断或自动续验。本轮追加默认关闭的Win32适配器、图层寿命接入及冻结现场候选，尚未运行真实Win32/GUI或证明性能改善，runtime_verified=false。**
 
 ## 产品与冻结部署
 
@@ -50,9 +50,12 @@
 | `tools/control_bitmap_timing.py` | 指示层每次上传API次数/墙钟成本汇总，模块局部代理不改共享WinDLL对象；最新4081次正常路径已现场验证 |
 | `tools/control_target_activation.py` | 只在未失败、UIA核验后/组前，至多一次原App激活与精确前景后验；离线8项/现场单组通过 |
 | `tools/analyze_control_uploads.py` | 复用健康重放，约束旧上传时间戳延迟及API裁剪上下界；最新4081上传离线核对通过，不等于CPU或预计提速 |
-| `tools/control_bitmap_surface_model.py` | 每不可变图层独有的DC/DIB/像素资源寿命模型；只有假API，无原生适配器或服务加载入口 |
+| `tools/control_bitmap_surface_model.py` | 每不可变图层独有的DC/DIB/像素寿命核心，保留部分结果与待退役实例；模块本身不加载Win32 |
+| `tools/control_bitmap_surface.py` | 私有WinDLL适配器及原图层寿命接入，默认关闭、资源预算/账本、原错误传播与所属线程退役；仅离线验证 |
+| `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
+| `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本，不替真实GUI或性能验收 |
 
-最后实际相关单元测试为**79项全部通过**，输出主`.local-analysis/control-upload-offline-analysis/tests-verified.log`（原61项加本轮18项）。原61项历史证据保留在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
+最后实际相关单元测试为**106项全部通过**，输出主`.local-analysis/control-bitmap-surface/tests-verified.log`（上一阶段79项加本轮27项）。冻结客户端额外6项定向检查单独记录在同目录`frozen-client-tests-final.log`，不与仓库测试合计冒称产品覆盖。上一阶段79项证据在`.local-analysis/control-upload-offline-analysis/tests-verified.log`，原61项历史证据在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
 
 ## 已结算现场阶段
 
@@ -72,8 +75,8 @@
 ## 下一会话的执行计划
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
-2. **资源复用评估及假API模型已完成，原生接入待做。** 局部API集合占时支持继续评估每不可变图层独有的内存DC/DIB/像素复用，但不是预计提速或修复证明。下一步在新独立分支完成默认不加载的Win32适配器、`_Layer`寿命对接、原生失败返回/部分结果移交/资源账本与批准摘要测试。保留屏幕DC逐次获取释放、整次UpdateLayeredWindow、原显示器枚举/消息泵与完整显示后的心跳。模型不能直接当作可运行现场候选。
-3. **满足可审阅条件才安排新现场。** 先完成独立分支代码/必要测试/风险边界、冻结摘要与新方案；向用户说明预计控制用时和具体范围，得到明确许可后，再沿原指定Pi模型执行一组有界验证。原App初始化可以引用最新通过流程，仍须原门禁/精确身份及前景后验；失败消费机会，不新增连接碰运气。开始计时、第N分钟停止新增诊断、正常退出余量均写入冻结客户端。
+2. **原生资源实验及离线验证已完成。** [实验报告](docs/control-bitmap-surface.md)包含默认不加载的Win32适配器、原`_Layer`寿命接入、原生失败返回/部分结果移交/资源账本、所有线程退役、独立正常寿命审计及新批准测试。原显示器枚举/消息泵/完整显示后的心跳保持；106项仓库测试及冻结客户端6项单独检查通过，尚未做真实Win32/GUI验证。
+3. **下一步为新许可下的单组现场。** 主`.local-analysis/control-bitmap-surface/candidate-final/`冻结107文件及客户端/计划；live目录仅空inbox，无批准或状态，旧candidate和candidate-v2是中间版不能使用。预计15分钟（诊断600秒、退出余量至900秒），在向用户说明具体范围并得到明确许可之后，新建Task/Dispatch/验收分支、核对实际Pi gpt-6.1-sol high、绑定两份新批准和全部摘要，再复制冻结客户端至live运行。禁止复用旧任务/会话/许可，失败消费机会、不恢复诊断组或新连追逐ready。真实GUI/API/健康/资源零余额及精确链exit0分别报告，不能以单组无超时宣称稳定。
 4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
@@ -91,6 +94,7 @@
 
 | 位置 | 内容 |
 | --- | --- |
+| 主`.local-analysis/control-bitmap-surface/` | 冻结candidate-final与107文件清单、106项仓库/6项客户端测试、假API审计及包/部署核对；live仅空inbox待新许可身份，无进程或有效批准 |
 | 主`.local-analysis/control-upload-offline-analysis/` | 最新上传边界/成本分析、79项测试输出、原trace/源码与冻结包/部署摘要核对，全程desktop_requests0 |
 | 主`.local-analysis/control-initial-activation/` | 最新双批准、before/after、独立API/健康/回调审计、精确句柄exit0见证、final-validation（56链接）、final-git-state |
 | `../verify-text-screen-sol/.local-analysis/control-initial-activation/` | 最新209证据/17链接、原图0/0→1/1、实际call/窗口日志/stderr、4081上传和健康trace、退出身份 |

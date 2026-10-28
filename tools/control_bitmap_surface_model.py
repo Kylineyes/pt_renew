@@ -1,14 +1,15 @@
-"""不可变图层位图的资源寿命实验模型；没有Win32适配器或运行时安装入口。"""
+"""后端注入的不可变图层资源寿命核心；模块本身不加载Win32或安装运行时包装。"""
 from __future__ import annotations
 
 import threading
 
 
 class BitmapSurfaceModel:
-    """后端须在API失败时抛异常；模型只用假API验证所有权、调用量和退役顺序。"""
+    """后端失败须抛异常；保留部分结果，统一所有权、上传及退役顺序。"""
 
     def __init__(self, api, width, height, pixels, *, target, owner_id=threading.get_ident):
         if (type(width) is not int or type(height) is not int or width <= 0 or height <= 0
+                or width > 2147483647 or height > 2147483647
                 or type(pixels) is not bytes or len(pixels) != width*height*4):
             raise ValueError('不可变图层的尺寸或BGRA字节数无效')
         self.api = api
@@ -23,6 +24,9 @@ class BitmapSurfaceModel:
             self.screen = api.acquire_screen()
             self.memory = api.create_memory(self.screen)
             self.bitmap, bits = api.create_bitmap(self.screen, width, height)
+            if bits is None:
+                # DIB句柄成功但像素指针为空时，句柄已归本实例，仍需正常退役。
+                raise OSError('CreateDIBSection返回空像素指针')
             self.original = api.select(self.memory, self.bitmap)
             self.selected = True
             api.copy(bits, pixels)
