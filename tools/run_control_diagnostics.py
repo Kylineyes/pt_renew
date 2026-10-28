@@ -52,12 +52,17 @@ def serve(package_root, trace_path, approval_path):
             raise RuntimeError('诊断启动器审阅后变化：'+name)
     health_sampling = approval.get('indicator_health_sampling', False)
     health_fix = approval.get('indicator_health_fix', False)
+    bitmap_timing = approval.get('indicator_bitmap_timing', False)
     if not isinstance(health_sampling, bool) or not isinstance(health_fix, bool):
         raise RuntimeError('指示层采样和修复选项必须是布尔值')
     if health_fix and not health_sampling:
         raise RuntimeError('指示层读取修复必须同时启用实际判定采样')
     if health_sampling and 'control_indicator_health.py' not in approval['launcher_files']:
         raise RuntimeError('指示层健康采样未列入批准摘要')
+    if not isinstance(bitmap_timing, bool):
+        raise RuntimeError('位图上传计时选项必须是布尔值')
+    if bitmap_timing and (not health_sampling or 'control_bitmap_timing.py' not in approval['launcher_files']):
+        raise RuntimeError('位图上传计时必须同时批准健康采样并冻结计时模块摘要')
     os.environ.update(ANONYMIZED_TELEMETRY='false', DO_NOT_TRACK='1',
                       WINDOWS_MCP_SCREENSHOT_BACKEND='pillow')
     sys.path.insert(0,str(root))
@@ -77,6 +82,9 @@ def serve(package_root, trace_path, approval_path):
         if health_sampling:
             from control_indicator_health import install_indicator_health
             install_indicator_health(control_overlay, trace, heartbeat_first=health_fix, phases=True)
+        if bitmap_timing:
+            from control_bitmap_timing import install_bitmap_timing
+            install_bitmap_timing(control_overlay.flash_overlay, trace)
         from windows_mcp.__main__ import main
         main(['serve'],standalone_mode=False)
     finally:
