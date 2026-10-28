@@ -32,6 +32,11 @@ class LauncherHealthTests(unittest.TestCase):
     def test_sampling_requires_frozen_module(self):
         self.refuse(dict(indicator_health_sampling=True), '未列入批准摘要')
 
+    def test_bitmap_timing_requires_sampling_and_frozen_module(self):
+        self.refuse(dict(indicator_bitmap_timing=True), '必须同时批准健康采样')
+        # 选项拒绝在控制包导入前完成。
+        self.refuse(dict(indicator_bitmap_timing='true'), '必须是布尔值')
+
     def test_string_false_is_not_a_boolean_option(self):
         for name in ('indicator_health_sampling', 'indicator_health_fix'):
             with self.subTest(name=name):
