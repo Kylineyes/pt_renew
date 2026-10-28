@@ -1,6 +1,6 @@
 # 初始目标激活：补齐窗口启动到首图之间的前景步骤
 
-本轮仅离线读取代码与既有JSON/日志、开发流程辅助模块并使用假窗口/假工具测试，没有启动控制服务、GUI、原生桌面检查、截图或输入。新增[control_target_activation.py](../tools/control_target_activation.py)及[8项定向测试](../tests/test_control_target_activation.py)。模块尚未现场接入，不能声称前景问题已修复或取得位图样本。
+本轮仅离线读取代码与既有JSON/日志、开发流程辅助模块并使用假窗口/假工具测试，没有启动控制服务、GUI、原生桌面检查、截图或输入。新增[control_target_activation.py](../tools/control_target_activation.py)及[8项定向测试](../tests/test_control_target_activation.py)。模块随后在用户明确许可下现场接入，原App一次激活/精确前景后验及图0/0→1/1单组通过，取得4081上传；健康稳定仍未通过，详见[限定现场结果](control-initial-activation.md)。本文保留离线设计及证据边界。
 
 上一[15分钟尝试](control-bitmap-retry.md)的两份原生记录显示：Launch前`864520.0220823`前景为PID23024/HWND333150的Orca，此时无目标；首图前`864523.5246169`前景仍为同一Orca，目标PID20332/HWND7276816已在窗口列表。二者都记录前景稳定、Default输入桌面。记录没有覆盖所有中间前景变化，不能证明目标从未短暂前景或是哪一步夺焦点，更不能归因用户。
 
@@ -19,4 +19,4 @@
 
 客户端下一次接入应增加独立`initial-activate`请求，只能在Launch与UIA后、begin-group前由新批准显式启用；导入并校验本模块摘要，结果失败即停止。不得把新入口用于旧失败Task/Dispatch、旧PID或一般产品窗口。原预算和控制服务不改，不能在拒绝后调用该入口救活已失败组。未获用户新桌面许可前，不启动任何现场来验证它。
 
-[待许可15分钟方案](control-target-activation-plan.md)已明确一次App初始化及其前后身份检查。本次没有运行GUI验证，也没有产品代码/版本/dist改动；稳定0.10.0、固定0.11.0和NET/铜竞争未通过状态保持。
+[15分钟方案](control-target-activation-plan.md)随后获得用户明确许可并执行，实际服务约12分45秒正常退出；原App调用一次，目标前景后验通过，首终图及两回调/stderr通过，4081上传字段/次数/清理记录审计一致。2883健康样本仍有2stale、1fail-open，不能将限定组通过称作长期前景/健康稳定或历史故障修复。新现场不自动续验；产品代码/版本/dist未改，稳定0.10.0、固定0.11.0和NET/铜竞争状态保持。
