@@ -62,7 +62,7 @@
 
 所有诊断窗口和控制链均已正常退出，无强制终止或后台输入计划。受阻时精确身份的一次WM_CLOSE只用于自建程序的正常生命周期清理，不作GUI输入/验收通过证据，不适用于产品候选或其他工程进程。已退出运行的failed/token/budget/截止和live-state全部归档，不删除、不恢复旧PID、不重连清门禁。
 
-本次位图现场Run `run_3da0a4eb0ac6` / Task `task_371c96f46645` / Dispatch `ctx_1aa4e6fd282a`已完成失败组及正常退出，报告/结算中。实际服务t0=859112.2685206，trace关闭859958.0270714，约845.7586秒；本地截止检查保留1500秒诊断/1800秒收尾限制，4项离线边界测试通过。父独立句柄5身份和工作者完整五链均exit0，无强杀。原门禁user不直接归因用户，上传0不代表计时模块异常或性能通过。证据主`.local-analysis/control-bitmap-timing/`及验收工作区同名目录，报告[位图取证](docs/control-bitmap-timing.md)；既有53项测试未为这次现场重复累加。
+本次位图现场Run `run_3da0a4eb0ac6` / Task `task_371c96f46645` / Dispatch `ctx_1aa4e6fd282a`已failed结算，唯一done `msg_b47f7956ea27`已由父验收ack，提交`4a18527`已整合；终端明确retain，无reclaimable。实际服务t0=859112.2685206，trace关闭859958.0270714，约845.7586秒；本地截止检查保留1500秒诊断/1800秒收尾限制，4项离线边界测试通过。父独立句柄5身份和工作者完整五链均exit0，无强杀。原门禁user不直接归因用户，上传0不代表计时模块异常或性能通过。证据主`.local-analysis/control-bitmap-timing/`及验收工作区同名目录，报告[位图取证](docs/control-bitmap-timing.md)；既有53项测试未为这次现场重复累加。
 
 ## 产品验收仍缺什么
 
