@@ -1,6 +1,6 @@
 # 控制诊断工具：当前能力、验证与使用限制
 
-当前稳定产品/dist为0.10.0。工具在独立控制包副本中提供取证；本轮新增[默认关闭的原生资源实验](control-bitmap-surface.md)，仅离线验证及冻结候选，尚无真实Win32/GUI结果。产品和已安装第三方包未修改。最新[限定现场](control-initial-activation.md)的一次原App初始化/精确前景后验、单组图0/0→1/1/双回调/空stderr及4081上传取证通过；2883健康样本仍含2次真实过期、1次fail-open，控制稳定性及历史全部截图根因未解决，固定0.11.0/NET铜竞争未通过。
+当前稳定产品/dist为0.10.0。工具在独立控制包副本中提供取证；[资源复用实验](control-bitmap-surface.md)默认关闭，后续[真实现场](control-bitmap-surface-live.md)完成双图/双回调、7寿命8509上传及零账本，但整体Task因监督器66568缺独立精确退出记录而failed。1188健康样本全healthy仅为本组结果；[退出见证修正](control-witness-launch.md)已离线完成，尚未追加现场。产品和已安装第三方包未修改。最新[限定现场](control-initial-activation.md)的一次原App初始化/精确前景后验、单组图0/0→1/1/双回调/空stderr及4081上传取证通过；2883健康样本仍含2次真实过期、1次fail-open，控制稳定性及历史全部截图根因未解决，固定0.11.0/NET铜竞争未通过。
 
 ## 工具和开关
 
@@ -20,7 +20,8 @@
 | `tools/control_bitmap_surface_model.py` | 后端注入的不可变图层寿命核心，验证一次创建/复制、逐次完整上传与失败退役 | 模块本身不加载Win32；原生适配器在单独模块，部分失败实例保持可退役 |
 | `tools/control_bitmap_surface.py` | 私有WinDLL、图层线程上下文接管、DC/DIB账本和所属线程退役，64图层/64MiB预算 | `indicator_bitmap_surface=true`且冻结核心/适配器才安装；需健康采样/修复，和旧bitmap计时互斥；runtime_verified=false |
 | `tools/control_surface_approval.py` | 纯离线核对新客户端/服务批准、真实Pi模型、新目录和冻结文件/包集合；附加资源日志前置检查 | 不是许可来源；旧Task/会话/状态拒绝，不启动桌面 |
-| `tools/audit_control_surfaces.py` | 正常surface JSONL独立寿命/API/账本审计，拒绝矛盾/异常/缺失退役 | 仅内部证据一致性，不替真实图像/回调/性能/健康 |
+| `tools/audit_control_surfaces.py` | 正常surface JSONL独立寿命/API/账本审计，拒绝矛盾/异常/缺失退役 | 本次7寿命8509上传内部证据通过；不替完整进程退出或性能/健康 |
+| `tools/control_witness_launch.py` | 基础Python直启标准库见证脚本、实际PID/摘要/解释器握手后显式放行、原Popen等待 | 修复venv外壳与实际进程身份缺口的离线工具；4项命令行测试，无新GUI |
 
 所有可选运行时包装默认不启用，只在冻结并明确批准的新隔离进程中加载；服务启动后不热改。客户端Task批准与桌面许可是不同证据，批准文件不能替代用户对操作时间/范围的许可。
 
@@ -32,7 +33,7 @@
 
 ## 离线验证与隔离准备
 
-最后实际`tests/test_control_*.py`为**106项全部通过**，证据主`.local-analysis/control-bitmap-surface/tests-verified.log`，本轮新增27项（原生/原循环17、启动器6、客户端批准4）。冻结客户端另6项定向离线检查在同目录`frozen-client-tests-final.log`，不混入仓库覆盖。上一阶段79项证据`.local-analysis/control-upload-offline-analysis/tests-verified.log`、原61项证据`.local-analysis/control-target-activation/tests.log`保留。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
+最后实际`tests/test_control_*.py`为**110项全部通过**，证据主`.local-analysis/control-bitmap-surface/tests-with-witness-fix.log`，在106项上新增见证器4项。原106项证据保留在`tests-verified.log`，其新增27项为原生/原循环17、启动器6、客户端批准4。冻结客户端另6项定向离线检查在同目录`frozen-client-tests-final.log`，不混入仓库覆盖。上一阶段79项证据`.local-analysis/control-upload-offline-analysis/tests-verified.log`、原61项证据`.local-analysis/control-target-activation/tests.log`保留。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
 
 ```powershell
 & '<MCP环境>/Scripts/python.exe' -X utf8 -m unittest discover -s tests -p 'test_control_*.py' -v
@@ -57,10 +58,12 @@ serve批准至少含`task_id`、`dispatch_id`、`mode=diagnostics-only`、`packa
 | [前景重试](control-bitmap-retry.md)、[初始激活设计](control-target-activation.md) | 前者首图前景Orca/实际call0；后者离线补齐组前激活，不能反推UIA或用户夺焦点 |
 | [最新初始激活现场](control-initial-activation.md) | 原App1/两有效图/双回调/4081上传，7384trace dropped0，全exit0；健康2stale/1fail-open仍存在 |
 | [最新上传离线分析](control-upload-offline-analysis.md) | 同旧心跳的局部上传/阶段并集与API占时边界、假API寿命模型完成；该阶段无新现场 |
-| [原生资源实验](control-bitmap-surface.md) | 适配器/图层接入/独立审计、新许可/身份批准检查及107文件候选冻结完成，离线106+单独5项通过；无真实Win32/GUI/提速证据 |
+| [原生资源实验](control-bitmap-surface.md) | 适配器/图层接入/独立审计及候选冻结完成；历史离线106+单独6项通过 |
+| [资源复用现场](control-bitmap-surface-live.md) | 单组GUI/8509正常上传/零账本和本组健康有效；整体failed，66568缺精确退出码，不推导性能或稳定修复 |
+| [退出见证直启修正](control-witness-launch.md) | 4项无GUI进程测试通过，已归档3个闲置agent窗格，旧原件保留，无追加现场 |
 
 ## 操作约束
 
-控制电脑前先向用户说明预计用时及范围，得到明确许可；已经结束的15/30分钟许可不复用，当前没有自动续验计划。正常键鼠不额外ControlStatus预检，所有动作仍经原ControlToolGate和精确目标归属。首次真实拒绝按冻结预算终止，120秒内零输入/截图/状态/原生桌面请求，到期只按计划收尾或有界恢复，不循环追逐ready。
+控制电脑前说明预计用时及范围。用户本次已明确授权控制，并补充必要控制验收允许执行；已授权范围不重复索权，但已结算组的预算不重置，不自动追加轮次。正常键鼠不额外ControlStatus预检，所有动作仍经原ControlToolGate和精确目标归属。首次真实拒绝按冻结预算终止，120秒内零输入/截图/状态/原生桌面请求，到期只按计划收尾或有界恢复，不循环追逐ready。
 
 Snapshot必须有image并实际读图；动作已执行但后图失败只能补观察，不重发。Alt+F4已执行后窗口消失的保守锁存保持，凭原Popen exit0退役，不再发关闭。精确自建Popen一次WM_CLOSE仅正常生命周期、不计GUI通过，不适用于产品/其他工程进程，无强杀。不得改活内存/清集合/放宽1秒阈值/关闭指示层/中途续心跳或换入口绕拒绝。
