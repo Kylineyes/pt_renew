@@ -1,51 +1,59 @@
-# 控制工具隔离诊断与App窗口缓存修复
+# 控制诊断工具：当前能力、验证与使用限制
 
-PT Renew的真实GUI验收多次在编辑后的截图阶段遇到控制拒绝。新增工具用于在独立控制包副本中保留拒绝原因和真实调用轨迹；它不修改PT Renew或已安装控制工具，也不把日志替代有效GUI图像。稳定产品保持0.10.0，固定0.11.0候选验收状态不因工具测试改变。
+当前稳定产品/dist为0.10.0。工具在独立控制包副本中提供取证，未修改产品或已安装第三方包。最新[限定现场](control-initial-activation.md)的一次原App初始化/精确前景后验、单组图0/0→1/1/双回调/空stderr及4081上传取证通过；2883健康样本仍含2次真实过期、1次fail-open，控制稳定性及历史全部截图根因未解决，固定0.11.0/NET铜竞争未通过。
 
-`tools/run_control_diagnostics.py`先复制本机已安装的`windows_mcp`包，核验原包与隔离副本每个文件的SHA-256，生成清单。运行阶段复验清单、当前任务身份和启动器摘要，确认实际导入来源是独立副本后，调用原MCP服务及其ControlToolGate。复制包、诊断日志、截图和清单均放在Git忽略目录，第三方包源码不提交。
+## 工具和开关
 
-`tools/control_diagnostics.py`包装原控制器方法并继续调用原实现，只向状态附加`diagnostics`并记录阶段。原`state`、`generation`、`wait_seconds`、拒绝代码、异常及保持键集合不被清理或重置；1秒心跳阈值、接管、截图暂停和输入账本原语义不变。低层记录只有消息类别和injected标志，不保存键值、字符或输入文字。队列有界，磁盘由独立线程写入，正常关闭记录`trace-closed`及丢失数量；存在丢失或写入失败时不能声称有完整因果证据。
+| 文件 | 行为 | 验证边界 |
+| --- | --- | --- |
+| `tools/run_control_diagnostics.py` | `prepare`复制windows_mcp并逐文件验SHA生成manifest；`serve`复验包、Task/Dispatch/mode、manifest和launcher摘要后调用原MCP/ControlToolGate | prepare不创建控制链/钩子；serve会启动真实控制服务，必须在已许可的新现场范围内 |
+| `tools/control_diagnostics.py` | 原方法包装追加阶段/原因/status diagnostics，保留原拒绝/异常/输入账本/接管/保持集合，队列有界、独立线程写日志，closed记录dropped | 非原子快照、日志开销影响调度；不记录用户字符或按键值，丢失/写错不能宣称完整因果 |
+| `tools/control_app_refresh.py` | 原switch_app前刷新窗口缓存，继续原窗口过滤/查找/激活/前景后验 | `app_refresh_fix=true`且冻结模块才加载；不改变CanMinimize/CanMaximize枚举要求，不解释全部历史not found |
+| `tools/control_diagnostic_budget.py` | 恢复失败联动refused，停止组，保留冻结一次只读诊断/观察供收尾 | 客户端须调用restored(row)；不能自动重发输入，也不能替已拒绝的组记通过 |
+| `tools/control_geometry.py` | 临时PER_MONITOR_AWARE_V2读取物理rect并finally恢复原线程DPI上下文 | 未知/无效/恢复失败拒绝，无激活或窗口移动；不能直接将逻辑rect与物理点比较 |
+| `tools/control_indicator_health.py` | 每次记录判定实际alive/stopping/error、now/heartbeat/age、顺序与返回值；记录当时可见阶段和完成的慢阶段/异常 | `indicator_health_sampling=true`默认保持clock-first；另`indicator_health_fix=true`才heartbeat-first，必须同时采样；保留原1秒及故障拒绝 |
+| `tools/control_test_window.py` | 真实Tk按钮/快捷键回调计数及逐行pid/monotonic/counts；显式stdout/stderr，异常原堆栈 | 修正旧event参数与输入kind冲突；仅测试窗，不用程序接口更新图冒充现场键鼠 |
+| `tools/replay_control_health.py` | 纯JSONL离线重放，按相同旧heartbeat归并过期区间，裁剪阶段并集，分开事后完整/当时可见覆盖 | 不导入控制包，拒绝未正常closed、丢失、矛盾/拼接日志；区间墙钟不是CPU归因 |
+| `tools/control_bitmap_timing.py` | flash模块局部API代理，仅指示层线程上传范围每次汇总尺寸/字节、API次数/墙钟耗时/异常 | `indicator_bitmap_timing=true`需同时批准健康采样、冻结模块摘要；共享ctypes/WinDLL对象不改，不记录像素/坐标/HWND |
+| `tools/control_target_activation.py` | 未失败、已绑定/UIA核验目标、组前最多一次原App switch；激活前精确身份/桌面检查，后调用原前景后验 | 客户端独立批准并冻结模块摘要；不直接原生激活、不额外ControlStatus、不清锁存/集合，不在旧失败组补激活或重试 |
 
-可观察字段包括截图暂停/恢复、调用开始/结束、控制状态变迁、物理事件处理类别、指针API阶段、fail-open调用点、控制/指示线程心跳年龄与状态。fail-open只记录看门狗已经求值的健康布尔，不额外触发健康检查。字段为非原子只读快照，诊断开销也可能改变调度时序；单次时序邻近或没有复现都不证明历史原因。
+所有可选运行时包装默认不启用，只在冻结并明确批准的新隔离进程中加载；服务启动后不热改。客户端Task批准与桌面许可是不同证据，批准文件不能替代用户对操作时间/范围的许可。
 
-新增`tools/control_app_refresh.py`针对一个可离线复现的问题：原`Desktop.switch_app`只在窗口缓存为空时更新列表，已有非空旧列表会遗漏后来新建的窗口并返回not found。修复在原switch_app前调用get_state刷新，随后仍由原模糊查找、激活和前景后验决定成功；刷新失败、目标不存在或Windows拒绝激活都仍失败。该修复默认不加载，只有新进程的明确批准`app_refresh_fix=true`且摘要包含该文件才启用。它只解决缓存旧列表的问题；原`get_windows`还要求UIA窗口支持最小化和最大化，不支持最大化的窗口可能仍被过滤，刷新不会改变这一枚举规则。离线真实枚举方法的假控件复现已确认该边界，现场是否由此触发仍需对应UIA属性直接取证。不能热改正在拒绝操作的服务，不能以此跳过ControlToolGate，更不能称它修复了历史截图错误。
+健康短路未执行的时间/heartbeat读取字段为空，不能用事后controller_fields快照代替原判定字段。`indicator-phase`在完成耗时至少50毫秒或异常时写入；健康行中的phase是当时线程可见关联，非原子，空值不说明线程没有工作。先heartbeat后now仅修伪负年龄，不能消除真实停更。
 
-`tools/control_geometry.py`在临时线程`PER_MONITOR_AWARE_V2`上下文读取物理窗口矩形，最后恢复原线程上下文。它解决诊断客户端把DPI虚拟化的逻辑窗口矩形与Snapshot物理点击坐标直接比较的问题，未知上下文、无效矩形或恢复失败都拒绝结果，不移除边界检查、不激活或改变窗口。6项假Win32测试覆盖物理点、读取/上下文失败及恢复路径。
+位图记录汇总GetDC、CreateCompatibleDC、CreateDIBSection、memmove、SelectObject、UpdateLayeredWindow、DeleteObject、DeleteDC、ReleaseDC。最新4081正常路径每上传SelectObject2次、其余各1，尺寸/字节/总成本一致且异常0；未执行的异常路径不能称为现场覆盖。分段耗时含调度/诊断开销，API外差值不能解释为CPU时间，不能按全场百分比直接确定超时根因。
 
-`tools/control_indicator_health.py`现在提供新隔离进程可选的健康判定采样。每条`indicator-health-sample`记录该次判定实际使用的线程/停止/错误状态、`now`、`heartbeat`、年龄、读取顺序和返回值；原短路未执行的读取保留空值，避免把事后快照当作原判定证据。默认启动器仍不加载它。批准`indicator_health_sampling=true`且冻结该模块摘要后，保持原先取当前时间再取心跳的顺序；额外明确`indicator_health_fix=true`才启用先心跳后时间的修复，修复必须同时采样。两种模式都保留原1秒阈值及过期/未来心跳、停止、故障、线程死亡拒绝。
+初始激活客户端已现场验证顺序：Launch→UIA→initial-activate（原App一次及精确前景后验）→begin-group→首Snapshot→Click→诊断Shortcut→终Snapshot。Popen/窗口显示/UIA枚举都不保证前景，初始ready日志观察也不保证目标前景；目标检查不能删除，失败不自动激活救活旧链。实际最新client/step位于本机验收证据目录，未提交的旧模板含身份占位，不能直接运行。
 
-采样同时附加指示层阶段观察：显示器枚举、图层建立、透明度更新、显示/隐藏/移动/关闭、消息泵和状态确认。健康行记录当时观察到的阶段与开始时间，完成阶段仅在耗时至少50毫秒或异常时写入`indicator-phase`。阶段读取不构成原子线程快照，阶段为空不能归因具体渲染或调度；包装和日志也会影响时序。离线测试确认原读取顺序的伪负年龄可复现、修复顺序有效，以及实际判定字段、短路、阶段异常传播和清理。本轮已在新隔离进程实际加载并完成限定组观察：5444条原采样判定全部可复核，其中3条真实年龄超过1秒，最大约1.0781844秒，并触发两次看门狗fail-open。两次有效Snapshot和诊断输入完成不代表控制稳定性已修复；详见[健康验证](control-health-validation.md)。
+## 离线验证与隔离准备
 
-`tools/control_diagnostic_budget.py`用于诊断驱动的受限动作预算。驱动在专用目标恢复返回后须调用`restored(row)`；失败立即终止诊断组，保留一次只读诊断和观察用于收尾。它修复了基线中恢复失败未联动预算、导致diagnose在到达MCP前被本地断言拦下的缺口。失败后不会继续点击探测，已执行关闭也不会被自动重发。
-
-隔离包准备示例，使用已有MCP环境的Python，避免系统Python的Pillow二进制版本不一致：
-
-```powershell
-& '<MCP环境>/Scripts/python.exe' -X utf8 tools/run_control_diagnostics.py prepare `
-  --source '<MCP环境>/Lib/site-packages/windows_mcp' `
-  --destination '.local-analysis/control-diagnostics/isolated'
-```
-
-后续新增[健康日志离线重放](control-offline-replay.md)及`tools/replay_control_health.py`，只读取已保存JSONL，不导入控制包或调用桌面。它按相同旧心跳归并过期采样，计算阶段区间并集，分别保留事后完整阶段与首次过期当时可见的阶段覆盖，并拒绝丢失/未关闭/矛盾输入。新增8项重放测试，合并相关控制测试共47项实际通过；本轮没有新的GUI样本。
-
-后续另准备`tools/control_bitmap_timing.py`，按每次上传汇总DC/DIB准备、memmove、UpdateLayeredWindow及清理时间，不记录像素/坐标或HWND。仅flash模块引用使用代理，共享系统API对象不修改，其他线程继续原调用；`indicator_bitmap_timing=true`必须同时批准健康采样且冻结计时模块摘要，默认不加载。5项假API测试通过；用户明确许可后现场已加载，但在任何有效截图/输入/位图上传前被目标前景及原门禁拦下，故计时功能仍未现场验证。唯一控制链约14分6秒正常全exit0，trace338863行正常关闭dropped0；[本轮结果](control-bitmap-timing.md)记录failed范围，无自动重试。
-
-新增`tools/control_target_activation.py`供新批准的自建诊断客户端在UIA后、组前执行一次原App初始化，随后仍调用原目标前景后验；它不修改控制服务，不直接调用系统激活API。失败链、重复ID、组已开始、身份/桌面未知都拒绝，原工具拒绝和传输未知继续锁存，不自动resume；详见[离线审查](control-target-activation.md)。8项新假窗口/假工具测试通过，相关控制测试总计61项离线通过。随后用户许可的[15分钟方案](control-target-activation-plan.md)完成真实接入：一次原App激活与精确目标前景后验成功，首终图0/0→1/1及两回调/空stderr齐全，4081上传正常路径API次数/清理审计一致；控制链约12分45秒全部正常退出。2883健康样本中仍有2次stale、1次fail-open，取证通过不替健康稳定或产品竞争验收。详见[现场结果](control-initial-activation.md)，无自动续验。
-
-现场前须先建立具体诊断任务和可审阅计划，并按用户最新要求先说明预计所需时间与操作范围、得到明确许可后再控制电脑。服务启动批准JSON至少包含当前`task_id`、`dispatch_id`、`mode=diagnostics-only`、隔离清单摘要和`launcher_files`；如启用App刷新则额外声明`app_refresh_fix=true`并冻结修复文件。准备命令不会建立MCP、安装钩子或发送输入；serve命令将运行真实控制工具，应遵守用户键鼠授权、拒绝停链、120秒检查间隔、正常退出和进程句柄见证的既有流程。
-
-离线验证使用MCP已有环境：
+最后实际`tests/test_control_*.py`为**61项全部通过**，证据主`.local-analysis/control-target-activation/tests.log`。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
 
 ```powershell
 & '<MCP环境>/Scripts/python.exe' -X utf8 -m unittest discover -s tests -p 'test_control_*.py' -v
+& '<MCP环境>/Scripts/python.exe' -X utf8 tools/run_control_diagnostics.py prepare `
+  --source '<MCP环境>/Lib/site-packages/windows_mcp' `
+  --destination '.local-analysis/<新任务>/isolated'
 ```
 
-39项测试覆盖原门禁语义和有界日志、缓存旧窗口复现及刷新后的查找/激活失败保护、预算恢复失败后的唯一诊断及禁止继续输入、物理矩形DPI上下文恢复、健康读取顺序和实际采样/阶段日志，以及启动器在加载控制包前拒绝无采样修复、缺少冻结摘要和非布尔选项。另有测试窗三项测试覆盖真实回调记录逻辑、异常堆栈和子进程stdout/stderr捕获。它们使用真实控制器/原Desktop方法及假窗口、假输入API，不安装实际钩子或发送键鼠，也不替代真实小窗口验证。
+使用已有MCP解释器，避免全局Pillow/NumPy兼容问题，不修改原安装或重复安装依赖。副本/manifest/trace/截图/第三方源码都在Git忽略目录，不入Git。
 
-本机此前四阶段事实见[诊断基线](control-snapshot-diagnostics.md)、[缓存及预算修复验证](control-snapshot-fix.md)、[窗口兼容前置](control-window-compat.md)和[物理矩形单组验证](control-physical-geometry.md)。前两次未进入Snapshot；第三次确认可发现性、App与首图成功，但被客户端DPI坐标检查拦下；第四次真实Click／快捷键后最终图从0/0变为1/1，限定单组通过。所有窗口与控制链均正常exit0，当前没有后台诊断计划。
+serve批准至少含`task_id`、`dispatch_id`、`mode=diagnostics-only`、`package_manifest_sha256`、`launcher_files`。加载App刷新/健康/位图时显式声明上述开关并冻结对应模块。客户端还须冻结自身、几何/激活摘要、绑定精确目标、预算、截止与用户许可；在新的Task/Dispatch/目录运行，不复用旧inbox/失败状态/PID。
 
-第四阶段冻结测试窗的逐输入回调日志有重名参数冲突，最终图和原工具调用有效，窗口正常关闭终态也为1/1，但不能把缺失回调行宣称完整输入日志。后续[日志修复组](control-window-logging.md)已使用`tools/control_test_window.py`修复事件名参数并显式保存stdout/stderr，首终图0/0→1/1、两真实回调完整、stderr空，486行trace closed dropped0，所有进程exit0；旧轮缺失原件仍保留。
+## 现场证据入口
 
-后续[健康组](control-health-validation.md)首次实际加载采样和先心跳后时间修复，保持原1秒阈值。相同限定GUI组完成、回调/stderr/退出证据完整，247057行trace closed dropped0；5444健康样本中5441健康、3过期，32条慢阶段/状态确认日志及两次fail-open。两次watch判定实际心跳年龄约1.0049和1.0193秒、desktop_ok=true，证明本隔离诊断配置存在真实滞后，未出现伪负年龄不等于长期可靠性已修复。诊断日志高频并有明显开销，不能据阶段时间邻近确定多图层累积、调度、绘制或历史截图根因。历史NET／铜层竞争仍未通过。
+| 报告 | 已验证范围与限制 |
+| --- | --- |
+| [基线](control-snapshot-diagnostics.md)、[缓存/预算](control-snapshot-fix.md) | 两次failed，未进有效截图/输入；保留原App/预算失败证据 |
+| [窗口兼容](control-window-compat.md)、[物理矩形](control-physical-geometry.md) | 前者UIA/App/首图通过但本地DPI拒绝；后者图1/1限定通过，旧逐回调日志缺口保留 |
+| [日志修复](control-window-logging.md) | 完整双回调/空stderr/终态/正常退出，486trace dropped0 |
+| [健康采样](control-health-validation.md)、[离线重放](control-offline-replay.md) | 5444样本3stale/2fail-open；两旧心跳区间阶段并集覆盖90.61%/93.14%，不能直接归因全场hook/input |
+| [位图首次](control-bitmap-timing.md)、[user时间线](control-user-timeline.md) | 实际图/输入/上传0，门禁user有最近事件续期证据，服务曾ready，来源未知 |
+| [前景重试](control-bitmap-retry.md)、[初始激活设计](control-target-activation.md) | 前者首图前景Orca/实际call0；后者离线补齐组前激活，不能反推UIA或用户夺焦点 |
+| [最新初始激活现场](control-initial-activation.md) | 原App1/两有效图/双回调/4081上传，7384trace dropped0，全exit0；健康2stale/1fail-open仍存在 |
 
-受阻时使用精确身份的一次WM_CLOSE让自建Tk程序执行正常关闭回调，仅作生命周期清理，不作GUI输入或验收通过证据，不适用于产品候选或其他工程。
+## 操作约束
+
+控制电脑前先向用户说明预计用时及范围，得到明确许可；已经结束的15/30分钟许可不复用，当前没有自动续验计划。正常键鼠不额外ControlStatus预检，所有动作仍经原ControlToolGate和精确目标归属。首次真实拒绝按冻结预算终止，120秒内零输入/截图/状态/原生桌面请求，到期只按计划收尾或有界恢复，不循环追逐ready。
+
+Snapshot必须有image并实际读图；动作已执行但后图失败只能补观察，不重发。Alt+F4已执行后窗口消失的保守锁存保持，凭原Popen exit0退役，不再发关闭。精确自建Popen一次WM_CLOSE仅正常生命周期、不计GUI通过，不适用于产品/其他工程进程，无强杀。不得改活内存/清集合/放宽1秒阈值/关闭指示层/中途续心跳或换入口绕拒绝。
