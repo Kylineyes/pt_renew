@@ -24,6 +24,7 @@ class OwnedDiagnosticClose:
         self.used = False
         self.attempted = False
         self.returned = False
+        self.confirmed = False
         self.wait_seconds = 5.0
         self.tool_margin_seconds = 35.0
         self.stop_margin_seconds = 40.0
@@ -79,8 +80,14 @@ class OwnedDiagnosticClose:
             self.attempted = True
             guard.event('owned_close_tool_start', id=ident, tool='Shortcut', arguments=dict(shortcut='alt+f4'))
             try:
-                await guard.raw('Shortcut', dict(shortcut='alt+f4'))
+                receipt = await guard.raw('Shortcut', dict(shortcut='alt+f4'))
                 self.returned = True
+                if (not isinstance(receipt, dict) or receipt.get('tool') != 'Shortcut'
+                        or receipt.get('arguments') != dict(shortcut='alt+f4')
+                        or receipt.get('is_error') is not False
+                        or receipt.get('text') != ['Pressed alt+f4.']):
+                    raise ValueError('原Shortcut回执缺失、错误或与冻结协议不符，执行结果未知')
+                self.confirmed = True
             finally:
                 guard.event('owned_close_tool_end', id=ident, returned=self.returned)
             phase = 'wait_exit'
@@ -106,7 +113,7 @@ class OwnedDiagnosticClose:
                     guard.retreat('专用关闭失败：' + type(error).__name__ + ': ' + str(error))
                 except Exception:
                     pass
-            result = dict(completed=False, executed=True if self.returned else 'unknown' if self.attempted else False,
+            result = dict(completed=False, executed=True if self.confirmed else 'unknown' if self.attempted else False,
                           tool_call_sent=self.attempted, returned=self.returned, retired=False,
                           reason=type(error).__name__ + ': ' + str(error), phase=phase,
                           failed_id=ident, not_before_monotonic=guard.not_before, exit_code=exit_code)

@@ -57,7 +57,7 @@ class Rig:
             self.calls.append((tool, args))
             self.disappear = True
             if isinstance(self.error, BaseException): raise self.error
-            return self.error or dict(text=['已执行'], is_error=False)
+            return self.error or dict(tool=tool, arguments=args, text=['Pressed alt+f4.'], is_error=False)
         async def waiter(process, seconds):
             self.assert_process = process
             self.clock.now += seconds
@@ -172,6 +172,17 @@ class CloseTests(unittest.IsolatedAsyncioTestCase):
                 self.assertFalse((await rig.run('retry'))['completed'])
                 self.assertEqual(len(rig.calls),1)
                 self.assertEqual(rig.native_calls,1)
+
+    async def test_malformed_receipts_cannot_be_promoted_by_process_exit(self):
+        valid=dict(tool='Shortcut',arguments=dict(shortcut='alt+f4'),text=['Pressed alt+f4.'],is_error=False)
+        for key,value in [('tool','Click'),('arguments',{}),('text',[]),('is_error',None),('text',['其他回执'])]:
+            rig=Rig();rig.error=dict(valid,**{key:value})
+            row=await rig.run()
+            self.assertFalse(row['completed']);self.assertEqual(row['executed'],'unknown')
+            self.assertTrue(row['returned'])
+            self.assertIsNotNone(rig.guard.target)
+            self.assertEqual(rig.guard.failed,'close');self.assertEqual(len(rig.calls),1)
+            self.assertNotIn('owned_close_exit',[e['kind'] for e in rig.events])
 
     async def test_wait_timeout_cancellation_or_nonzero_exit_keeps_target_and_failed_token(self):
         for value in (subprocess.TimeoutExpired('假进程',5),asyncio.CancelledError(),1,None):

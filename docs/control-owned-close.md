@@ -10,9 +10,9 @@
 
 `tools/freeze_control_close.py`只离线复制17客户端文件、3监督器文件、13工具文件和77文件控制包，生成111文件候选与摘要，默认没有任务、批准或有效关闭许可。模板通过实际路径找到同级冻结tools/isolated；使用时应保留该目录关系。新客户端必须通过双方`owned_diagnostic_close=true`及`owned_close_sha256`显式批准，并验证完整客户端/模块/包集合。旧客户端调用批准核验的缺省行为兼容。
 
-本次136项控制测试全部通过，包括13项新关闭/客户端测试和1项新批准测试。测试使用假时钟、假Popen及假桌面API；既有监督器测试使用无GUI标准库子进程。原始日志见本机[测试输出](../.local-analysis/control-owned-close/tests-verified.log)。首次误用全局Python产生依赖/解释器隔离错误，原输出保留为`tests-offline.log`；随后改用已验证MCP解释器，没有修改全局环境。没有改动产品源码或重建冻结产品。
+本次137项控制测试全部通过，包括14项新关闭/客户端测试和1项新批准测试。测试使用假时钟、假Popen及假桌面API；既有监督器测试使用无GUI标准库子进程。原始日志见本机[测试输出](../.local-analysis/control-owned-close/tests-verified.log)。首次误用全局Python产生依赖/解释器隔离错误，原输出保留为`tests-offline.log`；随后改用已验证MCP解释器，没有修改全局环境。没有改动产品源码或重建冻结产品。
 
-离线冻结位于`.local-analysis/control-owned-close/frozen/candidate/`，清单SHA-256为`31aea5b997c186a3361525db929d355d27a8e6b6d99a0c2dc1b71885cb1031a4`。见[摘要索引](../.local-analysis/control-owned-close/offline-review.json)及[候选清单](../.local-analysis/control-owned-close/frozen/candidate-manifest.json)。旧live172、旧候选110、原包77和稳定/固定/实验22/23/22文件集合及摘要已保存只读基线，现场后逐项比较。
+离线冻结位于`.local-analysis/control-owned-close/frozen-v2/candidate/`，清单SHA-256为`cfca1f09dbc38ce905c0edb33d2b97120588775065598f4dad849c9341922103`。见[摘要索引](../.local-analysis/control-owned-close/offline-review.json)及[候选清单](../.local-analysis/control-owned-close/frozen-v2/candidate-manifest.json)。初稿111文件候选保留在`frozen/`，未启动；离线复核补充了冻结Shortcut成功回执的精确校验，空、畸形或不符回执均按结果未知失败，不因随后原Popen退出而成功。旧live172、旧候选110、原包77和稳定/固定/实验22/23/22文件集合及摘要已保存只读基线，现场后逐项比较。
 
 后续仅安排一个全新Task/Dispatch、独立验收分支和证据目录，Pi明确`deng/gpt-6.1-sol high`并核对实际环境、会话JSONL的模型/推理记录及read图片调用。先离线审阅和准备全部批准，再启动连续runner；基础Python原Popen直持runner、核对外层实际PID与原查询句柄，禁止等待代理消息的短放行闸门。
 
