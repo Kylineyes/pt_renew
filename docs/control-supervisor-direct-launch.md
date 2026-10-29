@@ -1,6 +1,6 @@
 # 直启监督器接入与新候选
 
-基于`dev=fb02245`，本阶段在独立分支`feat/control-supervisor-direct-launch`把[见证器直启工具](control-witness-launch.md)接入[标准库监督器](../tools/control_process_supervisor.py)，并冻结全新候选。上一轮[现场](control-bitmap-surface-live.md)的failed与缺失监督器退出码保留，不用新工具补造旧证据。
+基于`dev=fb02245`，本阶段在独立分支`feat/control-supervisor-direct-launch`把[见证器直启工具](control-witness-launch.md)接入[标准库监督器](../tools/control_process_supervisor.py)，并冻结全新候选。后续[启动前验收](control-supervisor-direct-live.md)因外部门300秒超时而failed，监督器/客户端/服务均未启动，桌面请求0；该次没有新增GUI/资源/健康证据。上一轮[现场](control-bitmap-surface-live.md)的failed与缺失监督器退出码保留，不用新工具补造旧证据。
 
 监督器自身由`WitnessLaunch`使用基础Python直启。目标脚本在原Popen PID、实际PID、基础解释器与脚本摘要握手一致后才运行；自身退出码由父原Popen.wait取得。监督器单独记录实际PID及创建时间，最终须与该Popen退出回执对应。启动控制客户端时，明确使用方案中的MCP venv解释器，不使用监督器自身sys.executable替代控制环境。
 
