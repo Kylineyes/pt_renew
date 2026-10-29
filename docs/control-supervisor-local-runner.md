@@ -1,6 +1,6 @@
 # 本机连续启动监督器
 
-本阶段修正[上一轮启动前300秒超时](control-supervisor-direct-live.md)的编排问题：新增[本机启动器](../tools/control_supervisor_runner.py)，把监督器创建、实际PID核对、持有原生句柄、放行及退出核验放在同一程序中连续执行。所有任务批准、文件摘要和基础解释器探针在创建监督器前完成，10秒子进程握手期间没有代理消息等待，也没有额外outer-driver/worker-holder或300秒外部闸门。
+本阶段修正[上一轮启动前300秒超时](control-supervisor-direct-live.md)的编排问题：新增[本机启动器](../tools/control_supervisor_runner.py)，把监督器创建、实际PID核对、持有原生句柄、放行及退出核验放在同一程序中连续执行。后续[真实现场](control-supervisor-local-live.md)已限定通过单组GUI、8887上传零账本及全部已知进程链exit0；关闭后前景守卫仍拒绝，长期稳定与性能不作通过结论。所有任务批准、文件摘要和基础解释器探针在创建监督器前完成，10秒子进程握手期间没有代理消息等待，也没有额外outer-driver/worker-holder或300秒外部闸门。
 
 工作分支`fix/control-supervisor-local-runner`基于`dev=2cda5bd`。本轮只运行标准库命令行进程和原生进程查询，没有MCP控制服务、Win32窗口、截图、输入或新现场任务。上一轮failed、晚到放行文件和115项历史测试原件均保留。
 
@@ -28,7 +28,7 @@
 
 [测试输出](../.local-analysis/control-supervisor-local-runner/tests-verified.log)保存最后122项通过记录；中间文案断言失败的原输出保留。测试中的所有客户端都是标准库假客户端，没有真实GUI/控制服务，因此不能补作旧现场通过证据。
 
-新冻结候选为`.local-analysis/control-supervisor-local-runner/candidate/`，共110文件：原包77、包清单1、工具12、客户端17和监督器3。三个监督器文件为`control_process_supervisor.py`、`control_witness_launch.py`和`control_supervisor_runner.py`，摘要都绑定在新方案中。见[候选清单](../.local-analysis/control-supervisor-local-runner/candidate-manifest.json)、[方案模板](../.local-analysis/control-supervisor-local-runner/supervisor-plan-template.json)及[离线核验](../.local-analysis/control-supervisor-local-runner/validation.json)。模板尚无Task/Dispatch，不能直接运行。
+新冻结候选为`.local-analysis/control-supervisor-local-runner/candidate/`，共110文件：原包77、包清单1、工具12、客户端17和监督器3。三个监督器文件为`control_process_supervisor.py`、`control_witness_launch.py`和`control_supervisor_runner.py`，摘要都绑定在新方案中。见[候选清单](../.local-analysis/control-supervisor-local-runner/candidate-manifest.json)、[方案模板](../.local-analysis/control-supervisor-local-runner/supervisor-plan-template.json)及[离线核验](../.local-analysis/control-supervisor-local-runner/validation.json)。模板尚无Task/Dispatch，不能直接运行；后续现场使用的live目录已有完整已结算原件，禁止在该目录重启。
 
 本轮不再运行旧live。下一组须新建任务和证据目录，将候选client20文件原样复制到新目录，先填好新方案和两份批准、绑定方案SHA，再由指定Pi模型执行下面的单次命令；禁止临时再包一层等待代理回复的短闸门：
 
