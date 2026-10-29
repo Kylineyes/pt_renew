@@ -1,6 +1,8 @@
 # 产品竞争客户端的实现约束
 
-本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。2026-10-30已实现[默认禁用的离线API核心与状态机](async-product-client-offline.md)，新增30项测试及仓库234项Python测试通过；尚无冻结现场适配器、实际模型新上下文时序或产品现场批准，ready_for_live=false。冻结实验、60秒门闩及真实GUI判据保持，不复用诊断Tk窗关闭接口。
+本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[原始回执与原Popen适配](async-product-evidence-adapters.md)新增20项测试、仓库254项Python测试通过；原MCP/region与原句柄窄适配默认禁用，仍缺native/UIA/文件框及完整全链接入。新指定模型图片任务在编码预检失败后已failed结算，实际read/ack0，时序未取得，ready_for_live=false。
+
+以下保留前阶段实现状态：2026-10-30已实现[默认禁用的离线API核心与状态机](async-product-client-offline.md)，新增30项测试及仓库234项Python测试通过；尚无冻结现场适配器、实际模型新上下文时序或产品现场批准，ready_for_live=false。冻结实验、60秒门闩及真实GUI判据保持，不复用诊断Tk窗关闭接口。
 
 一次产品运行必须只有一个创建所有者。新客户端启动冻结实验EXE并保存原Popen及创建时间，应用门闩owner指向持续存活的该客户端或已冻结的持有者；不使用短命PowerShell的PID。启动记录包含实验EXE/完整22文件、输入、副本路径、环境清理结果、原Popen PID和句柄、原生主HWND/类/实际标题。主标题随dirty/文件名变化，必须验证已冻结的允许状态及同一精确HWND，不允许任意前缀模糊匹配替代进程归属。
 
