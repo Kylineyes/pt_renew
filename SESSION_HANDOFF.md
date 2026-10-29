@@ -1,6 +1,10 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。最新阶段为[产品竞争离线预检](docs/async-race-offline-preflight.md)，从`dev=77d81d6`独立分支完成纯离线事件/实际read时序审计工具及10项变异测试。实验22、固定23、稳定22文件和输入摘要保持，历史NET/铜正向对照事件与原exit0有效；旧两竞争仍aborted。最近实际read返回已需71.019/88.949秒，超过冻结60秒门闩，且旧关键段release不等待实际read，当前ready_for_live=false、产品启动/桌面请求0。[产品客户端约束](docs/async-product-client-contract.md)明确了下一阶段的原Popen、Qt主窗/dirty模态和read/ack接口要求。
+更新时间：2026-10-30。最新阶段为[产品客户端离线实现与冻结时限](docs/async-product-client-offline.md)，从已核对的`dev=origin/dev=f81576f83397900fd0c861765c57da928d313228`建立`feat/async-product-client-offline`。新增默认禁用的request/read/ack、NET/铜编排、产品Qt主窗/dirty模态及原Popen正常退出核心，30项新增测试和仓库234项Python测试全部通过。原22/23/22、旧事件/输入、最新控制及归档等10组参考按历史摘要口径全部匹配。产品启动/桌面请求0，没有新Task/Dispatch或批准；ready_for_live=false。
+
+本阶段交接入口为[下一阶段](docs/control-next-stage.md)、[客户端约束](docs/async-product-client-contract.md)与本机`.local-analysis/async-product-client-offline/NEXT_AGENT_BRIEF.md`；原`.local-analysis/NEXT_AGENT_BRIEF.md`不改，按前阶段历史读取。下一步先以指定模型新上下文验证原read image记录兼容性及两图顺序时限，再补冻结的Win32/MCP现场适配器、文件框阶段和原Popen全链启动/见证接入。T1/T2/T3设计为触发前原时钟起算20/50/55秒，原60秒上限不变，尚无新的实际模型计时证明。必要控制授权持续；新现场先完成可审阅材料并说明具体时间/范围，不恢复旧failed/abandoned任务或执行其准备脚本。
+
+以下保留2026-10-29及更早历史，旧结算和证据范围不变。前阶段[产品竞争离线预检](docs/async-race-offline-preflight.md)只增加事件/实际read时序审计工具及10项变异测试；此前71.019/88.949秒实际read区间及旧release缺少read关口的问题保持其历史结论。
 
 此前[完整关闭现场](docs/control-close-journal-live.md)按限定succeeded结算：本会话两图0/0→1/1及双回调、一次原Shortcut Alt+F4严格回执→客户端原Popen退出0→退役→stop，全链无拒绝；7寿命3625上传零账本、2880健康全healthy，监督器及9已发现子孙和已知外层原链exit0。快照发生1次临时权限重试、0持续失败。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
 
@@ -125,7 +129,7 @@
 
 全部Task均已结算，原Pi终端retain不代表任务仍活。新工作必须新Task/Dispatch/分支/批准/证据，不续投旧inbox、不重复worker_done、不重连清状态。精确ID和最终Git见本机简报。上一有效初始激活Run `run_b750f95c36e5`、Task `task_47e20595fdcb`、Dispatch `ctx_343756e91911`、done `msg_eea4f2c348a1`已验收ack，报告提交`37e9805`；无reclaimable资源。此前Run `run_bdf0b619f1e3`（前景failed）、`run_3da0a4eb0ac6`（user受阻failed）、`run_e136aa13bab5`（日志/健康）、`run_22b5092f9df3`（早四阶段）也全部结算。
 
-## 下一会话的执行计划
+## 前阶段执行计划（2026-10-29历史）
 
 当前入口见[下一阶段](docs/control-next-stage.md)和[产品竞争离线预检](docs/async-race-offline-preflight.md)。控制限定通过保持；产品竞争已完成不变对照/部署/输入/时序重算，当前尚不能在冻结60秒内可靠完成实际读图与release。先实现并验证产品专用客户端及read/ack/正常退出设计，不自动启动产品或旧控制组。
 
