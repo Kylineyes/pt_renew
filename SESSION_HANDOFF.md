@@ -23,7 +23,9 @@
 
 ## 最新有效结果与限制
 
-最新[资源复用现场](docs/control-bitmap-surface-live.md)：Run `run_3cd747640832` / Task `task_142ea7a86a8d` / Dispatch `ctx_af9c3c5211fd`，唯一done `msg_893d1c0c6eee`按failed结算。实际Pi `deng/gpt-6.1-sol high`、session `01a18478-da17-72cd-a114-3faf5c2359f1`。服务316.4527秒，原App1、Snapshot2、Click1、Shortcut2、ControlStatus0；两图实际0/0→1/1，双回调均落工具起止内，窗口stdout/stderr空。Alt+F4执行后目标消失保守锁存a009，原Popen exit0退役，完整120秒零桌面请求后原stop；无WM_CLOSE、重发或第二组。
+基于`dev=a189389`安排的新监督器现场在服务启动前超时，详见[本轮记录](docs/control-supervisor-direct-live.md)：Run `run_6c0b4be9202f` / Task `task_e972187b97ac` / Dispatch `ctx_3a7ad6cbe5f7`，done `msg_e35383efeaef`按failed结算。driver66860在300秒外部门截止先于父放行退出1，holder72056退出0，均有父精确持柄及driver原Popen/句柄证明。监督器、客户端、服务、窗口均未启动，桌面请求0，不能形成新资源/健康/GUI结论；晚到放行、旧源码和状态原件保留，不重启。worker报告4e9fa90已整合，验收Pi窗格按用户要求关闭归档，目前累计4个闲置窗格已关闭，历史JSONL/工作树保留。115项离线测试保持有效，109候选及19客户端/原包/部署摘要不变。
+
+最新已执行GUI的[资源复用现场](docs/control-bitmap-surface-live.md)：Run `run_3cd747640832` / Task `task_142ea7a86a8d` / Dispatch `ctx_af9c3c5211fd`，唯一done `msg_893d1c0c6eee`按failed结算。实际Pi `deng/gpt-6.1-sol high`、session `01a18478-da17-72cd-a114-3faf5c2359f1`。服务316.4527秒，原App1、Snapshot2、Click1、Shortcut2、ControlStatus0；两图实际0/0→1/1，双回调均落工具起止内，窗口stdout/stderr空。Alt+F4执行后目标消失保守锁存a009，原Popen exit0退役，完整120秒零桌面请求后原stop；无WM_CLOSE、重发或第二组。
 
 真实trace9958行closed/dropped0；7寿命、8509上传、创建DC/DIB/复制各7、SelectObject14、GetDC/ReleaseDC各8516，退役后账本0。1188健康样本全healthy/fail-open0；上传墙钟约4.25547秒、最慢0.108514秒，不与历史不等长样本直接推导提速。原包/隔离77/77、部署22/23/22与candidate107集合及摘要不变。
 
@@ -85,7 +87,7 @@
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **原生资源实验及离线验证已完成。** [实验报告](docs/control-bitmap-surface.md)包含默认不加载的Win32适配器、原`_Layer`寿命接入、原生失败返回/部分结果移交/资源账本、所有线程退役、独立正常寿命审计及新批准测试。原显示器枚举/消息泵/完整显示后的心跳保持；106项仓库测试及冻结客户端6项单独检查通过，尚未做真实Win32/GUI验证。
-3. **直启监督器接入及新候选已完成离线验证。** [接入报告](docs/control-supervisor-direct-launch.md)对应新候选`.local-analysis/control-supervisor-direct-launch/candidate/`109文件：显式MCP venv启动客户端、基础Python直启监督器本身、原Popen实际PID握手及子孙账本。115项测试通过，新方案模板尚无任务身份。用户已授权必要控制验收；下一组先说明15分钟/600与900秒范围，绑定新Task/Dispatch和实际Pi模型，冻结新方案摘要与两批准后再运行，不续投已failed旧live/inbox或改旧原件。
+3. **直启监督器离线通过，现场尚未执行成功。** 新候选109文件、115项测试有效，但Task `task_e972187b97ac`因启动前外部300秒闸门超时failed；服务未起、无新GUI/健康样本，不复用该live状态。下一步把外层身份持柄、摘要核对与放行合并为单一本机非LLM程序，避免短闸门依赖父worker消息往返；先完成离线自动化验证和冻结新方案，再按用户既有必要验收授权说明有界范围执行。旧failed、截止和晚到文件均保留。
 4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
