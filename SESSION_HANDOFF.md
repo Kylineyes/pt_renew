@@ -1,6 +1,6 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。先读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。最新[本机连续启动器现场](docs/control-supervisor-local-live.md)基于`dev=05e6cb0`完成，报告`ce79cd7`已整合；最终提交以`git log`和本机简报为准。旧版交接与失败原件保留。
+更新时间：2026-10-29。本次仅整理交接，不启动GUI或新验收任务。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文，再读[下一阶段开发计划](docs/control-next-stage.md)。当前成果已推送`dev=e389448`，最新[本机连续启动器现场](docs/control-supervisor-local-live.md)报告`ce79cd7`已整合；本次最终交接提交以Git和本机简报为准。原会话、旧交接和失败原件保留，新agent不恢复已结算任务。
 
 **稳定产品及dist仍为0.10.0，固定0.11.0候选和NET／铜完整竞争仍未通过。最新限定任务succeeded：单组双图/双回调、7个正常资源寿命8887次真实上传/零账本，以及监督器和全部已知控制链的原始exit0证据通过；1898次健康采样全healthy，仅为本组结果。正常Alt+F4关闭后的目标前景守卫仍保守拒绝，失败token及120秒限制原件保留，完整无拒绝关闭流程尚未通过。未知短命进程覆盖、长期稳定性与性能倍率未获证明。本轮控制已正常退出；已结算验收会话按用户要求归档，目前累计5个闲置agent窗格关闭，历史JSONL/工作树/证据保留，无后台控制或自动续验。**
 
@@ -66,7 +66,7 @@
 | `tools/control_bitmap_timing.py` | 指示层每次上传API次数/墙钟成本汇总，模块局部代理不改共享WinDLL对象；最新4081次正常路径已现场验证 |
 | `tools/control_target_activation.py` | 只在未失败、UIA核验后/组前，至多一次原App激活与精确前景后验；离线8项/现场单组通过 |
 | `tools/analyze_control_uploads.py` | 复用健康重放，约束旧上传时间戳延迟及API裁剪上下界；最新4081上传离线核对通过，不等于CPU或预计提速 |
-| `tools/control_bitmap_surface_model.py` | 每不可变图层独有的DC/DIB/像素寿命核心，保留部分结果与待退役实例；模块本身不加载Win32 |
+| `tools/control_bitmap_surface_model.py` | 每不可变图层独有的内存DC/DIB/像素寿命核心，保留部分结果与待退役实例；模块本身不加载Win32 |
 | `tools/control_bitmap_surface.py` | 私有WinDLL适配器及原图层寿命接入，默认关闭；本组7寿命8887上传正常路径取证通过，异常路径仍为离线测试范围 |
 | `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
 | `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本；本组7寿命8887真实上传审计通过，进程退出另行核验 |
@@ -74,7 +74,7 @@
 | `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端、精确子孙账本；本组实际监督器和9已发现子孙exit0 |
 | `tools/control_supervisor_runner.py` | 同一本机程序预检/持柄/放行与退出重算；7项无GUI测试及本组实际已知链退出取证通过 |
 
-最后实际相关仓库测试为**122项全部通过**，输出主`.local-analysis/control-supervisor-local-runner/tests-verified.log`（115项加本机启动器7项）。此前115项在`.local-analysis/control-bitmap-surface/tests-with-direct-supervisor.log`保留。此前110项在`tests-with-witness-fix.log`保留。冻结客户端6项历史检查单独保留。此前106项输出在`tests-verified.log`，不重复累加。冻结客户端额外6项定向检查单独记录在同目录`frozen-client-tests-final.log`，不与仓库测试合计冒称产品覆盖。上一阶段79项证据在`.local-analysis/control-upload-offline-analysis/tests-verified.log`，原61项历史证据在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
+最后实际相关仓库测试为**122项全部通过**，输出主`.local-analysis/control-supervisor-local-runner/tests-verified.log`。这些测试使用假窗口/API和无GUI标准库子进程，覆盖控制拒绝、诊断、健康、资源生命周期、批准、启动与精确退出，不安装真实输入钩子。冻结客户端另6项历史定向检查在`.local-analysis/control-bitmap-surface/frozen-client-tests-final.log`，不与仓库测试或产品覆盖相加。其余61/79/106/110/115项为历史测试阶段，原件保留，不重复累加。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果保持；本次纯文档交接不重跑无变化代码。
 
 ## 已结算现场阶段
 
@@ -94,6 +94,8 @@
 全部Task均已结算，原Pi终端retain不代表任务仍活。新工作必须新Task/Dispatch/分支/批准/证据，不续投旧inbox、不重复worker_done、不重连清状态。精确ID和最终Git见本机简报。上一有效初始激活Run `run_b750f95c36e5`、Task `task_47e20595fdcb`、Dispatch `ctx_343756e91911`、done `msg_eea4f2c348a1`已验收ack，报告提交`37e9805`；无reclaimable资源。此前Run `run_bdf0b619f1e3`（前景failed）、`run_3da0a4eb0ac6`（user受阻failed）、`run_e136aa13bab5`（日志/健康）、`run_22b5092f9df3`（早四阶段）也全部结算。
 
 ## 下一会话的执行计划
+
+具体入口、行为要求、离线测试和现场完成条件见[下一阶段：精确自建诊断窗正常关闭](docs/control-next-stage.md)。先离线开发，旧live仅作只读证据；当前没有关闭命令实现或新冻结候选，不自动启动旧验收。
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **资源复用及已知退出链取得单组真实证据。** 最新[现场报告](docs/control-supervisor-local-live.md)及父独立审计完成，本组7寿命8887上传、零账本、1898健康全healthy、监督器/9子孙/runner/launcher/owner原exit0成立；不因此提升为长期稳定或性能通过。122项离线测试保持，文档整合未改源码不重跑。

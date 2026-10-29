@@ -18,7 +18,7 @@
 | `tools/control_target_activation.py` | 未失败、已绑定/UIA核验目标、组前最多一次原App switch；激活前精确身份/桌面检查，后调用原前景后验 | 客户端独立批准并冻结模块摘要；不直接原生激活、不额外ControlStatus、不清锁存/集合，不在旧失败组补激活或重试 |
 | `tools/analyze_control_uploads.py` | 纯JSONL分析上传发出延迟、采样点裁剪与API集合占时边界；复用健康重放 | 正常schema 1上传专用，需核验同线程/同一时钟/心跳写入路径；上下界不是CPU或预计提速 |
 | `tools/control_bitmap_surface_model.py` | 后端注入的不可变图层寿命核心，验证一次创建/复制、逐次完整上传与失败退役 | 模块本身不加载Win32；原生适配器在单独模块，部分失败实例保持可退役 |
-| `tools/control_bitmap_surface.py` | 私有WinDLL、图层线程上下文接管、DC/DIB账本和所属线程退役，64图层/64MiB预算 | `indicator_bitmap_surface=true`且冻结核心/适配器才安装；需健康采样/修复，和旧bitmap计时互斥；runtime_verified=false |
+| `tools/control_bitmap_surface.py` | 私有WinDLL、图层线程上下文接管、DC/DIB账本和所属线程退役，64图层/64MiB预算 | `indicator_bitmap_surface=true`且冻结核心/适配器才安装；需健康采样/修复，和旧bitmap计时互斥；正常路径已有本组现场证据，安装事件仍固定写runtime_verified=false，不能单凭该字段判断验收 |
 | `tools/control_surface_approval.py` | 纯离线核对新客户端/服务批准、真实Pi模型、新目录和冻结文件/包集合；附加资源日志前置检查 | 不是许可来源；旧Task/会话/状态拒绝，不启动桌面 |
 | `tools/audit_control_surfaces.py` | 正常surface JSONL独立寿命/API/账本审计，拒绝矛盾/异常/缺失退役 | 本组7寿命8887上传内部证据通过；不替完整进程退出或性能/健康 |
 | `tools/control_witness_launch.py` | 基础Python直启标准库见证脚本、实际PID/摘要/解释器握手后显式放行、原Popen等待 | 修复venv外壳与实际进程身份缺口的离线工具；4项命令行测试 |
@@ -29,13 +29,15 @@
 
 健康短路未执行的时间/heartbeat读取字段为空，不能用事后controller_fields快照代替原判定字段。`indicator-phase`在完成耗时至少50毫秒或异常时写入；健康行中的phase是当时线程可见关联，非原子，空值不说明线程没有工作。先heartbeat后now仅修伪负年龄，不能消除真实停更。
 
-位图记录汇总GetDC、CreateCompatibleDC、CreateDIBSection、memmove、SelectObject、UpdateLayeredWindow、DeleteObject、DeleteDC、ReleaseDC。最新4081正常路径每上传SelectObject2次、其余各1，尺寸/字节/总成本一致且异常0；未执行的异常路径不能称为现场覆盖。分段耗时含调度/诊断开销，API外差值不能解释为CPU时间，不能按全场百分比直接确定超时根因。
+位图schema 1的GetDC、CreateCompatibleDC、CreateDIBSection、memmove、SelectObject、UpdateLayeredWindow、DeleteObject、DeleteDC、ReleaseDC细分取证对应较早4081次旧路径上传，每上传SelectObject2次、其余各1。最新资源复用组使用独立surface schema：7次创建/复制/退役、8887次完整上传，不能与旧计时记录混用。异常路径仍主要由离线测试覆盖；墙钟耗时含调度/诊断，不是CPU成本或提速证明。
 
 初始激活客户端已现场验证顺序：Launch→UIA→initial-activate（原App一次及精确前景后验）→begin-group→首Snapshot→Click→诊断Shortcut→终Snapshot。Popen/窗口显示/UIA枚举都不保证前景，初始ready日志观察也不保证目标前景；目标检查不能删除，失败不自动激活救活旧链。实际最新client/step位于本机验收证据目录，未提交的旧模板含身份占位，不能直接运行。
 
 ## 离线验证与隔离准备
 
-最后实际`tests/test_control_*.py`为**122项全部通过**，证据主`.local-analysis/control-supervisor-local-runner/tests-verified.log`（115项加本机启动器7项）。此前115项证据主`.local-analysis/control-bitmap-surface/tests-with-direct-supervisor.log`保留，此前110项在`tests-with-witness-fix.log`保留，原106项证据保留在`tests-verified.log`，其新增27项为原生/原循环17、启动器6、客户端批准4。冻结客户端另6项定向离线检查在同目录`frozen-client-tests-final.log`，不混入仓库覆盖。上一阶段79项证据`.local-analysis/control-upload-offline-analysis/tests-verified.log`、原61项证据`.local-analysis/control-target-activation/tests.log`保留。它们使用真实控制器/原Desktop方法加假窗口/输入API，覆盖原拒绝账本、日志、缓存、预算、几何、健康、启动开关、测试窗、重放、位图计时及初始激活。测试不安装真实钩子或发送输入；测试窗stderr测试仅运行命令行异常子进程。与工作者本机截止/初始观察定向测试不重复累加，不替产品CTest/GUI。
+最后实际`tests/test_control_*.py`为**122项全部通过**，证据主`.local-analysis/control-supervisor-local-runner/tests-verified.log`。冻结客户端另6项历史检查见`.local-analysis/control-bitmap-surface/frozen-client-tests-final.log`，不混入仓库或产品覆盖。测试包含假窗口/API及无GUI命令行子进程，不安装真实输入钩子；不替产品CTest/GUI验收。原61/79/106/110/115项输出均为历史阶段，不重复累加，本次纯文档整理不重跑。
+
+下一项开发为[精确自建窗正常关闭](control-next-stage.md)：先离线实现和测试专用命令，再冻结新客户端。旧guard/client是本机冻结证据，不能原地修改或在旧failed链补验。
 
 ```powershell
 & '<MCP环境>/Scripts/python.exe' -X utf8 -m unittest discover -s tests -p 'test_control_*.py' -v
