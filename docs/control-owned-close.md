@@ -26,4 +26,4 @@
 
 第三候选已经由新任务唯一执行，见[第三候选现场](control-owned-close-v3-live.md)：GUI两图/双回调、7寿命7663上传零账本及3420健康分项通过；关闭preflight拒绝且Alt+F4未发送，监督器账本替换失败、子孙原退出码不完整，整组failed。诊断窗66968/birth134377322138115927/HWND15010430在晚到精确句柄查询时仍live；服务按原900秒截止退出，不补关或恢复。
 
-本轮另在独立分支离线修复监督器周期快照写入失败时提前丢弃原进程的问题，142项控制测试通过。最新111文件候选、限制和下一步见[监督器快照修复](control-supervisor-snapshot-journal.md)及[下一阶段](control-next-stage.md)，尚未运行。旧第三份冻结和本轮失败execution均保留原样，不能追溯改写failed。下一现场之前先处理已知残留自建窗的生命周期归属。
+本轮另在独立分支离线修复监督器周期快照写入失败时提前丢弃原进程的问题，142项控制测试通过。最新111文件候选、限制和下一步见[监督器快照修复](control-supervisor-snapshot-journal.md)及[下一阶段](control-next-stage.md)，尚未运行。旧第三份冻结和本轮失败execution均保留原样，不能追溯改写failed。此后已用[独立生命周期](control-residual-lifecycle.md)正常关闭该残留诊断窗，新查询句柄exit0；未恢复旧Task或补记原Popen/GUI通过。下一步可以基于未运行候选另立有界验收。

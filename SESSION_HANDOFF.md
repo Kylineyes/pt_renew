@@ -1,8 +1,8 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。最新[第三候选现场](docs/control-owned-close-v3-live.md)已完成并按failed结算：GUI双图/回调、资源与健康分项通过，关闭preflight拒绝、监督器快照写入失败，存在精确自建诊断窗残留。随后[监督器快照修复](docs/control-supervisor-snapshot-journal.md)离线完成，142项控制测试通过，未再启动现场。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。最终Git以本机简报和仓库为准，已结算任务不恢复。
+更新时间：2026-10-29。最新[独立生命周期](docs/control-residual-lifecycle.md)已正常关闭第三候选遗留诊断窗：一次WM_CLOSE、新查询句柄退出0，原窗口自然追加两条关闭日志，原failed/token及旧验收结论保持，149项控制测试通过。此前[第三候选现场](docs/control-owned-close-v3-live.md)仍按failed结算，GUI/资源/健康分项通过，关闭前置拒绝及监督器失败边界保持。监督器快照修复尚未运行完整控制现场。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
 
-**必须先处理的当前状态：诊断窗PID66968/birth134377322138115927/HWND15010430在父晚到精确句柄查询时仍live，基础pythonw.exe、标题“PT Renew 控制诊断试验”、类TkTopLevel。客户端和控制服务已按原900秒截止退出，父不补发关闭或把清理记为通过；下一现场前需明确独立生命周期归属。最新111文件待验候选清单f5ebb7a8...无Task/Dispatch/批准，不能复用本轮failed链。**
+**当前残留已解决：独立操作lifecycle_e727f4cea876于18:14:27（UTC+08:00）核对PID66968/birth134377322138115927/HWND15010430后发送一次定向WM_CLOSE，同一新查询句柄exit0，非原Popen/GUI证明。发送前实际执行目录157文件完整备份，原窗口日志476字节前缀不变、只自然追加normal-close/mainloop-returned，其他旧文件和产品摘要不变。下一步可基于111文件候选f5ebb7a8...另立新验收，不能复用旧failed链。**
 
 **此前acb9c87阶段新增实现默认禁用，绑定客户端创建时保存的原Popen；只在精确身份/门禁/前景核验后尝试一次原Shortcut Alt+F4，严格回执及原Popen退出0后退役。普通输入的目标后验保持。137项离线测试通过后按新Task/Dispatch唯一启动，但见证器身份文件读取PermissionError导致服务/桌面请求/窗口均0，现场failed；外层已知链exit1，握手child原退出码缺失保持unverifiable。随后仅离线修复见证器握手读取及构造失败原Popen所有权，140项测试全部通过，第三份111文件候选已冻结但未运行、无新任务/批准。本轮失败及所有旧证据不变，不追加连接补验。**
 
@@ -27,7 +27,9 @@
 
 ## 最新有效结果与限制
 
-本轮[第三候选现场](docs/control-owned-close-v3-live.md)：Run `run_dc31bcdf4756` / Task `task_2978396a0432` / Dispatch `ctx_f2162fee7cf9`，唯一done `msg_bf13a30cf0e2`为failed并父验收ack，报告提交`e1259d6`。两批准绑定`msg_6dcabc521474`，实际沿用Pi `deng/gpt-6.1-sol high` session `01a18648-535d-720b-998d-63e4e0d5c42b`，96条assistant记录及两次read图片核对。双图0/0→1/1、双Tk回调在原工具start/end、11563行closed/dropped0、7寿命7663上传零账本、3420健康全healthy成立；close-owned在前景为WindowsTerminal时preflight拒绝，AltF4调用0，120秒及后续零桌面请求直到900秒原硬截止。监督器66892账本替换PermissionError后exit1，runner/launcher/owner原Popen及句柄均1，父recorder/owner原句柄均1，子孙完整原退出证明缺失；精确窗66968仍live。旧172/110/77和产品22/23/22、上一阶段482文件及旧worker42文件集合/摘要全同。worker-release仍为external_terminal retained/processAction=none，任务已结算，reclaimable为空。
+本轮[独立生命周期](docs/control-residual-lifecycle.md)通过，操作`lifecycle_e727f4cea876`仅处理残留窗，不创建控制连接或诊断组。冻结来源/工具/方案→只检查身份唯一→独占一次机会→复核完整身份→一次WM_CLOSE→同一新查询句柄exit0；没有键鼠/聚焦/强杀，没有原Task恢复或结果更改。149项测试和只读保护见报告。本次窗口原日志自然追加必须与旧归档区分，发送前完整备份保留。
+
+此前[第三候选现场](docs/control-owned-close-v3-live.md)：Run `run_dc31bcdf4756` / Task `task_2978396a0432` / Dispatch `ctx_f2162fee7cf9`，唯一done `msg_bf13a30cf0e2`为failed并父验收ack，报告提交`e1259d6`。两批准绑定`msg_6dcabc521474`，实际沿用Pi `deng/gpt-6.1-sol high` session `01a18648-535d-720b-998d-63e4e0d5c42b`，96条assistant记录及两次read图片核对。双图0/0→1/1、双Tk回调在原工具start/end、11563行closed/dropped0、7寿命7663上传零账本、3420健康全healthy成立；close-owned在前景为WindowsTerminal时preflight拒绝，AltF4调用0，120秒及后续零桌面请求直到900秒原硬截止。监督器66892账本替换PermissionError后exit1，runner/launcher/owner原Popen及句柄均1，父recorder/owner原句柄均1，子孙完整原退出证明缺失；精确窗66968仍live。旧172/110/77和产品22/23/22、上一阶段482文件及旧worker42文件集合/摘要全同。worker-release仍为external_terminal retained/processAction=none，任务已结算，reclaimable为空。
 
 此前[专用关闭启动现场](docs/control-owned-close-live.md)：Run `run_0ca568a11b7b` / Task `task_304e9df22f4d` / Dispatch `ctx_818a32eb5b79`，done `msg_a7125e2d3539`按failed结算并验收ack，worker报告`8d41db3`已整合。Pi `deng/gpt-6.1-sol high`、session `01a18648-535d-720b-998d-63e4e0d5c42b`，两批准绑定`msg_fa696d8887f7`。启动前PermissionError早于监督器放行；GUI/关闭/资源/健康均未执行，不能继承旧现场通过。runner25956、launcher3504、owner16608原Popen/句柄exit1，父recorder26424/owner原句柄exit1；握手child50968缺原退出码保持unverifiable。父独立审计核对旧172/110/77、产品22/23/22和本轮两个111候选/执行源码/批准全同。第三份待验候选和140项离线结果独立保存，不改本轮失败。worker-release回执为external_terminal/retained/processAction=none，验收Pi终端仍闲置保留，任务已结算且无reclaimable资源。
 
@@ -86,7 +88,9 @@
 | `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端、精确子孙账本；本组实际监督器和9已发现子孙exit0 |
 | `tools/control_supervisor_runner.py` | 同一本机程序预检/持柄/放行与退出重算；7项无GUI测试及本组实际已知链退出取证通过 |
 
-最新实际控制测试为**142项全部通过**，输出`.local-analysis/control-owned-close-v3/tests-supervisor-journal.log`，16.848秒；新增2项监督器快照重试/持续失败持原Popen回归，含真实无GUI客户端。此前一次定向子进程测试非0但stderr空，后续补诊断后定向7项及全体142项通过，该次未定位失败如实保留。离线修复`a37ed03`未写回活服务或冻结execution。此前140项结果如下，不叠加计数。
+最新实际控制测试为**149项全部通过**，输出`.local-analysis/control-residual-lifecycle/tests-offline.log`，16.796秒；新增7项独立生命周期契约测试，用假API核对来源/权限/时限/身份/唯一性/一次机会和未知及退出失败，没有发送真实关闭消息。真实生命周期另有持柄及自然回调证明。此前142项结果不叠加计数。
+
+此前控制测试为**142项全部通过**，输出`.local-analysis/control-owned-close-v3/tests-supervisor-journal.log`，16.848秒；新增2项监督器快照重试/持续失败持原Popen回归，含真实无GUI客户端。此前一次定向子进程测试非0但stderr空，后续补诊断后定向7项及全体142项通过，该次未定位失败如实保留。离线修复`a37ed03`未写回活服务或冻结execution。此前140项结果如下，不叠加计数。
 
 此前控制测试为**140项全部通过**，输出`.local-analysis/control-owned-close/tests-handshake-fixed.log`，覆盖原122项、14项关闭/客户端、1项批准和3项握手读取/所有权回归；不与137或122项历史结果相加。未运行GUI测试窗/输入钩子，既有监督器测试使用无GUI标准库子进程。现场因启动失败未验证专用关闭，不能用离线结果补记GUI通过。
 
@@ -113,11 +117,11 @@
 
 ## 下一会话的执行计划
 
-具体入口、行为要求、离线测试和现场完成条件见[下一阶段](docs/control-next-stage.md)。最新142项离线测试通过、监督器快照修复后候选未运行。先明确残留自建诊断窗的独立生命周期归属，再准备全新有界验收；旧live及两次关闭failed现场只读，不恢复或补关记通过。
+具体入口、行为要求、离线测试和现场完成条件见[下一阶段](docs/control-next-stage.md)。149项离线测试通过，残留诊断窗已由独立生命周期正常退出。监督器快照修复后的候选未运行，可准备全新有界验收；旧live及两次关闭failed现场仍只读，不恢复或补记通过。
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **资源复用及已知退出链取得单组真实证据。** 最新[现场报告](docs/control-supervisor-local-live.md)及父独立审计完成，本组7寿命8887上传、零账本、1898健康全healthy、监督器/9子孙/runner/launcher/owner原exit0成立；不因此提升为长期稳定或性能通过。122项离线测试保持，文档整合未改源码不重跑。
-3. **专用关闭仍未取得完整现场通过。** 第三候选新任务双图/回调、资源/健康分项通过，关闭前景preflight拒绝且未发送，监督器账本替换失败造成子孙退出缺口；窗口66968/birth134377322138115927仍live。`a37ed03`离线修复周期快照持续失败时保留原进程直到退出并锁存失败，142项通过。最新候选`.local-analysis/control-owned-close-v3/frozen-next/candidate`，111文件，清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`，未运行/无新批准。先处理残留生命周期归属，后续再新Task/Dispatch/分支/批准/证据及具体时间范围说明，不追加连接追逐ready。
+3. **专用关闭仍未取得完整现场通过，独立残留生命周期已完成。** 第三候选原failed及前置拒绝/监督器失败/子孙退出缺口保持；窗口66968/birth134377322138115927由独立一次WM_CLOSE正常退出，新查询句柄exit0不冒充原Popen。`a37ed03`离线快照修复后候选仍在`.local-analysis/control-owned-close-v3/frozen-next/candidate`，111文件，清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`，未运行/无新批准。独立生命周期工具及149项测试完成后，可另立全新Task/Dispatch/分支/批准/证据，并说明具体时间范围，不在旧任务追加连接追逐ready。
 4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 

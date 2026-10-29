@@ -1,6 +1,6 @@
 # 下一阶段：精确自建诊断窗正常关闭
 
-本阶段已完成默认禁用的专用关闭实现、客户端接入及离线回归，见[实现说明](control-owned-close.md)。最新[第三候选现场](control-owned-close-v3-live.md)取得GUI/资源/健康分项证据，关闭前景preflight拒绝，监督器账本写入失败，整组failed，诊断窗仍live。其后[监督器快照修复](control-supervisor-snapshot-journal.md)只在离线完成并通过142项测试，尚未验收。稳定产品/dist仍0.10.0。
+本阶段已完成默认禁用的专用关闭实现、客户端接入及离线回归，见[实现说明](control-owned-close.md)。此前[第三候选现场](control-owned-close-v3-live.md)取得GUI/资源/健康分项证据，关闭前景preflight拒绝，监督器账本写入失败，整组failed。其后[监督器快照修复](control-supervisor-snapshot-journal.md)仅离线完成，尚未验收；最新[独立生命周期](control-residual-lifecycle.md)已一次正常关闭遗留窗，新查询句柄exit0，149项控制测试全部通过。稳定产品/dist仍0.10.0。
 
 此前本机连续启动器任务已限定通过单组GUI、7寿命8887上传、零资源账本、本组1898健康样本及全部已知控制链exit0。未完成的是正常关闭的完整无拒绝流程：唯一Alt+F4已经关闭窗口，客户端仍执行`post_native`前景后验，随后保守锁存。不能据此把普通输入的前景检查删除，也不能清除旧现场的failed/token/120秒限制来补记成功。
 
@@ -40,7 +40,9 @@
 
 第三候选已用新Task `task_2978396a0432` / Dispatch `ctx_f2162fee7cf9`唯一执行。两图0/0→1/1、双回调、7寿命7663上传零账本与3420健康全healthy分项通过，但关闭前置检查时前景为WindowsTerminal，原Alt+F4调用0；保持failed/token与完整120秒零桌面请求后按原900秒截止退出服务。监督器中途账本替换PermissionError，已知外层exit1，子孙原退出码有缺口；诊断窗66968/birth134377322138115927/HWND15010430在父晚到精确句柄查询时仍live。该组已failed结算，不恢复、不补关。
 
-当前下一步先明确并处理该精确自建诊断窗的独立生命周期归属，不能借普通关闭命令绕过原Popen所有权或把清理补记为GUI通过。之后才安排新候选的独立验收。最新142项离线测试及111文件待验候选见[监督器快照修复](control-supervisor-snapshot-journal.md)，新清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`，无Task/Dispatch/批准/运行。所有新现场必须新任务、新分支、新批准和证据目录；不续投已结算任务，不复用旧inbox或任何旧截止。
+遗留诊断窗已由独立`lifecycle_e727f4cea876`在18:14:27一次WM_CLOSE正常退出，新查询句柄exit0；详见[独立生命周期报告](control-residual-lifecycle.md)。这不是原Popen退出证明，也不补记第三候选通过；原日志476字节前缀及failed/token保持，仅窗口自身自然追加两条关闭记录，发送前157文件完整备份保留。
+
+当前下一步可使用此前111文件待验候选另立全新验收，具体冻结见[监督器快照修复](control-supervisor-snapshot-journal.md)，清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`，无Task/Dispatch/批准/运行。独立生命周期新增7项测试后149项全过；候选内源码未变，无需因文档整合重测。新现场必须新任务、新分支、新批准和证据目录，先具体材料审阅及时间范围说明；不续投已结算任务，不复用旧inbox或任何旧截止。
 
 ## 后续现场与产品阶段
 
