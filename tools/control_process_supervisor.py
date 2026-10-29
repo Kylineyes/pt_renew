@@ -161,6 +161,37 @@ def save(path, value):
     temporary.replace(path)
 
 
+class SnapshotJournal:
+    """快照写入失败只锁存诊断，继续持有原进程；不把后续恢复改记为全程成功。"""
+
+    def __init__(self, writer=None, pause=time.sleep):
+        self.writer = writer or save
+        self.pause = pause
+        self.failure_count = 0
+        self.retry_count = 0
+        self.errors = []
+
+    def write(self, path, row):
+        for attempt in range(3):
+            try:
+                self.writer(path, row)
+                return True
+            except PermissionError as error:
+                failure_reason = type(error).__name__ + ': ' + str(error)
+                if attempt < 2:
+                    self.retry_count += 1
+                    self.pause(.01)
+                    continue
+            except OSError as error:
+                failure_reason = type(error).__name__ + ': ' + str(error)
+            break
+        self.failure_count += 1
+        if len(self.errors) < 64:
+            self.errors.append(dict(path=str(path), observed=time.monotonic(),
+                                    reason=failure_reason))
+        return False
+
+
 def validate_plan(plan, root, *, supervisor_executable=None):
     if plan.get('schema_version') != 1 or plan.get('purpose') != 'control-client-witness':
         raise RuntimeError('缺少明确的监督器冻结方案')
@@ -217,6 +248,7 @@ def main(plan_path=None):
          interpreter=str(Path(sys.executable).resolve()), client_interpreter=str(interpreter),
          plan_sha256=plan['_source_sha256'], desktop_requests=0))
     deadline_reported = False
+    snapshots = SnapshotJournal()
     with (root/'client-stdout.log').open('xb') as out, (root/'client-stderr.log').open('xb') as err:
         child = subprocess.Popen([str(interpreter), '-X', 'utf8', str(root/'client.py')], cwd=root,
                                  stdout=out, stderr=err, creationflags=subprocess.CREATE_NO_WINDOW)
@@ -225,7 +257,7 @@ def main(plan_path=None):
             while True:
                 chain.scan()
                 report = chain.report()
-                save(root/'supervisor-chain-held.json', report)
+                snapshots.write(root/'supervisor-chain-held.json', report)
                 if child.poll() is not None and report['all_exited']:
                     break
                 limits = root/'runtime-limits.json'
@@ -236,7 +268,14 @@ def main(plan_path=None):
                              note='预算已尽，只保留只读退出查询，不结束进程或追加桌面请求'))
                         deadline_reported = True
                 time.sleep(plan['scan_interval_seconds'])
-            report.update(client_popen_exit_code=child.returncode, supervisor_pid=os.getpid(),
+            # 只在原客户端及已发现子孙已退出后完成；快照失败不提前丢弃原Popen。
+            original_exit = child.wait()
+            report.update(client_popen_exit_code=original_exit, supervisor_pid=os.getpid(),
+                          snapshot_retry_count=snapshots.retry_count,
+                          snapshot_failure_count=snapshots.failure_count,
+                          snapshot_errors=snapshots.errors,
+                          snapshot_errors_truncated=snapshots.failure_count > len(snapshots.errors),
+                          verified=report['verified'] and snapshots.failure_count == 0,
                           supervisor_birth=own_birth, finished=time.monotonic(),
                           supervisor_exit_proof='上层WitnessLaunch原Popen等待，须与本实际PID/birth对应')
             save(root/'supervisor-chain-exit.json', report)
