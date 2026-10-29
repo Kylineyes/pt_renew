@@ -60,9 +60,10 @@
 | `tools/control_bitmap_surface.py` | 私有WinDLL适配器及原图层寿命接入，默认关闭、资源预算/账本、原错误传播与所属线程退役；仅离线验证 |
 | `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
 | `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本；本次7寿命8509真实上传审计通过，不替完整退出 |
-| `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；4项命令行子进程测试，无新GUI |
+| `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；4项命令行子进程测试 |
+| `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端，冻结方案/两批准/原生精确持柄账本；5项无GUI测试，真实监督器现场尚待验证 |
 
-最后实际相关仓库测试为**110项全部通过**，输出主`.local-analysis/control-bitmap-surface/tests-with-witness-fix.log`（原106项加见证器4项）。冻结客户端6项历史检查单独保留。此前106项输出在`tests-verified.log`，不重复累加。冻结客户端额外6项定向检查单独记录在同目录`frozen-client-tests-final.log`，不与仓库测试合计冒称产品覆盖。上一阶段79项证据在`.local-analysis/control-upload-offline-analysis/tests-verified.log`，原61项历史证据在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
+最后实际相关仓库测试为**115项全部通过**，输出主`.local-analysis/control-bitmap-surface/tests-with-direct-supervisor.log`（110项加监督器5项）。此前110项在`tests-with-witness-fix.log`保留。冻结客户端6项历史检查单独保留。此前106项输出在`tests-verified.log`，不重复累加。冻结客户端额外6项定向检查单独记录在同目录`frozen-client-tests-final.log`，不与仓库测试合计冒称产品覆盖。上一阶段79项证据在`.local-analysis/control-upload-offline-analysis/tests-verified.log`，原61项历史证据在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
 
 ## 已结算现场阶段
 
@@ -84,7 +85,7 @@
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **原生资源实验及离线验证已完成。** [实验报告](docs/control-bitmap-surface.md)包含默认不加载的Win32适配器、原`_Layer`寿命接入、原生失败返回/部分结果移交/资源账本、所有线程退役、独立正常寿命审计及新批准测试。原显示器枚举/消息泵/完整显示后的心跳保持；106项仓库测试及冻结客户端6项单独检查通过，尚未做真实Win32/GUI验证。
-3. **退出见证直启修正已离线完成，下一步冻结新监督器。** `control_witness_launch.py`避免只持venv启动器；目标脚本在实际PID/摘要/解释器身份匹配后才放行，非0退出原样保留。下一版标准库监督器须显式使用冻结MCP venv解释器启动客户端，不能用自身基础Python替代控制环境。先完成新监督器/见证器接入与冻结摘要，再另立新Task/Dispatch和方案，不续投已failed的旧live/inbox，不改旧截止/失败原件。用户已补充“若有需要控制电脑验收的，允许控制，否则推进下一步开发”；有界范围及明确截止仍保持，本次没有追加现场。
+3. **直启监督器接入及新候选已完成离线验证。** [接入报告](docs/control-supervisor-direct-launch.md)对应新候选`.local-analysis/control-supervisor-direct-launch/candidate/`109文件：显式MCP venv启动客户端、基础Python直启监督器本身、原Popen实际PID握手及子孙账本。115项测试通过，新方案模板尚无任务身份。用户已授权必要控制验收；下一组先说明15分钟/600与900秒范围，绑定新Task/Dispatch和实际Pi模型，冻结新方案摘要与两批准后再运行，不续投已failed旧live/inbox或改旧原件。
 4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
