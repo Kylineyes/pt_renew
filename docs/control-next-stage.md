@@ -1,28 +1,30 @@
-# 已完成控制限定验收，产品竞争先做离线准备
+# 产品客户端离线核心已实现，现场条件仍待验证
 
-2026-10-29，最近控制现场[监督器快照修复后的完整关闭](control-close-journal-live.md)限定通过：双图0/0→1/1、双回调、一次close-owned严格返回/客户端原Popen exit0/退役/stop，全链无拒绝；资源7寿命3625上传零账本、健康2880全healthy。快照实际有1次临时权限重试、失败0。服务实际759.341429秒约12分39，在原600/900秒预算内但超过最初预计。未知短命子进程覆盖、长期稳定及性能倍率限制保持。
+2026-10-30，从已核对的`dev=f81576f`独立分支`feat/async-product-client-offline`完成[产品客户端离线实现](async-product-client-offline.md)：request/read/ack、一次真实编辑的编排接口、产品Qt主窗/dirty模态及原Popen正常退出状态机均可注入假API测试，默认禁用。新增30项测试、仓库234项Python测试全部通过；没有启动产品/控制服务/输入钩子或运行旧演练，没有新Task/Dispatch/批准。**ready_for_live=false、max_product_launches=0。**
 
-固定0.11.0及独立实验NET/铜竞争仍未通过。只读前置、正向对照与60秒门闩内实际读图时间结论见[离线预检](async-race-offline-preflight.md)：旧正向对照事件/摘要复核有效，旧两竞争保持aborted；最近控制组截图结束到实际read完成71.019/88.949秒，完整到下一工具动作327.085/402.250秒，不能直接满足冻结60秒看门狗。
+此前控制限定通过保持：[完整关闭现场](control-close-journal-live.md)有双图/回调、一次诊断关闭严格回执→原Popen0→退役→stop，全链无拒绝；资源7寿命3625上传零账本、2880健康全healthy。未知短命进程、长期稳定及性能倍率仍未证明。产品稳定0.10.0、固定0.11.0与独立实验各自的验收边界不变。
 
-本阶段只提交了不启动产品的离线审计工具`tools/audit_async_race.py`和10项变异测试；产品客户端的具体状态、read/ack关联与正常退出要求见[实现约束](async-product-client-contract.md)。实际控制图片仍要求本会话read，审计工具绝不从事件数据授予GUI通过。独立归档图片时序演练在准备阶段遭遇指定模型反复连接错误/超时，已按未执行failed结算，worker abandoned、资源保留，无worker_done；request/read/ack均0，不能给出60秒实测结论。原件和结算见[演练报告](async-image-review-rehearsal.md)。本轮未启动产品、门闩、控制MCP或桌面输入，不形成新GUI通过。接手基线为新独立分支`feat/async-race-offline-preflight`，来自`dev=77d81d6`。
+## 本阶段可审阅结果
 
-## 当前离线结果
+- 新`tools/async_product_client/`只依赖标准库；共享身份、ID/token/忙/排队和原截止，失败不清锁存。request/ack写入新证据目录，唯一图hash及实际read回执不能复用。
+- 实际read须从绑定原会话JSONL核对`deng/gpt-6.1-sol/high`、session、调用及成功image的原字节hash，指定会话另作内容判断；不会把辅助`observed=true`或应用日志当作读图。
+- 原Popen由唯一创建器直接返回并立即持有，创建前核对完整部署/输入及清理环境，按精确主HWND和动态允许标题验证；dirty模态核对同PID/birth/image和owner，实际read后才明确一次“放弃更改”点击。
+- 普通选择/Delete保留前景后验，Delete要求canvas焦点；正常关闭后单独等待原Popen，不再要求已消失窗口保持前景。输入未知/错误不因后来退出0改成功；退役只证明生命周期结束。
+- `tools/freeze_async_product.py`生成新离线候选，包含核心、测试、文档、3个标准库见证器、实验22文件、控制包77文件及新输入3份；不生成批准或开启预算。固定23、稳定22及旧对照/竞争/控制证据全摘要按历史同口径复核不变。
 
-- 固定源码`feat-basic-editing=b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验源码`experiment/async-result-barrier=c4e3ec5e82bf1a022e523ec8844d0665d7b93234`。独立实验EXE摘要`782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`、22文件；固定候选EXE`dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8`、23文件；稳定dist EXE`726a44aa5f1b976dcfbffa068c011b99038172a451eb0964cbc853ee3bf20fc1`、22文件。均全摘要不变，不重建/覆盖。
-- 合成输入副本与原20字节A/B网表及162字节板图摘要匹配，不写原输入。
-- 历史NET/copper对照的新应用事件解析均满足有效release时间线及A/B或铜摘要，历史Popen退出0；它们是引用的历史对照，非本阶段新GUI。
-- 历史NET/copper竞争虽有revision3/dirty/0走线/A来源及旧结果discarded，但两个运行均有`aborted`、无有效`gate-released`，均保持未通过。旧回执未改。
-- 最近控制组两次实际读图完成区间71.019秒/88.949秒；到下一原动作的完整区间327.085秒/402.250秒。由截图结束、会话实际read记录与下一原工具调用的墙钟时间关联重算，不是纯模型推理计时；不声称未来时间数学界。
-- 方案`.local-analysis/async-race-offline-preflight/plan.json`标`offline-preparation-only`、`ready_for_live=false`、`max_product_launches=0`、无任务/许可。不得因某次离线演练快而自行改成live-ready。
+冻结时限设计为从目标请求**触发之前**的原本地单调时钟起算：T1门闩图实际read/ack严格小于20秒；T2编辑图实际read/ack严格小于50秒；T3严格小于55秒且应用时钟余量大于5秒时才开始唯一release；回执及应用释放均在原60秒内。本地事件wait每块至多1秒，35/5/40秒正常退出余量及失败120秒零桌面请求不变。这些是执行门槛，尚无新的实际模型计时证明。
 
-## 下一个阶段的阻断项
+## 下一阶段顺序
 
-1. 冻结60秒不能放宽；先离线完结request/read/ack关口的健壮性与时序演练。每张门闩图、编辑确认图都须真实调用指定模型read并检查image成功、图hash、实际模型/session、修订/几何/dirty/NET来源；缺图、超时、门闩已返回/aborted一律停，不能预写ack或事后补图。
-2. 产品专用生命周期尚未设计：要精确绑定实验EXE及原Popen/创建时间/HWND，覆盖主窗和dirty放弃模态；未保存时一次关闭命令后必须核实正常关闭对话框动作及原Popen退出码。不能复用诊断Tk窗专用close-owned，也不能以临时查询句柄代替原Popen。
-3. 为NET和铜分别冻结不变对照、输入摘要、运行顺序和最多一次竞争，使用全新Task/Dispatch/分支/批准/证据。现场中正常控制仍每步单条核对、失败即停；拒绝后完整120秒零桌面请求，不重连绕过。
-4. 有效竞争严格要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`及真实GUI删除/new revision/geometry/dirty/A来源/终图。cancel路径discard不通过。为节省门闩内时间可在运行前准备所有审阅材料并让连续worker逐步调用；实际读图检查点必须人工/指定Pi完整完成，不能自动图像判定冒充。
-5. 实验通过不提升固定候选。固定0.11.0的900000mil极端属性、受控系统会话结束等仍缺。新增图元、另存为/未知字段往返、元件移动、布线、完整DRC、生产输出、原字形runtime兼容分别规划；未经验证不宣称可用。
+1. **先验证原会话兼容性与时限。** 指定模型可用时另立新上下文，离线验证成功read image的原记录格式，以及新request→read→ack两图顺序计时。当前验证器会拒绝变换/删减image的记录，若需适配先冻结可审计变换链。旧[未执行演练](async-image-review-rehearsal.md)保持failed/abandoned，不能恢复、续投或直接执行其准备脚本。一次快速结果也不能给未来耗时提供保证。
+2. **补现场适配器与见证链接入。** 本阶段是可测试核心，尚无现场Win32/MCP适配器、文件框阶段或产品全链启动器；已复制见证器不等于已完成接入。必须保持持续owner、原Popen/原句柄、精确窗口和普通输入后验，先补假API回归再冻结所有模块/包/EXE/输入。
+3. **条件满足后再形成新现场。** NET与铜分别使用新Task/Dispatch/分支/证据及最终审阅材料，每类最多一次竞争，引用不变对照；说明具体开始时间、预计时长和桌面/进程范围后，在用户持续必要控制授权内执行。不先启动短握手进程等批准，不重复已成功的诊断组，不增加组/连接追逐ready。
+4. **完整产品判据独立验收。** 同应用时钟必须满足`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，并有门闩内真实删除、新修订/dirty/零走线/A来源图和终图。cancel后的discard不通过，核心的协议`settled`也不能替代完整事件/GUI审计。固定候选仍不能由实验通过代替。
 
-下一会话先阅读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、`AGENTS.md`、`SESSION_HANDOFF.md`及本文，再从最新dev新建独立开发分支。先实现并测试read/request/ack关口和产品Qt主窗/dirty模态的原Popen正常退出状态机，补齐纯离线失败路径，保留默认禁用；可并行推进这两项独立模块，但只在集成后冻结新客户端。指定模型可用后另立新的离线图片时序演练任务，不恢复本次failed/abandoned上下文。时限与生命周期均验证后才准备NET、铜分别一次的新现场，新批准是具体可审阅结果的最后一步。本轮交付不包含可用产品竞争客户端或有效现场批准。
+## 交接与授权边界
 
-用户已持续授权必要控制电脑，不重复索权；每次现场前先完成可审阅方案并说明具体开始时间/预计时长/范围。截图/GUI使用Pi `deng/gpt-6.1-sol high`且核对环境与JSONL。下一步由后续会话先审阅本报告、[离线预检](async-race-offline-preflight.md)、[产品客户端约束](async-product-client-contract.md)与[现有判据](async-result-boundaries.md)，只在T1/T2/T3时限可观测并且原进程正常退出路径冻结后，才决定是否请求父批准新现场；本方案目前不能启动产品。
+接手先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](../AGENTS.md)、[SESSION_HANDOFF.md](../SESSION_HANDOFF.md)、本文及[实现报告](async-product-client-offline.md)。本轮补充简报另写`.local-analysis/async-product-client-offline/NEXT_AGENT_BRIEF.md`，原简报和全部旧任务/失败/批准/归档证据保持只读。
+
+必要控制授权持续，不重复索权；每次现场先完成具体可审阅结果并说明实际时间与范围。本阶段没有安排现场，不虚构开始时间。首次真实拒绝完整120秒无输入/截图/状态/原生桌面请求；Snapshot须有image且指定会话实际read，输入后观察失败只补观察不重发；不关闭指示层、不放宽1秒阈值、不热改或绕拒绝。
+
+后续原字形runtime、固定900000mil极端属性/受控会话结束、新增图元、另存为/未知字段往返、元件放置/布线、完整DRC、生产输出仍分别规划。没有新的产品GUI通过或发布版本升级。
