@@ -80,6 +80,28 @@ class SurfaceApprovalTests(unittest.TestCase):
             (package/'windows_mcp/新增.py').write_text('变化',encoding='utf-8')
             with self.assertRaisesRegex(RuntimeError,'隔离包文件集合'):self.check(*args)
 
+    def test_close_requires_explicit_matching_flags_and_frozen_module(self):
+        with self.candidate() as args:
+            root,tools,package,approval,server,env=args
+            self.check(*args)
+            with self.assertRaisesRegex(RuntimeError,'显式批准'):
+                require_client_approval(root,tools,package,environ=env,require_owned_close=True)
+            module='control_owned_close.py'
+            (tools/module).write_text('专用关闭模块',encoding='utf-8')
+            sha=hashlib.sha256((tools/module).read_bytes()).hexdigest()
+            approval.update(owned_diagnostic_close=True,owned_close_sha256=sha)
+            server.update(owned_diagnostic_close=True,owned_close_sha256=sha)
+            server['launcher_files'][module]=sha
+            self.assertEqual(self.check(*args),approval)
+            self.assertEqual(require_client_approval(root,tools,package,environ=env,require_owned_close=True),approval)
+            for field,value in [('owned_diagnostic_close',False),('owned_close_sha256','0'*64)]:
+                bad=deepcopy(server);bad[field]=value
+                with self.assertRaises(RuntimeError):self.check(root,tools,package,approval,bad,env)
+            bad=deepcopy(server);del bad['launcher_files'][module]
+            with self.assertRaises(RuntimeError):self.check(root,tools,package,approval,bad,env)
+            (tools/module).write_text('发生变化',encoding='utf-8')
+            with self.assertRaisesRegex(RuntimeError,'审阅后变化'):self.check(*args)
+
     def test_passive_readiness_requires_one_install_and_no_resource_failure(self):
         installed=dict(event='indicator-surface-installed',max_surfaces=64,max_bitmap_bytes=64*1024*1024)
         self.assertFalse(surface_initial_ready([])['ready'])

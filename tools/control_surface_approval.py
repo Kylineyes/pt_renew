@@ -32,7 +32,7 @@ def verify_files(root, values, required):
         require(hashlib.sha256(path.read_bytes()).hexdigest() == expected, '冻结文件审阅后变化：'+name)
 
 
-def require_client_approval(root, tools_root, package_root, *, environ=None):
+def require_client_approval(root, tools_root, package_root, *, environ=None, require_owned_close=False):
     root, tools_root, package_root = (Path(p).resolve() for p in (root, tools_root, package_root))
     approval = load(root/'phase-two-approval.json')
     env = os.environ if environ is None else environ
@@ -41,7 +41,8 @@ def require_client_approval(root, tools_root, package_root, *, environ=None):
     require(approval.get('mode') == 'diagnostics-only' and approval.get('evidence_root') == str(root), '批准范围或证据目录不符')
     require(bool(re.fullmatch(r'task_[0-9a-f]{12}', str(approval.get('task_id'))))
             and bool(re.fullmatch(r'ctx_[0-9a-f]{12}', str(approval.get('dispatch_id')))), '必须绑定本轮新Task/Dispatch')
-    require(approval['task_id'] not in ('task_47e20595fdcb','task_ab514403da21','task_371c96f46645'), '禁止复用已结算现场任务')
+    require(approval['task_id'] not in ('task_47e20595fdcb','task_ab514403da21','task_371c96f46645',
+            'task_f45a13630a8b','task_e972187b97ac','task_142ea7a86a8d'), '禁止复用已结算现场任务')
     expected = (approval.get('provider'), 'gpt-6.1-sol', 'high', approval.get('session_id'))
     actual = tuple(env.get(name) for name in ('PI_PROVIDER','PI_MODEL','PI_REASONING_LEVEL','PI_SESSION_ID'))
     require(bool(expected[0]) and bool(expected[3]) and expected == actual, '实际Pi模型、推理强度或新会话不符')
@@ -65,6 +66,15 @@ def require_client_approval(root, tools_root, package_root, *, environ=None):
     require(approval.get('indicator_bitmap_timing') is False and server.get('indicator_bitmap_timing') is False,
             '资源实验不能混用旧位图计时')
     verify_files(tools_root, server.get('launcher_files'), TOOL_FILES)
+    close_enabled = approval.get('owned_diagnostic_close', False)
+    require(type(close_enabled) is bool, '专用关闭开关必须是布尔值')
+    require(close_enabled == server.get('owned_diagnostic_close', False), '客户端与服务的专用关闭批准不一致')
+    require(not require_owned_close or close_enabled, '本候选必须显式批准专用关闭')
+    if close_enabled:
+        module = 'control_owned_close.py'
+        verify_files(tools_root, server['launcher_files'], TOOL_FILES | {module})
+        require(approval.get('owned_close_sha256') == server.get('owned_close_sha256')
+                == server['launcher_files'][module], '专用关闭模块摘要不符')
     for name, file in (('geometry_sha256','control_geometry.py'),
                        ('target_activation_sha256','control_target_activation.py')):
         require(approval.get(name) == server['launcher_files'][file] == server.get(name), '客户端辅助模块摘要不符：'+name)
