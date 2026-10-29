@@ -1,6 +1,8 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。最新[完整关闭现场](docs/control-close-journal-live.md)按限定succeeded结算：本会话两图0/0→1/1及双回调、一次原Shortcut Alt+F4严格回执→客户端原Popen退出0→退役→stop，全链无拒绝；7寿命3625上传零账本、2880健康全healthy，监督器及9已发现子孙和已知外层原链exit0。快照发生1次临时权限重试、0持续失败。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
+更新时间：2026-10-29。最新阶段为[产品竞争离线预检](docs/async-race-offline-preflight.md)，从`dev=77d81d6`独立分支完成纯离线事件/实际read时序审计工具及10项变异测试。实验22、固定23、稳定22文件和输入摘要保持，历史NET/铜正向对照事件与原exit0有效；旧两竞争仍aborted。最近实际read返回已需71.019/88.949秒，超过冻结60秒门闩，且旧关键段release不等待实际read，当前ready_for_live=false、产品启动/桌面请求0。[产品客户端约束](docs/async-product-client-contract.md)明确了下一阶段的原Popen、Qt主窗/dirty模态和read/ack接口要求。
+
+此前[完整关闭现场](docs/control-close-journal-live.md)按限定succeeded结算：本会话两图0/0→1/1及双回调、一次原Shortcut Alt+F4严格回执→客户端原Popen退出0→退役→stop，全链无拒绝；7寿命3625上传零账本、2880健康全healthy，监督器及9已发现子孙和已知外层原链exit0。快照发生1次临时权限重试、0持续失败。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
 
 **当前控制限定缺口已取得本组证据，无已知遗留或后台控制。普通输入目标后验未删，旧failed/token/截止/退出码缺口保持。实际服务759.3414秒约12分39，超过预计5～10分钟但在原600/900预算内；50ms未知短命进程、长期稳定和性能倍率不因此通过。稳定产品/dist仍0.10.0，固定0.11.0及NET/铜完整竞争仍未过。下一步先离线准备独立产品竞争方案，本轮不启动产品。**
 
@@ -26,6 +28,8 @@
 固定源码`Kylineyes/feat-basic-editing=b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验`experiment/async-result-barrier=c4e3ec5e82bf1a022e523ec8844d0665d7b93234`（实验代码`98a4321`）。主build可能是历史0.11.0构建，不凭分支猜EXE版本，不重建覆盖冻结部署。本轮未修改产品src、CMake版本、dist、候选或原安装，main仍由用户操作。
 
 ## 最新有效结果与限制
+
+[产品竞争离线预检](docs/async-race-offline-preflight.md)没有启动产品或桌面。`tools/audit_async_race.py`只重算同应用时钟事件链，任何事件通过仍gui_verified=false；中止路径返回aborted不当有效竞争。10项变异测试通过。读图时序引用最近成功控制组原工具起止及实际read成功image回执，不将327.085/402.250秒完整检查点区间归因于纯模型推理。独立归档图演练Task `task_75f8102028b0` / Dispatch `ctx_1bed19e5ff05`在准备阶段因指定Pi连接错误/超时被父取消：Task failed、Dispatch failed、worker abandoned，processAction=none，资源保留、reclaimable0，无worker_done；request/read/ack均未开始、无时序结果，不换模型或新Task绕过。见[演练报告](docs/async-image-review-rehearsal.md)。
 
 [完整关闭现场](docs/control-close-journal-live.md)：Run `run_5fe071294ef6` / Task `task_be586c71f149` / Dispatch `ctx_9bdfefbc4379`，唯一done `msg_b4ea15337528`限定succeeded父验收ack，报告`b87b3c8`已整合。批准`msg_584c9cfcd3b5`，实际Pi `deng/gpt-6.1-sol high` session `01a18648-535d-720b-998d-63e4e0d5c42b`，131条assistant及两次本轮read成功image回执核对。6937行trace closed/dropped0、7寿命3625上传/零账本、2880healthy/fail-open0；close-owned严格成功→原Popen0→退役→stop无拒绝。监督器69840/birth134377475074705323、9已发现子孙/runner51844/launcher41692/owner26088原退出0，父recorder61060/owner原句柄0；snapshot_retry1/failure0。所有旧482/381/182/172/110/77及产品22/23/22、worker42/204摘要全同。worker-release external_terminal retained/processAction=none、reclaimable0，任务已结算。
 
@@ -69,6 +73,7 @@
 
 | 文件 | 用途及完成范围 |
 | --- | --- |
+| `tools/audit_async_race.py` | 纯离线重算应用事件链/真实read先后及时间条件；10项测试通过，事件通过仍不授予GUI通过 |
 | `tools/control_diagnostics.py` | 原方法只读阶段/状态/原因日志，有界队列、独立写线程、丢失计数，不记录用户文字或键值 |
 | `tools/run_control_diagnostics.py` | 复制/核验77文件控制包；启动校验Task/Dispatch/manifest/launcher摘要，继续原ControlToolGate |
 | `tools/control_app_refresh.py` | 原App切换前刷新旧窗口缓存，原枚举过滤、查找、激活和后验保持 |
@@ -90,7 +95,9 @@
 | `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端、精确子孙账本；本组实际监督器和9已发现子孙exit0 |
 | `tools/control_supervisor_runner.py` | 同一本机程序预检/持柄/放行与退出重算；7项无GUI测试及本组实际已知链退出取证通过 |
 
-最新实际控制测试为**149项全部通过**，输出`.local-analysis/control-residual-lifecycle/tests-offline.log`，16.796秒；新增7项独立生命周期契约测试，用假API核对来源/权限/时限/身份/唯一性/一次机会和未知及退出失败，没有发送真实关闭消息。真实生命周期另有持柄及自然回调证明。此前142项结果不叠加计数。
+新增异步离线证据审计测试为**10项全部通过**，日志`.local-analysis/async-race-offline-preflight/tests-audit-final.log`，不启动Qt/Win32/门闩/产品，覆盖事件身份、时序、摘要、代次、原拒绝决定、中止伪通过与真实read成功/先后计时。和149项控制测试分属不同工具范围，不简单相加，不重跑无变化产品矩阵。
+
+此前实际控制测试为**149项全部通过**，输出`.local-analysis/control-residual-lifecycle/tests-offline.log`，16.796秒；新增7项独立生命周期契约测试，用假API核对来源/权限/时限/身份/唯一性/一次机会和未知及退出失败，没有发送真实关闭消息。真实生命周期另有持柄及自然回调证明。此前142项结果不叠加计数。
 
 此前控制测试为**142项全部通过**，输出`.local-analysis/control-owned-close-v3/tests-supervisor-journal.log`，16.848秒；新增2项监督器快照重试/持续失败持原Popen回归，含真实无GUI客户端。此前一次定向子进程测试非0但stderr空，后续补诊断后定向7项及全体142项通过，该次未定位失败如实保留。离线修复`a37ed03`未写回活服务或冻结execution。此前140项结果如下，不叠加计数。
 
@@ -120,12 +127,12 @@
 
 ## 下一会话的执行计划
 
-具体入口和边界见[下一阶段](docs/control-next-stage.md)。149项离线测试结果保持，本轮无源码变化未重复。残留独立生命周期已完成，快照修复后新任务的专用关闭/GUI/资源/健康/已知原链退出取得限定通过；旧failed现场仍只读。下一步先离线规划产品NET/铜竞争，不自动启动或把控制通过当产品通过。
+当前入口见[下一阶段](docs/control-next-stage.md)和[产品竞争离线预检](docs/async-race-offline-preflight.md)。控制限定通过保持；产品竞争已完成不变对照/部署/输入/时序重算，当前尚不能在冻结60秒内可靠完成实际读图与release。先实现并验证产品专用客户端及read/ack/正常退出设计，不自动启动产品或旧控制组。
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **资源复用及已知退出链取得单组真实证据。** 最新[现场报告](docs/control-supervisor-local-live.md)及父独立审计完成，本组7寿命8887上传、零账本、1898健康全healthy、监督器/9子孙/runner/launcher/owner原exit0成立；不因此提升为长期稳定或性能通过。122项离线测试保持，文档整合未改源码不重跑。
 3. **专用关闭已取得本组完整限定通过。** 原Shortcut一次、严格成功回执、原Popen0、退役、stop且无拒绝；普通输入后验保持。快照修复本组retry1/failure0、监督器及9已发现子孙和外层原链exit0，未知短命进程/长期稳定限制保持。有效111文件候选f5ebb7a8...和本组execution只读，不原地重跑。第三候选原failed及子孙缺口、独立生命周期非原Popen边界不改；当前可先离线准备独立产品竞争方案。
-4. **下一项先离线准备产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
+4. **产品竞争离线预检完成，先补执行条件。** 实验源码c4e3ec5/EXE782a769f...、历史NET/铜正向对照和A/B/板输入核对不变，旧竞争仍aborted。实际read时间超过60秒看门狗，旧关键段不等实际read便release不能复用；新方案ready_for_live=false、max_product_launches=0。需按产品客户端约束补主窗/dirty模态精确归属、原Popen正常退出、read/ack时限与冻结/批准，再另定必要新现场。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
 固定候选已有编辑/严格文本焦点/菜单/10000mil远移reset/五类只读图元/关闭保护/选后文件消失等证据，无源码变化不重跑全矩阵，见[实际编辑](docs/basic-editing-actual-edit-acceptance.md)和[剩余验收](docs/basic-editing-remaining-acceptance.md)。产品实验边界见[异步设计](docs/async-result-boundaries.md)、[开发报告](docs/async-experiment-development.md)、[恢复四例](docs/async-gui-recovered-120.md)、[自适应续验](docs/async-races-adaptive.md)。
@@ -142,6 +149,8 @@
 
 | 位置 | 内容 |
 | --- | --- |
+| 主`.local-analysis/async-race-offline-preflight/` | 本轮新输入3、旧/新完整摘要、历史对照/aborted竞争重算、真实read时序、10项测试、非live方案、模型错误/结算和最终Git |
+| 主`.local-analysis/async-image-review-rehearsal/`及worker同名目录 | 未开始演练的准备文件、环境/源图摘要；父快照和未执行审计仅主副本新增，Task failed/worker abandoned，无read/ack |
 | 主`.local-analysis/control-supervisor-local-runner/` | candidate110/live20冻结、真实trace/两图/回调/runner退出与父独立审计；本组限定succeeded，122项离线测试 |
 | `../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/` | 实际模型/原JSONL、before-after、owner/launcher/runner原Popen/持柄退出、worker审计 |
 | 主`.local-analysis/control-bitmap-surface/` | candidate-final107冻结原件、live真实现场与父更正审计、110项仓库测试及原客户端6项；Task failed已结算，见证器修正仅离线，无后台进程 |
