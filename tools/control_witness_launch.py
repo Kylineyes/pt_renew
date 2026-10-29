@@ -53,15 +53,34 @@ class WitnessLaunch:
             self.stdout.close();self.stderr.close()
             raise
         end = time.monotonic()+ready_timeout
-        while not self.ready_path.exists() and self.process.poll() is None and time.monotonic() < end:
+        try:
+            self.identity = self._wait_identity(end)
+            if (self.identity.get('pid') != self.process.pid or
+                    Path(self.identity.get('executable', '')).resolve() != self.interpreter or
+                    self.identity.get('script_sha256') != self.script_sha256):
+                self._abort('原Popen与实际见证器身份不一致，禁止执行目标脚本')
+        except BaseException as error:
+            # 初始化已经创建了进程。任何读取/解析/校验异常都必须将原Popen
+            # 交还调用方等待；不能因构造函数未返回而丢失进程所有权。
+            error.pending_launch = self
+            raise
+
+    def _wait_identity(self, deadline):
+        """仅重读身份文件，沿原握手截止；不重建进程、不放行目标。"""
+        last_error = None
+        while time.monotonic() < deadline:
+            try:
+                return json.loads(self.ready_path.read_text(encoding='utf-8'))
+            except (FileNotFoundError, PermissionError) as error:
+                last_error = error
+            if self.process.poll() is not None:
+                break
             time.sleep(.01)
-        if not self.ready_path.exists():
-            self._abort('没有收到精确进程身份握手')
-        self.identity = json.loads(self.ready_path.read_text(encoding='utf-8'))
-        if (self.identity.get('pid') != self.process.pid or
-                Path(self.identity.get('executable', '')).resolve() != self.interpreter or
-                self.identity.get('script_sha256') != self.script_sha256):
-            self._abort('原Popen与实际见证器身份不一致，禁止执行目标脚本')
+        reason = '没有在原握手截止内读到精确进程身份'
+        if last_error is not None:
+            reason += '：' + type(last_error).__name__ + ': ' + str(last_error)
+        self._abort(reason)
+
 
     def _abort(self, reason):
         # 未放行的child在自己的10秒截止后正常退出，父不kill，不遗失原Popen。
