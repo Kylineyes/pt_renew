@@ -1,8 +1,10 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。本次仅整理交接，不启动GUI或新验收任务。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文，再读[下一阶段开发计划](docs/control-next-stage.md)。当前成果已推送`dev=e389448`，最新[本机连续启动器现场](docs/control-supervisor-local-live.md)报告`ce79cd7`已整合；本次最终交接提交以Git和本机简报为准。原会话、旧交接和失败原件保留，新agent不恢复已结算任务。
+更新时间：2026-10-29。本轮已从`dev=5c9c611`独立分支实现精确自建诊断窗专用关闭；实现与最新冻结见[专用关闭](docs/control-owned-close.md)，现场结果见[独立失败报告](docs/control-owned-close-live.md)。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文，再读[下一阶段开发计划](docs/control-next-stage.md)。最终提交以Git和本机简报为准，旧会话和已结算任务不恢复。
 
-**稳定产品及dist仍为0.10.0，固定0.11.0候选和NET／铜完整竞争仍未通过。最新限定任务succeeded：单组双图/双回调、7个正常资源寿命8887次真实上传/零账本，以及监督器和全部已知控制链的原始exit0证据通过；1898次健康采样全healthy，仅为本组结果。正常Alt+F4关闭后的目标前景守卫仍保守拒绝，失败token及120秒限制原件保留，完整无拒绝关闭流程尚未通过。未知短命进程覆盖、长期稳定性与性能倍率未获证明。本轮控制已正常退出；已结算验收会话按用户要求归档，目前累计5个闲置agent窗格关闭，历史JSONL/工作树/证据保留，无后台控制或自动续验。**
+**本轮新增实现默认禁用，绑定客户端创建时保存的原Popen；只在精确身份/门禁/前景核验后尝试一次原Shortcut Alt+F4，严格回执及原Popen退出0后退役。普通输入的目标后验保持。137项离线测试通过后按新Task/Dispatch唯一启动，但见证器身份文件读取PermissionError导致服务/桌面请求/窗口均0，现场failed；外层已知链exit1，握手child原退出码缺失保持unverifiable。随后仅离线修复见证器握手读取及构造失败原Popen所有权，140项测试全部通过，第三份111文件候选已冻结但未运行、无新任务/批准。本轮失败及所有旧证据不变，不追加连接补验。**
+
+**稳定产品及dist仍为0.10.0，固定0.11.0候选和NET／铜完整竞争仍未通过。此前本机连续启动器限定任务succeeded：单组双图/双回调、7个正常资源寿命8887次真实上传/零账本，以及监督器和全部已知控制链的原始exit0证据通过；1898次健康采样全healthy，仅为本组结果。正常Alt+F4关闭后的目标前景守卫仍保守拒绝，失败token及120秒限制原件保留，完整无拒绝关闭流程尚未通过。未知短命进程覆盖、长期稳定性与性能倍率未获证明。该轮控制已正常退出；此前已结算验收会话按用户要求归档，目前累计5个闲置agent窗格关闭，历史JSONL/工作树/证据保留，无后台控制或自动续验。**
 
 ## 产品与冻结部署
 
@@ -22,6 +24,10 @@
 固定源码`Kylineyes/feat-basic-editing=b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验`experiment/async-result-barrier=c4e3ec5e82bf1a022e523ec8844d0665d7b93234`（实验代码`98a4321`）。主build可能是历史0.11.0构建，不凭分支猜EXE版本，不重建覆盖冻结部署。本轮未修改产品src、CMake版本、dist、候选或原安装，main仍由用户操作。
 
 ## 最新有效结果与限制
+
+本轮[专用关闭现场](docs/control-owned-close-live.md)：Run `run_0ca568a11b7b` / Task `task_304e9df22f4d` / Dispatch `ctx_818a32eb5b79`，done `msg_a7125e2d3539`按failed结算并验收ack，worker报告`8d41db3`已整合。Pi `deng/gpt-6.1-sol high`、session `01a18648-535d-720b-998d-63e4e0d5c42b`，两批准绑定`msg_fa696d8887f7`。启动前PermissionError早于监督器放行；GUI/关闭/资源/健康均未执行，不能继承旧现场通过。runner25956、launcher3504、owner16608原Popen/句柄exit1，父recorder26424/owner原句柄exit1；握手child50968缺原退出码保持unverifiable。父独立审计核对旧172/110/77、产品22/23/22和本轮两个111候选/执行源码/批准全同。第三份待验候选和140项离线结果独立保存，不改本轮失败。worker-release回执为external_terminal/retained/processAction=none，验收Pi终端仍闲置保留，任务已结算且无reclaimable资源。
+
+以下为此前有效现场与历史结果，结论保持原范围。
 
 [本机连续启动器现场](docs/control-supervisor-local-live.md)：Run `run_2ca10ef14e2f` / Task `task_f45a13630a8b` / Dispatch `ctx_d0c7d529aa48`，唯一done `msg_e0448797f2ae`按限定succeeded验收ack。实际Pi `deng/gpt-6.1-sol high`、session `01a185da-259e-7031-a404-17572feabd0a`，两批准绑定`msg_d1dc0cf65510`。冻结candidate110/live20/包77/旧隔离77/部署22/23/22摘要均不变。原App1、Snapshot2、Click1、Shortcut2、ControlStatus0；指定worker实际read两图0/0→1/1，父核对原JSONL读图调用与双回调区间，不冒称父读图。
 
@@ -70,16 +76,21 @@
 | `tools/control_bitmap_surface.py` | 私有WinDLL适配器及原图层寿命接入，默认关闭；本组7寿命8887上传正常路径取证通过，异常路径仍为离线测试范围 |
 | `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
 | `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本；本组7寿命8887真实上传审计通过，进程退出另行核验 |
-| `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；4项命令行子进程测试 |
+| `tools/control_owned_close.py`、`tools/control_close_client/` | 默认禁用的一次精确自建Popen正常关闭；普通输入后验保持，现场尚未通过 |
+| `tools/freeze_control_close.py` | 离线冻结17客户端/13工具/3监督器/77包，生成111文件候选，不创建任务或许可 |
+| `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；新增原截止内身份读取与构造异常所有权，7项定向测试 |
 | `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端、精确子孙账本；本组实际监督器和9已发现子孙exit0 |
 | `tools/control_supervisor_runner.py` | 同一本机程序预检/持柄/放行与退出重算；7项无GUI测试及本组实际已知链退出取证通过 |
 
-最后实际相关仓库测试为**122项全部通过**，输出主`.local-analysis/control-supervisor-local-runner/tests-verified.log`。这些测试使用假窗口/API和无GUI标准库子进程，覆盖控制拒绝、诊断、健康、资源生命周期、批准、启动与精确退出，不安装真实输入钩子。冻结客户端另6项历史定向检查在`.local-analysis/control-bitmap-surface/frozen-client-tests-final.log`，不与仓库测试或产品覆盖相加。其余61/79/106/110/115项为历史测试阶段，原件保留，不重复累加。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果保持；本次纯文档交接不重跑无变化代码。
+最新实际控制测试为**140项全部通过**，输出`.local-analysis/control-owned-close/tests-handshake-fixed.log`，覆盖原122项、14项关闭/客户端、1项批准和3项握手读取/所有权回归；不与137或122项历史结果相加。未运行GUI测试窗/输入钩子，既有监督器测试使用无GUI标准库子进程。现场因启动失败未验证专用关闭，不能用离线结果补记GUI通过。
+
+此前实际相关仓库测试为**122项全部通过**，输出主`.local-analysis/control-supervisor-local-runner/tests-verified.log`。这些测试使用假窗口/API和无GUI标准库子进程，覆盖控制拒绝、诊断、健康、资源生命周期、批准、启动与精确退出，不安装真实输入钩子。冻结客户端另6项历史定向检查在`.local-analysis/control-bitmap-surface/frozen-client-tests-final.log`，不与仓库测试或产品覆盖相加。其余61/79/106/110/115项为历史测试阶段，原件保留，不重复累加。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果保持；本次纯文档交接不重跑无变化代码。
 
 ## 已结算现场阶段
 
 | 阶段 / 报告 | 结果与有效边界 |
 | --- | --- |
+| [专用关闭启动](docs/control-owned-close-live.md) | failed，身份文件PermissionError早于监督器放行；服务/桌面请求0，已知外层exit1，握手child原退出码缺失 |
 | [基线](docs/control-snapshot-diagnostics.md)、[缓存/预算](docs/control-snapshot-fix.md) | failed，App未找到，未进入有效截图/输入 |
 | [窗口兼容](docs/control-window-compat.md) | failed，UIA/枚举/App/首图通过，Click本地混合DPI坐标拒绝；有健康失败轨迹 |
 | [物理矩形](docs/control-physical-geometry.md) | 限定通过，图0/0→1/1；旧逐输入日志有重名参数缺口，原件保留 |
@@ -95,11 +106,11 @@
 
 ## 下一会话的执行计划
 
-具体入口、行为要求、离线测试和现场完成条件见[下一阶段：精确自建诊断窗正常关闭](docs/control-next-stage.md)。先离线开发，旧live仅作只读证据；当前没有关闭命令实现或新冻结候选，不自动启动旧验收。
+具体入口、行为要求、离线测试和现场完成条件见[下一阶段：精确自建诊断窗正常关闭](docs/control-next-stage.md)。专用关闭代码、客户端接入和140项离线测试已经完成，第三份冻结候选未运行；下一次必须新Task/Dispatch/批准/证据目录，旧live及本轮失败只读，不自动恢复。
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **资源复用及已知退出链取得单组真实证据。** 最新[现场报告](docs/control-supervisor-local-live.md)及父独立审计完成，本组7寿命8887上传、零账本、1898健康全healthy、监督器/9子孙/runner/launcher/owner原exit0成立；不因此提升为长期稳定或性能通过。122项离线测试保持，文档整合未改源码不重跑。
-3. **下一步修复自建窗正常关闭的守卫边界。** 现有Guard在AltF4成功关闭目标后仍要求其保持前景，导致post_native保守拒绝。先在新独立分支设计默认不启用的专用关闭命令：仅允许本轮精确自建Popen身份、关闭前仍走原门禁/目标检查、唯一输入、原Popen退出后只退役；未知/未退出/错误身份保持拒绝，不清旧failed或重发，不削弱普通输入后验。假API/状态机测试及新冻结客户端验证后另定有界现场，不复用本组live/inbox/批准/预算。用户必要控制授权保持，开始前说明具体范围。
+3. **专用自建窗关闭实现已完成，现场仍未通过。** `69bdc82`/`81ae57b`提供默认禁用的窄关闭命令、精确原Popen/身份、原门禁、一次Shortcut、严格回执、退出0退役和客户端预算/批准接入；普通输入后验保持。新Task唯一启动因见证器身份读取失败而failed，未进入GUI。`837baf8`仅离线修复握手读取与构造异常所有权，140项通过；第三份111候选清单SHA `85da8a4b12ba0eab3de813697640935d08c1169fbd845bc563d93ec3c02a5873`。下一步以该候选另立有界现场，先审阅并说明具体启动时间/范围，不复用本轮或旧live/inbox/批准/预算。用户必要控制授权保持，失败不追加连接追逐ready。
 4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
