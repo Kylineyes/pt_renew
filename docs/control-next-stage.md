@@ -1,8 +1,8 @@
 # 下一阶段：精确自建诊断窗正常关闭
 
-本阶段已完成默认禁用的专用关闭实现、客户端接入及离线回归，见[实现与最新冻结](control-owned-close.md)；本轮唯一现场在服务启动前失败，见[独立失败报告](control-owned-close-live.md)。接手开发基线为`dev=5c9c611`，此前有效现场见[本机连续启动器验收](control-supervisor-local-live.md)。稳定产品/dist仍0.10.0。
+本阶段已完成默认禁用的专用关闭实现、客户端接入及离线回归，见[实现说明](control-owned-close.md)。最新[第三候选现场](control-owned-close-v3-live.md)取得GUI/资源/健康分项证据，关闭前景preflight拒绝，监督器账本写入失败，整组failed，诊断窗仍live。其后[监督器快照修复](control-supervisor-snapshot-journal.md)只在离线完成并通过142项测试，尚未验收。稳定产品/dist仍0.10.0。
 
-最新任务已限定通过单组GUI、7寿命8887上传、零资源账本、本组1898健康样本及全部已知控制链exit0。未完成的是正常关闭的完整无拒绝流程：唯一Alt+F4已经关闭窗口，客户端仍执行`post_native`前景后验，随后保守锁存。不能据此把普通输入的前景检查删除，也不能清除旧现场的failed/token/120秒限制来补记成功。
+此前本机连续启动器任务已限定通过单组GUI、7寿命8887上传、零资源账本、本组1898健康样本及全部已知控制链exit0。未完成的是正常关闭的完整无拒绝流程：唯一Alt+F4已经关闭窗口，客户端仍执行`post_native`前景后验，随后保守锁存。不能据此把普通输入的前景检查删除，也不能清除旧现场的failed/token/120秒限制来补记成功。
 
 ## 先读的实现入口
 
@@ -38,7 +38,9 @@
 
 本轮已形成代码、137项通过日志、111文件v2冻结与批准，并以新Task `task_304e9df22f4d` / Dispatch `ctx_818a32eb5b79`单次启动；见证器读取身份JSON遭遇PermissionError，服务及桌面请求0，现场failed，不补验。握手child原退出码缺口保持unverifiable。随后独立分支仅离线修复原截止内身份读取和构造异常原Popen所有权，新增3项测试后140项全部通过；未改失败execution或批准。
 
-当前下一步使用全新111文件`frozen-v3`候选另立Task/Dispatch/验收分支/批准/证据目录，具体摘要见[实现说明](control-owned-close.md)。该候选未运行、未绑定任务或许可。不能向本轮或更早已结算任务投递请求，不复用旧live/inbox、批准或任何原15分钟截止；不在本轮失败后追加连接追逐ready。
+第三候选已用新Task `task_2978396a0432` / Dispatch `ctx_f2162fee7cf9`唯一执行。两图0/0→1/1、双回调、7寿命7663上传零账本与3420健康全healthy分项通过，但关闭前置检查时前景为WindowsTerminal，原Alt+F4调用0；保持failed/token与完整120秒零桌面请求后按原900秒截止退出服务。监督器中途账本替换PermissionError，已知外层exit1，子孙原退出码有缺口；诊断窗66968/birth134377322138115927/HWND15010430在父晚到精确句柄查询时仍live。该组已failed结算，不恢复、不补关。
+
+当前下一步先明确并处理该精确自建诊断窗的独立生命周期归属，不能借普通关闭命令绕过原Popen所有权或把清理补记为GUI通过。之后才安排新候选的独立验收。最新142项离线测试及111文件待验候选见[监督器快照修复](control-supervisor-snapshot-journal.md)，新清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`，无Task/Dispatch/批准/运行。所有新现场必须新任务、新分支、新批准和证据目录；不续投已结算任务，不复用旧inbox或任何旧截止。
 
 ## 后续现场与产品阶段
 

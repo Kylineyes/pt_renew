@@ -24,4 +24,6 @@
 
 本轮失败后只在独立`fix/control-witness-handshake-read`分支离线修复见证器，提交`837baf8`、合入`33f4673`：身份文件的FileNotFoundError/PermissionError只在原握手截止内重读，不启动新进程或放行目标；构造器创建进程后任何读取/解析/校验异常均附带原pending_launch供调用方等待。底层权限错误原因仍未证实，修复不改写本组失败及child退出缺口。新增3项实质回归后[140项离线测试全部通过](../.local-analysis/control-owned-close/tests-handshake-fixed.log)，不与137项历史结果叠加。
 
-当前待验源码候选为`.local-analysis/control-owned-close/frozen-v3/candidate/`，仍111文件，清单SHA-256为`85da8a4b12ba0eab3de813697640935d08c1169fbd845bc563d93ec3c02a5873`，没有Task/Dispatch、许可或运行状态。见[第三份冻结清单](../.local-analysis/control-owned-close/frozen-v3/candidate-manifest.json)。冻结v1/v2及失败execution原件保留。本轮不追加新连接追逐ready；下一步是以第三份候选另立有界验收任务，先审阅全部材料并向用户说明具体启动时间和范围，再按既有授权执行，不能恢复本任务。
+第三候选已经由新任务唯一执行，见[第三候选现场](control-owned-close-v3-live.md)：GUI两图/双回调、7寿命7663上传零账本及3420健康分项通过；关闭preflight拒绝且Alt+F4未发送，监督器账本替换失败、子孙原退出码不完整，整组failed。诊断窗66968/birth134377322138115927/HWND15010430在晚到精确句柄查询时仍live；服务按原900秒截止退出，不补关或恢复。
+
+本轮另在独立分支离线修复监督器周期快照写入失败时提前丢弃原进程的问题，142项控制测试通过。最新111文件候选、限制和下一步见[监督器快照修复](control-supervisor-snapshot-journal.md)及[下一阶段](control-next-stage.md)，尚未运行。旧第三份冻结和本轮失败execution均保留原样，不能追溯改写failed。下一现场之前先处理已知残留自建窗的生命周期归属。
