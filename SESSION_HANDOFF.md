@@ -63,9 +63,10 @@
 | `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
 | `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本；本次7寿命8509真实上传审计通过，不替完整退出 |
 | `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；4项命令行子进程测试 |
-| `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端，冻结方案/两批准/原生精确持柄账本；5项无GUI测试，真实监督器现场尚待验证 |
+| `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端，冻结方案/两批准/原生精确持柄账本；真实监督器现场尚待验证 |
+| `tools/control_supervisor_runner.py` | 同一本机程序完成预检、持柄、放行与退出重算，取消代理消息短闸门；7项无GUI测试 |
 
-最后实际相关仓库测试为**115项全部通过**，输出主`.local-analysis/control-bitmap-surface/tests-with-direct-supervisor.log`（110项加监督器5项）。此前110项在`tests-with-witness-fix.log`保留。冻结客户端6项历史检查单独保留。此前106项输出在`tests-verified.log`，不重复累加。冻结客户端额外6项定向检查单独记录在同目录`frozen-client-tests-final.log`，不与仓库测试合计冒称产品覆盖。上一阶段79项证据在`.local-analysis/control-upload-offline-analysis/tests-verified.log`，原61项历史证据在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
+最后实际相关仓库测试为**122项全部通过**，输出主`.local-analysis/control-supervisor-local-runner/tests-verified.log`（115项加本机启动器7项）。此前115项在`.local-analysis/control-bitmap-surface/tests-with-direct-supervisor.log`保留。此前110项在`tests-with-witness-fix.log`保留。冻结客户端6项历史检查单独保留。此前106项输出在`tests-verified.log`，不重复累加。冻结客户端额外6项定向检查单独记录在同目录`frozen-client-tests-final.log`，不与仓库测试合计冒称产品覆盖。上一阶段79项证据在`.local-analysis/control-upload-offline-analysis/tests-verified.log`，原61项历史证据在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
 
 ## 已结算现场阶段
 
@@ -87,7 +88,7 @@
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **原生资源实验及离线验证已完成。** [实验报告](docs/control-bitmap-surface.md)包含默认不加载的Win32适配器、原`_Layer`寿命接入、原生失败返回/部分结果移交/资源账本、所有线程退役、独立正常寿命审计及新批准测试。原显示器枚举/消息泵/完整显示后的心跳保持；106项仓库测试及冻结客户端6项单独检查通过，尚未做真实Win32/GUI验证。
-3. **直启监督器离线通过，现场尚未执行成功。** 新候选109文件、115项测试有效，但Task `task_e972187b97ac`因启动前外部300秒闸门超时failed；服务未起、无新GUI/健康样本，不复用该live状态。下一步把外层身份持柄、摘要核对与放行合并为单一本机非LLM程序，避免短闸门依赖父worker消息往返；先完成离线自动化验证和冻结新方案，再按用户既有必要验收授权说明有界范围执行。旧failed、截止和晚到文件均保留。
+3. **本机连续启动器已完成，真实现场待验。** [接入报告](docs/control-supervisor-local-runner.md)将预检、原Popen与实际PID核对、原生持柄、放行和退出重算合并为本机连续步骤，不在10秒握手内等待代理消息。122项测试通过，新候选`.local-analysis/control-supervisor-local-runner/candidate/`110文件，包含17客户端及3监督器模块。下一组先完整准备新任务/方案/两批准，再单次启动；不得加入新的代理往返短闸门，不复用已有failed live。用户必要控制授权仍有效，先说明具体有界范围；本轮没有新桌面现场。
 4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 

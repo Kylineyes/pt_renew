@@ -76,8 +76,10 @@ class WitnessLaunch:
             self._abort('见证器脚本在握手后变化，禁止放行')
         if time.monotonic() >= self.identity['release_deadline']:
             self._abort('见证器放行期限已过，禁止继续启动')
-        with self.release_path.open('x', encoding='utf-8') as out:
+        temporary = self.release_path.with_suffix('.tmp')
+        with temporary.open('x', encoding='utf-8') as out:
             json.dump(dict(pid=self.process.pid, script_sha256=self.script_sha256), out)
+        temporary.rename(self.release_path)
         self.released = True
 
     def wait(self, timeout=None):

@@ -161,14 +161,15 @@ def save(path, value):
     temporary.replace(path)
 
 
-def validate_plan(plan, root):
+def validate_plan(plan, root, *, supervisor_executable=None):
     if plan.get('schema_version') != 1 or plan.get('purpose') != 'control-client-witness':
         raise RuntimeError('缺少明确的监督器冻结方案')
     if (plan.get('diagnostic_seconds') != 600 or plan.get('total_seconds') != 900
             or plan.get('scan_interval_seconds') != .05):
         raise RuntimeError('监督器预算或采样间隔不符')
     interpreter = Path(plan['client_interpreter']).resolve(strict=True)
-    if interpreter == Path(sys.executable).resolve():
+    actual_supervisor = Path(supervisor_executable or sys.executable).resolve()
+    if interpreter == actual_supervisor:
         raise RuntimeError('必须显式选择独立MCP环境，不能用监督器基础Python替代')
     for collection in ('client_files', 'supervisor_files'):
         files = plan.get(collection)
