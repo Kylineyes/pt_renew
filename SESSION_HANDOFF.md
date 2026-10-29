@@ -1,6 +1,14 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-30。最新阶段为[产品客户端离线实现与冻结时限](docs/async-product-client-offline.md)，从已核对的`dev=origin/dev=f81576f83397900fd0c861765c57da928d313228`建立`feat/async-product-client-offline`。新增默认禁用的request/read/ack、NET/铜编排、产品Qt主窗/dirty模态及原Popen正常退出核心，30项新增测试和仓库234项Python测试全部通过。原22/23/22、旧事件/输入、最新控制及归档等10组参考按历史摘要口径全部匹配。产品启动/桌面请求0，没有新Task/Dispatch或批准；ready_for_live=false。
+更新时间：2026-10-30。最新阶段为[原始回执与原Popen适配](docs/async-product-evidence-adapters.md)，从已核对的`dev=origin/dev=883f33323b6519e6ea4bb9a2095e0a5277247e9d`建立`feat/async-product-evidence-adapters`。新增默认禁用的原MCP结果/PNG/region物理倍率、产品原Popen创建/原句柄身份适配及全新归档顺序计时器、显式UTF-8预检。20项新增测试及仓库254项Python测试通过，10组旧参考摘要不变；产品启动/桌面请求0，ready_for_live=false。
+
+新Run `run_e79a93df45bb` / Task `task_70c8976c2e7e` / Dispatch `ctx_1e46f88cbaf6`只读图片任务已failed结算。实际Pi `deng/gpt-6.1-sol high` session `01a188b6-141b-7023-bb48-f7b9d57d707a`的12条assistant身份通过；worker预检PowerShell未指定UTF-8导致JSON解析失败，依约在init前停止，request/read/ack0、无timing-result，不等于读图超60秒。唯一done `msg_150a1878ddbd`已父验收ack，release为external_terminal retained/processAction=none，reclaimable0。修复版预检只在父新分支，不恢复任务或重写原冻结。新证据和补充简报在`.local-analysis/async-product-evidence-adapters/`；原简报与前阶段证据只读。
+
+下一步补native/UIA可信窗口/模态按钮/文件框阶段、应用原run UUID与Task上下文绑定、门闩事件及唯一release、原Popen外层全链见证。模型实际两图read兼容性与T1/T2时序仍未取得，当前无可运行产品现场客户端。必要控制授权持续，新现场前完成可审阅材料并说明实际开始时间、预计时长和范围；不复用旧failed/abandoned任务、批准或演练。
+
+以下为前阶段已完成离线核心，历史数字不覆盖最新结果。
+
+前阶段更新时间：2026-10-30。此前阶段为[产品客户端离线实现与冻结时限](docs/async-product-client-offline.md)，从已核对的`dev=origin/dev=f81576f83397900fd0c861765c57da928d313228`建立`feat/async-product-client-offline`。新增默认禁用的request/read/ack、NET/铜编排、产品Qt主窗/dirty模态及原Popen正常退出核心，30项新增测试和仓库234项Python测试全部通过。原22/23/22、旧事件/输入、最新控制及归档等10组参考按历史摘要口径全部匹配。产品启动/桌面请求0，没有新Task/Dispatch或批准；ready_for_live=false。
 
 本阶段交接入口为[下一阶段](docs/control-next-stage.md)、[客户端约束](docs/async-product-client-contract.md)与本机`.local-analysis/async-product-client-offline/NEXT_AGENT_BRIEF.md`；原`.local-analysis/NEXT_AGENT_BRIEF.md`不改，按前阶段历史读取。下一步先以指定模型新上下文验证原read image记录兼容性及两图顺序时限，再补冻结的Win32/MCP现场适配器、文件框阶段和原Popen全链启动/见证接入。T1/T2/T3设计为触发前原时钟起算20/50/55秒，原60秒上限不变，尚无新的实际模型计时证明。必要控制授权持续；新现场先完成可审阅材料并说明具体时间/范围，不恢复旧failed/abandoned任务或执行其准备脚本。
 

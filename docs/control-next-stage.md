@@ -1,4 +1,12 @@
-# 产品客户端离线核心已实现，现场条件仍待验证
+# 产品回执与原Popen适配已补，实际读图时序仍缺
+
+2026-10-30最新结果见[原始回执与原Popen适配报告](async-product-evidence-adapters.md)。从`dev=883f333`独立分支完成默认禁用的原MCP结果/PNG/region物理倍率及原Popen创建/原句柄身份适配，另加全新顺序读图计时器与显式UTF-8预检。新增20项及仓库254项Python测试通过；10组旧参考摘要不变，产品/桌面请求0，ready_for_live=false。
+
+新只读图片Task `task_70c8976c2e7e` / Dispatch `ctx_1e46f88cbaf6`已按**failed结算**：实际Pi `deng/gpt-6.1-sol high`及12条assistant记录核验通过，预检PowerShell编码错误发生在init之前，依约停止。request/read/ack均0，无timing-result；父已验收唯一done并ack，external_terminal保留、processAction=none、reclaimable0。修复后的Python UTF-8 preflight只在父新分支，不写回旧冻结或恢复该任务。后续不能重复投递本次或更早failed/abandoned上下文。
+
+下一步继续补native/UIA可信主窗/文件框/dirty模态数据、应用原run UUID与Task绑定、门闩原事件/唯一release以及原Popen外层全链见证；再冻结并测试。实际指定模型两图read兼容性及T1/T2用时仍未取得，不因模型本次可响应而当时限通过。当前没有可运行的产品现场客户端或新现场批准。
+
+以下保留前阶段结果和共同约束；最新实现范围以上述报告为准。
 
 2026-10-30，从已核对的`dev=f81576f`独立分支`feat/async-product-client-offline`完成[产品客户端离线实现](async-product-client-offline.md)：request/read/ack、一次真实编辑的编排接口、产品Qt主窗/dirty模态及原Popen正常退出状态机均可注入假API测试，默认禁用。新增30项测试、仓库234项Python测试全部通过；没有启动产品/控制服务/输入钩子或运行旧演练，没有新Task/Dispatch/批准。**ready_for_live=false、max_product_launches=0。**
 
@@ -16,8 +24,8 @@
 
 ## 下一阶段顺序
 
-1. **先验证原会话兼容性与时限。** 指定模型可用时另立新上下文，离线验证成功read image的原记录格式，以及新request→read→ack两图顺序计时。当前验证器会拒绝变换/删减image的记录，若需适配先冻结可审计变换链。旧[未执行演练](async-image-review-rehearsal.md)保持failed/abandoned，不能恢复、续投或直接执行其准备脚本。一次快速结果也不能给未来耗时提供保证。
-2. **补现场适配器与见证链接入。** 本阶段是可测试核心，尚无现场Win32/MCP适配器、文件框阶段或产品全链启动器；已复制见证器不等于已完成接入。必须保持持续owner、原Popen/原句柄、精确窗口和普通输入后验，先补假API回归再冻结所有模块/包/EXE/输入。
+1. **实际read兼容性与时限仍待验证。** 本次全新任务在预检编码错误后已failed结算；后续只能在新的具体任务和新上下文里使用已测试并冻结的UTF-8预检。指定模型可用时另立新上下文，离线验证成功read image的原记录格式，以及新request→read→ack两图顺序计时。当前验证器会拒绝变换/删减image的记录，若需适配先冻结可审计变换链。旧[未执行演练](async-image-review-rehearsal.md)保持failed/abandoned，不能恢复、续投或直接执行其准备脚本。一次快速结果也不能给未来耗时提供保证。
+2. **继续补齐现场适配器与见证链接入。** 现在已有默认禁用的原MCP结果/PNG/region及原Popen创建/原句柄适配，仍缺native/UIA可信数据、文件框阶段、应用UUID绑定和产品全链启动器；已复制见证器不等于已完成接入。必须保持持续owner、原Popen/原句柄、精确窗口和普通输入后验，先补假API回归再冻结所有模块/包/EXE/输入。
 3. **条件满足后再形成新现场。** NET与铜分别使用新Task/Dispatch/分支/证据及最终审阅材料，每类最多一次竞争，引用不变对照；说明具体开始时间、预计时长和桌面/进程范围后，在用户持续必要控制授权内执行。不先启动短握手进程等批准，不重复已成功的诊断组，不增加组/连接追逐ready。
 4. **完整产品判据独立验收。** 同应用时钟必须满足`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，并有门闩内真实删除、新修订/dirty/零走线/A来源图和终图。cancel后的discard不通过，核心的协议`settled`也不能替代完整事件/GUI审计。固定候选仍不能由实验通过代替。
 

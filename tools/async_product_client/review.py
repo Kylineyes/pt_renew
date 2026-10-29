@@ -105,8 +105,11 @@ class PiReadVerifier:
         require(ri > ci and rr.get('id') == result_id and result.get('toolName') == 'read'
                 and result.get('isError') is False, '实际read顺序或成功回执不匹配')
         start, end = wall_ns(cr['timestamp']), wall_ns(rr['timestamp'])
-        require(request.snapshot.end_wall_ns <= request.created_wall_ns <= start <= end,
-                'ack使用了request之前的read或跨日志时钟矛盾')
+        require(request.created_wall_ns <= start <= end, 'ack使用了request之前的read或跨日志时钟矛盾')
+        snapshot_end = getattr(request.snapshot, 'end_wall_ns', None)
+        if snapshot_end is not None:
+            require(positive(snapshot_end) and snapshot_end <= request.created_wall_ns,
+                    '产品Snapshot结束时间晚于request')
         images = [x for x in result.get('content', []) if x.get('type') == 'image']
         require(len(images) == 1 and images[0].get('mimeType', '').startswith('image/'),
                 'read回执缺少唯一成功image')
