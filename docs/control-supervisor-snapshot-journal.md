@@ -8,4 +8,4 @@
 
 新增2项实质测试覆盖临时权限拒绝、有界重试、持续拒绝锁存、非权限写入失败、诊断数量上限、后续写入恢复仍保持失败，以及真实无GUI客户端在持续账本写入失败时完成原正常生命周期、保留原退出码并返回失败。一次定向运行的既有子进程测试出现非0且原stderr为空，未据此记通过；补充失败时输出原退出账本诊断后，7项定向测试及[142项控制测试](../.local-analysis/control-owned-close-v3/tests-supervisor-journal.log)全部通过，后者16.848秒。该次未定位的定向失败保留为验证限制，不能以随后通过否定其发生。
 
-新冻结候选位于`.local-analysis/control-owned-close-v3/frozen-next/candidate`，仍111文件（17客户端、13工具、3监督器和77文件包及清单），清单SHA-256 `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`。没有绑定Task/Dispatch、批准或运行状态，尚未现场验证。旧第三候选、旧失败execution、原批准及产品文件保持只读；此后遗留诊断窗已通过[独立生命周期](control-residual-lifecycle.md)一次WM_CLOSE正常退出；该新查询句柄exit0不补记旧验收或原Popen证明。后续可另立新Task/Dispatch及冻结批准验收，不能在failed任务追加关闭或新连接补验。
+新冻结候选位于`.local-analysis/control-owned-close-v3/frozen-next/candidate`，仍111文件（17客户端、13工具、3监督器和77文件包及清单），清单SHA-256 `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`。该候选已由[完整关闭现场](control-close-journal-live.md)在新Task `task_be586c71f149`唯一执行并取得限定通过：retry_count=1、failure_count=0，原进程持柄/等待继续，监督器、9个已发现子孙和已知外层均exit0。一次重试表明临时PermissionError写入恢复路径真实发生，不证明底层权限问题已消除或全部写入首次成功。旧第三候选failed、原退出码缺口和独立生命周期证明边界保持；本候选不能原地重跑，今后每次仍需新副本/任务/批准及原预算。

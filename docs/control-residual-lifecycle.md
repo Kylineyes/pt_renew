@@ -14,4 +14,4 @@
 
 本次退出证明明确标为晚到精确查询句柄，不是原Popen，不恢复已结算Task或监督器。[独立审计](../.local-analysis/control-residual-lifecycle/independent-audit.json)核对唯一WM_CLOSE、同句柄exit0及原窗口两条自然回调顺序，计数保持1/1；旧窗口日志原476字节前缀逐字节不变，原执行目录157文件中仅window-events.jsonl追加，其余文件及全部冻结/旧验收归档/产品摘要不变。新增来源备份保留全部发送前原件。只读进程查询当前未发现该PID只是辅助观察，退出结论来自本次持柄回执。[执行回执](../.local-analysis/control-residual-lifecycle/execute-result.json)和[事件日志](../.local-analysis/control-residual-lifecycle/execute-events.jsonl)保持原件。
 
-本次独立生命周期通过，遗留自建窗已退。第三候选failed、专用Alt+F4关闭未验证、原子孙退出码缺口、长期稳定性及固定0.11.0/NET/铜竞争边界保持。下一步可以使用此前监督器快照修复后的111文件候选另立全新有界验收，先准备可审阅材料和具体时间范围，不能复用旧Task/inbox/批准/预算。
+本次独立生命周期通过，遗留自建窗已退。第三候选failed、原子孙退出码缺口、长期稳定性及固定0.11.0/NET/铜竞争边界保持。随后[完整关闭现场](control-close-journal-live.md)在全新Task/副本/批准下取得一次专用Alt+F4、原Popen退出0、退役与stop无拒绝的限定证据，不能将它补记到此前第三候选或本独立生命周期。当前下一阶段见[计划](control-next-stage.md)，不复用任何旧Task/inbox/批准/预算。
