@@ -1,8 +1,8 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。最新[独立生命周期](docs/control-residual-lifecycle.md)已正常关闭第三候选遗留诊断窗：一次WM_CLOSE、新查询句柄退出0，原窗口自然追加两条关闭日志，原failed/token及旧验收结论保持，149项控制测试通过。此前[第三候选现场](docs/control-owned-close-v3-live.md)仍按failed结算，GUI/资源/健康分项通过，关闭前置拒绝及监督器失败边界保持。监督器快照修复尚未运行完整控制现场。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
+更新时间：2026-10-29。最新[完整关闭现场](docs/control-close-journal-live.md)按限定succeeded结算：本会话两图0/0→1/1及双回调、一次原Shortcut Alt+F4严格回执→客户端原Popen退出0→退役→stop，全链无拒绝；7寿命3625上传零账本、2880健康全healthy，监督器及9已发现子孙和已知外层原链exit0。快照发生1次临时权限重试、0持续失败。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
 
-**当前残留已解决：独立操作lifecycle_e727f4cea876于18:14:27（UTC+08:00）核对PID66968/birth134377322138115927/HWND15010430后发送一次定向WM_CLOSE，同一新查询句柄exit0，非原Popen/GUI证明。发送前实际执行目录157文件完整备份，原窗口日志476字节前缀不变、只自然追加normal-close/mainloop-returned，其他旧文件和产品摘要不变。下一步可基于111文件候选f5ebb7a8...另立新验收，不能复用旧failed链。**
+**当前控制限定缺口已取得本组证据，无已知遗留或后台控制。普通输入目标后验未删，旧failed/token/截止/退出码缺口保持。实际服务759.3414秒约12分39，超过预计5～10分钟但在原600/900预算内；50ms未知短命进程、长期稳定和性能倍率不因此通过。稳定产品/dist仍0.10.0，固定0.11.0及NET/铜完整竞争仍未过。下一步先离线准备独立产品竞争方案，本轮不启动产品。**
 
 **此前acb9c87阶段新增实现默认禁用，绑定客户端创建时保存的原Popen；只在精确身份/门禁/前景核验后尝试一次原Shortcut Alt+F4，严格回执及原Popen退出0后退役。普通输入的目标后验保持。137项离线测试通过后按新Task/Dispatch唯一启动，但见证器身份文件读取PermissionError导致服务/桌面请求/窗口均0，现场failed；外层已知链exit1，握手child原退出码缺失保持unverifiable。随后仅离线修复见证器握手读取及构造失败原Popen所有权，140项测试全部通过，第三份111文件候选已冻结但未运行、无新任务/批准。本轮失败及所有旧证据不变，不追加连接补验。**
 
@@ -26,6 +26,8 @@
 固定源码`Kylineyes/feat-basic-editing=b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验`experiment/async-result-barrier=c4e3ec5e82bf1a022e523ec8844d0665d7b93234`（实验代码`98a4321`）。主build可能是历史0.11.0构建，不凭分支猜EXE版本，不重建覆盖冻结部署。本轮未修改产品src、CMake版本、dist、候选或原安装，main仍由用户操作。
 
 ## 最新有效结果与限制
+
+[完整关闭现场](docs/control-close-journal-live.md)：Run `run_5fe071294ef6` / Task `task_be586c71f149` / Dispatch `ctx_9bdfefbc4379`，唯一done `msg_b4ea15337528`限定succeeded父验收ack，报告`b87b3c8`已整合。批准`msg_584c9cfcd3b5`，实际Pi `deng/gpt-6.1-sol high` session `01a18648-535d-720b-998d-63e4e0d5c42b`，131条assistant及两次本轮read成功image回执核对。6937行trace closed/dropped0、7寿命3625上传/零账本、2880healthy/fail-open0；close-owned严格成功→原Popen0→退役→stop无拒绝。监督器69840/birth134377475074705323、9已发现子孙/runner51844/launcher41692/owner26088原退出0，父recorder61060/owner原句柄0；snapshot_retry1/failure0。所有旧482/381/182/172/110/77及产品22/23/22、worker42/204摘要全同。worker-release external_terminal retained/processAction=none、reclaimable0，任务已结算。
 
 本轮[独立生命周期](docs/control-residual-lifecycle.md)通过，操作`lifecycle_e727f4cea876`仅处理残留窗，不创建控制连接或诊断组。冻结来源/工具/方案→只检查身份唯一→独占一次机会→复核完整身份→一次WM_CLOSE→同一新查询句柄exit0；没有键鼠/聚焦/强杀，没有原Task恢复或结果更改。149项测试和只读保护见报告。本次窗口原日志自然追加必须与旧归档区分，发送前完整备份保留。
 
@@ -82,7 +84,7 @@
 | `tools/control_bitmap_surface.py` | 私有WinDLL适配器及原图层寿命接入，默认关闭；本组7寿命8887上传正常路径取证通过，异常路径仍为离线测试范围 |
 | `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
 | `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本；本组7寿命8887真实上传审计通过，进程退出另行核验 |
-| `tools/control_owned_close.py`、`tools/control_close_client/` | 默认禁用的一次精确自建Popen正常关闭；普通输入后验保持，现场尚未通过 |
+| `tools/control_owned_close.py`、`tools/control_close_client/` | 默认禁用的一次精确自建Popen正常关闭；普通输入后验保持，最新单组原Popen0→退役→stop无拒绝通过 |
 | `tools/freeze_control_close.py` | 离线冻结17客户端/13工具/3监督器/77包，生成111文件候选，不创建任务或许可 |
 | `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；新增原截止内身份读取与构造异常所有权，7项定向测试 |
 | `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端、精确子孙账本；本组实际监督器和9已发现子孙exit0 |
@@ -100,6 +102,7 @@
 
 | 阶段 / 报告 | 结果与有效边界 |
 | --- | --- |
+| [完整关闭现场](docs/control-close-journal-live.md) | 限定succeeded，专用关闭一次成功无拒绝、两图/回调、7寿命3625上传零账本、2880healthy及全部已知链原exit0 |
 | [第三候选现场](docs/control-owned-close-v3-live.md) | failed，双图/回调及资源健康分项通过；关闭preflight拒绝未发送、监督器exit1/子孙缺口、窗口仍live |
 | [专用关闭启动](docs/control-owned-close-live.md) | failed，身份文件PermissionError早于监督器放行；服务/桌面请求0，已知外层exit1，握手child原退出码缺失 |
 | [基线](docs/control-snapshot-diagnostics.md)、[缓存/预算](docs/control-snapshot-fix.md) | failed，App未找到，未进入有效截图/输入 |
@@ -117,12 +120,12 @@
 
 ## 下一会话的执行计划
 
-具体入口、行为要求、离线测试和现场完成条件见[下一阶段](docs/control-next-stage.md)。149项离线测试通过，残留诊断窗已由独立生命周期正常退出。监督器快照修复后的候选未运行，可准备全新有界验收；旧live及两次关闭failed现场仍只读，不恢复或补记通过。
+具体入口和边界见[下一阶段](docs/control-next-stage.md)。149项离线测试结果保持，本轮无源码变化未重复。残留独立生命周期已完成，快照修复后新任务的专用关闭/GUI/资源/健康/已知原链退出取得限定通过；旧failed现场仍只读。下一步先离线规划产品NET/铜竞争，不自动启动或把控制通过当产品通过。
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
 2. **资源复用及已知退出链取得单组真实证据。** 最新[现场报告](docs/control-supervisor-local-live.md)及父独立审计完成，本组7寿命8887上传、零账本、1898健康全healthy、监督器/9子孙/runner/launcher/owner原exit0成立；不因此提升为长期稳定或性能通过。122项离线测试保持，文档整合未改源码不重跑。
-3. **专用关闭仍未取得完整现场通过，独立残留生命周期已完成。** 第三候选原failed及前置拒绝/监督器失败/子孙退出缺口保持；窗口66968/birth134377322138115927由独立一次WM_CLOSE正常退出，新查询句柄exit0不冒充原Popen。`a37ed03`离线快照修复后候选仍在`.local-analysis/control-owned-close-v3/frozen-next/candidate`，111文件，清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`，未运行/无新批准。独立生命周期工具及149项测试完成后，可另立全新Task/Dispatch/分支/批准/证据，并说明具体时间范围，不在旧任务追加连接追逐ready。
-4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
+3. **专用关闭已取得本组完整限定通过。** 原Shortcut一次、严格成功回执、原Popen0、退役、stop且无拒绝；普通输入后验保持。快照修复本组retry1/failure0、监督器及9已发现子孙和外层原链exit0，未知短命进程/长期稳定限制保持。有效111文件候选f5ebb7a8...和本组execution只读，不原地重跑。第三候选原failed及子孙缺口、独立生命周期非原Popen边界不改；当前可先离线准备独立产品竞争方案。
+4. **下一项先离线准备产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
 固定候选已有编辑/严格文本焦点/菜单/10000mil远移reset/五类只读图元/关闭保护/选后文件消失等证据，无源码变化不重跑全矩阵，见[实际编辑](docs/basic-editing-actual-edit-acceptance.md)和[剩余验收](docs/basic-editing-remaining-acceptance.md)。产品实验边界见[异步设计](docs/async-result-boundaries.md)、[开发报告](docs/async-experiment-development.md)、[恢复四例](docs/async-gui-recovered-120.md)、[自适应续验](docs/async-races-adaptive.md)。

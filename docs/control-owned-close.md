@@ -1,6 +1,6 @@
 # 精确自建诊断窗的专用正常关闭
 
-2026-10-29，从`dev=5c9c611`建立`feat/control-owned-window-close`。专用关闭实现与离线验证已完成，现场启动前失败，结果见[独立验收报告](control-owned-close-live.md)。旧现场、批准、failed/token、截止和原证据均只读；本轮失败也不重启补验。
+2026-10-29，从`dev=5c9c611`建立`feat/control-owned-window-close`完成专用关闭；最新[完整关闭现场](control-close-journal-live.md)已按限定succeeded验收，普通输入目标后验保持。原[启动失败报告](control-owned-close-live.md)及所有旧批准、failed/token、截止和原证据保持，不因本组成功追溯改写。
 
 旧路径在唯一Alt+F4已正常关闭诊断窗后，继续执行普通输入的前景后验并拒绝。新`tools/control_owned_close.py`提供默认禁用的`OwnedDiagnosticClose`，仅由创建自建窗的客户端登记原始Popen；请求不接受PID或窗口参数。关闭前沿用Guard门禁、物理矩形与前景检查，并核对唯一标题、PID、创建时间、映像、HWND、类及原Popen仍活。工具调用尝试即消费机会；只允许一次原Shortcut Alt+F4。
 
@@ -26,4 +26,4 @@
 
 第三候选已经由新任务唯一执行，见[第三候选现场](control-owned-close-v3-live.md)：GUI两图/双回调、7寿命7663上传零账本及3420健康分项通过；关闭preflight拒绝且Alt+F4未发送，监督器账本替换失败、子孙原退出码不完整，整组failed。诊断窗66968/birth134377322138115927/HWND15010430在晚到精确句柄查询时仍live；服务按原900秒截止退出，不补关或恢复。
 
-本轮另在独立分支离线修复监督器周期快照写入失败时提前丢弃原进程的问题，142项控制测试通过。最新111文件候选、限制和下一步见[监督器快照修复](control-supervisor-snapshot-journal.md)及[下一阶段](control-next-stage.md)，尚未运行。旧第三份冻结和本轮失败execution均保留原样，不能追溯改写failed。此后已用[独立生命周期](control-residual-lifecycle.md)正常关闭该残留诊断窗，新查询句柄exit0；未恢复旧Task或补记原Popen/GUI通过。下一步可以基于未运行候选另立有界验收。
+本轮快照修复候选已经由新Task `task_be586c71f149` / Dispatch `ctx_9bdfefbc4379`唯一执行，结果见[完整关闭现场](control-close-journal-live.md)：两图0/0→1/1、双回调、一次原Shortcut严格成功回执→客户端原Popen0→退役→stop且无拒绝，7寿命3625上传零账本、2880健康全healthy、监督器及9已发现子孙/已知外层原链exit0成立。快照retry_count=1、failure_count=0，实际服务759.3414292秒在原600/900预算内。此前第三候选failed、旧原退出缺口及独立生命周期证明边界保持；下一阶段转向独立产品竞争准备，不自动启动产品。
