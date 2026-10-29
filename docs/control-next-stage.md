@@ -1,35 +1,28 @@
-# 下一阶段：控制限定验收完成后转向产品竞争准备
+# 已完成控制限定验收，产品竞争先做离线准备
 
-2026-10-29，[监督器快照修复后的完整关闭现场](control-close-journal-live.md)按本组限定范围通过：实际双图0/0→1/1、双Tk回调、一次原Shortcut Alt+F4严格成功回执→客户端原Popen退出0→退役→stop，全链无拒绝；7个正常资源寿命3625次上传零账本、2880次实际健康采样全healthy，以及监督器/9个已发现子孙/已知外层原退出链均通过。快照发生1次临时PermissionError重试，持续失败0，不等于全部文件首次写入成功。
+2026-10-29，最近控制现场[监督器快照修复后的完整关闭](control-close-journal-live.md)限定通过：双图0/0→1/1、双回调、一次close-owned严格返回/客户端原Popen exit0/退役/stop，全链无拒绝；资源7寿命3625上传零账本、健康2880全healthy。快照实际有1次临时权限重试、失败0。服务实际759.341429秒约12分39，在原600/900秒预算内但超过最初预计。未知短命子进程覆盖、长期稳定及性能倍率限制保持。
 
-本组基线`dev=671259c`，Run `run_5fe071294ef6` / Task `task_be586c71f149` / Dispatch `ctx_9bdfefbc4379`，两批准绑定`msg_584c9cfcd3b5`。原started=930969.9231912，600秒诊断截止931569.9231912、900秒收尾截止931869.9231912；实际服务759.3414292秒约12分39秒，超过最初5～10分钟预计，仍在原预算内。此前所有failed、token、截止及退出证据缺口保持原样，不因本组通过追溯改写。
+固定0.11.0及独立实验NET/铜竞争仍未通过。只读前置、正向对照与60秒门闩内实际读图时间结论见[离线预检](async-race-offline-preflight.md)：旧正向对照事件/摘要复核有效，旧两竞争保持aborted；最近控制组截图结束到实际read完成71.019/88.949秒，完整到下一工具动作327.085/402.250秒，不能直接满足冻结60秒看门狗。
 
-稳定产品/dist仍0.10.0；固定0.11.0及NET/铜完整竞争仍未通过，原字形runtime_verified=false。控制组通过不等于产品、长期健康稳定或性能倍率通过，50ms子孙轮询仍不能排除未知短命进程。
+本阶段只提交了不启动产品的离线审计工具`tools/audit_async_race.py`和10项变异测试；产品客户端的具体状态、read/ack关联与正常退出要求见[实现约束](async-product-client-contract.md)。实际控制图片仍要求本会话read，审计工具绝不从事件数据授予GUI通过。独立归档图片时序演练在准备阶段遭遇指定模型反复连接错误/超时，已按未执行failed结算，worker abandoned、资源保留，无worker_done；request/read/ack均0，不能给出60秒实测结论。原件和结算见[演练报告](async-image-review-rehearsal.md)。本轮未启动产品、门闩、控制MCP或桌面输入，不形成新GUI通过。接手基线为新独立分支`feat/async-race-offline-preflight`，来自`dev=77d81d6`。
 
-## 已完成的控制边界
+## 当前离线结果
 
-专用关闭实现见[实现说明](control-owned-close.md)：默认禁用，仅本轮客户端创建并保存的原Popen可绑定；关闭前保留原门禁、精确PID/birth/image/HWND/title/class和前景核验，正常动作不额外ControlStatus。一次原Shortcut的Alt+F4尝试即消费机会，严格核对冻结回执；最多5秒原Popen退出0后退役，随后stop。普通Guard/DiagnosticGuard输入后验保持，本组Click/普通Shortcut也实际通过post_native。
+- 固定源码`feat-basic-editing=b0e5ac7761f13690b5310bbc913ab7bfd2691d08`；实验源码`experiment/async-result-barrier=c4e3ec5e82bf1a022e523ec8844d0665d7b93234`。独立实验EXE摘要`782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac`、22文件；固定候选EXE`dcf310949526eb2f9f5af4e6b0f28df8095b12a5f621733c9d964fc96e8f0fe8`、23文件；稳定dist EXE`726a44aa5f1b976dcfbffa068c011b99038172a451eb0964cbc853ee3bf20fc1`、22文件。均全摘要不变，不重建/覆盖。
+- 合成输入副本与原20字节A/B网表及162字节板图摘要匹配，不写原输入。
+- 历史NET/copper对照的新应用事件解析均满足有效release时间线及A/B或铜摘要，历史Popen退出0；它们是引用的历史对照，非本阶段新GUI。
+- 历史NET/copper竞争虽有revision3/dirty/0走线/A来源及旧结果discarded，但两个运行均有`aborted`、无有效`gate-released`，均保持未通过。旧回执未改。
+- 最近控制组两次实际读图完成区间71.019秒/88.949秒；到下一原动作的完整区间327.085秒/402.250秒。由截图结束、会话实际read记录与下一原工具调用的墙钟时间关联重算，不是纯模型推理计时；不声称未来时间数学界。
+- 方案`.local-analysis/async-race-offline-preflight/plan.json`标`offline-preparation-only`、`ready_for_live=false`、`max_product_launches=0`、无任务/许可。不得因某次离线演练快而自行改成live-ready。
 
-工具错误、取消、超时、身份不符、非0退出或传输未知均保守失败，结果未知不重发、不通过WM_CLOSE或其它入口补发。首次真实拒绝完整120秒零桌面请求，failed/token/原截止不清；失败组不恢复、不追加第二组或新连接追逐ready。关闭前至少保留35秒工具、5秒退出和40秒停止余量，600/900预算不重算。
+## 下一个阶段的阻断项
 
-[快照修复](control-supervisor-snapshot-journal.md)只对周期账本有界写入，持续失败锁存并继续持原进程直到退出；本组retry_count=1/failure_count=0，真实重试恢复有证据，失败路径仍主要靠离线测试。最终必要报告写入也可能失败，不能宣称根除所有权限问题。
+1. 冻结60秒不能放宽；先离线完结request/read/ack关口的健壮性与时序演练。每张门闩图、编辑确认图都须真实调用指定模型read并检查image成功、图hash、实际模型/session、修订/几何/dirty/NET来源；缺图、超时、门闩已返回/aborted一律停，不能预写ack或事后补图。
+2. 产品专用生命周期尚未设计：要精确绑定实验EXE及原Popen/创建时间/HWND，覆盖主窗和dirty放弃模态；未保存时一次关闭命令后必须核实正常关闭对话框动作及原Popen退出码。不能复用诊断Tk窗专用close-owned，也不能以临时查询句柄代替原Popen。
+3. 为NET和铜分别冻结不变对照、输入摘要、运行顺序和最多一次竞争，使用全新Task/Dispatch/分支/批准/证据。现场中正常控制仍每步单条核对、失败即停；拒绝后完整120秒零桌面请求，不重连绕过。
+4. 有效竞争严格要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`及真实GUI删除/new revision/geometry/dirty/A来源/终图。cancel路径discard不通过。为节省门闩内时间可在运行前准备所有审阅材料并让连续worker逐步调用；实际读图检查点必须人工/指定Pi完整完成，不能自动图像判定冒充。
+5. 实验通过不提升固定候选。固定0.11.0的900000mil极端属性、受控系统会话结束等仍缺。新增图元、另存为/未知字段往返、元件移动、布线、完整DRC、生产输出、原字形runtime兼容分别规划；未经验证不宣称可用。
 
-此前[第三候选现场](control-owned-close-v3-live.md)仍failed；遗留窗66968已由[独立生命周期](control-residual-lifecycle.md)于18:14:27一次WM_CLOSE、新查询句柄exit0正常退出，非原Popen/GUI验收。其原日志476字节前缀和157文件发送前备份保持，仅窗口自然追加两条关闭记录。本组新窗39620则由原Popen正常退出，无已知遗留或后台控制服务。
+下一会话先阅读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、`AGENTS.md`、`SESSION_HANDOFF.md`及本文，再从最新dev新建独立开发分支。先实现并测试read/request/ack关口和产品Qt主窗/dirty模态的原Popen正常退出状态机，补齐纯离线失败路径，保留默认禁用；可并行推进这两项独立模块，但只在集成后冻结新客户端。指定模型可用后另立新的离线图片时序演练任务，不恢复本次failed/abandoned上下文。时限与生命周期均验证后才准备NET、铜分别一次的新现场，新批准是具体可审阅结果的最后一步。本轮交付不包含可用产品竞争客户端或有效现场批准。
 
-本轮没有源码变化，沿用149项控制测试通过结果，不重复测试或累加历史计数。有效冻结候选仍为`.local-analysis/control-owned-close-v3/frozen-next/candidate`，111文件，清单SHA `f5ebb7a8b4dfb6b50b378fd54e0ab4d47cedd693607b159391f287cabb066b0e`。它已在本组获得限定现场证据，旧候选和本组execution不可覆盖重跑；以后每次仍使用新副本、新Task/Dispatch/批准/证据及原截止。
-
-## 下一步先离线准备产品竞争
-
-不自动启动产品或重复控制诊断组。下一项工作从最新dev独立分支开始，完整读取[异步结果判据](async-result-boundaries.md)、[实验开发](async-experiment-development.md)及[既有竞争边界](async-races-adaptive.md)，核对固定/实验源码、EXE和输入摘要。先形成可审阅的新产品验收方案，明确采用哪一候选、剩余缺口、单步入口、时间分配、实际模型、精确进程与正常退出归属，再安排必要GUI。
-
-实验竞争必须同应用时钟证明：`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`。真实GUI编辑、新修订、几何、dirty、NET来源图和最终图必须共同成立；cancel后的discarded不能补作有效release。不能用控制诊断窗专用关闭接口操作产品，必须另行设计产品精确归属与正常生命周期。
-
-NET和铜分别冻结新范围、输入与不变对照，不能因为实验通过让原固定候选自动通过。对既有正向对照先核对有效性，无源码变化不盲重跑全矩阵；门闩时限、编辑与实际读图时间能否落在同一窗口内要在启动前评估。读图检查点以外可串行批次执行，但每条依赖成功回执，失败立停，不能预排输入或读图前点击。
-
-## 后续现场通用要求
-
-用户已多次明确授权必要控制电脑，授权保持，不重复索权。先完成代码/测试/冻结摘要/执行顺序材料，执行前说明具体预计开始时间、预计用时和范围；新Task/Dispatch/分支/批准/证据目录独立。截图与GUI由Pi `gpt-6.1-sol high`执行并核对实际PI环境及原JSONL模型/推理/读图记录，模型不可用如实报告不替换；纯逆向使用Pi `glm-5.3 high`。
-
-沿用基础Python原Popen直启本机连续runner、立即持柄放行；所有慢预检和父审阅在握手进程创建前完成，不添加等待代理消息的短闸门。Screenshot有image且必须实际read，已执行输入后观察失败不重发；不放宽指示层1秒阈值、不改活内存/心跳/输入保持集合、不换入口绕拒绝。所有完成条件、失败收尾和进程退出证据分项报告，迟到查询句柄不冒充原Popen。
-
-固定候选900000mil极端位置属性、受控会话结束等剩余项，以及新增图元、另存为、未知字段往返、元件放置、布线、完整DRC、生产输出和原字形兼容，继续分别规划；未实现或未验证能力不得宣称可用。原安装、原库/板图只读，写入测试只用隔离副本；截图、包、产物和.local-analysis不提交。
+用户已持续授权必要控制电脑，不重复索权；每次现场前先完成可审阅方案并说明具体开始时间/预计时长/范围。截图/GUI使用Pi `deng/gpt-6.1-sol high`且核对环境与JSONL。下一步由后续会话先审阅本报告、[离线预检](async-race-offline-preflight.md)、[产品客户端约束](async-product-client-contract.md)与[现有判据](async-result-boundaries.md)，只在T1/T2/T3时限可观测并且原进程正常退出路径冻结后，才决定是否请求父批准新现场；本方案目前不能启动产品。
