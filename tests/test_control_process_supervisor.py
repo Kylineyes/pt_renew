@@ -9,7 +9,9 @@ import tempfile
 import unittest
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from control_process_supervisor import ChainWitness,validate_plan
+from control_process_supervisor import ChainWitness,SnapshotJournal,validate_plan
+import control_process_supervisor as supervisor
+from unittest.mock import Mock, patch
 from control_witness_launch import WitnessLaunch
 
 
@@ -27,6 +29,53 @@ class FakeProcessApi:
 
 
 class SupervisorTests(unittest.TestCase):
+    def test_snapshot_write_retries_only_permission_errors_and_latches_exhaustion(self):
+        pauses=[]
+        writer=Mock(side_effect=[PermissionError('暂不可替换'),None])
+        journal=SnapshotJournal(writer,pauses.append)
+        self.assertTrue(journal.write(Path('快照.json'),{}))
+        self.assertEqual((writer.call_count,journal.retry_count,journal.failure_count),(2,1,0))
+        self.assertEqual(pauses,[.01])
+        writer=Mock(side_effect=PermissionError('持续不可替换'))
+        journal=SnapshotJournal(writer,pauses.append)
+        self.assertFalse(journal.write(Path('快照.json'),{}))
+        self.assertEqual((writer.call_count,journal.retry_count,journal.failure_count),(3,2,1))
+        self.assertIn('PermissionError',journal.errors[0]['reason'])
+        journal.writer=Mock()
+        self.assertTrue(journal.write(Path('快照.json'),{}))
+        self.assertEqual(journal.failure_count,1)
+        journal.writer=Mock(side_effect=OSError('磁盘写入失败'))
+        for _ in range(70):self.assertFalse(journal.write(Path('快照.json'),{}))
+        self.assertEqual(journal.failure_count,71)
+        self.assertEqual(len(journal.errors),64)
+        self.assertEqual(journal.writer.call_count,70)
+
+    def test_snapshot_failure_keeps_original_client_until_normal_exit_and_reports_failure(self):
+        with tempfile.TemporaryDirectory(prefix='pt-supervisor-snapshot-') as directory:
+            root=Path(directory)
+            (root/'client.py').write_text("import time\nfrom pathlib import Path\ntime.sleep(.3)\nPath('正常退出前标记').write_text('已完成')\n",encoding='utf-8')
+            plan=root/'supervisor-plan.json';plan.write_text(json.dumps(dict(scan_interval_seconds=.05)),encoding='utf-8')
+            real_save=supervisor.save
+            writes=[]
+            def failing_snapshot(path,row):
+                if path.name=='supervisor-chain-held.json':
+                    writes.append(row)
+                    raise PermissionError('注入持续快照拒绝')
+                return real_save(path,row)
+            with patch.object(supervisor,'validate_plan',return_value=Path(sys.executable).resolve()),patch.object(supervisor,'save',side_effect=failing_snapshot):
+                code=supervisor.main(plan)
+            self.assertEqual(code,1)
+            self.assertTrue((root/'正常退出前标记').is_file())
+            self.assertFalse((root/'supervisor-fatal.json').exists())
+            report=json.loads((root/'supervisor-chain-exit.json').read_text(encoding='utf-8'))
+            self.assertEqual(report['client_popen_exit_code'],0)
+            self.assertTrue(report['all_exited'] and report['all_exit0'])
+            self.assertFalse(report['verified'])
+            self.assertGreater(report['snapshot_failure_count'],0)
+            self.assertEqual(len(writes),report['snapshot_failure_count']*3)
+            self.assertEqual(report['snapshot_retry_count'],report['snapshot_failure_count']*2)
+            self.assertTrue(all(p['exit_code']==0 for p in report['processes']))
+
     def test_descendants_reconstructed_out_of_order_and_nonzero_exit_kept(self):
         api=FakeProcessApi();chain=ChainWitness(api);chain.hold(1)
         api.rows=[dict(pid=3,parent=2),dict(pid=2,parent=1),dict(pid=9,parent=0)]
@@ -125,7 +174,8 @@ p.wait();time.sleep(.2)
             self.assertFalse((root/'supervisor-identity.json').exists())
             launch.release();result=launch.wait(15)
             if result['exit_code']!=0:
-                self.fail((launch.directory/'stderr.log').read_text(encoding='utf-8'))
+                proof=(root/'supervisor-chain-exit.json').read_text(encoding='utf-8') if (root/'supervisor-chain-exit.json').exists() else '缺少退出账本'
+                self.fail((launch.directory/'stderr.log').read_text(encoding='utf-8')+'\n'+proof)
             actual=json.loads((root/'supervisor-identity.json').read_text())
             chain=json.loads((root/'supervisor-chain-exit.json').read_text())
             client=json.loads((root/'fake-client-identity.json').read_text())
