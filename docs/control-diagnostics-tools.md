@@ -1,6 +1,6 @@
 # 控制诊断工具：当前能力、验证与使用限制
 
-当前稳定产品/dist为0.10.0。[本机连续启动器](control-supervisor-local-runner.md)已实现预检、持柄与自动放行，离线122项通过，新候选110文件，尚无新桌面验证。本轮[直启监督器接入](control-supervisor-direct-launch.md)离线115项通过，但[启动前尝试](control-supervisor-direct-live.md)因300秒外部门超时failed，服务/GUI均未启动，没有新现场样本。工具在独立控制包副本中提供取证；[资源复用实验](control-bitmap-surface.md)默认关闭，后续[真实现场](control-bitmap-surface-live.md)完成双图/双回调、7寿命8509上传及零账本，但整体Task因监督器66568缺独立精确退出记录而failed。1188健康样本全healthy仅为本组结果；[退出见证修正](control-witness-launch.md)已离线完成，尚未追加现场。产品和已安装第三方包未修改。最新[限定现场](control-initial-activation.md)的一次原App初始化/精确前景后验、单组图0/0→1/1/双回调/空stderr及4081上传取证通过；2883健康样本仍含2次真实过期、1次fail-open，控制稳定性及历史全部截图根因未解决，固定0.11.0/NET铜竞争未通过。
+当前稳定产品/dist为0.10.0。最新[本机连续启动器现场](control-supervisor-local-live.md)限定succeeded：双图/双回调、7寿命8887上传零账本、1898健康全healthy，以及监督器和全部已知控制链的原始exit0核验通过。普通AltF4后目标前景守卫仍保守拒绝，完整无拒绝关闭流程未过；长期稳定/性能倍率与产品竞争未过。运行时实验默认关闭，历史失败与缺口不追溯改写。原包及部署未改，源码无变化未为文档重跑122项测试。
 
 ## 工具和开关
 
@@ -20,10 +20,10 @@
 | `tools/control_bitmap_surface_model.py` | 后端注入的不可变图层寿命核心，验证一次创建/复制、逐次完整上传与失败退役 | 模块本身不加载Win32；原生适配器在单独模块，部分失败实例保持可退役 |
 | `tools/control_bitmap_surface.py` | 私有WinDLL、图层线程上下文接管、DC/DIB账本和所属线程退役，64图层/64MiB预算 | `indicator_bitmap_surface=true`且冻结核心/适配器才安装；需健康采样/修复，和旧bitmap计时互斥；runtime_verified=false |
 | `tools/control_surface_approval.py` | 纯离线核对新客户端/服务批准、真实Pi模型、新目录和冻结文件/包集合；附加资源日志前置检查 | 不是许可来源；旧Task/会话/状态拒绝，不启动桌面 |
-| `tools/audit_control_surfaces.py` | 正常surface JSONL独立寿命/API/账本审计，拒绝矛盾/异常/缺失退役 | 本次7寿命8509上传内部证据通过；不替完整进程退出或性能/健康 |
+| `tools/audit_control_surfaces.py` | 正常surface JSONL独立寿命/API/账本审计，拒绝矛盾/异常/缺失退役 | 本组7寿命8887上传内部证据通过；不替完整进程退出或性能/健康 |
 | `tools/control_witness_launch.py` | 基础Python直启标准库见证脚本、实际PID/摘要/解释器握手后显式放行、原Popen等待 | 修复venv外壳与实际进程身份缺口的离线工具；4项命令行测试 |
-| `tools/control_process_supervisor.py` | 显式MCP环境启动客户端、核验冻结方案与新批准、精确子孙账本 | 5项无GUI测试；本次现场在其启动前超时，尚无实际监督器现场退出验收 |
-| `tools/control_supervisor_runner.py` | 本机连续完成全部批准预检、实际PID持柄、原子放行及原退出码审计，不等待代理回复 | 7项无GUI测试；新候选110文件，真实GUI仍待验证 |
+| `tools/control_process_supervisor.py` | 显式MCP环境启动客户端、核验冻结方案与新批准、精确子孙账本 | 5项无GUI测试及本组监督器/9已发现子孙原exit0，未知短命进程限制保持 |
+| `tools/control_supervisor_runner.py` | 本机连续完成全部批准预检、实际PID持柄、原子放行及原退出码审计，不等待代理回复 | 7项无GUI测试；本组同PID/创建时间/原Popen/句柄退出及全部已知链通过 |
 
 所有可选运行时包装默认不启用，只在冻结并明确批准的新隔离进程中加载；服务启动后不热改。客户端Task批准与桌面许可是不同证据，批准文件不能替代用户对操作时间/范围的许可。
 
@@ -61,6 +61,7 @@ serve批准至少含`task_id`、`dispatch_id`、`mode=diagnostics-only`、`packa
 | [最新初始激活现场](control-initial-activation.md) | 原App1/两有效图/双回调/4081上传，7384trace dropped0，全exit0；健康2stale/1fail-open仍存在 |
 | [最新上传离线分析](control-upload-offline-analysis.md) | 同旧心跳的局部上传/阶段并集与API占时边界、假API寿命模型完成；该阶段无新现场 |
 | [原生资源实验](control-bitmap-surface.md) | 适配器/图层接入/独立审计及候选冻结完成；历史离线106+单独6项通过 |
+| [本机连续启动器现场](control-supervisor-local-live.md) | 限定succeeded，双图/回调、8887上传零账本、1898健康全healthy及已知链exit0；关闭后前景守卫仍拒绝 |
 | [资源复用现场](control-bitmap-surface-live.md) | 单组GUI/8509正常上传/零账本和本组健康有效；整体failed，66568缺精确退出码，不推导性能或稳定修复 |
 | [退出见证直启修正](control-witness-launch.md) | 4项无GUI进程测试通过，已归档3个闲置agent窗格，旧原件保留，无追加现场 |
 
