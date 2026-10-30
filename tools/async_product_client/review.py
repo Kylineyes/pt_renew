@@ -66,6 +66,7 @@ class ReviewRequest:
     deadline_mono_ns: int
     app_deadline_ns: int | None
     expected: tuple
+    application_run_id: str | None = None
 
 
 class PiReadVerifier:
@@ -137,10 +138,10 @@ class ReviewGate:
                 app_deadline_ns, expected):
         ledger = self.ledger
         ledger.desktop_allowed()
-        require(ident not in self.requests and stage in ('gate', 'edit', 'final', 'dirty-modal'),
+        require(ident not in self.requests and stage in ('baseline', 'gate', 'edit', 'final', 'dirty-modal'),
                 '图像request ID重复或阶段未知')
         require(positive(gate_request_id) and positive(deadline_mono_ns)
-                and (app_deadline_ns is None if stage == 'dirty-modal' else positive(app_deadline_ns)),
+                and (app_deadline_ns is None if stage in ('baseline', 'dirty-modal') else positive(app_deadline_ns)),
                 '缺少原应用请求/截止或混用模态与应用时钟')
         require(ledger.clock.monotonic_ns() < deadline_mono_ns <= ledger.cleanup_deadline_ns,
                 '图像request已过原截止')
@@ -151,7 +152,8 @@ class ReviewGate:
         require(expected and all(isinstance(k, str) for k in expected), '必须冻结图像内容判据')
         row = ReviewRequest(ident, ledger.context, self.identity, gate_request_id, stage, snapshot,
                             ledger.clock.wall_ns(), ledger.clock.monotonic_ns(), deadline_mono_ns,
-                            app_deadline_ns, tuple(sorted(expected.items())))
+                            app_deadline_ns, tuple(sorted(expected.items())),
+                            ledger.application.run_id if ledger.application else None)
         # 先独占ID和hash再持久化；写入未知时不允许重建同图request。
         self.requests[ident] = row
         self.used_images.add(snapshot.sha256)
@@ -178,9 +180,12 @@ class ReviewGate:
         require(judgment == dict(row.expected) and isinstance(summary, str) and bool(summary.strip()),
                 '实际读图内容判断缺失或与冻结判据不符')
         # 辅助observed=true字段从不参与授权；图像内容由指定会话明确判断。
+        require(ledger.clock.monotonic_ns() < row.deadline_mono_ns, '实际read证据核对完成时已过原截止')
         self.used_reads.add(key)
-        ack = dict(proof=proof, judgment=dict(judgment), summary=summary)
+        ack = dict(proof=proof, judgment=dict(judgment), summary=summary,
+                   ack_mono_ns=ledger.clock.monotonic_ns(), ack_wall_ns=ledger.clock.wall_ns())
         self.publish_ack(ident, ack)
+        require(ledger.clock.monotonic_ns() < row.deadline_mono_ns, 'ack持久化完成时已过原截止')
         self.acks[ident] = ack
         ledger.event('review_ack', request_id=ident, **ack)
         return self.acks[ident]

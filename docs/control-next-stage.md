@@ -1,6 +1,14 @@
-# 产品回执与原Popen适配已补，实际读图时序仍缺
+# 应用门闩与可信窗口离线接入，归档图取得一次实际时序
 
-2026-10-30最新结果见[原始回执与原Popen适配报告](async-product-evidence-adapters.md)。从`dev=883f333`独立分支完成默认禁用的原MCP结果/PNG/region物理倍率及原Popen创建/原句柄身份适配，另加全新顺序读图计时器与显式UTF-8预检。新增20项及仓库254项Python测试通过；10组旧参考摘要不变，产品/桌面请求0，ready_for_live=false。
+2026-10-30最新结果见[应用UUID、门闩与可信窗口接入报告](async-product-gate-binding.md)。从`dev=42d7556`独立分支完成不可变应用随机UUID绑定、原日志/清单映射GateState、已read基线、唯一SetEvent后原gate-released确认，以及默认禁用的原生/UIA窗口采集。新增27项及仓库281项Python测试通过；10组旧参考及22/23/22部署摘要不变，产品/桌面请求0，ready_for_live=false。
+
+新归档图任务`task_c257068934b4` / Dispatch `ctx_01d8d1a98c97`已按限定**succeeded**结算。Pi实际`deng/gpt-6.1-sol high` session `01a188e4-680f-74d8-a046-d5e506d19612`，父核对18条实际assistant、17冻结文件、两张唯一read成功image/hash、原会话前缀与32文件worker证据。图一request→ack13.7759396秒、图二16.1056135秒、request1→ack2合计36.22394秒。唯一done `msg_825a2c42c45d`已父验收ack，release为external_terminal retained/processAction=none；旧failed/abandoned结算不改。
+
+这只是本次归档read观察样本，未包含产品截图、选择/Delete、release和收尾，不是未来时延上界。第二图仍是历史取消后图，不代表门闩内编辑或产品GUI通过；不能自行live-ready。下一步重点是独立有界COM探针、初始主窗发现、原生文件框明确阶段和原Popen产品/服务/客户端/监督器全链启动/退出见证，再形成包含全部实际动作的冻结预算。用户已再次明确允许必要控制电脑，实际控制前仍先完成可审阅结果并说明开始时间、预计时长与范围。
+
+以下保留前阶段结果和共同约束，旧失败、数字与缺口按历史读取，最新范围以上述报告为准。
+
+2026-10-30此前结果见[原始回执与原Popen适配报告](async-product-evidence-adapters.md)。从`dev=883f333`独立分支完成默认禁用的原MCP结果/PNG/region物理倍率及原Popen创建/原句柄身份适配，另加全新顺序读图计时器与显式UTF-8预检。新增20项及仓库254项Python测试通过；10组旧参考摘要不变，产品/桌面请求0，ready_for_live=false。
 
 新只读图片Task `task_70c8976c2e7e` / Dispatch `ctx_1e46f88cbaf6`已按**failed结算**：实际Pi `deng/gpt-6.1-sol high`及12条assistant记录核验通过，预检PowerShell编码错误发生在init之前，依约停止。request/read/ack均0，无timing-result；父已验收唯一done并ack，external_terminal保留、processAction=none、reclaimable0。修复后的Python UTF-8 preflight只在父新分支，不写回旧冻结或恢复该任务。后续不能重复投递本次或更早failed/abandoned上下文。
 
@@ -24,8 +32,8 @@
 
 ## 下一阶段顺序
 
-1. **实际read兼容性与时限仍待验证。** 本次全新任务在预检编码错误后已failed结算；后续只能在新的具体任务和新上下文里使用已测试并冻结的UTF-8预检。指定模型可用时另立新上下文，离线验证成功read image的原记录格式，以及新request→read→ack两图顺序计时。当前验证器会拒绝变换/删减image的记录，若需适配先冻结可审计变换链。旧[未执行演练](async-image-review-rehearsal.md)保持failed/abandoned，不能恢复、续投或直接执行其准备脚本。一次快速结果也不能给未来耗时提供保证。
-2. **继续补齐现场适配器与见证链接入。** 现在已有默认禁用的原MCP结果/PNG/region及原Popen创建/原句柄适配，仍缺native/UIA可信数据、文件框阶段、应用UUID绑定和产品全链启动器；已复制见证器不等于已完成接入。必须保持持续owner、原Popen/原句柄、精确窗口和普通输入后验，先补假API回归再冻结所有模块/包/EXE/输入。
+1. **read记录兼容性已有本次归档证据，产品完整时限仍待验证。** 新任务取得一次36.22394秒两图观察区间，后续引用本轮不变证据，不盲重跑以追逐更快结果。此前编码预检任务已failed结算；以后新的具体任务只能用已测试冻结的UTF-8预检和新上下文。实际产品时序须包含原Snapshot、编辑与release，不能只用归档值推定。当前验证器会拒绝变换/删减image的记录，若需适配先冻结可审计变换链。旧[未执行演练](async-image-review-rehearsal.md)保持failed/abandoned，不能恢复、续投或直接执行其准备脚本。一次快速结果也不能给未来耗时提供保证。
+2. **继续接通有界探针、文件框与完整见证链。** 已有默认禁用的原MCP/region、原Popen/原句柄、native/UIA、应用UUID及门闩原事件/release窄适配，仍缺有界COM探针、主窗发现、文件框阶段及产品全链启动器；已复制见证器不等于已完成接入。必须保持持续owner、原Popen/原句柄、精确窗口和普通输入后验，先补假API回归再冻结所有模块/包/EXE/输入。
 3. **条件满足后再形成新现场。** NET与铜分别使用新Task/Dispatch/分支/证据及最终审阅材料，每类最多一次竞争，引用不变对照；说明具体开始时间、预计时长和桌面/进程范围后，在用户持续必要控制授权内执行。不先启动短握手进程等批准，不重复已成功的诊断组，不增加组/连接追逐ready。
 4. **完整产品判据独立验收。** 同应用时钟必须满足`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，并有门闩内真实删除、新修订/dirty/零走线/A来源图和终图。cancel后的discard不通过，核心的协议`settled`也不能替代完整事件/GUI审计。固定候选仍不能由实验通过代替。
 
