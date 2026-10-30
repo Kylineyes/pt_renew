@@ -50,7 +50,11 @@ class FreezeTests(unittest.TestCase):
         self.assertEqual(result['desktop_requests'], 0)
         self.assertTrue((destination / 'candidate/tools/async_product_client/close.py').is_file())
         self.assertTrue((destination / 'candidate/tools/control_witness_launch.py').is_file())
-        self.assertTrue((destination / 'candidate/runtime/windows_mcp/pt-renew.exe').is_file())
+        self.assertEqual(len([name for name in result['files'] if name.startswith('runtime/windows_mcp/')]), 77)
+        self.assertTrue((destination / 'candidate/runtime/package-manifest.json').is_file())
+        self.assertTrue(plan['phase_remaining_deadline_offline_tested'])
+        self.assertFalse(plan['production_bootstrap_runtime_verified'])
+        self.assertTrue((destination / 'candidate/tools/async_product_client/service_driver.py').is_file())
         self.assertEqual(json.loads((destination / 'frozen-manifest.json').read_text(encoding='utf-8'))['plan'], plan)
         with self.assertRaises(FileExistsError):
             freeze_async_product.freeze(destination, references=self.refs, inputs=self.inputs)
@@ -65,7 +69,7 @@ class FreezeTests(unittest.TestCase):
         self.assertEqual(len(tree_hashes(package)), 78)
         self.assertEqual(tree_hashes(package, ignore_bytecode=True), self.refs['control_package']['files'])
         result = freeze_async_product.freeze(self.root / 'cache-candidate', references=self.refs, inputs=self.inputs)
-        self.assertEqual(len([name for name in result['files'] if name.startswith('runtime/')]), 77)
+        self.assertEqual(len([name for name in result['files'] if name.startswith('runtime/windows_mcp/')]), 77)
         self.assertTrue((cache / 'module.pyc').is_file())
 
     def test_changed_reference_input_and_unpinned_exe_cannot_publish_manifest(self):

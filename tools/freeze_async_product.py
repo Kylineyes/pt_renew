@@ -12,6 +12,10 @@ from async_product_client.product import tree_hashes
 
 FROZEN_EXPERIMENT_SHA = '782a769f6a1a00f60f184bda32c0a9b8bab9edafdc5a45218b9e697b3d00b4ac'
 WITNESS_FILES = ('control_process_supervisor.py', 'control_witness_launch.py', 'control_supervisor_runner.py')
+SERVICE_FILES = ('run_control_diagnostics.py', 'control_diagnostics.py', 'control_indicator_health.py',
+                 'control_bitmap_surface.py', 'control_bitmap_surface_model.py', 'control_surface_approval.py',
+                 'control_app_refresh.py', 'control_target_activation.py', 'control_test_window.py',
+                 'control_bitmap_timing.py')
 
 
 def freeze(destination, *, references, inputs):
@@ -34,16 +38,19 @@ def freeze(destination, *, references, inputs):
     candidate.mkdir()
     source = Path(__file__).resolve().parents[1]
     names = [p.relative_to(source) for p in (source / 'tools/async_product_client').glob('*.py')]
-    names += [Path('tools') / name for name in WITNESS_FILES]
+    names += [Path('tools') / name for name in WITNESS_FILES + SERVICE_FILES]
     names += [Path(name) for name in ('tools/freeze_async_product.py', 'tools/probe_async_images.py',
                                      'tools/control_geometry.py', 'tools/audit_async_race.py',
                                      'tests/test_async_product_client.py', 'tests/test_async_product_adapters.py',
                                      'tests/test_async_product_gate.py', 'tests/test_async_product_native.py',
                                      'tests/test_async_product_probe.py', 'tests/test_async_product_file_dialog.py',
                                      'tests/test_async_product_session.py', 'tests/test_async_product_witness.py',
-                                     'tests/test_async_product_batch.py',
+                                     'tests/test_async_product_batch.py', 'tests/test_async_product_deadlines.py',
+                                     'tests/test_async_product_runtime.py', 'tests/test_async_product_connection.py',
+                                     'tests/test_async_product_shutdown.py', 'tests/fixtures/async_product_runtime_driver.py',
                                      'tests/test_audit_async_race.py',
                                      'tests/test_probe_async_images.py', 'tests/test_freeze_async_product.py',
+                                     'docs/async-product-deadlines.md',
                                      'docs/async-product-batch-observation.md', 'docs/async-product-session.md', 'docs/async-product-file-dialog.md', 'docs/async-product-bounded-probe.md', 'docs/async-product-gate-binding.md',
                                      'docs/async-product-evidence-adapters.md', 'docs/async-product-client-offline.md',
                                      'docs/async-product-client-contract.md')]
@@ -60,6 +67,10 @@ def freeze(destination, *, references, inputs):
             path.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(Path(reference['root']) / name, path)
             require(digest(path.read_bytes()) == sha, '复制时外部依赖改变')
+    package_manifest = dict(source=references['control_package']['root'], package=str(candidate / 'runtime/windows_mcp'),
+                            files=references['control_package']['files'], installed_writes=0)
+    with (candidate / 'runtime/package-manifest.json').open('x', encoding='utf-8') as out:
+        json.dump(package_manifest, out, ensure_ascii=False, indent=2)
     for path, sha in inputs.items():
         target = candidate / 'inputs' / Path(path).name
         target.parent.mkdir(exist_ok=True)
@@ -82,7 +93,11 @@ def freeze(destination, *, references, inputs):
                 file_dialog_offline_tested=True, original_popen_registry_offline_tested=True,
                 process_chain_runtime_verified=False, session_offline_tested=True,
                 batch_observation_offline_tested=True, batch_observation_runtime_verified=False,
-                creator_relay_offline_tested=True, session_budgets={kind: session_budget(kind) for kind in ('net', 'copper')},
+                creator_relay_offline_tested=True, phase_remaining_deadline_offline_tested=True,
+                creator_runtime_no_gui_chain_tested=True, original_service_pipe_offline_tested=True,
+                arbitrary_stage_shutdown_offline_tested=True, production_bootstrap_runtime_verified=False,
+                passive_original_popen_hold_after_failure=True,
+                session_budgets={kind: session_budget(kind) for kind in ('net', 'copper')},
                 default_enabled=False, watchdog_ms=60000, t1_read_ack_ms=20000,
                 t2_edit_read_ack_ms=50000, t3_release_start_before_ms=55000,
                 release_completion_before_ms=60000, local_wait_chunk_ms=1000,
@@ -92,7 +107,8 @@ def freeze(destination, *, references, inputs):
                 budget_armed=False,
                 blockers=['批量观察含发现NET31/铜22次在32次内，但真实冷启动/COM/截图/read总时限仍未验证',
                           '原生文件框/控件/路径输入尚无真实GUI兼容性和时限证据',
-                          '创建者relay审计已实现，服务/客户端/监督器生产启动器尚未实际发布并交换报告',
+                          '阶段剩余时限拒绝已接入，但不能证明同步预检或在途COM会被及时中断',
+                          '生产创建者及原服务管道已接入，无GUI四身份链通过；实际控制服务/产品驱动与原退出链仍待验证',
                           '有界探针与主窗发现尚无真实产品UIA/COM兼容性与时限证明',
                           '尚无新Task/Dispatch及具体时间范围的最终审阅材料'])
     with (candidate / 'plan.json').open('x', encoding='utf-8') as out:

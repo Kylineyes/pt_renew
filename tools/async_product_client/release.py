@@ -119,6 +119,7 @@ class GateRelease:
             self.attempted = True
             self.ledger.event('gate_signal_attempt', application_run_id=self.ledger.application_run_id,
                               request_id=request_id, event_name=manifest['release_event'])
+            self.waiting(expected, margin_ns=self.margin_ns)
             self.api.signal(release)
             self.signal_returned = True
             self.ledger.event('gate_signal_returned', request_id=request_id,

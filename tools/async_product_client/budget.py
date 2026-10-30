@@ -50,7 +50,10 @@ def session_budget(kind):
                 batch_t1_probe_configured_wait_sum_seconds=len(NATIVE_WINDOWS['gate_image']) * 5,
                 batch_t2_probe_configured_wait_sum_seconds=sum(len(NATIVE_WINDOWS[name]) for name in critical) * 5,
                 snapshot_tool_timeout_seconds=35, t1_deadline_seconds=20, t2_deadline_seconds=50,
-                original_watchdog_seconds=60, ready_for_live=False, runtime_timing_verified=False,
+                original_watchdog_seconds=60, release_start_before_seconds=55,
+                phase_remaining_deadline_enforced=True, precheck_and_persistence_in_deadline=True,
+                phase_deadline_clock_origin='before-original-target-input',
+                ready_for_live=False, runtime_timing_verified=False,
                 reason=('批量NET含主窗发现仍超32次；其余仍缺实际截图/模型/校验/收尾时限证据'
                         if native_count + 1 > 32 else '调用数在32次内，实际截图/模型/校验/收尾时限仍未验证'),
                 interpretation='这里只核对当前调用结构和配置拒绝上限，不是耗时测量、未来上界或产品现场批准')

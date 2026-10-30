@@ -46,6 +46,7 @@ class ProductOwner:
                         for k in environment),
                 '继承环境含未清理Qt或旧实验变量')
         self.launch_used = True
+        self.ledger.desktop_allowed()
         # factory的生产适配器必须在本客户端直接创建Popen；这里不提供现场适配器。
         self.process = factory([str(Path(deployment).resolve() / 'pt-renew.exe')],
                                cwd=str(Path(deployment).resolve()), env=dict(environment))
@@ -148,6 +149,7 @@ class ProductIO:
         self.owner.alive()
         target = self.policy.check(row, self.owner.identity, stage=stage, dirty=dirty)
         self.ledger.event('native_result', stage=stage, result=row)
+        self.ledger.desktop_allowed()
         return target
 
     async def _send(self, tool, arguments, expected_text):
@@ -160,6 +162,7 @@ class ProductIO:
         self.attempts.append(attempt)
         self.ledger.event('input_attempt', **attempt)
         try:
+            self.ledger.desktop_allowed()
             row = await self.transport(tool, arguments)
         except BaseException as error:
             self.ledger.event('input_unknown', error=type(error).__name__, **attempt)

@@ -38,7 +38,7 @@ class ProductCommand:
         return button
 
     async def capture(self, ident, parent):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, deadline_ns=self.deadline_ns):
             self.check(); require(self.stage == 'new', '可见命令图不可重复发布')
             shot = await self.io.capture(dirty=False, stable=True)
             after = self.io.capture_targets[shot.call_id]
@@ -53,14 +53,14 @@ class ProductCommand:
         return self.review
 
     async def ack(self, ident, parent, **evidence):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, deadline_ns=self.deadline_ns):
             self.check(); require(self.stage == 'requested', '可见命令ack乱序')
             self.reviews.ack(self.review, **evidence)
             require(await self.io.observe(dirty=False) == self.target, '读图或ack核对期间按钮/焦点改变')
             self.check(); self.stage = 'read'
 
     async def click(self, ident, parent, *, image_point):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, deadline_ns=self.deadline_ns):
             self.check(); require(self.stage == 'read' and not self.used, '须先实际read命令图，且点击机会未消费')
             target = await self.io.observe(dirty=False)
             require(target == self.target, '实际read后命令按钮/焦点变化')
@@ -74,6 +74,8 @@ class ProductCommand:
             require(box[0] < point[0] < box[2] and box[1] < point[1] < box[3], '命令点击坐标不在明确按钮内')
             self.check(); self.used = True; self.stage = 'attempted'
             self.trigger_mono_ns = self.ledger.clock.monotonic_ns()
+            if self.command == 'copperAnalyze':
+                self.ledger.arm_gate(self.trigger_mono_ns)
             await self.io._send('Click', dict(loc=point), f'Single left clicked at ({point[0]},{point[1]}).')
             if self.command == 'netlistOpen':
                 # 文件框出现是预期阶段变化；仍保留精确产品前景后验，不把模态当主窗输入。
