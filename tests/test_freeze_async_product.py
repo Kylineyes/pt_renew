@@ -85,6 +85,23 @@ class FreezeTests(unittest.TestCase):
         self.assertEqual(tree_hashes(target), environment['files'])
         self.assertEqual(tree_hashes(dependencies), environment['files'])
 
+    def test_freezes_separate_complete_probe_package_and_binds_it_to_full_environment(self):
+        from async_product_client.probe_environment import GENERATED, freeze_probe_environment
+        dependencies = self.root / 'python-dependencies'; dependencies.mkdir()
+        for name in GENERATED | {'comtypes/__init__.py', 'unrelated.py'}:
+            path = dependencies / name; path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('# 假依赖\n', encoding='utf-8')
+        profile = dict(root=str(dependencies), files=tree_hashes(dependencies), version=list(sys.version_info[:3]))
+        probe = freeze_probe_environment(profile, self.root / 'probe-dependencies')
+        result = freeze_async_product.freeze(self.root / 'with-probe', references=self.refs, inputs=self.inputs,
+                                             python_environment=profile, probe_environment=probe)
+        self.assertTrue(result['plan']['probe_dependency_environment_frozen'])
+        self.assertFalse(result['plan']['real_uia_object_runtime_verified'])
+        self.assertFalse(result['plan']['ready_for_live'])
+        self.assertEqual(result['probe_environment']['files'], probe['files'])
+        self.assertEqual(tree_hashes(result['probe_environment']['root']), probe['files'])
+        self.assertNotIn('unrelated.py', result['probe_environment']['files'])
+
     def test_changed_reference_input_and_unpinned_exe_cannot_publish_manifest(self):
         for mode in ('reference', 'input', 'unpinned'):
             with self.subTest(mode=mode):

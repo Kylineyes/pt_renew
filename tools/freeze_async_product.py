@@ -18,7 +18,7 @@ SERVICE_FILES = ('run_control_diagnostics.py', 'control_diagnostics.py', 'contro
                  'control_bitmap_timing.py')
 
 
-def freeze(destination, *, references, inputs, python_environment=None):
+def freeze(destination, *, references, inputs, python_environment=None, probe_environment=None):
     destination = Path(destination).resolve()
     destination.mkdir(parents=True, exist_ok=False)
     require({'experiment', 'fixed', 'stable', 'control_package'} <= references.keys(), '冻结外部依赖不完整')
@@ -49,11 +49,13 @@ def freeze(destination, *, references, inputs, python_environment=None):
                                      'tests/test_async_product_runtime.py', 'tests/test_async_product_connection.py',
                                      'tests/test_async_product_shutdown.py', 'tests/fixtures/async_product_runtime_driver.py',
                                      'tests/test_async_product_driver.py', 'tests/test_async_product_environment.py',
-                                     'tests/test_async_product_materials.py', 'tests/fixtures/async_product_dependency_driver.py',
+                                     'tests/test_async_product_materials.py', 'tests/test_async_product_probe_runtime.py',
+                                     'tests/fixtures/async_product_dependency_driver.py',
+                                     'tools/measure_async_probe_import.py',
                                      'tools/async_product_command.py',
                                      'tests/test_audit_async_race.py',
                                      'tests/test_probe_async_images.py', 'tests/test_freeze_async_product.py',
-                                     'docs/async-product-drivers.md', 'docs/async-product-deadlines.md',
+                                     'docs/async-product-probe-runtime.md', 'docs/async-product-drivers.md', 'docs/async-product-deadlines.md',
                                      'docs/async-product-batch-observation.md', 'docs/async-product-session.md', 'docs/async-product-file-dialog.md', 'docs/async-product-bounded-probe.md', 'docs/async-product-gate-binding.md',
                                      'docs/async-product-evidence-adapters.md', 'docs/async-product-client-offline.md',
                                      'docs/async-product-client-contract.md')]
@@ -94,6 +96,24 @@ def freeze(destination, *, references, inputs, python_environment=None):
         frozen_environment = dict(root=str(dependency_root), files=dependencies.files, version=list(dependencies.version))
         with (candidate / 'runtime/python-environment.json').open('x', encoding='utf-8') as out:
             json.dump(frozen_environment, out, ensure_ascii=False, indent=2)
+    frozen_probe_environment = None
+    if probe_environment is not None:
+        from async_product_client.probe_environment import validate_probe_environment
+        from async_product_client.python_environment import environment
+        probe_profile = validate_probe_environment(environment(probe_environment))
+        require(frozen_environment is not None and probe_profile.files == {
+            name: sha for name, sha in frozen_environment['files'].items() if name.startswith('comtypes/')},
+            '探针依赖必须逐字对应原完整Python依赖中的完整comtypes包')
+        probe_root = candidate / 'runtime/probe-dependencies'
+        for name, sha in probe_profile.files.items():
+            target = probe_root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(Path(probe_profile.root) / name, target)
+            require(digest(target.read_bytes()) == sha, '复制时探针依赖改变')
+        probe_profile.verify()
+        frozen_probe_environment = dict(root=str(probe_root), files=probe_profile.files, version=list(probe_profile.version))
+        with (candidate / 'runtime/probe-environment.json').open('x', encoding='utf-8') as out:
+            json.dump(frozen_probe_environment, out, ensure_ascii=False, indent=2)
     # 冻结前后复核来源，避免把不同时点的文件拼成一次候选。
     for label, reference in references.items():
         require(tree_hashes(reference['root'], ignore_bytecode=True) == reference['files'],
@@ -117,6 +137,9 @@ def freeze(destination, *, references, inputs, python_environment=None):
                 compatibility_driver_offline_tested=True, compatibility_driver_runtime_verified=False,
                 virtualenv_redirector_rejected=True, isolated_base_interpreter_offline_tested=True,
                 python_dependency_environment_frozen=frozen_environment is not None,
+                probe_dependency_environment_frozen=frozen_probe_environment is not None,
+                private_probe_cache_offline_tested=True, com_apartment_accounting_offline_tested=True,
+                real_uia_object_runtime_verified=False,
                 passive_original_popen_hold_after_failure=True,
                 session_budgets={kind: session_budget(kind) for kind in ('net', 'copper')},
                 default_enabled=False, watchdog_ms=60000, t1_read_ack_ms=20000,
@@ -136,7 +159,8 @@ def freeze(destination, *, references, inputs, python_environment=None):
         json.dump(plan, out, ensure_ascii=False, indent=2)
     files = tree_hashes(candidate)
     result = dict(schema_version=1, files=files, references=references, inputs=inputs,
-                  plan=plan, python_environment=frozen_environment, desktop_requests=0, product_launches=0)
+                  plan=plan, python_environment=frozen_environment, probe_environment=frozen_probe_environment,
+                  desktop_requests=0, product_launches=0)
     with (destination / 'frozen-manifest.json').open('x', encoding='utf-8') as out:
         json.dump(result, out, ensure_ascii=False, indent=2)
     return result
@@ -148,10 +172,13 @@ if __name__ == '__main__':
     parser.add_argument('--references', type=Path, required=True)
     parser.add_argument('--inputs', type=Path, required=True)
     parser.add_argument('--python-environment', type=Path)
+    parser.add_argument('--probe-environment', type=Path)
     args = parser.parse_args()
     result = freeze(args.destination,
                     references=json.loads(args.references.read_text(encoding='utf-8-sig')),
                     inputs=json.loads(args.inputs.read_text(encoding='utf-8-sig')),
                     python_environment=json.loads(args.python_environment.read_text(encoding='utf-8-sig'))
-                    if args.python_environment else None)
+                    if args.python_environment else None,
+                    probe_environment=json.loads(args.probe_environment.read_text(encoding='utf-8-sig'))
+                    if args.probe_environment else None)
     print(json.dumps(dict(files=len(result['files']), ready_for_live=False, desktop_requests=0), ensure_ascii=False))
