@@ -1,5 +1,7 @@
 # 单次真实UIA对象兼容性核验
 
+接手后从 `dev=1789c32` 建立 `fix/uia-object-lifecycle-review`，继续审阅原failed与离线候选。新增修复处理COM退出回调失败、释放结果未知、部分core导入和最终回执越时/写盘错误：已知余额尽力清理，未知释放不重复，清理错误不报告平衡；最终拒绝保持首次failed/token/原截止并完整120秒零新请求。新增9项假API/时钟/磁盘故障测试；本机新材料位于 `.local-analysis/uia-object-lifecycle-review/`。新Task `task_49c2158f60ce` / Dispatch `ctx_15cecb4855e4` 使用独立Pi `deng/gpt-6.1-sol high`，只核验一个原UIA对象，不启动Qt、服务、桌面查询或输入。实际结果以新证据和工作者报告为准，旧Task及其6622文件失败候选不变，产品仍 `ready_for_live=false`。
+
 从 `dev=462bc5654842a1b221b1999a9f6e2d939ec5c264` 建立独立分支 `feat/async-product-uia-compat`。本阶段接续[探针运行时](async-product-probe-runtime.md)，准备并执行单次UIA自动化对象兼容性核验；最终实际结果及范围由本机证据记录，不以工具存在或假测试通过当现场成功。`ready_for_live=false`，PT产品、控制服务、窗口/桌面查询、截图和输入不在本次执行范围。
 
 ## 唯一对象入口与时限

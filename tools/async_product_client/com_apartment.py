@@ -124,6 +124,7 @@ class ApartmentTrace(importlib.abc.MetaPathFinder):
         self.thread = threading.get_ident()
         self.shutdown_callbacks = []
         self.calls, self.balance, self.closed = [], 0, False
+        self.cleanup_completed, self.cleanup_errors = False, []
         self.library = ole
         self.proxies = {}
         self.installed = False
@@ -163,24 +164,39 @@ class ApartmentTrace(importlib.abc.MetaPathFinder):
     def close(self):
         require(not self.closed and threading.get_ident() == self.thread, 'COM清理重复或离开原线程')
         self.closed = True
+        errors = []
+        def attempt(action):
+            try: action()
+            except BaseException as error: errors.append(error)
+        def release_unknown():
+            return any(row['api'] == 'CoUninitialize' and not row['returned'] for row in self.calls)
         try:
             core = sys.modules.get('windows_mcp.uia.core')
-            if core is not None:
-                core._AutomationClient._instance = None
-            gc.collect()
-            for callback, args, kwargs in reversed(self.shutdown_callbacks): callback(*args, **kwargs)
-            self.shutdown_callbacks.clear()
+            client_class = getattr(core, '_AutomationClient', None)
+            if client_class is not None:
+                attempt(lambda: setattr(client_class, '_instance', None))
+            attempt(gc.collect)
+            # 每个原回调仅消费一次；普通回调失败后继续清理已知余额，释放结果未知时立刻停止。
+            callbacks, self.shutdown_callbacks = self.shutdown_callbacks, []
+            for callback, args, kwargs in reversed(callbacks):
+                if release_unknown(): break
+                attempt(lambda: callback(*args, **kwargs))
             ole = self.ole(self.library)
-            while self.balance > 0: ole.CoUninitialize()
-            require(self.balance == 0 and all(row['returned'] and 'balance' in row for row in self.calls),
-                    'COM初始化/释放证据不完整')
+            while self.balance > 0 and not release_unknown():
+                attempt(ole.CoUninitialize)
+            attempt(lambda: require(self.balance == 0 and all(row['returned'] and 'balance' in row for row in self.calls),
+                                    'COM初始化/释放证据不完整'))
+            self.cleanup_errors = [type(error).__name__ + ': ' + str(error) for error in errors]
+            self.cleanup_completed = not errors
+            if errors: raise errors[0]
         finally:
             if self in sys.meta_path: sys.meta_path.remove(self)
             self.installed = False
 
     def report(self):
         return dict(thread=self.thread, balance=self.balance, calls=self.calls,
-                    balanced=self.closed and self.balance == 0
+                    cleanup_completed=self.cleanup_completed, cleanup_errors=list(self.cleanup_errors),
+                    balanced=self.cleanup_completed and self.balance == 0
                     and all(row['returned'] and 'balance' in row for row in self.calls))
 
     def __exit__(self, kind, error, traceback):
