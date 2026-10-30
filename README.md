@@ -1,6 +1,6 @@
 # PT Renew
 
-当前发布版本为 **v0.11.0-alpha**，定位为 Windows x64 旧 PCB 资料只读查看器。下载与已知限制见[发布说明](docs/releases/v0.11.0-alpha.md)；本次发行不含独立分支中的基础编辑候选。
+当前发布版本为 **v0.11.0-alpha**，定位为 Windows x64 旧 PCB 资料只读查看器。[下载 Windows 测试版](https://github.com/Kylineyes/pt_renew/releases/tag/v0.11.0-alpha)，功能与已知限制见[发布说明](docs/releases/v0.11.0-alpha.md)，维护者可参考[构建与打包](docs/releases/v0.11.0-alpha-build.md)；本次发行不含独立分支中的基础编辑候选。
 
 开发验收与后续任务见[会话交接](SESSION_HANDOFF.md)，历史报告中的版本号和失败结论保持原记录。
 
