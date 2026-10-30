@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import asyncio
 from contextlib import contextmanager
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 import hashlib
 import re
 import time
@@ -54,6 +54,25 @@ class Context:
 
 
 @dataclass(frozen=True)
+class ApplicationRun:
+    context: Context
+    run_id: str
+    pid: int
+    birth: int
+    image: str
+    owner_pid: int
+    owner_birth: int
+    directory: str
+    startup_sha256: str
+
+    def __post_init__(self):
+        import uuid
+        require(str(uuid.UUID(self.run_id)) == self.run_id, '应用run必须是原始规范UUID')
+        require(all(positive(x) for x in (self.pid, self.birth, self.owner_pid, self.owner_birth))
+                and self.image and self.directory and valid_hash(self.startup_sha256), '应用运行绑定不完整')
+
+
+@dataclass(frozen=True)
 class Identity:
     pid: int
     birth: int
@@ -87,6 +106,7 @@ class Ledger:
     def __init__(self, *, context, cleanup_deadline_ns, clock=None, enabled=False, emit=None):
         require(positive(cleanup_deadline_ns), '原始收尾截止无效')
         self.context = context
+        self._application = None
         self.clock = clock or Clock()
         self.cleanup_deadline_ns = cleanup_deadline_ns
         self.enabled = enabled is True
@@ -99,6 +119,22 @@ class Ledger:
         self.pending = False
         self.seen = set()
         self.events = []
+
+    @property
+    def application(self):
+        return self._application
+
+    @property
+    def application_run_id(self):
+        # 无绑定仅用于原有纯假API夹具；真实事件适配器必须先完成唯一应用绑定。
+        return self._application.run_id if self._application else self.context.run_id
+
+    def bind_application(self, binding):
+        self.desktop_allowed()
+        require(self._application is None and isinstance(binding, ApplicationRun)
+                and binding.context == self.context, '应用run只可绑定一次且必须属于本轮Task上下文')
+        self._application = binding
+        self.event('application_run_bound', binding=asdict(binding))
 
     def event(self, kind, **data):
         row = dict(kind=kind, monotonic_ns=self.clock.monotonic_ns(),

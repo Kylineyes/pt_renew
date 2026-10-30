@@ -36,8 +36,12 @@ def freeze(destination, *, references, inputs):
     names = [p.relative_to(source) for p in (source / 'tools/async_product_client').glob('*.py')]
     names += [Path('tools') / name for name in WITNESS_FILES]
     names += [Path(name) for name in ('tools/freeze_async_product.py', 'tools/probe_async_images.py',
+                                     'tools/control_geometry.py', 'tools/audit_async_race.py',
                                      'tests/test_async_product_client.py', 'tests/test_async_product_adapters.py',
+                                     'tests/test_async_product_gate.py', 'tests/test_async_product_native.py',
+                                     'tests/test_audit_async_race.py',
                                      'tests/test_probe_async_images.py', 'tests/test_freeze_async_product.py',
+                                     'docs/async-product-gate-binding.md',
                                      'docs/async-product-evidence-adapters.md', 'docs/async-product-client-offline.md',
                                      'docs/async-product-client-contract.md')]
     for name in names:
@@ -66,6 +70,8 @@ def freeze(destination, *, references, inputs):
                 permission_confirmed=False, task_id=None, dispatch_id=None, run_id=None, session_id=None,
                 max_product_launches=0, live_adapter_frozen=False, model_timing_verified=False,
                 mcp_result_adapter_offline_tested=True, original_popen_adapter_offline_tested=True,
+                application_uuid_binding_offline_tested=True, gate_event_adapter_offline_tested=True,
+                unique_release_offline_tested=True, native_window_adapter_offline_tested=True,
                 native_window_adapter_verified=False, file_dialog_stage_verified=False,
                 default_enabled=False, watchdog_ms=60000, t1_read_ack_ms=20000,
                 t2_edit_read_ack_ms=50000, t3_release_start_before_ms=55000,
@@ -74,8 +80,8 @@ def freeze(destination, *, references, inputs):
                 close_original_popen_wait_ms=5000, close_stop_margin_ms=40000,
                 diagnostic_budget_seconds=600, total_budget_seconds=900,
                 budget_armed=False,
-                blockers=['仍缺冻结的native/UIA/文件框阶段及完整原Popen外层启动链接入',
-                          '指定模型新任务在编码预检失败后停止，实际read计时仍缺',
+                blockers=['仍缺UIA有界COM探针/文件框阶段及完整原Popen外层启动链接入',
+                          '指定模型新读图结果须单独审阅，离线事件/测试不授予现场时限通过',
                           '尚无新Task/Dispatch及具体时间范围的最终审阅材料'])
     with (candidate / 'plan.json').open('x', encoding='utf-8') as out:
         json.dump(plan, out, ensure_ascii=False, indent=2)

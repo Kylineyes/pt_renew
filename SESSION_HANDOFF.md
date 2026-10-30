@@ -1,6 +1,14 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-30。最新阶段为[原始回执与原Popen适配](docs/async-product-evidence-adapters.md)，从已核对的`dev=origin/dev=883f33323b6519e6ea4bb9a2095e0a5277247e9d`建立`feat/async-product-evidence-adapters`。新增默认禁用的原MCP结果/PNG/region物理倍率、产品原Popen创建/原句柄身份适配及全新归档顺序计时器、显式UTF-8预检。20项新增测试及仓库254项Python测试通过，10组旧参考摘要不变；产品启动/桌面请求0，ready_for_live=false。
+更新时间：2026-10-30。最新阶段为[应用UUID、原门闩与可信窗口接入](docs/async-product-gate-binding.md)，从核对的`dev=origin/dev=42d7556b589232eceb803cbebdc5eace04015726`建立`feat/async-product-gate-binding`。新增不可变应用随机UUID绑定、门闩前实际read基线、原JSONL/request清单映射、唯一SetEvent后原gate-released确认和默认禁用native/UIA窗口采集；27项新增测试及仓库281项Python测试通过，10组旧参考/22/23/22摘要不变。产品启动/桌面请求0，ready_for_live=false。
+
+新Run `run_2cca64780fb9` / Task `task_c257068934b4` / Dispatch `ctx_01d8d1a98c97`归档图任务限定succeeded。实际Pi `deng/gpt-6.1-sol high` session `01a188e4-680f-74d8-a046-d5e506d19612`的18条assistant、17冻结文件、两张唯一read成功image/hash及原JSONL前缀、32文件worker证据均经父独立复核。图一request→ack13.7759396秒、图二16.1056135秒、request1→ack2完整36.22394秒，仅本次归档样本；不包括产品截图/编辑/release/收尾、不代表未来时限上界。图二仍为历史取消后图，不补记门闩内编辑或产品GUI通过。唯一done `msg_825a2c42c45d`父已验收ack，external_terminal retained/processAction=none；所有旧failed/abandoned保持。
+
+下一步补独立有界COM探针、初始主窗发现、原生文件框明确阶段及产品/客户端/服务/监督器全链原Popen见证，再完善包含全部动作的冻结预算，不能仅因归档样本快就live-ready。用户本轮再次明确允许控制电脑，必要授权持续；实际控制前完成可审阅材料并说明具体开始时间、预计时长与范围，不先启动短握手进程等待。新证据及补充简报位于`.local-analysis/async-product-gate-binding/`，原简报/旧任务/批准/失败只读。
+
+以下保留前阶段历史，最新范围以上述报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[原始回执与原Popen适配](docs/async-product-evidence-adapters.md)，从已核对的`dev=origin/dev=883f33323b6519e6ea4bb9a2095e0a5277247e9d`建立`feat/async-product-evidence-adapters`。新增默认禁用的原MCP结果/PNG/region物理倍率、产品原Popen创建/原句柄身份适配及全新归档顺序计时器、显式UTF-8预检。20项新增测试及仓库254项Python测试通过，10组旧参考摘要不变；产品启动/桌面请求0，ready_for_live=false。
 
 新Run `run_e79a93df45bb` / Task `task_70c8976c2e7e` / Dispatch `ctx_1e46f88cbaf6`只读图片任务已failed结算。实际Pi `deng/gpt-6.1-sol high` session `01a188b6-141b-7023-bb48-f7b9d57d707a`的12条assistant身份通过；worker预检PowerShell未指定UTF-8导致JSON解析失败，依约在init前停止，request/read/ack0、无timing-result，不等于读图超60秒。唯一done `msg_150a1878ddbd`已父验收ack，release为external_terminal retained/processAction=none，reclaimable0。修复版预检只在父新分支，不恢复任务或重写原冻结。新证据和补充简报在`.local-analysis/async-product-evidence-adapters/`；原简报与前阶段证据只读。
 

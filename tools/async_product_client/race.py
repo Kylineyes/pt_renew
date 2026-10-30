@@ -65,7 +65,7 @@ class RaceClient:
         state = await self.gate_api()
         require(isinstance(state, GateState), '应用门闩观察未知')
         require((state.run_id, state.pid, state.request_id, state.kind) ==
-                (self.ledger.context.run_id, self.io.owner.identity.pid, self.request_id, self.kind),
+                (self.ledger.application_run_id, self.io.owner.identity.pid, self.request_id, self.kind),
                 '门闩运行/PID/请求/类型不匹配')
         require(all(positive(x) for x in (state.sequence, state.entered_ns, state.ready_ns,
                                         state.deadline_ns, state.sampled_app_ns))
@@ -178,7 +178,7 @@ class RaceClient:
             self.ledger.event('release_receipt', receipt=receipt, returned=True)
             require(isinstance(receipt, dict) and receipt.get('request_id') == self.request_id
                     and receipt.get('pid') == self.io.owner.identity.pid
-                    and receipt.get('run_id') == self.ledger.context.run_id
+                    and receipt.get('run_id') == self.ledger.application_run_id
                     and receipt.get('released') is True and receipt.get('aborted') is False
                     and type(receipt.get('app_ns')) is int
                     and state.published_ns < receipt['app_ns'] < state.deadline_ns

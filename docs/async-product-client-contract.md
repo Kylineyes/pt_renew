@@ -1,6 +1,8 @@
 # 产品竞争客户端的实现约束
 
-本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[原始回执与原Popen适配](async-product-evidence-adapters.md)新增20项测试、仓库254项Python测试通过；原MCP/region与原句柄窄适配默认禁用，仍缺native/UIA/文件框及完整全链接入。新指定模型图片任务在编码预检失败后已failed结算，实际read/ack0，时序未取得，ready_for_live=false。
+本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[应用UUID与门闩接入](async-product-gate-binding.md)新增27项测试、仓库281项Python测试通过。独立应用UUID、原事件/release及native/UIA窄适配默认禁用；新归档任务两图实际read/ack取得36.22394秒完整观察区间，但没有产品动作/收尾或未来时限保证，ready_for_live=false。仍缺有界COM探针、初始主窗/文件框阶段及完整原Popen链。
+
+以下保留前阶段范围：此前[原始回执与原Popen适配](async-product-evidence-adapters.md)新增20项测试、仓库254项Python测试通过；原MCP/region与原句柄窄适配默认禁用，仍缺native/UIA/文件框及完整全链接入。新指定模型图片任务在编码预检失败后已failed结算，实际read/ack0，时序未取得，ready_for_live=false。
 
 以下保留前阶段实现状态：2026-10-30已实现[默认禁用的离线API核心与状态机](async-product-client-offline.md)，新增30项测试及仓库234项Python测试通过；尚无冻结现场适配器、实际模型新上下文时序或产品现场批准，ready_for_live=false。冻结实验、60秒门闩及真实GUI判据保持，不复用诊断Tk窗关闭接口。
 

@@ -20,6 +20,8 @@ class OriginalHandleApi:
             from ctypes import wintypes
             require(os.name == 'nt', '原句柄适配仅支持Windows')
             kernel = ctypes.WinDLL('kernel32', use_last_error=True)
+            kernel.GetCurrentProcess.argtypes = []
+            kernel.GetCurrentProcess.restype = wintypes.HANDLE
             kernel.GetProcessId.argtypes = [wintypes.HANDLE]
             kernel.GetProcessId.restype = wintypes.DWORD
             kernel.GetProcessTimes.argtypes = [wintypes.HANDLE] + [ctypes.POINTER(wintypes.FILETIME)] * 4
@@ -31,6 +33,18 @@ class OriginalHandleApi:
             kernel.WaitForSingleObject.restype = wintypes.DWORD
             self.kernel = kernel
         return self.kernel
+
+    def current_identity(self):
+        import ctypes
+        from ctypes import wintypes
+        kernel = self.load()
+        handle = kernel.GetCurrentProcess()
+        times = [wintypes.FILETIME() for _ in range(4)]
+        if not kernel.GetProcessTimes(handle, *(ctypes.byref(value) for value in times)):
+            raise ctypes.WinError(ctypes.get_last_error())
+        require(kernel.GetProcessId(handle) == os.getpid(), '当前客户端原句柄PID不符')
+        return dict(pid=os.getpid(), birth=(times[0].dwHighDateTime << 32) | times[0].dwLowDateTime,
+                    original_handle=True)
 
     def inspect(self, process):
         import ctypes
