@@ -61,6 +61,7 @@ class BoundedUiaProbe:
                  'async_product_client/core.py', 'async_product_client/product.py',
                  'async_product_client/events.py', 'async_product_client/race.py',
                  'async_product_client/file_dialog.py', 'async_product_client/commands.py',
+                 'async_product_client/batch.py',
                  'async_product_client/__init__.py'} <= self.module_files.keys(),
                 '探针模块冻结集合不完整')
         package_names = {p.relative_to(self.module_root).as_posix()
@@ -71,6 +72,14 @@ class BoundedUiaProbe:
                 '探针模块与冻结摘要不符或包含链接')
 
     async def inspect(self, hwnd, pid):
+        return await self._query(hwnd, pid, kind='single-uia')
+
+    async def observe(self):
+        identity = self.owner.identity
+        require(identity is not None, '整窗观察前必须已有精确主HWND绑定')
+        return await self._query(identity.hwnd, identity.pid, kind='native-observation')
+
+    async def _query(self, hwnd, pid, *, kind):
         self.ledger.desktop_allowed()
         require(self.enabled and not self.active and not self.failed
                 and len(self.children) < self.max_queries and positive(hwnd), '探针禁用、正在执行、已有失败或次数耗尽')
@@ -91,7 +100,7 @@ class BoundedUiaProbe:
             folder = self.root / f'{len(self.children) + 1:04}'
             folder.mkdir(exist_ok=False)
             request = dict(schema_version=1, context=asdict(self.ledger.context), nonce=self.nonce_factory(),
-                           target=dict(info, hwnd=hwnd), deadline_ns=deadline,
+                           target=dict(info, hwnd=hwnd), query_kind=kind, deadline_ns=deadline,
                            created_mono_ns=self.ledger.clock.monotonic_ns(),
                            package_root=str(self.package_root), package_files=self.package_files,
                            module_root=str(self.module_root), module_files=self.module_files,
@@ -162,10 +171,16 @@ class BoundedUiaProbe:
             require(type(result.get('started_ns')) is int and type(result.get('finished_ns')) is int
                     and request['created_mono_ns'] <= result['started_ns'] <= result['finished_ns']
                     <= self.ledger.clock.monotonic_ns() < deadline, '探针时序越过原截止或时钟矛盾')
-            row = result.get('uia')
-            require(isinstance(row, dict) and row.get('readonly') is True
-                    and row.get('root', {}).get('pid') == pid and row['root'].get('hwnd') == hwnd,
-                    '探针UIA根不属于精确请求窗口')
+            require(result.get('query_kind', 'single-uia') == kind, '探针结果类型与原请求不符')
+            if kind == 'native-observation':
+                from .batch import validate_observation
+                row = result.get('native')
+                validate_observation(row, self.owner.identity)
+            else:
+                row = result.get('uia')
+                require(isinstance(row, dict) and row.get('readonly') is True
+                        and row.get('root', {}).get('pid') == pid and row['root'].get('hwnd') == hwnd,
+                        '探针UIA根不属于精确请求窗口')
             self.sources()
             self.ledger.desktop_allowed()
             require(self.ledger.clock.monotonic_ns() < deadline, '最终核对耗时跨越探针原截止')

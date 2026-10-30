@@ -3,18 +3,18 @@ from __future__ import annotations
 
 from .core import require
 
-# 每次ProductNative对每个可见窗前后各启动一个独立探针。
-# 数字来自当前统一编排的显式observe/capture路径，需用完整假流程计数交叉验证。
+# 下表为实际native调用的可见窗口数量；逐窗旧适配器每窗双探针，批量适配器每次观察一个子进程。
+# 仍用完整假流程实计交叉核对，计数不表示耗时通过。
 NATIVE_WINDOWS = {
     'baseline': (1, 1),
-    'command_image': (1, 1, 1, 1),
-    'command_ack': (1, 1),
+    'command_image': (1, 1),
+    'command_ack': (1,),
     'net_command_click': (1, 2),
     'copper_command_click': (1, 1),
-    'file_image': (2, 2, 2),
-    'file_ack': (2, 2),
-    'file_type_and_image': (2, 2, 2, 2),
-    'file_path_ack': (2, 2),
+    'file_image': (2, 2),
+    'file_ack': (2,),
+    'file_type_and_image': (2, 2, 2),
+    'file_path_ack': (2,),
     'file_open': (2, 1),
     'gate_image': (1, 1),
     'edit_and_image': (1, 1, 1, 1, 1, 1),
@@ -41,7 +41,16 @@ def session_budget(kind):
                 exceeds_frozen_probe_limit=sum(probes.values()) > 32,
                 t1_probe_configured_wait_sum_seconds=probes['gate_image'] * 5,
                 t2_probe_configured_wait_sum_seconds=sum(probes[name] for name in critical) * 5,
+                legacy_probe_queries=106 if kind == 'net' else 54,
+                batch_probe_queries=native_count, batch_with_main_discovery_queries=native_count + 1,
+                batch_probe_queries_before_gate=sum(len(NATIVE_WINDOWS[name]) for name in pre),
+                batch_probe_queries_t1=len(NATIVE_WINDOWS['gate_image']),
+                batch_probe_queries_gate_through_edit=sum(len(NATIVE_WINDOWS[name]) for name in critical),
+                batch_exceeds_frozen_probe_limit=native_count + 1 > 32,
+                batch_t1_probe_configured_wait_sum_seconds=len(NATIVE_WINDOWS['gate_image']) * 5,
+                batch_t2_probe_configured_wait_sum_seconds=sum(len(NATIVE_WINDOWS[name]) for name in critical) * 5,
                 snapshot_tool_timeout_seconds=35, t1_deadline_seconds=20, t2_deadline_seconds=50,
                 original_watchdog_seconds=60, ready_for_live=False, runtime_timing_verified=False,
-                reason='当前调用数量超冻结探针预算；配置等待上限之和已耗尽门槛，且未计实际模型/工具/CPU/持久化成本',
+                reason=('批量NET含主窗发现仍超32次；其余仍缺实际截图/模型/校验/收尾时限证据'
+                        if native_count + 1 > 32 else '调用数在32次内，实际截图/模型/校验/收尾时限仍未验证'),
                 interpretation='这里只核对当前调用结构和配置拒绝上限，不是耗时测量、未来上界或产品现场批准')

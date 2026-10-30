@@ -1,6 +1,16 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-30。最新阶段为[统一产品会话与创建者见证](docs/async-product-session.md)，从核对的`dev=origin/dev=259ab96e4091d697c5708e863a4f8862b45d9204`建立`feat/async-product-session`。接通冻结A命令行与原接受事件/read基线、可见NET/铜按钮、B文件框、目标原请求、竞争各read关口和dirty正常收尾；补跨创建者原Popen报告递归审计。新增15项、仓库326项Python测试通过（35.030秒），产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+更新时间：2026-10-30。最新阶段为[批量窗口观察与冷探针预算](docs/async-product-batch-observation.md)，从核对的`dev=origin/dev=cdfd0b8ef678bcdc0e9f059b6dc3218315a20a23`建立`feat/async-product-batch-observation`。同一次完整native/UIA观察在一个受限子进程内执行，保留每窗两轮UIA和全部前后核验；合并紧邻无输入的重复观察。新增13项、仓库339项Python测试通过（34.214秒），产品/真实COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+
+完整NET/铜假会话实计30/21次批量原Popen，加一次主窗发现31/22次，未提高32次上限；单窗/整窗共用原截止和计数。父原Popen身份与退出0继续核验，子查询句柄仅读birth/image支持在途身份，不冒作创建句柄或退出证明。普通输入post_native、实际read/ack及双轮UIA/DPI/owner/焦点/按钮稳定性不删减。
+
+真实时限仍缺：T1两批量观察的5秒配置上限合计10秒，至编辑图8次合计40秒，未计Snapshot/模型/输入等成本；Snapshot35秒上限不能保证严格20秒。下一步先按阶段剩余deadline收紧调用预算，再接生产服务/客户端/监督器原Popen报告交换、所有阶段正常收尾，不能因调用数合格就live-ready。首次全回归新增worker测试模块环境已隔离；既有runner两次失败后两次保留诊断均过及全339通过，但原失败原因未定位，日志不删。
+
+新证据在`.local-analysis/async-product-batch-observation/`；旧任务/批准/失败/冻结和归档36.22394秒只读。必要控制授权持续，实际现场前完成可审阅代码/测试/冻结/时限及失败收尾，再说明具体开始时间、预计时长与范围。
+
+以下保留前阶段历史，最新状态以上述报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[统一产品会话与创建者见证](docs/async-product-session.md)，从核对的`dev=origin/dev=259ab96e4091d697c5708e863a4f8862b45d9204`建立`feat/async-product-session`。接通冻结A命令行与原接受事件/read基线、可见NET/铜按钮、B文件框、目标原请求、竞争各read关口和dirty正常收尾；补跨创建者原Popen报告递归审计。新增15项、仓库326项Python测试通过（35.030秒），产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
 
 本阶段查明并修正实验主窗标题缺失`【独立异步实验构建】`后缀问题，原EXE不改。完整假流程实计NET37次native/106次冷探针（门闩前72）、铜24次native/54次冷探针，均超过冻结32次上限；T1门闩图4探针配置等待合计20秒，至编辑图16次合计80秒，未计其他成本。不是实测耗时或未来上下界，但确定当前结构不能作为现场完整预算。下一步先受限批量观察降冷启动数量并保持身份/DPI/焦点/前后/post_native，再重算预算；不擅自提高32次或延长60秒。
 

@@ -25,7 +25,8 @@ def execute(request_path, *, query=None, clock=time.monotonic_ns):
     request = decode_object(raw)
     started = clock()
     result = dict(schema_version=1, context=request['context'], nonce=request['nonce'],
-                  target=request['target'], child_pid=os.getpid(), request_sha256=digest(raw),
+                  target=request['target'], query_kind=request.get('query_kind', 'single-uia'),
+                  child_pid=os.getpid(), request_sha256=digest(raw),
                   started_ns=started, completed=False, readonly=True, input_calls=0,
                   com_uninitialized=False, dpi_restored=False)
     try:
@@ -50,10 +51,18 @@ def execute(request_path, *, query=None, clock=time.monotonic_ns):
         checkpoint()
         target = request['target']
         # query仅供离线测试注入；正式入口固定run_uia，不能从request选择可执行代码。
-        queried = query(target, package) if query is not None else run_uia(target, package, checkpoint=checkpoint)
+        kind = request.get('query_kind', 'single-uia')
+        require(kind in ('single-uia', 'native-observation'), '探针观察类型未冻结')
+        queried = query(target, package) if query is not None else run_uia(target, package, checkpoint=checkpoint, kind=kind)
         result.update(queried)
-        require(result.get('com_uninitialized') is True and result.get('dpi_restored') is True
-                and result.get('uia', {}).get('readonly') is True, 'COM/DPI/只读UIA证据不完整')
+        require(result.get('com_uninitialized') is True and result.get('dpi_restored') is True,
+                'COM/DPI恢复证据不完整')
+        if kind == 'single-uia':
+            require(result.get('uia', {}).get('readonly') is True, '只读UIA证据不完整')
+        else:
+            from async_product_client.batch import validate_observation
+            from async_product_client.core import Identity
+            validate_observation(result.get('native'), Identity(target['pid'], target['birth'], target['image'], target['hwnd']))
         checkpoint()
         require(path.read_bytes() == raw, '探针执行后请求改变')
         result['completed'] = True
@@ -66,7 +75,7 @@ def execute(request_path, *, query=None, clock=time.monotonic_ns):
     return 0 if result['completed'] else 1
 
 
-def run_uia(target, package, *, checkpoint):
+def run_uia(target, package, *, checkpoint, kind='single-uia'):
     require(os.name == 'nt', 'COM探针仅支持Windows')
     from async_product_client.native import ReadOnlyUia, ReadOnlyWin32
     native = ReadOnlyWin32()
@@ -85,7 +94,6 @@ def run_uia(target, package, *, checkpoint):
             checkpoint()
             foreground = native.foreground()
             checkpoint()
-            checkpoint()
             desktop = native.desktop()
             checkpoint()
             foreground_row = native.window(foreground)
@@ -97,8 +105,26 @@ def run_uia(target, package, *, checkpoint):
             import windows_mcp.uia as uia
             checkpoint()
             bridge = ReadOnlyUia(uia, package_root=package, checkpoint=checkpoint)
-            result['uia'] = bridge.inspect(target['hwnd'], target['pid'])
-            checkpoint()
+            from async_product_client.batch import TargetQueryHandle
+            try:
+                with TargetQueryHandle(target) as query_handle:
+                    if kind == 'native-observation':
+                        import asyncio
+                        from async_product_client.batch import validate_observation
+                        from async_product_client.core import Identity
+                        from async_product_client.native import collect_native
+                        identity = Identity(target['pid'], target['birth'], target['image'], target['hwnd'])
+                        def verify():
+                            checkpoint(); query_handle.verify()
+                        result['native'] = asyncio.run(collect_native(identity, native, bridge,
+                                                                     checkpoint=checkpoint, verify_identity=verify))
+                        validate_observation(result['native'], identity)
+                    else:
+                        query_handle.verify()
+                        result['uia'] = bridge.inspect(target['hwnd'], target['pid'])
+                        checkpoint(); query_handle.verify()
+            finally:
+                checkpoint()
             after = native.window(target['hwnd'])
             checkpoint()
             desktop_after = native.desktop()

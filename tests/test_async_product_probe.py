@@ -28,7 +28,7 @@ class ProbeFixture:
         self.package = self.root / 'package'; (self.package / 'windows_mcp').mkdir(parents=True)
         for index in range(77): (self.package / 'windows_mcp' / f'module{index}.py').write_bytes(str(index).encode())
         self.modules = self.root / 'tools'; (self.modules / 'async_product_client').mkdir(parents=True)
-        for name in ('probe_worker.py', 'native.py', 'core.py', 'product.py', 'events.py', 'race.py', '__init__.py', 'file_dialog.py', 'commands.py'):
+        for name in ('probe_worker.py', 'native.py', 'core.py', 'product.py', 'events.py', 'race.py', '__init__.py', 'file_dialog.py', 'commands.py', 'batch.py'):
             (self.modules / 'async_product_client' / name).write_bytes(name.encode())
         self.calls, self.processes = [], []
         self.mode = 'valid'
