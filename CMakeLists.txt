@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.10.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.11.0 LANGUAGES CXX)
+set(PT_RENEW_VERSION "${PROJECT_VERSION}-alpha")
+configure_file(src/application/Version.h.in generated/application/Version.h @ONLY)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -33,7 +35,7 @@ add_library(pt_core STATIC
     src/io/LegacyPcbInspector.cpp
     src/io/LegacyPcbInspector.h
 )
-target_include_directories(pt_core PUBLIC src)
+target_include_directories(pt_core PUBLIC src "${CMAKE_CURRENT_BINARY_DIR}/generated")
 target_link_libraries(pt_core PUBLIC Qt6::Core)
 
 add_library(pt_geometry STATIC

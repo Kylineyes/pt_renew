@@ -1,0 +1,6 @@
+#pragma once
+
+namespace pt {
+// 构建版本与程序内显示共用同一份发布标识。
+inline constexpr char ApplicationVersion[] = "@PT_RENEW_VERSION@";
+}
