@@ -1,5 +1,7 @@
 # 产品竞争客户端的实现约束
 
+2026-10-31最新进展见[UIA对象生命周期修复与新单次核验](uia-object-lifecycle-review.md)：新增清理/最终回执失败收尾修复，仓库428项、独立候选234项通过；全新指定Pi任务单次对象严格COM三次初始化/三次释放、原Popen同PID/exit0及原5秒限定通过。旧failed及其结算不改，Qt/完整冷探针/文件框/全链和产品全动作仍未过，ready_for_live=false。下一步先准备真实Qt/完整冷探针新任务，NET31/铜22、32次和原全部时限保持。以下按历史阶段阅读。
+
 最新[真实UIA对象核验](async-uia-object-compat.md)新Task仅一次创建对象，严格3次COM验收因记录2/2拒绝，原exit1、failed/token保持、120.091秒零请求收尾，Task failed已结算。父离线修复星号导出覆盖ctypes代理及停止被宽泛异常吞掉的路径，419项测试通过，没有重跑/改旧候选或把余额0补通过。真实Qt/整窗冷探针/产品全动作未过，ready_for_live=false；NET31/铜22、32次、5秒及原阶段/总截止不扩大。
 
 最新[探针运行时](async-product-probe-runtime.md)将探针依赖固定为同原完整依赖中的156文件comtypes包，私有缓存及只读审计阻止生成字节变化，父独立重算COM原线程/API/HRESULT/余额。一次仅COM导入核验取得原Popen/exit0及平衡，两次初始化/释放，最终落盘2.867147秒；没有UIA对象/桌面查询或产品，真实冷探针/Qt/全动作仍未过。共享32次、NET31/铜22、5秒和20/50/55/60截止不变，`ready_for_live=false`。
