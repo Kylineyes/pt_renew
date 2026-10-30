@@ -1,6 +1,7 @@
 #include "ui/MainWindow.h"
 
 #include "application/CommandCatalog.h"
+#include "application/Version.h"
 #include "io/LegacyPcbReader.h"
 #include "ui/BoardRenderer.h"
 #include <QListWidget>
@@ -218,9 +219,11 @@ void MainWindow::executeCommand(const QString& id) {
         dock->show(); dock->raise();
     } else if (id == QStringLiteral("app.about")) {
         QMessageBox::information(this, QStringLiteral("关于当前阶段"),
-            QStringLiteral("C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
+            QStringLiteral("PT Renew %1 · 早期测试版\n"
+                           "C++ + Qt 6 的 AUTOTRAX 重建工程。\n\n"
                            "当前支持只读板图/库/网表及受限铜层几何分析；不是完整 DRC。\n"
-                           "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。"));
+                           "文字与部分轮廓为近似显示；不支持编辑、保存、DRC、布线和生产输出。")
+                .arg(QString::fromLatin1(ApplicationVersion)));
     }
     statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
 }
