@@ -148,6 +148,100 @@ atexit.register(_shutdown)
         self.assertTrue(validate_com_report(trace.report())['balanced'])
         self.assertEqual(self.calls, ['init', 'init', 'uninit', 'uninit'])
 
+    async def test_failed_shutdown_callback_cannot_report_balanced_after_releasing_its_com_slot(self):
+        ole = self.fake_ole()
+        def shutdown():
+            trace.ole(ole).CoUninitialize()
+            raise RuntimeError('原退出回调失败')
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole)
+            with self.assertRaisesRegex(RuntimeError, '原退出回调失败'):
+                with trace: trace.shutdown_callbacks.append((shutdown, (), {}))
+            self.assertEqual(trace.balance, 0)
+            self.assertFalse(trace.report()['balanced'])
+            self.assertEqual(trace.shutdown_callbacks, [])
+            self.assertNotIn(trace, sys.meta_path)
+        self.assertEqual(self.calls, ['init', 'uninit'])
+
+    async def test_callback_failure_preserves_original_error_and_releases_known_com_slots(self):
+        ole = self.fake_ole(); callbacks = []
+        def shutdown():
+            callbacks.append('失败回调')
+            raise RuntimeError('原退出回调失败')
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole)
+            with self.assertRaisesRegex(ValueError, '原观察失败') as caught:
+                with trace:
+                    trace.ole(ole).CoInitialize(None)
+                    trace.shutdown_callbacks.append((lambda: callbacks.append('另一回调'), (), {}))
+                    trace.shutdown_callbacks.append((shutdown, (), {}))
+                    raise ValueError('原观察失败')
+            self.assertIn('原退出回调失败', caught.exception.com_cleanup_error)
+            self.assertEqual(trace.balance, 0)
+            self.assertFalse(trace.report()['balanced'])
+            self.assertEqual(trace.shutdown_callbacks, [])
+        self.assertEqual(callbacks, ['失败回调', '另一回调'])
+        self.assertEqual(self.calls, ['init', 'init', 'uninit', 'uninit'])
+
+    async def test_unknown_uninitialize_is_not_repeated_during_failure_cleanup(self):
+        ole = self.fake_ole()
+        def unknown():
+            self.calls.append('未知释放')
+            raise OSError('释放是否完成未知')
+        ole.CoUninitialize = unknown
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole)
+            with self.assertRaisesRegex(OSError, '释放是否完成未知'):
+                with trace:
+                    trace.shutdown_callbacks.append((trace.ole(ole).CoUninitialize, (), {}))
+            self.assertFalse(trace.report()['balanced'])
+            self.assertEqual(trace.balance, 1)
+            self.assertEqual(trace.shutdown_callbacks, [])
+        self.assertEqual(self.calls, ['init', '未知释放'])
+
+    async def test_unknown_release_in_body_is_not_repeated_by_exit_callbacks(self):
+        ole = self.fake_ole()
+        def unknown():
+            self.calls.append('未知释放')
+            raise OSError('原释放结果未知')
+        ole.CoUninitialize = unknown
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole)
+            with self.assertRaisesRegex(OSError, '原释放结果未知'):
+                with trace:
+                    trace.shutdown_callbacks.append((trace.ole(ole).CoUninitialize, (), {}))
+                    trace.ole(ole).CoUninitialize()
+            self.assertFalse(trace.report()['balanced'])
+            self.assertEqual(trace.shutdown_callbacks, [])
+        self.assertEqual(self.calls, ['init', '未知释放'])
+
+    async def test_singleton_references_are_released_before_original_shutdown_callback(self):
+        import weakref
+        ole = self.fake_ole(); references = []
+        class Client: pass
+        client_class = type('AutomationClient', (), {'_instance': Client()})
+        references.append(weakref.ref(client_class._instance))
+        def shutdown():
+            self.assertIsNone(references[0]())
+            self.assertGreater(trace.balance, 0)
+            trace.ole(ole).CoUninitialize()
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole)
+            with trace:
+                sys.modules['windows_mcp.uia.core'] = SimpleNamespace(_AutomationClient=client_class)
+                trace.shutdown_callbacks.append((shutdown, (), {}))
+            self.assertTrue(validate_com_report(trace.report())['balanced'])
+        self.assertEqual(self.calls, ['init', 'uninit'])
+
+    async def test_partial_core_import_without_singleton_class_still_releases_com(self):
+        ole = self.fake_ole()
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole)
+            with trace:
+                sys.modules['windows_mcp.uia.core'] = ModuleType('windows_mcp.uia.core')
+            self.assertTrue(validate_com_report(trace.report())['balanced'])
+        self.assertEqual(self.calls, ['init', 'uninit'])
+
     async def test_bad_hresult_unknown_api_and_wrong_thread_do_not_produce_success(self):
         ole = self.fake_ole()
         with isolated_modules():
