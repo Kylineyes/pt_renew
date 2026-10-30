@@ -1,8 +1,76 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-29。先读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)，再读本文。上一轮交接已推送`dev=e5340a3`；本轮从该基线完成[最新上传离线分析与资源寿命模型](docs/control-upload-offline-analysis.md)，最终提交以`git log`和本机简报为准。旧版交接备份在`.local-analysis/handoff-archive/`，不删除失败原件。
+最新见[单次UIA对象核验](docs/async-uia-object-compat.md)及[独立工作者报告](docs/uia-object-compat-worker.md)。从 `dev=462bc56` 分支首次以Pi deng/gpt-6.1-sol high新Task核验真实UIA对象，原单例曾创建，但严格3次COM验收拒绝、原退出1，Task failed已结算，120.091秒零新请求完成；旧结果不改。父定位星号导出覆盖局部ctypes代理，补离线修复与419项测试，未重跑真实UIA。ready_for_live=false，NET31/铜22与原32次/时限不扩大。证据 `.local-analysis/async-product-uia-compat/`。
 
-**稳定产品及dist仍为0.10.0。固定0.11.0候选和NET／铜层完整竞争验收仍未通过。最新完成的是控制诊断工具与限定自建窗口取证：一次原App初始化、单组GUI和4081条位图上传记录通过；真实心跳滞后仍存在，控制稳定性尚未修复。所有现场窗口、探针与控制链已正常退出，全部Task均结算，无后台诊断或自动续验。本轮追加的是纯离线上传边界分析与假API资源模型，尚无Win32复用适配器或性能改善现场证据。**
+最新开发见[探针专用依赖、私有缓存与COM生命周期](docs/async-product-probe-runtime.md)。从 `dev=6479a1a` 独立分支将探针依赖独立为原完整包中的156文件comtypes，增加私有工作/缓存、只读审计、真实COM初始化计数及分段时钟。一次仅COM导入进程取得同原Popen/exit0、两次初始化与两次释放平衡，父全区间2.867147秒；未创建UIA对象或查询桌面，不能当真实UIA/Qt/全动作通过。NET31/铜22、32上限与 `ready_for_live=false` 保持，新证据 `.local-analysis/async-product-probe-runtime/`。
+
+最新开发见[实际兼容性驱动与基础解释器依赖](docs/async-product-drivers.md)。从 `dev=4f3ac63` 独立分支实现逐条命令邮箱、实际客户端/监督器入口和创建前完整材料核验；新无GUI实测确认虚拟环境重定向器PID不一致，改用基础Python加完整冻结依赖。6,267文件依赖副本的隔离导入及原Popen退出0已验证，真实控制服务/Qt/UIA/全动作时限仍未验证，`ready_for_live=false`，NET31/铜22及32次上限保持。新证据 `.local-analysis/async-product-drivers/`。
+
+最新开发见[阶段剩余时限、创建者运行器与失败收尾](docs/async-product-deadlines.md)。从核对的 `dev=afb22b7` 建立 `feat/async-product-deadlines`：原输入前唯一时钟、20/50/55/60秒剩余约束已接入工具/探针/落盘；实际无GUI四身份原Popen报告链与原服务管道通过测试，门闩前/文件框失败收尾已补。真实服务/产品/COM/UIA/全动作时限尚未验证，含发现NET31/铜22及32次上限不变，`ready_for_live=false`。新证据 `.local-analysis/async-product-deadlines/`，以下交接及历史原结算保持。
+
+**新代理先读[2026-10-30统一接手入口](docs/agent-handoff-20261030.md)。** 实现基线为`dev=53922ab39dda1a0c07739f557ea9d5cbc5dd0c01`，本次只整理交接、不再扩展实现或启动现场。最新本机入口为`.local-analysis/CURRENT_AGENT_HANDOFF.md`；旧`.local-analysis/NEXT_AGENT_BRIEF.md`和各阶段Task/批准/失败/冻结保持只读。最终交接Git状态见`.local-analysis/agent-handoff-20261030/final-git-state.json`。
+
+更新时间：2026-10-30。最新阶段为[批量窗口观察与冷探针预算](docs/async-product-batch-observation.md)，从核对的`dev=origin/dev=cdfd0b8ef678bcdc0e9f059b6dc3218315a20a23`建立`feat/async-product-batch-observation`。同一次完整native/UIA观察在一个受限子进程内执行，保留每窗两轮UIA和全部前后核验；合并紧邻无输入的重复观察。新增13项、仓库339项Python测试通过（34.214秒），产品/真实COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+
+完整NET/铜假会话实计30/21次批量原Popen，加一次主窗发现31/22次，未提高32次上限；单窗/整窗共用原截止和计数。父原Popen身份与退出0继续核验，子查询句柄仅读birth/image支持在途身份，不冒作创建句柄或退出证明。普通输入post_native、实际read/ack及双轮UIA/DPI/owner/焦点/按钮稳定性不删减。
+
+真实时限仍缺：T1两批量观察的5秒配置上限合计10秒，至编辑图8次合计40秒，未计Snapshot/模型/输入等成本；Snapshot35秒上限不能保证严格20秒。下一步先按阶段剩余deadline收紧调用预算，再接生产服务/客户端/监督器原Popen报告交换、所有阶段正常收尾，不能因调用数合格就live-ready。首次全回归新增worker测试模块环境已隔离；既有runner两次失败后两次保留诊断均过及全339通过，但原失败原因未定位，日志不删。
+
+新证据在`.local-analysis/async-product-batch-observation/`；旧任务/批准/失败/冻结和归档36.22394秒只读。必要控制授权持续，实际现场前完成可审阅代码/测试/冻结/时限及失败收尾，再说明具体开始时间、预计时长与范围。
+
+以下保留前阶段历史，最新状态以上述报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[统一产品会话与创建者见证](docs/async-product-session.md)，从核对的`dev=origin/dev=259ab96e4091d697c5708e863a4f8862b45d9204`建立`feat/async-product-session`。接通冻结A命令行与原接受事件/read基线、可见NET/铜按钮、B文件框、目标原请求、竞争各read关口和dirty正常收尾；补跨创建者原Popen报告递归审计。新增15项、仓库326项Python测试通过（35.030秒），产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+
+本阶段查明并修正实验主窗标题缺失`【独立异步实验构建】`后缀问题，原EXE不改。完整假流程实计NET37次native/106次冷探针（门闩前72）、铜24次native/54次冷探针，均超过冻结32次上限；T1门闩图4探针配置等待合计20秒，至编辑图16次合计80秒，未计其他成本。不是实测耗时或未来上下界，但确定当前结构不能作为现场完整预算。下一步先受限批量观察降冷启动数量并保持身份/DPI/焦点/前后/post_native，再重算预算；不擅自提高32次或延长60秒。
+
+创建者relay要求父原Popen已退出0和创建身份，子报告按上下文/角色/摘要递归绑定，外层根必须仍存活时保存的同Popen退出后才能结算；报告JSON不能补作缺失原身份。协议已假链验证，真实MCP服务/客户端/监督器生产启动器与交换仍未接通。新证据在`.local-analysis/async-product-session/`；旧任务/批准/失败及归档36.22394秒证据只读。必要控制授权持续，实际控制前先给可审阅冻结结果与具体时间范围。
+
+以下保留前阶段历史，最新状态以上述报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[原生NET文件框与原Popen账本](docs/async-product-file-dialog.md)，从核对的`dev=origin/dev=9b13adaec08a936aff4bd2c1f3bc5e8cea9d7218`建立`feat/async-product-file-dialog`。独立文件框read→唯一冻结路径Type→后验/路径图read→明确打开/取消，以及产品/探针同创建原Popen账本均已离线接入；新增16项、仓库311项Python测试通过（27.607秒）。产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+
+普通Type仍拒绝，文件框只可用同Ledger/token/冻结A/B副本的一次性凭据，press_enter=false；读图后控件/路径/焦点变化也拒绝。打开前保留原触发时钟，框消失只记submitted/load_verified=false。控件ID1148/1/2及按钮名称为待真实核验候选，不以假API宣称Windows/Qt兼容。原账本保存创建后身份未知对象，后来exit0不改原失败；产品/探针已接入，服务/客户端/监督器和已发现子孙跨创建者完整链仍缺。下一步继续命令/模块串联及完整原Popen见证与冻结总预算。
+
+新证据和补充简报在`.local-analysis/async-product-file-dialog/`；旧任务/批准/失败/冻结和归档36.22394秒样本只读。必要控制授权保持，现场前先完成可审阅材料并说明实际开始时间、预计时长和范围。
+
+以下为前阶段历史，最新范围以本阶段报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[有界UIA探针与主窗发现](docs/async-product-bounded-probe.md)，从`dev=00907260907058747d0c623e9a4e36e0af32b100`建立`feat/async-product-bounded-probe`。独立STA/DPI子探针、父原Popen有界等待/协作停止/本地reap和一次初始主HWND发现均默认禁用，14项新增测试、仓库295项Python测试通过（27.856秒）。产品/COM/UIA现场/桌面请求0，未新增图片任务，ready_for_live=false。
+
+父等待超时不等于COM调用已停止；保留原Popen和unknown、不强杀/不重试，迟到退出0只证明生命周期，不采纳迟到UIA结果。主窗按精确标题/owner/原Popen和mainWindow UIA根/物理rect核对后唯一绑定，未知不聚焦或输入。下一步补原生文件框独立阶段和全部原Popen链，再审阅包含冷探针加载成本的20/50/55/60秒总预算。新证据在`.local-analysis/async-product-bounded-probe/`，旧任务/批准/失败与归档双图36.22394秒样本保持只读；必要控制授权持续，实际控制前仍说明具体时间与范围。
+
+以下保留前阶段历史，最新范围以本阶段报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[应用UUID、原门闩与可信窗口接入](docs/async-product-gate-binding.md)，从核对的`dev=origin/dev=42d7556b589232eceb803cbebdc5eace04015726`建立`feat/async-product-gate-binding`。新增不可变应用随机UUID绑定、门闩前实际read基线、原JSONL/request清单映射、唯一SetEvent后原gate-released确认和默认禁用native/UIA窗口采集；27项新增测试及仓库281项Python测试通过，10组旧参考/22/23/22摘要不变。产品启动/桌面请求0，ready_for_live=false。
+
+新Run `run_2cca64780fb9` / Task `task_c257068934b4` / Dispatch `ctx_01d8d1a98c97`归档图任务限定succeeded。实际Pi `deng/gpt-6.1-sol high` session `01a188e4-680f-74d8-a046-d5e506d19612`的18条assistant、17冻结文件、两张唯一read成功image/hash及原JSONL前缀、32文件worker证据均经父独立复核。图一request→ack13.7759396秒、图二16.1056135秒、request1→ack2完整36.22394秒，仅本次归档样本；不包括产品截图/编辑/release/收尾、不代表未来时限上界。图二仍为历史取消后图，不补记门闩内编辑或产品GUI通过。唯一done `msg_825a2c42c45d`父已验收ack，external_terminal retained/processAction=none；所有旧failed/abandoned保持。
+
+下一步补独立有界COM探针、初始主窗发现、原生文件框明确阶段及产品/客户端/服务/监督器全链原Popen见证，再完善包含全部动作的冻结预算，不能仅因归档样本快就live-ready。用户本轮再次明确允许控制电脑，必要授权持续；实际控制前完成可审阅材料并说明具体开始时间、预计时长与范围，不先启动短握手进程等待。新证据及补充简报位于`.local-analysis/async-product-gate-binding/`，原简报/旧任务/批准/失败只读。
+
+以下保留前阶段历史，最新范围以上述报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[原始回执与原Popen适配](docs/async-product-evidence-adapters.md)，从已核对的`dev=origin/dev=883f33323b6519e6ea4bb9a2095e0a5277247e9d`建立`feat/async-product-evidence-adapters`。新增默认禁用的原MCP结果/PNG/region物理倍率、产品原Popen创建/原句柄身份适配及全新归档顺序计时器、显式UTF-8预检。20项新增测试及仓库254项Python测试通过，10组旧参考摘要不变；产品启动/桌面请求0，ready_for_live=false。
+
+新Run `run_e79a93df45bb` / Task `task_70c8976c2e7e` / Dispatch `ctx_1e46f88cbaf6`只读图片任务已failed结算。实际Pi `deng/gpt-6.1-sol high` session `01a188b6-141b-7023-bb48-f7b9d57d707a`的12条assistant身份通过；worker预检PowerShell未指定UTF-8导致JSON解析失败，依约在init前停止，request/read/ack0、无timing-result，不等于读图超60秒。唯一done `msg_150a1878ddbd`已父验收ack，release为external_terminal retained/processAction=none，reclaimable0。修复版预检只在父新分支，不恢复任务或重写原冻结。新证据和补充简报在`.local-analysis/async-product-evidence-adapters/`；原简报与前阶段证据只读。
+
+下一步补native/UIA可信窗口/模态按钮/文件框阶段、应用原run UUID与Task上下文绑定、门闩事件及唯一release、原Popen外层全链见证。模型实际两图read兼容性与T1/T2时序仍未取得，当前无可运行产品现场客户端。必要控制授权持续，新现场前完成可审阅材料并说明实际开始时间、预计时长和范围；不复用旧failed/abandoned任务、批准或演练。
+
+以下为前阶段已完成离线核心，历史数字不覆盖最新结果。
+
+前阶段更新时间：2026-10-30。此前阶段为[产品客户端离线实现与冻结时限](docs/async-product-client-offline.md)，从已核对的`dev=origin/dev=f81576f83397900fd0c861765c57da928d313228`建立`feat/async-product-client-offline`。新增默认禁用的request/read/ack、NET/铜编排、产品Qt主窗/dirty模态及原Popen正常退出核心，30项新增测试和仓库234项Python测试全部通过。原22/23/22、旧事件/输入、最新控制及归档等10组参考按历史摘要口径全部匹配。产品启动/桌面请求0，没有新Task/Dispatch或批准；ready_for_live=false。
+
+本阶段交接入口为[下一阶段](docs/control-next-stage.md)、[客户端约束](docs/async-product-client-contract.md)与本机`.local-analysis/async-product-client-offline/NEXT_AGENT_BRIEF.md`；原`.local-analysis/NEXT_AGENT_BRIEF.md`不改，按前阶段历史读取。下一步先以指定模型新上下文验证原read image记录兼容性及两图顺序时限，再补冻结的Win32/MCP现场适配器、文件框阶段和原Popen全链启动/见证接入。T1/T2/T3设计为触发前原时钟起算20/50/55秒，原60秒上限不变，尚无新的实际模型计时证明。必要控制授权持续；新现场先完成可审阅材料并说明具体时间/范围，不恢复旧failed/abandoned任务或执行其准备脚本。
+
+以下保留2026-10-29及更早历史，旧结算和证据范围不变。前阶段[产品竞争离线预检](docs/async-race-offline-preflight.md)只增加事件/实际read时序审计工具及10项变异测试；此前71.019/88.949秒实际read区间及旧release缺少read关口的问题保持其历史结论。
+
+此前[完整关闭现场](docs/control-close-journal-live.md)按限定succeeded结算：本会话两图0/0→1/1及双回调、一次原Shortcut Alt+F4严格回执→客户端原Popen退出0→退役→stop，全链无拒绝；7寿命3625上传零账本、2880健康全healthy，监督器及9已发现子孙和已知外层原链exit0。快照发生1次临时权限重试、0持续失败。先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](AGENTS.md)、本文及[下一阶段](docs/control-next-stage.md)。
+
+**当前控制限定缺口已取得本组证据，无已知遗留或后台控制。普通输入目标后验未删，旧failed/token/截止/退出码缺口保持。实际服务759.3414秒约12分39，超过预计5～10分钟但在原600/900预算内；50ms未知短命进程、长期稳定和性能倍率不因此通过。稳定产品/dist仍0.10.0，固定0.11.0及NET/铜完整竞争仍未过。下一步先离线准备独立产品竞争方案，本轮不启动产品。**
+
+**此前acb9c87阶段新增实现默认禁用，绑定客户端创建时保存的原Popen；只在精确身份/门禁/前景核验后尝试一次原Shortcut Alt+F4，严格回执及原Popen退出0后退役。普通输入的目标后验保持。137项离线测试通过后按新Task/Dispatch唯一启动，但见证器身份文件读取PermissionError导致服务/桌面请求/窗口均0，现场failed；外层已知链exit1，握手child原退出码缺失保持unverifiable。随后仅离线修复见证器握手读取及构造失败原Popen所有权，140项测试全部通过，第三份111文件候选已冻结但未运行、无新任务/批准。本轮失败及所有旧证据不变，不追加连接补验。**
+
+**稳定产品及dist仍为0.10.0，固定0.11.0候选和NET／铜完整竞争仍未通过。此前本机连续启动器限定任务succeeded：单组双图/双回调、7个正常资源寿命8887次真实上传/零账本，以及监督器和全部已知控制链的原始exit0证据通过；1898次健康采样全healthy，仅为本组结果。正常Alt+F4关闭后的目标前景守卫仍保守拒绝，失败token及120秒限制原件保留，完整无拒绝关闭流程尚未通过。未知短命进程覆盖、长期稳定性与性能倍率未获证明。该轮控制已正常退出；此前已结算验收会话按用户要求归档，目前累计5个闲置agent窗格关闭，历史JSONL/工作树/证据保留，无后台控制或自动续验。**
 
 ## 产品与冻结部署
 
@@ -23,7 +91,35 @@
 
 ## 最新有效结果与限制
 
-[最新现场报告](docs/control-initial-activation.md)对应原Pi验收会话实际读图；父侧独立审计工具调用/回调时序、API次数/分段、健康判定及精确进程退出，不把父日志审计冒称父读图。
+[产品竞争离线预检](docs/async-race-offline-preflight.md)没有启动产品或桌面。`tools/audit_async_race.py`只重算同应用时钟事件链，任何事件通过仍gui_verified=false；中止路径返回aborted不当有效竞争。10项变异测试通过。读图时序引用最近成功控制组原工具起止及实际read成功image回执，不将327.085/402.250秒完整检查点区间归因于纯模型推理。独立归档图演练Task `task_75f8102028b0` / Dispatch `ctx_1bed19e5ff05`在准备阶段因指定Pi连接错误/超时被父取消：Task failed、Dispatch failed、worker abandoned，processAction=none，资源保留、reclaimable0，无worker_done；request/read/ack均未开始、无时序结果，不换模型或新Task绕过。见[演练报告](docs/async-image-review-rehearsal.md)。
+
+[完整关闭现场](docs/control-close-journal-live.md)：Run `run_5fe071294ef6` / Task `task_be586c71f149` / Dispatch `ctx_9bdfefbc4379`，唯一done `msg_b4ea15337528`限定succeeded父验收ack，报告`b87b3c8`已整合。批准`msg_584c9cfcd3b5`，实际Pi `deng/gpt-6.1-sol high` session `01a18648-535d-720b-998d-63e4e0d5c42b`，131条assistant及两次本轮read成功image回执核对。6937行trace closed/dropped0、7寿命3625上传/零账本、2880healthy/fail-open0；close-owned严格成功→原Popen0→退役→stop无拒绝。监督器69840/birth134377475074705323、9已发现子孙/runner51844/launcher41692/owner26088原退出0，父recorder61060/owner原句柄0；snapshot_retry1/failure0。所有旧482/381/182/172/110/77及产品22/23/22、worker42/204摘要全同。worker-release external_terminal retained/processAction=none、reclaimable0，任务已结算。
+
+本轮[独立生命周期](docs/control-residual-lifecycle.md)通过，操作`lifecycle_e727f4cea876`仅处理残留窗，不创建控制连接或诊断组。冻结来源/工具/方案→只检查身份唯一→独占一次机会→复核完整身份→一次WM_CLOSE→同一新查询句柄exit0；没有键鼠/聚焦/强杀，没有原Task恢复或结果更改。149项测试和只读保护见报告。本次窗口原日志自然追加必须与旧归档区分，发送前完整备份保留。
+
+此前[第三候选现场](docs/control-owned-close-v3-live.md)：Run `run_dc31bcdf4756` / Task `task_2978396a0432` / Dispatch `ctx_f2162fee7cf9`，唯一done `msg_bf13a30cf0e2`为failed并父验收ack，报告提交`e1259d6`。两批准绑定`msg_6dcabc521474`，实际沿用Pi `deng/gpt-6.1-sol high` session `01a18648-535d-720b-998d-63e4e0d5c42b`，96条assistant记录及两次read图片核对。双图0/0→1/1、双Tk回调在原工具start/end、11563行closed/dropped0、7寿命7663上传零账本、3420健康全healthy成立；close-owned在前景为WindowsTerminal时preflight拒绝，AltF4调用0，120秒及后续零桌面请求直到900秒原硬截止。监督器66892账本替换PermissionError后exit1，runner/launcher/owner原Popen及句柄均1，父recorder/owner原句柄均1，子孙完整原退出证明缺失；精确窗66968仍live。旧172/110/77和产品22/23/22、上一阶段482文件及旧worker42文件集合/摘要全同。worker-release仍为external_terminal retained/processAction=none，任务已结算，reclaimable为空。
+
+此前[专用关闭启动现场](docs/control-owned-close-live.md)：Run `run_0ca568a11b7b` / Task `task_304e9df22f4d` / Dispatch `ctx_818a32eb5b79`，done `msg_a7125e2d3539`按failed结算并验收ack，worker报告`8d41db3`已整合。Pi `deng/gpt-6.1-sol high`、session `01a18648-535d-720b-998d-63e4e0d5c42b`，两批准绑定`msg_fa696d8887f7`。启动前PermissionError早于监督器放行；GUI/关闭/资源/健康均未执行，不能继承旧现场通过。runner25956、launcher3504、owner16608原Popen/句柄exit1，父recorder26424/owner原句柄exit1；握手child50968缺原退出码保持unverifiable。父独立审计核对旧172/110/77、产品22/23/22和本轮两个111候选/执行源码/批准全同。第三份待验候选和140项离线结果独立保存，不改本轮失败。worker-release回执为external_terminal/retained/processAction=none，验收Pi终端仍闲置保留，任务已结算且无reclaimable资源。
+
+以下为此前有效现场与历史结果，结论保持原范围。
+
+[本机连续启动器现场](docs/control-supervisor-local-live.md)：Run `run_2ca10ef14e2f` / Task `task_f45a13630a8b` / Dispatch `ctx_d0c7d529aa48`，唯一done `msg_e0448797f2ae`按限定succeeded验收ack。实际Pi `deng/gpt-6.1-sol high`、session `01a185da-259e-7031-a404-17572feabd0a`，两批准绑定`msg_d1dc0cf65510`。冻结candidate110/live20/包77/旧隔离77/部署22/23/22摘要均不变。原App1、Snapshot2、Click1、Shortcut2、ControlStatus0；指定worker实际read两图0/0→1/1，父核对原JSONL读图调用与双回调区间，不冒称父读图。
+
+真实trace11113行closed/dropped0；7寿命8887上传，DIB/兼容DC/复制/释放各7，SelectObject14，GetDC/ReleaseDC各8894，最终账本0。1898健康全healthy/fail-open0。上传墙钟4.2648431秒、最慢0.1085396秒，包含诊断与50ms进程枚举开销，不与旧不等长样本直接推导提速。
+
+本机runner在短期限内连续持柄/放行，监督器58784/birth134377212257949452的握手/Popen/原生句柄/自身身份/子孙报告一致exit0；9个已发现子孙全exit0、capture_errors空；runner62600、launcher30772的原Popen和句柄均0，owner29084由父原句柄证实exit0。50ms枚举不能排除未知短命子进程，窗口/UIA另有原Popen回执。服务501.2558秒、约8分21，诊断/收尾都在原600/900预算内。s09-close AltF4已实际正常关闭，随后post_native拒绝，原failed/token/120秒限制保留，冷却后只retire/stop，不重发或重连。
+
+以下为更早阶段的历史，失败与证据缺口不由本组追溯改写：
+
+基于`dev=a189389`安排的新监督器现场在服务启动前超时，详见[本轮记录](docs/control-supervisor-direct-live.md)：Run `run_6c0b4be9202f` / Task `task_e972187b97ac` / Dispatch `ctx_3a7ad6cbe5f7`，done `msg_e35383efeaef`按failed结算。driver66860在300秒外部门截止先于父放行退出1，holder72056退出0，均有父精确持柄及driver原Popen/句柄证明。监督器、客户端、服务、窗口均未启动，桌面请求0，不能形成新资源/健康/GUI结论；晚到放行、旧源码和状态原件保留，不重启。worker报告4e9fa90已整合，验收Pi窗格按用户要求关闭归档，目前累计4个闲置窗格已关闭，历史JSONL/工作树保留。115项离线测试保持有效，109候选及19客户端/原包/部署摘要不变。
+
+此前已执行GUI的[资源复用现场](docs/control-bitmap-surface-live.md)：Run `run_3cd747640832` / Task `task_142ea7a86a8d` / Dispatch `ctx_af9c3c5211fd`，唯一done `msg_893d1c0c6eee`按failed结算。实际Pi `deng/gpt-6.1-sol high`、session `01a18478-da17-72cd-a114-3faf5c2359f1`。服务316.4527秒，原App1、Snapshot2、Click1、Shortcut2、ControlStatus0；两图实际0/0→1/1，双回调均落工具起止内，窗口stdout/stderr空。Alt+F4执行后目标消失保守锁存a009，原Popen exit0退役，完整120秒零桌面请求后原stop；无WM_CLOSE、重发或第二组。
+
+真实trace9958行closed/dropped0；7寿命、8509上传、创建DC/DIB/复制各7、SelectObject14、GetDC/ReleaseDC各8516，退役后账本0。1188健康样本全healthy/fail-open0；上传墙钟约4.25547秒、最慢0.108514秒，不与历史不等长样本直接推导提速。原包/隔离77/77、部署22/23/22与candidate107集合及摘要不变。
+
+8个持柄子进程、父持11208/29836以及监督器启动器28300原Popen exit0有证明；实际监督器66568没有原持柄退出码，当前不存在不补作exit0。父早期审计保留，最终以`.local-analysis/control-bitmap-surface/parent-independent-live-audit-corrected.json`更正结论为准。后续`control_witness_launch.py`以基础Python直启、实际PID握手和原Popen等待修正此缺口，4项无GUI子进程测试通过，其后完成本机连续启动器及本组新现场验证；旧66568退出缺口仍保留。
+
+以下为此前[初始激活/旧位图计时现场](docs/control-initial-activation.md)的独立历史结果，对应原Pi验收会话实际读图；父侧仅审计日志，不冒称父读图：
 
 - 一次原App初始化及精确PID/birth/HWND/映像/标题/物理矩形前景后验成功。首图实际0/0，真实Click和Ctrl+Shift+F8各一次，终图实际1/1，两条Tk回调分别落原工具调用起止内，stdout/stderr空。
 - 原调用App1、Snapshot2、Click1、Shortcut2（诊断快捷键及Alt+F4关闭各一次），ControlStatus0；没有第二组/连接。服务约764.531秒（12分45秒），全部诊断动作600秒内，正常退出900秒内。
@@ -39,6 +135,7 @@
 
 | 文件 | 用途及完成范围 |
 | --- | --- |
+| `tools/audit_async_race.py` | 纯离线重算应用事件链/真实read先后及时间条件；10项测试通过，事件通过仍不授予GUI通过 |
 | `tools/control_diagnostics.py` | 原方法只读阶段/状态/原因日志，有界队列、独立写线程、丢失计数，不记录用户文字或键值 |
 | `tools/run_control_diagnostics.py` | 复制/核验77文件控制包；启动校验Task/Dispatch/manifest/launcher摘要，继续原ControlToolGate |
 | `tools/control_app_refresh.py` | 原App切换前刷新旧窗口缓存，原枚举过滤、查找、激活和后验保持 |
@@ -50,14 +147,33 @@
 | `tools/control_bitmap_timing.py` | 指示层每次上传API次数/墙钟成本汇总，模块局部代理不改共享WinDLL对象；最新4081次正常路径已现场验证 |
 | `tools/control_target_activation.py` | 只在未失败、UIA核验后/组前，至多一次原App激活与精确前景后验；离线8项/现场单组通过 |
 | `tools/analyze_control_uploads.py` | 复用健康重放，约束旧上传时间戳延迟及API裁剪上下界；最新4081上传离线核对通过，不等于CPU或预计提速 |
-| `tools/control_bitmap_surface_model.py` | 每不可变图层独有的DC/DIB/像素资源寿命模型；只有假API，无原生适配器或服务加载入口 |
+| `tools/control_bitmap_surface_model.py` | 每不可变图层独有的内存DC/DIB/像素寿命核心，保留部分结果与待退役实例；模块本身不加载Win32 |
+| `tools/control_bitmap_surface.py` | 私有WinDLL适配器及原图层寿命接入，默认关闭；本组7寿命8887上传正常路径取证通过，异常路径仍为离线测试范围 |
+| `tools/control_surface_approval.py` | 新客户端批准/实际模型/冻结文件及包集合核验，检查被动日志资源前置条件；不访问桌面 |
+| `tools/audit_control_surfaces.py` | 纯JSONL独立重算正常资源寿命/API/零账本；本组7寿命8887真实上传审计通过，进程退出另行核验 |
+| `tools/control_owned_close.py`、`tools/control_close_client/` | 默认禁用的一次精确自建Popen正常关闭；普通输入后验保持，最新单组原Popen0→退役→stop无拒绝通过 |
+| `tools/freeze_control_close.py` | 离线冻结17客户端/13工具/3监督器/77包，生成111文件候选，不创建任务或许可 |
+| `tools/control_witness_launch.py` | 基础Python直启标准库见证器、核对实际PID后显式放行、原Popen等待；新增原截止内身份读取与构造异常所有权，7项定向测试 |
+| `tools/control_process_supervisor.py` | 标准库监督器显式启动MCP环境客户端、精确子孙账本；本组实际监督器和9已发现子孙exit0 |
+| `tools/control_supervisor_runner.py` | 同一本机程序预检/持柄/放行与退出重算；7项无GUI测试及本组实际已知链退出取证通过 |
 
-最后实际相关单元测试为**79项全部通过**，输出主`.local-analysis/control-upload-offline-analysis/tests-verified.log`（原61项加本轮18项）。原61项历史证据保留在`.local-analysis/control-target-activation/tests.log`。未与本地截止/被动观察测试重复累加，也未因纯文档交接重跑无变化代码。单元测试使用假窗口/API，不安装真实钩子或发送输入，测试窗子进程测试仅命令行异常脚本。纯本机驱动额外有截止4项、被动观察5项定向测试，不能作为新增产品覆盖。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果不变。
+新增异步离线证据审计测试为**10项全部通过**，日志`.local-analysis/async-race-offline-preflight/tests-audit-final.log`，不启动Qt/Win32/门闩/产品，覆盖事件身份、时序、摘要、代次、原拒绝决定、中止伪通过与真实read成功/先后计时。和149项控制测试分属不同工具范围，不简单相加，不重跑无变化产品矩阵。
+
+此前实际控制测试为**149项全部通过**，输出`.local-analysis/control-residual-lifecycle/tests-offline.log`，16.796秒；新增7项独立生命周期契约测试，用假API核对来源/权限/时限/身份/唯一性/一次机会和未知及退出失败，没有发送真实关闭消息。真实生命周期另有持柄及自然回调证明。此前142项结果不叠加计数。
+
+此前控制测试为**142项全部通过**，输出`.local-analysis/control-owned-close-v3/tests-supervisor-journal.log`，16.848秒；新增2项监督器快照重试/持续失败持原Popen回归，含真实无GUI客户端。此前一次定向子进程测试非0但stderr空，后续补诊断后定向7项及全体142项通过，该次未定位失败如实保留。离线修复`a37ed03`未写回活服务或冻结execution。此前140项结果如下，不叠加计数。
+
+此前控制测试为**140项全部通过**，输出`.local-analysis/control-owned-close/tests-handshake-fixed.log`，覆盖原122项、14项关闭/客户端、1项批准和3项握手读取/所有权回归；不与137或122项历史结果相加。未运行GUI测试窗/输入钩子，既有监督器测试使用无GUI标准库子进程。现场因启动失败未验证专用关闭，不能用离线结果补记GUI通过。
+
+此前实际相关仓库测试为**122项全部通过**，输出主`.local-analysis/control-supervisor-local-runner/tests-verified.log`。这些测试使用假窗口/API和无GUI标准库子进程，覆盖控制拒绝、诊断、健康、资源生命周期、批准、启动与精确退出，不安装真实输入钩子。冻结客户端另6项历史定向检查在`.local-analysis/control-bitmap-surface/frozen-client-tests-final.log`，不与仓库测试或产品覆盖相加。其余61/79/106/110/115项为历史测试阶段，原件保留，不重复累加。产品既有CTest固定Debug/Release各11组、实验各12组及OFF相关3组历史结果保持；本次纯文档交接不重跑无变化代码。
 
 ## 已结算现场阶段
 
 | 阶段 / 报告 | 结果与有效边界 |
 | --- | --- |
+| [完整关闭现场](docs/control-close-journal-live.md) | 限定succeeded，专用关闭一次成功无拒绝、两图/回调、7寿命3625上传零账本、2880healthy及全部已知链原exit0 |
+| [第三候选现场](docs/control-owned-close-v3-live.md) | failed，双图/回调及资源健康分项通过；关闭preflight拒绝未发送、监督器exit1/子孙缺口、窗口仍live |
+| [专用关闭启动](docs/control-owned-close-live.md) | failed，身份文件PermissionError早于监督器放行；服务/桌面请求0，已知外层exit1，握手child原退出码缺失 |
 | [基线](docs/control-snapshot-diagnostics.md)、[缓存/预算](docs/control-snapshot-fix.md) | failed，App未找到，未进入有效截图/输入 |
 | [窗口兼容](docs/control-window-compat.md) | failed，UIA/枚举/App/首图通过，Click本地混合DPI坐标拒绝；有健康失败轨迹 |
 | [物理矩形](docs/control-physical-geometry.md) | 限定通过，图0/0→1/1；旧逐输入日志有重名参数缺口，原件保留 |
@@ -66,22 +182,26 @@
 | [位图首次](docs/control-bitmap-timing.md) | failed，原门禁user，实际图/输入/上传0，14分06正常退出 |
 | [15分钟重试](docs/control-bitmap-retry.md) | failed，初始ready但首图前景Orca，实际call/上传0，约8分28正常退出 |
 | [原App初始激活](docs/control-initial-activation.md) | 限定通过，原App/前景后验、两图/双回调/4081上传有效，健康2stale/1fail-open，约12分45全exit0 |
+| [本机连续启动器现场](docs/control-supervisor-local-live.md) | 限定succeeded，双图/回调、8887上传零账本、1898健康及全部已知链exit0；正常关闭后验仍拒绝 |
+| [资源复用现场](docs/control-bitmap-surface-live.md) | 整体failed，双图/双回调/7寿命8509上传/零账本及本组健康通过；66568精确退出码缺失，当前无该活进程不当exit0证明 |
 
-全部Task均已结算，原Pi终端retain不代表任务仍活。新工作必须新Task/Dispatch/分支/批准/证据，不续投旧inbox、不重复worker_done、不重连清状态。精确ID和最终Git见本机简报。最新Run `run_b750f95c36e5`、Task `task_47e20595fdcb`、Dispatch `ctx_343756e91911`、done `msg_eea4f2c348a1`已验收ack，报告提交`37e9805`；无reclaimable资源。此前Run `run_bdf0b619f1e3`（前景failed）、`run_3da0a4eb0ac6`（user受阻failed）、`run_e136aa13bab5`（日志/健康）、`run_22b5092f9df3`（早四阶段）也全部结算。
+全部Task均已结算，原Pi终端retain不代表任务仍活。新工作必须新Task/Dispatch/分支/批准/证据，不续投旧inbox、不重复worker_done、不重连清状态。精确ID和最终Git见本机简报。上一有效初始激活Run `run_b750f95c36e5`、Task `task_47e20595fdcb`、Dispatch `ctx_343756e91911`、done `msg_eea4f2c348a1`已验收ack，报告提交`37e9805`；无reclaimable资源。此前Run `run_bdf0b619f1e3`（前景failed）、`run_3da0a4eb0ac6`（user受阻failed）、`run_e136aa13bab5`（日志/健康）、`run_22b5092f9df3`（早四阶段）也全部结算。
 
-## 下一会话的执行计划
+## 前阶段执行计划（2026-10-29历史）
+
+当前入口见[下一阶段](docs/control-next-stage.md)和[产品竞争离线预检](docs/async-race-offline-preflight.md)。控制限定通过保持；产品竞争已完成不变对照/部署/输入/时序重算，当前尚不能在冻结60秒内可靠完成实际读图与release。先实现并验证产品专用客户端及read/ack/正常退出设计，不自动启动产品或旧控制组。
 
 1. **最新现场离线重建已完成。** [上传分析报告](docs/control-upload-offline-analysis.md)核对父两个审计、原trace/源码与冻结部署；同旧心跳到最后过期采样1.1905275秒，原慢阶段并集覆盖85.96%，加入短上传后并集边界1.1167753～1.1169445秒。schema 1缺少API起止时间，上传记录还有发出延迟，均采用上下界；不将未来结束值记为当时证据。
-2. **资源复用评估及假API模型已完成，原生接入待做。** 局部API集合占时支持继续评估每不可变图层独有的内存DC/DIB/像素复用，但不是预计提速或修复证明。下一步在新独立分支完成默认不加载的Win32适配器、`_Layer`寿命对接、原生失败返回/部分结果移交/资源账本与批准摘要测试。保留屏幕DC逐次获取释放、整次UpdateLayeredWindow、原显示器枚举/消息泵与完整显示后的心跳。模型不能直接当作可运行现场候选。
-3. **满足可审阅条件才安排新现场。** 先完成独立分支代码/必要测试/风险边界、冻结摘要与新方案；向用户说明预计控制用时和具体范围，得到明确许可后，再沿原指定Pi模型执行一组有界验证。原App初始化可以引用最新通过流程，仍须原门禁/精确身份及前景后验；失败消费机会，不新增连接碰运气。开始计时、第N分钟停止新增诊断、正常退出余量均写入冻结客户端。
-4. **控制条件可靠后再另定产品竞争。** 不自动启动NET/铜产品实验。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
+2. **资源复用及已知退出链取得单组真实证据。** 最新[现场报告](docs/control-supervisor-local-live.md)及父独立审计完成，本组7寿命8887上传、零账本、1898健康全healthy、监督器/9子孙/runner/launcher/owner原exit0成立；不因此提升为长期稳定或性能通过。122项离线测试保持，文档整合未改源码不重跑。
+3. **专用关闭已取得本组完整限定通过。** 原Shortcut一次、严格成功回执、原Popen0、退役、stop且无拒绝；普通输入后验保持。快照修复本组retry1/failure0、监督器及9已发现子孙和外层原链exit0，未知短命进程/长期稳定限制保持。有效111文件候选f5ebb7a8...和本组execution只读，不原地重跑。第三候选原failed及子孙缺口、独立生命周期非原Popen边界不改；当前可先离线准备独立产品竞争方案。
+4. **产品竞争离线预检完成，先补执行条件。** 实验源码c4e3ec5/EXE782a769f...、历史NET/铜正向对照和A/B/板输入核对不变，旧竞争仍aborted。实际read时间超过60秒看门狗，旧关键段不等实际read便release不能复用；新方案ready_for_live=false、max_product_launches=0。需按产品客户端约束补主窗/dirty模态精确归属、原Popen正常退出、read/ack时限与冻结/批准，再另定必要新现场。新范围须冻结候选与输入，引用不变对照；有效竞争要求同应用时钟`worker-entered < gate-ready < document-published < gate-released < worker-returned < callback-discarded`，真实GUI编辑、门闩内新修订/几何/dirty/NET来源图与最终图共同成立。cancel后的discarded不能补作有效release或完整竞争通过，实验通过也不自动让固定候选通过。
 5. **产品后续另立阶段。** 固定候选900000mil极端位置属性、受控系统会话结束（共享宿主不注销/关机）仍缺。新增图元→工具取消→另存为新文件→未知字段保留或明确拒绝→往返/原程序重开另行开发；元件放置、布线、完整DRC、生产输出、Windows部署/性能分别规划。原字形继续独立研究，完整runtime兼容未过前保持false。
 
 固定候选已有编辑/严格文本焦点/菜单/10000mil远移reset/五类只读图元/关闭保护/选后文件消失等证据，无源码变化不重跑全矩阵，见[实际编辑](docs/basic-editing-actual-edit-acceptance.md)和[剩余验收](docs/basic-editing-remaining-acceptance.md)。产品实验边界见[异步设计](docs/async-result-boundaries.md)、[开发报告](docs/async-experiment-development.md)、[恢复四例](docs/async-gui-recovered-120.md)、[自适应续验](docs/async-races-adaptive.md)。
 
 ## 用户要求与不可改变的边界
 
-- **控制电脑前先说明预计时间和范围，取得明确许可。** “继续”只授权离线推进；已结束15/30分钟窗口不能复用。已获同一范围许可不重复索权，但不能扩大轮次/目标或自动延期。当前用户已授权继续下一阶段离线工作，无新桌面许可或自动续验。
+- **控制电脑前先说明预计时间和范围。** 本次用户已明确“你控制电脑”，并补充“若有需要控制电脑验收的，允许控制，否则推进下一步开发”。该授权保持有效，不对已授权范围重复索权；不据此重置已结束现场的600/900秒预算，不在失败组追加轮次。新任务先完成可审阅材料并说明具体范围。
 - 正常动作不额外ControlStatus预检。真实拒绝立停，完整120秒内无输入/截图/状态/原生桌面请求；到期只按冻结预算诊断/恢复/收尾，不自动归因user为用户正在操作。120秒最小退避与原服务最近输入后10秒空闲条件独立。
 - Snapshot必须有image并实际读图；已执行输入后图失败只补观察，不重发输入。不关指示层、不放宽1秒阈值、不在中途续心跳掩盖未完成显示、不改活内存/清状态或保持集合、不换入口绕拒绝。
 - 坐标用实际图像倍率和物理rect，不能与DPI逻辑rect混比。目标唯一PID/birth/image/HWND/title/class必须可核验。窗口关闭后消失的保守锁存由Popen exit0证明处理，不恢复已死目标，不重发关闭。
@@ -91,6 +211,12 @@
 
 | 位置 | 内容 |
 | --- | --- |
+| 主`.local-analysis/async-race-offline-preflight/` | 本轮新输入3、旧/新完整摘要、历史对照/aborted竞争重算、真实read时序、10项测试、非live方案、模型错误/结算和最终Git |
+| 主`.local-analysis/async-image-review-rehearsal/`及worker同名目录 | 未开始演练的准备文件、环境/源图摘要；父快照和未执行审计仅主副本新增，Task failed/worker abandoned，无read/ack |
+| 主`.local-analysis/control-supervisor-local-runner/` | candidate110/live20冻结、真实trace/两图/回调/runner退出与父独立审计；本组限定succeeded，122项离线测试 |
+| `../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/` | 实际模型/原JSONL、before-after、owner/launcher/runner原Popen/持柄退出、worker审计 |
+| 主`.local-analysis/control-bitmap-surface/` | candidate-final107冻结原件、live真实现场与父更正审计、110项仓库测试及原客户端6项；Task failed已结算，见证器修正仅离线，无后台进程 |
+| 主`.local-analysis/agent-session-archive-20261029/` | 前3个闲置窗格的历史核验；后续direct/local验收窗格也已在各任务结算后关闭，累计5个，JSONL/分支/工作树保留 |
 | 主`.local-analysis/control-upload-offline-analysis/` | 最新上传边界/成本分析、79项测试输出、原trace/源码与冻结包/部署摘要核对，全程desktop_requests0 |
 | 主`.local-analysis/control-initial-activation/` | 最新双批准、before/after、独立API/健康/回调审计、精确句柄exit0见证、final-validation（56链接）、final-git-state |
 | `../verify-text-screen-sol/.local-analysis/control-initial-activation/` | 最新209证据/17链接、原图0/0→1/1、实际call/窗口日志/stderr、4081上传和健康trace、退出身份 |
@@ -103,4 +229,4 @@
 
 Qt6.12.0/MSVC x64：`C:/Users/rikideng/Qt/6.12.0/msvc2022_64`；VS2026/MSVC14.51.36231、CMake/Ninja/Python已有，不安装无关依赖。已有控制解释器`C:/Users/rikideng/scoop/persist/uv/tools/versions/windows-mcp/Scripts/python.exe -X utf8`；全局Pillow/NumPy曾不兼容，不为任务修全局环境。
 
-原验收Pi session `01a1739a-82f6-76cf-9ffc-c63e95be56d4`，终端`term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d`保留，使用前Orca枚举确认当前runtime，不能凭旧句柄判断。所有子代理Pi；纯逆向`glm-5.3 high`，截图/GUI验收`gpt-6.1-sol high`，核对实际环境/JSONL/assistant；模型不可用如实报告不替换。开发从最新dev独立分支，验证后no-ff合dev推送，main合并/提交/推送只由用户执行，不强推不跳钩子。主工程`D:/project/pt_renew`及其他工程终端不是本任务，不抢占。
+原验收Pi session `01a1739a-82f6-76cf-9ffc-c63e95be56d4`的旧终端`term_d544d0b2-a65f-4b5c-bea9-6257e802bd6d`与本次已结算Pi终端均按用户要求关闭归档，原JSONL保留，不恢复旧任务。所有子代理Pi；纯逆向`glm-5.3 high`，截图/GUI验收`gpt-6.1-sol high`，核对实际环境/JSONL/assistant；模型不可用如实报告不替换。开发从最新dev独立分支，验证后no-ff合dev推送，main合并/提交/推送只由用户执行，不强推不跳钩子。主工程`D:/project/pt_renew`及其他工程终端不是本任务，不抢占。
