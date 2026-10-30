@@ -1,6 +1,7 @@
 """单次NET/铜竞争编排；同应用时钟顺序与外部保守截止分别核验。"""
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass
 
 from .core import SECOND, positive, require, valid_hash
@@ -48,6 +49,7 @@ class RaceClient:
         self.deadline = min(trigger_mono_ns + watchdog_ns, ledger.cleanup_deadline_ns)
         self.gate_read_deadline = min(trigger_mono_ns + watchdog_ns // 3, self.deadline)
         self.edit_read_deadline = min(trigger_mono_ns + watchdog_ns * 5 // 6, self.deadline)
+        self.trigger_mono_ns = trigger_mono_ns
         self.stage = 'new'
         self.first = None
         self.previous = None
@@ -62,7 +64,9 @@ class RaceClient:
         require(not waiting or self.ledger.clock.monotonic_ns() + margin < self.deadline,
                 '原门闩保守截止已到或剩余时间不足')
         # gate_api仅能读本地应用状态，不得做桌面预检/续心跳/重置门闩。
-        state = await self.gate_api()
+        deadline = min(self.ledger.current_deadline_ns, self.ledger.clock.monotonic_ns() + SECOND)
+        state = await asyncio.wait_for(self.gate_api(), (deadline - self.ledger.clock.monotonic_ns()) / SECOND)
+        require(self.ledger.clock.monotonic_ns() < deadline, '本地门闩核验越过原阶段截止')
         require(isinstance(state, GateState), '应用门闩观察未知')
         require((state.run_id, state.pid, state.request_id, state.kind) ==
                 (self.ledger.application_run_id, self.io.owner.identity.pid, self.request_id, self.kind),
@@ -104,6 +108,7 @@ class RaceClient:
     async def capture_gate(self, ident, parent):
         with self.ledger.operation(ident, parent):
             require(self.stage == 'new', '门闩图阶段乱序')
+            self.ledger.arm_gate(self.trigger_mono_ns, watchdog_ns=self.watchdog_ns)
             state = await self.state(waiting=True)
             require(state.revision == self.original_revision and state.dirty is False and state.tracks == 1
                     and state.net_sha256 == self.a_sha256 and not state.published_ns, '初始A来源或单走线文档不符')
@@ -135,6 +140,8 @@ class RaceClient:
                           'final-requested': 'settled'}[self.stage]
             if self.stage == 'settled':
                 self.reviews.consume(review_id, stage='final')
+        if self.stage in ('gate-read', 'edit-read'):
+            self.ledger.advance_gate('edit' if self.stage == 'gate-read' else 'release-start')
         if self.stage == 'settled':
             self.settled = self.ledger.failed is None
 
@@ -172,8 +179,10 @@ class RaceClient:
             self.reviews.consume(self.edit_review, stage='edit')
             self.release_attempted = True
             self.ledger.event('release_attempt', request_id=self.request_id)
+            self.ledger.advance_gate('release-finish')
             # 消费机会后传输未知仍不重试，不把cancel作为release。
-            receipt = await self.release_api(self.request_id)
+            deadline = self.ledger.call_deadline(self.watchdog_ns, deadline_ns=self.deadline)
+            receipt = await asyncio.wait_for(self.release_api(self.request_id), self.ledger.remaining(deadline))
             self.release_returned = True
             self.ledger.event('release_receipt', receipt=receipt, returned=True)
             require(isinstance(receipt, dict) and receipt.get('request_id') == self.request_id
@@ -187,6 +196,7 @@ class RaceClient:
             self.release_app_ns = receipt['app_ns']
             self.stage = 'released'
             self.ledger.event('release_returned', receipt=receipt)
+        self.ledger.advance_gate('final')
 
     def final_state(self, state):
         self.edited(state)

@@ -96,7 +96,8 @@ class FileDialogPolicy:
 
 
 class NetFileDialog:
-    def __init__(self, ledger, io, reviews, spec, *, request_id, main_title, deadline_ns, enabled=False):
+    def __init__(self, ledger, io, reviews, spec, *, request_id, main_title, deadline_ns, enabled=False,
+                 cleanup_only=False):
         require(positive(request_id) and positive(deadline_ns) and deadline_ns <= ledger.cleanup_deadline_ns,
                 '文件框关联请求/原截止无效')
         require(io.ledger is ledger and reviews.ledger is ledger and reviews.identity == io.owner.identity,
@@ -104,6 +105,7 @@ class NetFileDialog:
         self.ledger, self.io, self.reviews, self.spec = ledger, io, reviews, spec
         self.request_id, self.main_title, self.deadline_ns = request_id, main_title, deadline_ns
         self.enabled = enabled is True
+        self.cleanup_only = cleanup_only is True
         self.stage = 'new'
         self.bound_hwnd = None
         self.dialog_review = self.path_review = None
@@ -113,9 +115,9 @@ class NetFileDialog:
 
     def check(self):
         self.ledger.desktop_allowed()
-        require(self.enabled and not self.ledger.cleanup_active
+        require(self.enabled and self.ledger.cleanup_active == self.cleanup_only
                 and self.ledger.clock.monotonic_ns() < self.deadline_ns, '文件框禁用/原截止已到/错误收尾阶段')
-        self.spec.verify()
+        if not self.cleanup_only: self.spec.verify()
         self.io.owner.alive()
 
     async def observe(self):
@@ -142,7 +144,7 @@ class NetFileDialog:
                                            sha256=self.spec.sha256))
 
     async def start(self, ident, parent):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, cleanup=self.cleanup_only, deadline_ns=self.deadline_ns):
             self.check()
             require(self.stage == 'new', '文件框阶段已开始，禁止重置')
             self.dialog_review = ident + '-image'
@@ -151,7 +153,7 @@ class NetFileDialog:
         return self.dialog_review
 
     async def ack(self, ident, parent, *, call_id, result_id, judgment, summary):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, cleanup=self.cleanup_only, deadline_ns=self.deadline_ns):
             self.check()
             require(self.stage in ('dialog-requested', 'path-requested'), '文件框ack乱序')
             review = self.dialog_review if self.stage == 'dialog-requested' else self.path_review
@@ -163,9 +165,9 @@ class NetFileDialog:
             self.stage = 'dialog-read' if self.stage == 'dialog-requested' else 'path-read'
 
     async def type_path(self, ident, parent):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, deadline_ns=self.deadline_ns):
             self.check()
-            require(self.stage == 'dialog-read' and not self.type_used, '文件框必须实际read后才唯一输入路径')
+            require(not self.cleanup_only and self.stage == 'dialog-read' and not self.type_used, '文件框必须实际read后才唯一输入路径')
             target = await self.observe()
             require(target == self.review_windows[self.dialog_review], '实际read后文件框控件/焦点改变')
             row = self.reviews.consume(self.dialog_review, stage='file-dialog')
@@ -192,9 +194,9 @@ class NetFileDialog:
         return self.path_review
 
     async def choose(self, ident, parent, *, choice, image_point):
-        with self.ledger.operation(ident, parent):
+        with self.ledger.operation(ident, parent, cleanup=self.cleanup_only, deadline_ns=self.deadline_ns):
             self.check()
-            require(choice in ('open', 'cancel') and not self.choice_used
+            require((not self.cleanup_only or choice == 'cancel') and choice in ('open', 'cancel') and not self.choice_used
                     and (self.stage == 'path-read' if choice == 'open' else self.stage in ('dialog-read', 'path-read')),
                     '文件框选择乱序；打开前必须实际read确认冻结路径')
             target = await self.observe()
@@ -214,7 +216,9 @@ class NetFileDialog:
             self.choice_used = True
             self.stage = choice + '-attempted'
             # 目标异步请求由明确打开按钮触发；起点必须早于该原输入调用。
-            if choice == 'open': self.trigger_mono_ns = self.ledger.clock.monotonic_ns()
+            if choice == 'open':
+                self.trigger_mono_ns = self.ledger.clock.monotonic_ns()
+                self.ledger.arm_gate(self.trigger_mono_ns)
             await self.io._send('Click', dict(loc=point), f'Single left clicked at ({point[0]},{point[1]}).')
             await self.io.observe(dirty=False)
             self.check()

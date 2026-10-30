@@ -84,11 +84,11 @@ class BoundedUiaProbe:
         require(self.enabled and not self.active and not self.failed
                 and len(self.children) < self.max_queries and positive(hwnd), '探针禁用、正在执行、已有失败或次数耗尽')
         try:
+            deadline = self.ledger.call_deadline(self.timeout_ns, deadline_ns=self.deadline_ns)
             info = self.product_identity()
             require(pid == info['pid'], '探针目标PID与原Popen不一致')
             self.sources()
-            deadline = min(self.deadline_ns, self.ledger.clock.monotonic_ns() + self.timeout_ns)
-            require(self.ledger.clock.monotonic_ns() < deadline, '探针原截止已到')
+            self.ledger.remaining(deadline)
         except BaseException:
             self.failed = True
             raise
@@ -122,6 +122,7 @@ class BoundedUiaProbe:
             self.product_identity()
             require(self.ledger.clock.monotonic_ns() < deadline, '创建探针前原截止已到')
             self.ledger.event('uia_probe_attempt', folder=str(folder), request_sha256=child['request_sha256'], hwnd=hwnd)
+            self.ledger.remaining(deadline)
             # 直接创建并立即保存原Popen；不存在短命shell或中间启动器。
             child['process'] = self.popen([str(self.interpreter), '-B', '-X', 'utf8',
                                          str(self.module_root / 'async_product_client/probe_worker.py'), str(request_path)],
@@ -184,9 +185,11 @@ class BoundedUiaProbe:
             self.sources()
             self.ledger.desktop_allowed()
             require(self.ledger.clock.monotonic_ns() < deadline, '最终核对耗时跨越探针原截止')
-            child.update(accepted=True, result_sha256=digest(raw))
+            child['result_sha256'] = digest(raw)
             self.ledger.event('uia_probe_accepted', identity=child['identity'], request_sha256=child['request_sha256'],
                               result_sha256=child['result_sha256'], original_popen=True)
+            self.ledger.remaining(deadline)
+            child['accepted'] = True
             return row
         except BaseException:
             self.failed = True

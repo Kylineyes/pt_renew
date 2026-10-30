@@ -118,6 +118,7 @@ class OwnedProductProcess:
             self.ledger.desktop_allowed()
             self.ledger.event('product_popen_attempt', command=command, owner_pid=self.owner_pid,
                               stdout=str(self.root / 'stdout.log'), stderr=str(self.root / 'stderr.log'))
+            self.ledger.desktop_allowed()
             # Popen原对象在任何身份回调前保存；不存在中间PowerShell或短命owner。
             self.process = self.popen(command, cwd=cwd, env=dict(env), stdin=subprocess.DEVNULL,
                                       stdout=self.streams[0], stderr=self.streams[1], shell=False,

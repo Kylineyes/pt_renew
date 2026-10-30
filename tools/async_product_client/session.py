@@ -28,6 +28,7 @@ class ProductSession:
         self.ledger, self.io, self.reviews, self.journal = ledger, io, reviews, journal
         self.a, self.b, self.board_sha256, self.revision = a, b, board_sha256, revision
         self.diagnostic_deadline_ns = diagnostic_deadline_ns
+        ledger.diagnostic_deadline_ns = min(ledger.diagnostic_deadline_ns, diagnostic_deadline_ns)
         self.enabled = enabled is True
         self.event_api, self.pause, self.waiter = event_api, pause, waiter
         self.stage = 'created'
@@ -35,6 +36,51 @@ class ProductSession:
         self.command = self.dialog = self.gate = self.race = self.close = None
         self.a_request_id = self.target_request_id = None
         self.trigger_mono_ns = None
+        kwargs = dict(cleanup_ready=self.cleanup_ready, request_id=1)
+        if self.waiter is not None: kwargs['waiter'] = self.waiter
+        self.close = ProductClose(self.ledger, self.io, self.reviews, **kwargs)
+        self.cancel_dialog = None
+
+    async def cleanup_ready(self):
+        """门闩前也验证所有原请求已有终态；未知初始化/在途工作不能冒作可关闭。"""
+        if self.race is not None:
+            return await self.race.cleanup_ready()
+        if self.journal.startup is None:
+            self.journal.bind()
+        rows = self.journal.read()
+        requests = [row for row in rows if row['event'] == 'request-created']
+        ids = [integer(row.get('request_id'), '原请求ID') for row in requests]
+        require(len(set(ids)) == len(ids), '收尾原请求ID重复')
+        for request, rid in zip(requests, ids):
+            returned = [r for r in rows if r['event'] == 'worker-returned' and integer(r.get('request_id'), '返回请求ID') == rid]
+            terminal = [r for r in rows if r['event'] in ('callback-accepted', 'callback-discarded')
+                        and integer(r.get('request_id'), '终态请求ID') == rid]
+            if len(returned) != 1 or len(terminal) != 1:
+                return False
+            require(integer(request['monotonic_ns'], '请求时间') < integer(returned[0]['monotonic_ns'], '返回时间')
+                    < integer(terminal[0]['monotonic_ns'], '终态时间'), '原请求终态时序不符')
+            if request.get('gated') is True:
+                aborted = [r for r in rows if r['event'] == 'aborted' and integer(r.get('request_id'), '中止请求ID') == rid]
+                if len(aborted) != 1 or terminal[0]['event'] != 'callback-discarded': return False
+                require(integer(aborted[0]['monotonic_ns'], '中止时间') < integer(returned[0]['monotonic_ns'], '返回时间'),
+                        '失败收尾必须先原中止再工作返回')
+        return True
+
+    async def cancel_file_step(self, ident, parent, *, action, **arguments):
+        attempted_open = (self.command is not None and self.command.command == 'netlistOpen' and self.command.used
+                          and self.ledger.gate_trigger_ns is None and self.stage != 'cancelled')
+        require(self.enabled and (self.dialog is not None or attempted_open), '尚无本轮已尝试打开的文件框')
+        if self.cancel_dialog is None:
+            self.cancel_dialog = NetFileDialog(self.ledger, self.io, self.reviews, self.b,
+                                               request_id=self.a_request_id + 1, main_title=self.io.policy.title(False),
+                                               deadline_ns=self.ledger.cleanup_deadline_ns -
+                                               (self.close.tool_margin_ns + self.close.wait_ns + self.close.stop_margin_ns),
+                                               enabled=True, cleanup_only=True)
+        methods = {'start': self.cancel_dialog.start, 'ack': self.cancel_dialog.ack, 'choose': self.cancel_dialog.choose}
+        require(action in methods, '未知文件框正常取消动作')
+        result = await methods[action](ident, parent, **arguments)
+        if self.cancel_dialog.stage == 'cancelled': self.stage = 'cancelled'
+        return result
 
     def check(self, *stages):
         self.ledger.desktop_allowed()
@@ -181,7 +227,7 @@ class ProductSession:
 
     async def close_step(self, ident, parent, *, action, **arguments):
         # 此处不重新route/token：失败后的正常收尾必须保留原token/首次120秒截止。
-        require(self.enabled and self.close is not None, '尚无已绑定门闩的产品收尾组件')
+        require(self.enabled and self.close is not None, '尚无同身份产品收尾组件')
         methods = {'start': self.close.start, 'ack': self.close.ack_modal, 'choose': self.close.choose}
         require(action in methods, '未知正常收尾动作')
         if action == 'ack': result = methods[action](ident, parent, **arguments)
@@ -194,8 +240,10 @@ class ProductSession:
         return dict(stage=self.stage, client_run_id=self.ledger.context.run_id,
                     application_run_id=self.ledger.application.run_id if self.ledger.application else None,
                     a_request_id=self.a_request_id, target_request_id=self.target_request_id,
-                    trigger_mono_ns=self.trigger_mono_ns, diagnostic_deadline_ns=self.diagnostic_deadline_ns,
+                    trigger_mono_ns=self.trigger_mono_ns, gate_trigger_mono_ns=self.ledger.gate_trigger_ns,
+                    diagnostic_deadline_ns=self.diagnostic_deadline_ns,
                     cleanup_deadline_ns=self.ledger.cleanup_deadline_ns, failed_id=self.ledger.failed,
+                    gate_phase=self.ledger.gate_phase, current_deadline_ns=self.ledger.current_deadline_ns,
                     race_protocol_settled=bool(self.race and self.race.settled),
                     original_product_retired=self.io.owner.retired, budget=session_budget(self.journal.kind),
                     ready_for_live=False, gui_verified=False)

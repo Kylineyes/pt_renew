@@ -92,16 +92,18 @@ class McpProductTransport:
             out.flush()
 
     async def file_dialog_type(self, permit):
+        deadline = self.ledger.call_deadline(self.timeout_ns)
         from .file_dialog import FileTypePermit
         require(type(permit) is FileTypePermit, '文件框Type必须使用本客户端一次性凭据')
         arguments = permit.consume(self.ledger)
-        return await self._call('Type', arguments, file_permit=permit)
+        return await self._call('Type', arguments, file_permit=permit, deadline_ns=deadline)
 
     async def __call__(self, tool, arguments):
         return await self._call(tool, arguments)
 
-    async def _call(self, tool, arguments, *, file_permit=None):
+    async def _call(self, tool, arguments, *, file_permit=None, deadline_ns=None):
         self.ledger.desktop_allowed()
+        deadline = self.ledger.call_deadline(self.timeout_ns, deadline_ns=deadline_ns)
         require(self.enabled and self.validate is not None, '原MCP适配器默认禁用或缺少冻结schema验证器')
         require(tool in ('Snapshot', 'Click', 'Shortcut') or tool == 'Type' and file_permit is not None,
                 '产品适配器拒绝其他MCP工具入口')
@@ -129,7 +131,8 @@ class McpProductTransport:
                     and arguments['region'][0] < arguments['region'][2]
                     and arguments['region'][1] < arguments['region'][3], 'Snapshot必须冻结明确region和纯图像参数')
         require(type(self.timeout_ns) is int and 0 < self.timeout_ns <= 35 * SECOND, '原工具超时不可扩大')
-        self.ledger.time_left(self.timeout_ns)
+        require(self.ledger.clock.monotonic_ns() + self.timeout_ns < self.ledger.cleanup_deadline_ns,
+                '原工具正常收尾余量不足')
         args = copy.deepcopy(arguments)
         self.validate(tool, args)
         self.ledger.desktop_allowed()
@@ -138,11 +141,13 @@ class McpProductTransport:
         start_wall = self.ledger.clock.wall_ns()
         start_mono = self.ledger.clock.monotonic_ns()
         event = dict(call_id=call_id, tool=tool, arguments=args, start_wall_ns=start_wall,
-                     start_mono_ns=start_mono, attempted=True, returned=False)
+                     start_mono_ns=start_mono, deadline_ns=deadline, attempted=True, dispatched=False, returned=False)
         self.calls.append(event)
         self.write(call_id + '-start.json', event)
         try:
-            result = await asyncio.wait_for(self.connection.call_tool(tool, args), self.timeout_ns / SECOND)
+            remaining = self.ledger.remaining(deadline)
+            event['dispatched'] = True
+            result = await asyncio.wait_for(self.connection.call_tool(tool, args), remaining)
             event['returned'] = True
             event.update(end_wall_ns=self.ledger.clock.wall_ns(), end_mono_ns=self.ledger.clock.monotonic_ns())
             # 原协议来自冻结MCP对象的model_dump，不采用调用者提交的已规范JSON。
@@ -154,8 +159,8 @@ class McpProductTransport:
                 path = self.root / f'{call_id}-{index:02}.png'
                 with path.open('xb') as out: out.write(base64.b64decode(image['data'], validate=True))
                 image['path'] = str(path.resolve())
-            self.ledger.desktop_allowed()
-            require(start_mono <= event['end_mono_ns'] < start_mono + self.timeout_ns
+            self.ledger.remaining(deadline)
+            require(start_mono <= event['end_mono_ns'] < deadline
                     and abs((event['end_wall_ns'] - start_wall) - (event['end_mono_ns'] - start_mono)) <= SECOND,
                     '原工具调用期间时钟倒退或墙钟跳变')
             self.write(call_id + '-normalized.json', row)
@@ -165,14 +170,17 @@ class McpProductTransport:
             raise
         finally:
             self.write(call_id + '-end.json', event)
+            if 'error' not in event:
+                self.ledger.remaining(deadline)
 
     async def snapshot(self, target):
         self.ledger.desktop_allowed()
+        deadline = self.ledger.call_deadline(self.timeout_ns)
         rect = tuple(target['rect'])
         require(target.get('coordinate_space') == 'physical-desktop-pixels'
                 and target.get('thread_context_restored') is True, 'Snapshot必须绑定已核验物理rect')
         arguments = dict(use_vision=True, use_annotation=False, use_ui_tree=False, region=list(rect))
-        row = await self('Snapshot', arguments)
+        row = await self._call('Snapshot', arguments, deadline_ns=deadline)
         require(row['call_id'] not in self.used, 'Snapshot原调用已消费')
         image = row['images'][0]
         raw = Path(image['path']).read_bytes()
@@ -188,4 +196,5 @@ class McpProductTransport:
                         width, height, rect, ((rect[2] - rect[0]) / width, (rect[3] - rect[1]) / height),
                         target['hwnd'], row)
         shot.validate(lambda path: Path(path).read_bytes())
+        self.ledger.remaining(deadline)
         return shot
