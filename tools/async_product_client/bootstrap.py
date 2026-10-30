@@ -37,7 +37,7 @@ class ProductBootstrap:
 
     async def _start(self, ident, parent, *, kind, deployment, manifest, board, board_sha256, a, b, environment,
                     interpreter, interpreter_sha256, package_root, package_files, module_root, module_files,
-                    verifier, validate, diagnostic_deadline_ns, revision=2, discovery_api=None):
+                    verifier, validate, diagnostic_deadline_ns, revision=2, discovery_api=None, python_environment=None):
         with self.ledger.operation(ident, parent, deadline_ns=diagnostic_deadline_ns):
             require(self.enabled and not self.used and self.connection.initialized,
                     '产品装配禁用、机会已消费或原MCP服务未初始化')
@@ -56,7 +56,8 @@ class ProductBootstrap:
                                          interpreter_sha256=interpreter_sha256, package_root=package_root,
                                          package_files=package_files, module_root=module_root, module_files=module_files,
                                          evidence_root=self.root / 'probes', deadline_ns=self.ledger.cleanup_deadline_ns,
-                                         enabled=True, handle_api=self.runtime.handles, registry=self.runtime.registry)
+                                         enabled=True, handle_api=self.runtime.handles, registry=self.runtime.registry,
+                                         python_environment=python_environment)
             self.shutdown.probe = self.probe
             policy = WindowPolicy(Path(board).name)
             self.discovery = ProductMainDiscovery(self.ledger, self.owner, self.creator, policy,

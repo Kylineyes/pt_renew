@@ -27,12 +27,15 @@ async def run(plan_path, expected_sha256):
         plan = decode_object(raw)
         require(plan.get('schema_version') == 1 and plan.get('enabled') is True
                 and plan.get('role') in ('supervisor', 'client', 'service'), '创建者计划未显式启用或角色无效')
+        deadline = plan.get('startup_deadline_ns')
+        require(type(deadline) is int and time.monotonic_ns() < deadline <= plan['diagnostic_deadline_ns'],
+                '创建者原启动截止已到或无效')
         program = FrozenProgram(**plan['program'])
         interpreter, root = program.verify()
         require(Path(sys.executable).resolve() == interpreter, '实际解释器与冻结计划不符')
         ledger = Ledger(context=Context(**plan['context']), cleanup_deadline_ns=plan['cleanup_deadline_ns'], enabled=True)
         ledger.diagnostic_deadline_ns = min(plan['diagnostic_deadline_ns'], ledger.cleanup_deadline_ns)
-        deadline = min(ledger.diagnostic_deadline_ns, ledger.clock.monotonic_ns() + 35 * SECOND)
+        require(ledger.clock.monotonic_ns() < deadline, '创建者预检已经超过原启动截止')
         while not (path.parent / 'parent-binding.json').exists():
             require(ledger.clock.monotonic_ns() < deadline, '父原Popen身份绑定等待超过原截止')
             await asyncio.sleep(min(.1, (deadline - ledger.clock.monotonic_ns()) / SECOND))
@@ -47,9 +50,15 @@ async def run(plan_path, expected_sha256):
         runtime = CreatorRuntime(ledger, path.parent, self_identity=identity, role=plan['role'],
                                  required_roles=roles[plan['role']], enabled=True)
         require(ledger.clock.monotonic_ns() < deadline, '冻结驱动加载前原截止已到')
+        from async_product_client.python_environment import environment
+        dependencies = environment(program.python_environment)
+        if dependencies is not None:
+            dependencies.activate()
+            require(ledger.clock.monotonic_ns() < deadline, '冻结依赖加载超过原截止')
         spec = importlib.util.spec_from_file_location('pt_frozen_creator_driver', root / program.entry)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
+        require(ledger.clock.monotonic_ns() < deadline, '冻结驱动模块执行已超过原启动截止')
         ledger.time_left()
         result = await module.run(runtime, plan['configuration'])
         require(type(result) is int and result == 0, '冻结创建者驱动未正常返回0')

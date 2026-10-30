@@ -1,5 +1,7 @@
 # PT Renew 当前进度与新会话交接
 
+最新开发见[实际兼容性驱动与基础解释器依赖](docs/async-product-drivers.md)。从 `dev=4f3ac63` 独立分支实现逐条命令邮箱、实际客户端/监督器入口和创建前完整材料核验；新无GUI实测确认虚拟环境重定向器PID不一致，改用基础Python加完整冻结依赖。6,267文件依赖副本的隔离导入及原Popen退出0已验证，真实控制服务/Qt/UIA/全动作时限仍未验证，`ready_for_live=false`，NET31/铜22及32次上限保持。新证据 `.local-analysis/async-product-drivers/`。
+
 最新开发见[阶段剩余时限、创建者运行器与失败收尾](docs/async-product-deadlines.md)。从核对的 `dev=afb22b7` 建立 `feat/async-product-deadlines`：原输入前唯一时钟、20/50/55/60秒剩余约束已接入工具/探针/落盘；实际无GUI四身份原Popen报告链与原服务管道通过测试，门闩前/文件框失败收尾已补。真实服务/产品/COM/UIA/全动作时限尚未验证，含发现NET31/铜22及32次上限不变，`ready_for_live=false`。新证据 `.local-analysis/async-product-deadlines/`，以下交接及历史原结算保持。
 
 **新代理先读[2026-10-30统一接手入口](docs/agent-handoff-20261030.md)。** 实现基线为`dev=53922ab39dda1a0c07739f557ea9d5cbc5dd0c01`，本次只整理交接、不再扩展实现或启动现场。最新本机入口为`.local-analysis/CURRENT_AGENT_HANDOFF.md`；旧`.local-analysis/NEXT_AGENT_BRIEF.md`和各阶段Task/批准/失败/冻结保持只读。最终交接Git状态见`.local-analysis/agent-handoff-20261030/final-git-state.json`。

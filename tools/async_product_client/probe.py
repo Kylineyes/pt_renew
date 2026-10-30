@@ -22,7 +22,8 @@ class BoundedUiaProbe:
     def __init__(self, ledger, owner, creator, *, interpreter, interpreter_sha256,
                  package_root, package_files, module_root, module_files, evidence_root,
                  deadline_ns, enabled=False, timeout_ns=5 * SECOND, max_queries=32,
-                 popen=None, handle_api=None, sleeper=pause, nonce_factory=None, registry=None, registry_parent='product'):
+                 popen=None, handle_api=None, sleeper=pause, nonce_factory=None, registry=None, registry_parent='product',
+                 python_environment=None):
         require(positive(deadline_ns) and deadline_ns <= ledger.cleanup_deadline_ns
                 and positive(timeout_ns) and timeout_ns <= 5 * SECOND
                 and type(max_queries) is int and 0 < max_queries <= 32, '探针原总截止/单次5秒上限/次数边界无效')
@@ -33,6 +34,7 @@ class BoundedUiaProbe:
         self.package_files, self.module_files = dict(package_files), dict(module_files)
         self.root = Path(evidence_root).resolve()
         self._deadline_ns = deadline_ns
+        self.python_environment = python_environment
         self.enabled, self.timeout_ns, self.max_queries = enabled is True, timeout_ns, max_queries
         self.popen, self.handle_api, self.sleeper = popen or subprocess.Popen, handle_api or OriginalHandleApi(), sleeper
         self.nonce_factory = nonce_factory or (lambda: str(uuid.uuid4()))
@@ -53,6 +55,8 @@ class BoundedUiaProbe:
         return current
 
     def sources(self):
+        require(not (self.interpreter.parent.parent / 'pyvenv.cfg').is_file(),
+                '只读探针必须直接使用基础解释器，不能经虚拟环境重定向器')
         require(self.interpreter.is_file() and digest(self.interpreter.read_bytes()) == self.interpreter_sha256,
                 '探针解释器与冻结摘要不符')
         require(len(self.package_files) == 77 and tree_hashes(self.package_root / 'windows_mcp', ignore_bytecode=True)
@@ -70,6 +74,10 @@ class BoundedUiaProbe:
         actual = {name: digest((self.module_root / name).read_bytes()) for name in self.module_files}
         require(actual == self.module_files and not any((self.module_root / name).is_symlink() for name in self.module_files),
                 '探针模块与冻结摘要不符或包含链接')
+
+        from .python_environment import environment
+        dependencies = environment(self.python_environment)
+        if dependencies is not None: dependencies.verify()
 
     async def inspect(self, hwnd, pid):
         return await self._query(hwnd, pid, kind='single-uia')
@@ -105,6 +113,7 @@ class BoundedUiaProbe:
                            package_root=str(self.package_root), package_files=self.package_files,
                            module_root=str(self.module_root), module_files=self.module_files,
                            interpreter=str(self.interpreter), interpreter_sha256=self.interpreter_sha256,
+                           python_environment=self.python_environment,
                            readonly=True, input_calls=0)
             require(str(uuid.UUID(request['nonce'])) == request['nonce'], '探针nonce无效')
             request_path = folder / 'request.json'
@@ -124,7 +133,8 @@ class BoundedUiaProbe:
             self.ledger.event('uia_probe_attempt', folder=str(folder), request_sha256=child['request_sha256'], hwnd=hwnd)
             self.ledger.remaining(deadline)
             # 直接创建并立即保存原Popen；不存在短命shell或中间启动器。
-            child['process'] = self.popen([str(self.interpreter), '-B', '-X', 'utf8',
+            isolation = ['-I', '-S'] if self.python_environment is not None else []
+            child['process'] = self.popen([str(self.interpreter), *isolation, '-B', '-X', 'utf8',
                                          str(self.module_root / 'async_product_client/probe_worker.py'), str(request_path)],
                                          cwd=str(folder), stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                                          shell=False, close_fds=True)

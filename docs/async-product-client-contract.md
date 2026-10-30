@@ -1,5 +1,7 @@
 # 产品竞争客户端的实现约束
 
+最新[实际兼容性驱动与依赖](async-product-drivers.md)补单请求邮箱、实际客户端/监督器及全材料创建前核验；兼容性范围拒绝目标B打开、铜门闩、Delete和release。新原Popen身份实验确认虚拟环境重定向器产生不同执行PID，现要求基础解释器-I -S加完整冻结依赖，不用迟到查询句柄补证。原启动35秒截止已从父预检贯穿子依赖加载，不重计。真实控制服务/Qt/UIA/全动作时限未验证，`ready_for_live=false`、NET31/铜22和32次上限保持。
+
 最新[阶段剩余时限与生产创建者](async-product-deadlines.md)已将原输入前时钟及20/50/55/60秒截止接到schema/哈希预检、工具/探针调用、原回执核验和最终落盘，保留35/5/40退出余量及600/900总预算。实际无GUI四身份原Popen/报告链、原服务stdio连接已验证，生产组件装配及服务入口默认禁用；真实服务/产品/COM/UIA及全动作时限仍未通过。失败收尾覆盖初始化、未绑定、文件框取消及未知探针，未知对象继续持有，迟到exit0不清失败。含发现NET31/铜22、32次上限及 `ready_for_live=false` 保持。
 
 本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[批量窗口观察](async-product-batch-observation.md)新增13项、仓库339项Python测试通过。单子进程执行同次完整native/UIA双轮核验，普通post_native和read关口保持；完整NET/铜含发现31/22次，未扩大32次上限。真实冷启动/工具/read总时限及生产原退出链仍缺，ready_for_live=false，产品/COM/桌面请求0。

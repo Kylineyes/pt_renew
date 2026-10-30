@@ -72,6 +72,19 @@ class FreezeTests(unittest.TestCase):
         self.assertEqual(len([name for name in result['files'] if name.startswith('runtime/windows_mcp/')]), 77)
         self.assertTrue((cache / 'module.pyc').is_file())
 
+    def test_freezes_complete_python_dependency_copy_without_enabling_live(self):
+        dependencies = self.root / 'python-dependencies'; dependencies.mkdir()
+        (dependencies / 'fake.py').write_text('# 假依赖\n', encoding='utf-8')
+        environment = dict(root=str(dependencies), files=tree_hashes(dependencies), version=list(sys.version_info[:3]))
+        result = freeze_async_product.freeze(self.root / 'with-python', references=self.refs, inputs=self.inputs,
+                                             python_environment=environment)
+        self.assertTrue(result['plan']['python_dependency_environment_frozen'])
+        self.assertFalse(result['plan']['ready_for_live'])
+        self.assertEqual(result['python_environment']['files'], environment['files'])
+        target = Path(result['python_environment']['root'])
+        self.assertEqual(tree_hashes(target), environment['files'])
+        self.assertEqual(tree_hashes(dependencies), environment['files'])
+
     def test_changed_reference_input_and_unpinned_exe_cannot_publish_manifest(self):
         for mode in ('reference', 'input', 'unpinned'):
             with self.subTest(mode=mode):
