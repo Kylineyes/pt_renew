@@ -8,6 +8,7 @@ from pathlib import Path
 from .core import positive, require
 from .product import MODAL_TITLE
 from .file_dialog import FILE_CLASS, FILE_TITLE
+from .commands import COMMANDS
 
 
 class ReadOnlyWin32:
@@ -131,16 +132,25 @@ class ReadOnlyUia:
         result = dict(root=root_row, modal=bool(pattern.IsModal) if pattern else None,
                       buttons=[], focus=None, readonly=True)
         file_dialog = root_row['name'] == FILE_TITLE and root_row['cls'] == FILE_CLASS
+        main_commands = root_row['automation_id'] == 'mainWindow'
+        if main_commands: result['commands'] = []
         if file_dialog: result['file_elements'] = []
-        if root_row['name'] == MODAL_TITLE or file_dialog:
+        if root_row['name'] == MODAL_TITLE or file_dialog or main_commands:
             pending, count = [(root, 0)], 0
             while pending:
                 control, depth = pending.pop()
                 count += 1
-                require(count <= 256 and depth <= 8, 'dirty模态UIA子树超出冻结边界')
+                require(count <= (2048 if main_commands else 256) and depth <= (16 if main_commands else 8),
+                        'UIA只读子树超出冻结数量/深度边界')
                 row = self.element(control)
                 require(row['pid'] == pid, 'UIA模态子树混入其他PID')
-                if file_dialog and ((row['control_type'] == 50004 and row['automation_id'] == '1148')
+                if main_commands and row['automation_id'] in COMMANDS:
+                    require(row['control_type'] == 50000 and row['name'] == COMMANDS[row['automation_id']],
+                            'NET可见命令objectName/名称/类型不符')
+                    self.checkpoint(); box = control.BoundingRectangle
+                    row.update(rect=[box.left, box.top, box.right, box.bottom], descendant_verified=True)
+                    result['commands'].append(row)
+                elif file_dialog and ((row['control_type'] == 50004 and row['automation_id'] == '1148')
                                     or (row['control_type'] == 50000 and row['automation_id'] in ('1', '2'))):
                     self.checkpoint()
                     box = control.BoundingRectangle
@@ -152,7 +162,7 @@ class ReadOnlyUia:
                         self.checkpoint(); row['value'] = value.Value
                         self.checkpoint(); row['read_only'] = bool(value.IsReadOnly)
                     result['file_elements'].append(row)
-                elif row['control_type'] == 50000 and not file_dialog:
+                elif row['control_type'] == 50000 and not file_dialog and not main_commands:
                     require(row['name'] in ('放弃更改', '取消'), 'dirty模态出现未知按钮')
                     self.checkpoint()
                     box = control.BoundingRectangle
@@ -237,6 +247,13 @@ class ProductNative:
                 if focus.get('automation_id') == 'boardCanvas' and focus.get('name') == '板图工作区' and focus.get('control_type') == 50033:
                     row['focus_kind'] = 'canvas'
                 elif focus.get('control_type') in (50004, 50030): row['focus_kind'] = 'text'
+            if 'commands' in uia:
+                commands = {}
+                for button in uia['commands']:
+                    key = button.get('automation_id')
+                    require(key in COMMANDS and key not in commands, 'NET可见命令ID未知或重复')
+                    commands[key] = button
+                row['commands'] = commands
             if before['title'] == MODAL_TITLE:
                 require(hwnd != identity.hwnd and before['owner'] == identity.hwnd and uia.get('modal') is True,
                         'dirty模态缺少同原生owner及UIA模态证明')

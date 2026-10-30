@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from .core import require
 from .native import ReadOnlyWin32, query_uia
-from .product import QT_CLASS
+from .product import QT_CLASS, EXPERIMENT_SUFFIX
 
 
 class ProductMainDiscovery:
@@ -30,7 +30,7 @@ class ProductMainDiscovery:
         foreground = self.api.foreground()
         handles = self.api.enumerate(info['pid'])
         require(handles and len(handles) == len(set(handles)), '产品可见窗口集合为空或重复')
-        title = self.policy.title(False) if loaded else 'PT Renew · 内存编辑 · 不支持保存'
+        title = self.policy.title(False) if loaded else 'PT Renew · 内存编辑 · 不支持保存' + EXPERIMENT_SUFFIX
         raw = {hwnd: self.api.window(hwnd) for hwnd in handles}
         require(all(row['pid'] == info['pid'] and row['visible'] is True for row in raw.values()),
                 '可见窗口枚举过程中PID/可见性改变')

@@ -60,7 +60,7 @@ class BoundedUiaProbe:
         require({'async_product_client/probe_worker.py', 'async_product_client/native.py',
                  'async_product_client/core.py', 'async_product_client/product.py',
                  'async_product_client/events.py', 'async_product_client/race.py',
-                 'async_product_client/file_dialog.py',
+                 'async_product_client/file_dialog.py', 'async_product_client/commands.py',
                  'async_product_client/__init__.py'} <= self.module_files.keys(),
                 '探针模块冻结集合不完整')
         package_names = {p.relative_to(self.module_root).as_posix()

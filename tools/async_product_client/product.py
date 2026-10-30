@@ -8,6 +8,7 @@ from pathlib import Path
 from .core import Identity, SECOND, digest, positive, require
 
 QT_CLASS = 'Qt6120QWindowIcon'
+EXPERIMENT_SUFFIX = '【独立异步实验构建】'
 MODAL_TITLE = '放弃工作副本更改？'
 
 
@@ -98,7 +99,7 @@ class WindowPolicy:
 
     def title(self, dirty):
         require(self.filename and Path(self.filename).name == self.filename, '冻结文件名必须精确')
-        return f'{self.filename}{" * 已修改" if dirty else ""} · 工作副本 · 不支持保存 · PT Renew'
+        return f'{self.filename}{" * 已修改" if dirty else ""} · 工作副本 · 不支持保存 · PT Renew' + EXPERIMENT_SUFFIX
 
     def check(self, native, identity, *, stage, dirty):
         require(native.get('input_desktop') == 'Default' and native.get('locked') is False

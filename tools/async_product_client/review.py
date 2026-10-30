@@ -138,10 +138,10 @@ class ReviewGate:
                 app_deadline_ns, expected):
         ledger = self.ledger
         ledger.desktop_allowed()
-        require(ident not in self.requests and stage in ('baseline', 'gate', 'edit', 'final', 'dirty-modal', 'file-dialog', 'file-path'),
+        require(ident not in self.requests and stage in ('baseline', 'gate', 'edit', 'final', 'dirty-modal', 'file-dialog', 'file-path', 'command'),
                 '图像request ID重复或阶段未知')
         require(positive(gate_request_id) and positive(deadline_mono_ns)
-                and (app_deadline_ns is None if stage in ('baseline', 'dirty-modal', 'file-dialog', 'file-path') else positive(app_deadline_ns)),
+                and (app_deadline_ns is None if stage in ('baseline', 'dirty-modal', 'file-dialog', 'file-path', 'command') else positive(app_deadline_ns)),
                 '缺少原应用请求/截止或混用模态与应用时钟')
         require(ledger.clock.monotonic_ns() < deadline_mono_ns <= ledger.cleanup_deadline_ns,
                 '图像request已过原截止')
