@@ -22,11 +22,12 @@ class BoundedUiaProbe:
     def __init__(self, ledger, owner, creator, *, interpreter, interpreter_sha256,
                  package_root, package_files, module_root, module_files, evidence_root,
                  deadline_ns, enabled=False, timeout_ns=5 * SECOND, max_queries=32,
-                 popen=None, handle_api=None, sleeper=pause, nonce_factory=None):
+                 popen=None, handle_api=None, sleeper=pause, nonce_factory=None, registry=None, registry_parent='product'):
         require(positive(deadline_ns) and deadline_ns <= ledger.cleanup_deadline_ns
                 and positive(timeout_ns) and timeout_ns <= 5 * SECOND
                 and type(max_queries) is int and 0 < max_queries <= 32, '探针原总截止/单次5秒上限/次数边界无效')
         self.ledger, self.owner, self.creator = ledger, owner, creator
+        self.registry, self.registry_parent = registry, registry_parent
         self.interpreter, self.interpreter_sha256 = Path(interpreter).resolve(), interpreter_sha256
         self.package_root, self.module_root = Path(package_root).resolve(), Path(module_root).resolve()
         self.package_files, self.module_files = dict(package_files), dict(module_files)
@@ -59,6 +60,7 @@ class BoundedUiaProbe:
         require({'async_product_client/probe_worker.py', 'async_product_client/native.py',
                  'async_product_client/core.py', 'async_product_client/product.py',
                  'async_product_client/events.py', 'async_product_client/race.py',
+                 'async_product_client/file_dialog.py',
                  'async_product_client/__init__.py'} <= self.module_files.keys(),
                 '探针模块冻结集合不完整')
         package_names = {p.relative_to(self.module_root).as_posix()
@@ -117,12 +119,17 @@ class BoundedUiaProbe:
                                          cwd=str(folder), stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                                          shell=False, close_fds=True)
             require(child['process'] is not None, '探针创建结果未知，不允许重试')
+            if self.registry is not None:
+                child['registry_key'] = f'uia-probe-{len(self.children)}'
+                self.registry.created(child['registry_key'], child['process'], role='probe', parent=self.registry_parent)
             child['identity'] = self.handle_api.inspect(child['process'])
             require(child['identity'].get('pid') == child['process'].pid
                     and child['identity'].get('original_handle') is True
                     and positive(child['identity'].get('birth')) and positive(child['identity'].get('handle'))
                     and Path(child['identity'].get('image', '')).resolve() == self.interpreter,
                     '探针原Popen句柄身份未知')
+            if self.registry is not None:
+                self.registry.identified(child['registry_key'], child['process'], child['identity'])
             self.ledger.event('uia_probe_created', identity=child['identity'], original_popen=True)
             while True:
                 self.ledger.desktop_allowed()
@@ -133,6 +140,8 @@ class BoundedUiaProbe:
                     child['exit_code'] = code
                     child['outcome'] = 'exited'
                     self.close_streams(child)
+                    if self.registry is not None:
+                        self.registry.exited(child['registry_key'], child['process'], code)
                     self.ledger.event('uia_probe_exit', identity=child['identity'], original_popen=True, exit_code=code)
                     require(code == 0, '只读探针非0退出')
                     break
@@ -190,6 +199,8 @@ class BoundedUiaProbe:
                     require(type(code) is int and code == child['process'].returncode, '原探针退出证据未知')
                     child.update(exit_code=code, outcome='exited')
                     self.close_streams(child)
+                    if self.registry is not None and 'registry_key' in child:
+                        self.registry.exited(child['registry_key'], child['process'], code)
                     self.ledger.event('uia_probe_reaped', original_popen=True, pid=child['process'].pid,
                                       exit_code=code, accepted=child['accepted'])
         return [dict(pid=child['process'].pid if child['process'] else None, exit_code=child['exit_code'],

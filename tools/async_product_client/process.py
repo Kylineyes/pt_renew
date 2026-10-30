@@ -72,9 +72,10 @@ class OwnedProductProcess:
     """供ProductOwner注入的创建器；客户端自身持续持有Popen和实验owner身份。"""
 
     def __init__(self, ledger, *, kind, experiment_directory, board_copy, evidence_root,
-                 enabled=False, popen=None, handle_api=None, owner_pid=None):
+                 enabled=False, popen=None, handle_api=None, owner_pid=None, registry=None, registry_key='product'):
         require(kind in ('net', 'copper'), '实验种类无效')
         self.ledger, self.kind = ledger, kind
+        self.registry, self.registry_key = registry, registry_key
         self.experiment_directory = Path(experiment_directory).resolve()
         self.board_copy = Path(board_copy).resolve()
         self.root = Path(evidence_root).resolve()
@@ -114,6 +115,8 @@ class OwnedProductProcess:
                                       stdout=self.streams[0], stderr=self.streams[1], shell=False,
                                       close_fds=True)
             require(self.process is not None, '创建结果未知，不允许重复启动')
+            if self.registry is not None:
+                self.registry.created(self.registry_key, self.process, role='product')
             return self.process
         except BaseException:
             if self.process is None:
@@ -125,6 +128,10 @@ class OwnedProductProcess:
         self.identity = self.handle_api.inspect(process)
         require(self.identity['pid'] == process.pid and self.identity.get('original_handle') is True,
                 '创建后的原句柄核验失败')
+        if self.registry is not None:
+            row = self.registry.entries[self.registry_key]
+            if row['identity'] is None: self.registry.identified(self.registry_key, process, self.identity)
+            else: require(row['identity'] == self.identity, '账本中的原产品身份改变')
         return dict(self.identity)
 
     def close_streams(self):
@@ -137,5 +144,6 @@ class OwnedProductProcess:
         code = self.process.poll()
         require(type(code) is int, '原Popen尚未退出或状态未知')
         self.close_streams()
+        if self.registry is not None: self.registry.exited(self.registry_key, self.process, code)
         self.ledger.event('product_creator_exit', pid=self.process.pid, original_popen=True, exit_code=code)
         return code

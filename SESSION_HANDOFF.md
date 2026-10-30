@@ -1,6 +1,14 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-30。最新阶段为[有界UIA探针与主窗发现](docs/async-product-bounded-probe.md)，从`dev=00907260907058747d0c623e9a4e36e0af32b100`建立`feat/async-product-bounded-probe`。独立STA/DPI子探针、父原Popen有界等待/协作停止/本地reap和一次初始主HWND发现均默认禁用，14项新增测试、仓库295项Python测试通过（27.856秒）。产品/COM/UIA现场/桌面请求0，未新增图片任务，ready_for_live=false。
+更新时间：2026-10-30。最新阶段为[原生NET文件框与原Popen账本](docs/async-product-file-dialog.md)，从核对的`dev=origin/dev=9b13adaec08a936aff4bd2c1f3bc5e8cea9d7218`建立`feat/async-product-file-dialog`。独立文件框read→唯一冻结路径Type→后验/路径图read→明确打开/取消，以及产品/探针同创建原Popen账本均已离线接入；新增16项、仓库311项Python测试通过（27.607秒）。产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+
+普通Type仍拒绝，文件框只可用同Ledger/token/冻结A/B副本的一次性凭据，press_enter=false；读图后控件/路径/焦点变化也拒绝。打开前保留原触发时钟，框消失只记submitted/load_verified=false。控件ID1148/1/2及按钮名称为待真实核验候选，不以假API宣称Windows/Qt兼容。原账本保存创建后身份未知对象，后来exit0不改原失败；产品/探针已接入，服务/客户端/监督器和已发现子孙跨创建者完整链仍缺。下一步继续命令/模块串联及完整原Popen见证与冻结总预算。
+
+新证据和补充简报在`.local-analysis/async-product-file-dialog/`；旧任务/批准/失败/冻结和归档36.22394秒样本只读。必要控制授权保持，现场前先完成可审阅材料并说明实际开始时间、预计时长和范围。
+
+以下为前阶段历史，最新范围以本阶段报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[有界UIA探针与主窗发现](docs/async-product-bounded-probe.md)，从`dev=00907260907058747d0c623e9a4e36e0af32b100`建立`feat/async-product-bounded-probe`。独立STA/DPI子探针、父原Popen有界等待/协作停止/本地reap和一次初始主HWND发现均默认禁用，14项新增测试、仓库295项Python测试通过（27.856秒）。产品/COM/UIA现场/桌面请求0，未新增图片任务，ready_for_live=false。
 
 父等待超时不等于COM调用已停止；保留原Popen和unknown、不强杀/不重试，迟到退出0只证明生命周期，不采纳迟到UIA结果。主窗按精确标题/owner/原Popen和mainWindow UIA根/物理rect核对后唯一绑定，未知不聚焦或输入。下一步补原生文件框独立阶段和全部原Popen链，再审阅包含冷探针加载成本的20/50/55/60秒总预算。新证据在`.local-analysis/async-product-bounded-probe/`，旧任务/批准/失败与归档双图36.22394秒样本保持只读；必要控制授权持续，实际控制前仍说明具体时间与范围。
 
