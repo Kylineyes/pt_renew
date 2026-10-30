@@ -14,6 +14,10 @@ from types import ModuleType
 from .core import require
 
 
+class ApartmentStopped(BaseException):
+    """穿过原UIA的except Exception，确保停止检查不会被其初始化兼容分支吞掉。"""
+
+
 class FunctionProxy:
     def __init__(self, function, name, trace):
         object.__setattr__(self, 'function', function)
@@ -26,7 +30,10 @@ class FunctionProxy:
     def __call__(self, *args):
         trace = self.trace
         require(threading.get_ident() == trace.thread, 'COM调用越过原STA线程')
-        if self.name != 'CoUninitialize': trace.checkpoint()
+        if self.name != 'CoUninitialize':
+            try: trace.checkpoint()
+            except BaseException as error:
+                raise ApartmentStopped('COM原初始化检查点已停止：' + str(error)) from error
         else: require(trace.balance > 0, 'COM释放次数超过本线程已证实的初始化次数')
         row = dict(api=self.name, returned=False, thread=trace.thread)
         trace.calls.append(row)
@@ -98,6 +105,9 @@ class ImportLoader(importlib.abc.Loader):
         module.__dict__['__builtins__'] = dict(vars(builtins), __import__=local_import)
         self.original.exec_module(module)
         if module.__name__ == 'windows_mcp.uia.core':
+            # 原enums的星号导出含ctypes，会覆盖前面的局部import；单例延迟创建前必须重新绑定同一代理。
+            module.ctypes = proxy
+            require(module.ctypes is proxy, 'UIA星号导入后ctypes代理丢失')
             original_time = module.time
             trace = self.trace
             class TimeProxy:

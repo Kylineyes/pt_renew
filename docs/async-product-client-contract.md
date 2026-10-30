@@ -1,5 +1,7 @@
 # 产品竞争客户端的实现约束
 
+最新[真实UIA对象核验](async-uia-object-compat.md)新Task仅一次创建对象，严格3次COM验收因记录2/2拒绝，原exit1、failed/token保持、120.091秒零请求收尾，Task failed已结算。父离线修复星号导出覆盖ctypes代理及停止被宽泛异常吞掉的路径，419项测试通过，没有重跑/改旧候选或把余额0补通过。真实Qt/整窗冷探针/产品全动作未过，ready_for_live=false；NET31/铜22、32次、5秒及原阶段/总截止不扩大。
+
 最新[探针运行时](async-product-probe-runtime.md)将探针依赖固定为同原完整依赖中的156文件comtypes包，私有缓存及只读审计阻止生成字节变化，父独立重算COM原线程/API/HRESULT/余额。一次仅COM导入核验取得原Popen/exit0及平衡，两次初始化/释放，最终落盘2.867147秒；没有UIA对象/桌面查询或产品，真实冷探针/Qt/全动作仍未过。共享32次、NET31/铜22、5秒和20/50/55/60截止不变，`ready_for_live=false`。
 
 最新[实际兼容性驱动与依赖](async-product-drivers.md)补单请求邮箱、实际客户端/监督器及全材料创建前核验；兼容性范围拒绝目标B打开、铜门闩、Delete和release。新原Popen身份实验确认虚拟环境重定向器产生不同执行PID，现要求基础解释器-I -S加完整冻结依赖，不用迟到查询句柄补证。原启动35秒截止已从父预检贯穿子依赖加载，不重计。真实控制服务/Qt/UIA/全动作时限未验证，`ready_for_live=false`、NET31/铜22和32次上限保持。

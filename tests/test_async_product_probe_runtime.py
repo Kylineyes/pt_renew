@@ -84,6 +84,26 @@ atexit.register(_shutdown)
             self.assertTrue(validate_com_report(trace.report())['balanced'])
         self.assertEqual(self.calls, ['init', 'init', 'uninit', 'uninit'])
 
+    async def test_uia_star_export_cannot_replace_local_ctypes_proxy_before_singleton_creation(self):
+        ole = self.fake_ole()
+        class Loader:
+            def exec_module(self, module):
+                # 模拟原from .enums import *把真实ctypes重新导出到core命名空间。
+                exec('import time\n', module.__dict__)
+                module.ctypes = ctypes
+                exec('def initialize():\n    return ctypes.windll.ole32.CoInitialize(None)\n', module.__dict__)
+        with isolated_modules(), patch.object(ctypes, 'windll', SimpleNamespace(ole32=ole), create=True):
+            trace = ApartmentTrace(ole=ole)
+            with trace:
+                module = ModuleType('windows_mcp.uia.core')
+                ImportLoader(Loader(), trace).exec_module(module)
+                self.assertIsNot(module.ctypes, ctypes)
+                module.initialize()
+            validate_com_report(trace.report())
+        self.assertEqual(self.calls, ['init','init','uninit','uninit'])
+        self.assertEqual([row['api'] for row in trace.report()['calls']],
+                         ['CoInitializeEx','CoInitialize','CoUninitialize','CoUninitialize'])
+
     async def test_uia_original_retry_sleep_is_refused_by_module_local_proxy(self):
         ole = self.fake_ole(); module = ModuleType('windows_mcp.uia.core')
         class Loader:
@@ -100,6 +120,22 @@ atexit.register(_shutdown)
         with isolated_modules(), self.assertRaises(ValueError):
             with ApartmentTrace(ole=ole, checkpoint=stop): pass
         self.assertEqual(self.calls, [])
+
+    async def test_stop_during_extra_initializer_cannot_be_swallowed_by_original_except_exception(self):
+        from async_product_client.com_apartment import ApartmentStopped
+        ole = self.fake_ole(); stopped = False
+        def checkpoint():
+            if stopped: raise ValueError('父已要求停止')
+        with isolated_modules():
+            trace = ApartmentTrace(ole=ole,checkpoint=checkpoint)
+            with self.assertRaises(ApartmentStopped):
+                with trace:
+                    stopped = True
+                    try: trace.ole(ole).CoInitialize(None)
+                    except Exception: pass
+                    self.fail('原except Exception不得吞掉停止检查')
+        self.assertEqual(self.calls,['init','uninit'])
+        self.assertTrue(validate_com_report(trace.report())['balanced'])
 
     async def test_exception_still_balances_acquired_initializers_and_preserves_error(self):
         ole = self.fake_ole()
