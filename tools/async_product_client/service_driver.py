@@ -4,16 +4,18 @@ from __future__ import annotations
 import asyncio
 from pathlib import Path
 
-from async_product_client.core import require
+from async_product_client.core import digest, require
 from async_product_client.events import decode_object
 
 
 async def run(runtime, configuration):
     require(runtime.enabled and runtime.relay.role == 'service' and not runtime.registry.entries,
             '控制服务入口只可在本轮已绑定服务创建者运行')
-    require(set(configuration) == {'package_root', 'trace', 'approval'}, '服务配置含未冻结字段')
+    require(set(configuration) == {'package_root', 'trace', 'approval', 'approval_sha256'}, '服务配置含未冻结字段')
     approval_path = Path(configuration['approval']).resolve()
-    approval = decode_object(approval_path.read_bytes())
+    raw = approval_path.read_bytes()
+    require(digest(raw) == configuration['approval_sha256'], '服务批准原字节摘要改变')
+    approval = decode_object(raw)
     ledger = runtime.ledger
     require(approval.get('task_id') == ledger.context.task_id and approval.get('dispatch_id') == ledger.context.dispatch_id
             and approval.get('permission_confirmed') is True and approval.get('permission') and approval.get('message_id')

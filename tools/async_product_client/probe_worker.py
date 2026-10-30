@@ -49,6 +49,11 @@ def execute(request_path, *, query=None, clock=time.monotonic_ns):
             require(not (path.parent / 'stop-requested').exists() and clock() < request['deadline_ns'],
                     '父已请求停止或探针原截止已到，禁止后续UIA/native查询')
         checkpoint()
+        from async_product_client.python_environment import environment
+        dependencies = environment(request.get('python_environment'))
+        if dependencies is not None:
+            dependencies.activate()
+            checkpoint()
         target = request['target']
         # query仅供离线测试注入；正式入口固定run_uia，不能从request选择可执行代码。
         kind = request.get('query_kind', 'single-uia')

@@ -36,17 +36,23 @@ class FrozenProgram:
     root: str
     files: tuple
     entry: str
+    python_environment: dict | None = None
 
     def verify(self):
         interpreter, root = Path(self.interpreter).resolve(), Path(self.root).resolve()
         require(interpreter.is_file() and not Path(self.interpreter).is_symlink()
                 and digest(interpreter.read_bytes()) == self.interpreter_sha256, '启动解释器摘要不符')
+        require(not (interpreter.parent.parent / 'pyvenv.cfg').is_file(),
+                '虚拟环境重定向器会创建非原Popen执行进程，必须使用基础解释器加冻结依赖')
         files = dict(self.files)
         require(len(files) == len(self.files) and self.entry in files
                 and 'async_product_client/runtime_worker.py' in files
                 and tree_hashes(root, ignore_bytecode=True) == files, '启动模块完整冻结集合不符')
         entry = root / self.entry
         require(entry.resolve().is_relative_to(root) and entry.suffix == '.py', '冻结入口越界或类型无效')
+        from .python_environment import environment
+        dependencies = environment(self.python_environment)
+        if dependencies is not None: dependencies.verify()
         return interpreter, root
 
 
@@ -80,6 +86,7 @@ class CreatorRuntime:
         require(folder.parent == self.root, '创建者证据键不能包含路径')
         folder.mkdir(exist_ok=False); child['folder'] = folder
         plan = dict(schema_version=1, context=asdict(self.ledger.context), role=role,
+                    startup_deadline_ns=deadline,
                     diagnostic_deadline_ns=self.ledger.diagnostic_deadline_ns,
                     cleanup_deadline_ns=self.ledger.cleanup_deadline_ns,
                     program=asdict(program), configuration=configuration or {}, enabled=True)
@@ -89,7 +96,8 @@ class CreatorRuntime:
         try:
             for name in (('stderr.log',) if pipes else ('stdout.log', 'stderr.log')):
                 child['streams'].append((folder / name).open('xb'))
-            command = [str(interpreter), '-B', '-X', 'utf8',
+            isolation = ['-I', '-S'] if program.python_environment is not None else []
+            command = [str(interpreter), *isolation, '-B', '-X', 'utf8',
                        str(module_root / 'async_product_client/runtime_worker.py'),
                        str(folder / 'launch.json'), child['launch_sha256']]
             self.ledger.event('creator_launch_attempt', key=key, role=role, command=command)
