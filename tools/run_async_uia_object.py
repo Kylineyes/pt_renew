@@ -39,6 +39,42 @@ def authorize(configuration):
     return context
 
 
+def finalize(ledger, owner, root, started, failure, *, write=write_once, sleep=time.sleep):
+    """最终回执也属于原截止；任何拒绝或写盘错误都先锁存，再完整本地收尾。"""
+    clock = ledger.clock
+    report = dict(context=asdict(ledger.context), original_identity=owner.identity, original_exit=owner.exit_code,
+                  failed_id=ledger.failed, token=ledger.token, not_before_ns=ledger.not_before_ns,
+                  deadline_ns=owner.deadline, finished_ns=clock.monotonic_ns(), elapsed_seconds=(clock.monotonic_ns()-started)/SECOND,
+                  accepted=False, failure=failure, actual_object_processes=int(owner.process is not None), desktop_queries=0,
+                  product_launches=0, control_services=0, screenshots=0, inputs=0, ready_for_live=False, qt_verified=False)
+    try:
+        if ledger.failed is None:
+            require(owner.accepted and owner.deadline is not None and clock.monotonic_ns() < owner.deadline,
+                    '最终回执前已越过原5秒或对象未验收')
+            report['accepted'] = True
+        write(root / 'final-result.json', json.dumps(report, ensure_ascii=False, indent=2).encode('utf-8'))
+        if report['accepted']:
+            require(clock.monotonic_ns() < owner.deadline, '最终回执持久化越过原5秒截止')
+    except BaseException as error:
+        report.update(accepted=False, finalization_error=type(error).__name__ + ': ' + str(error))
+        try: ledger.fail('object-final-persist', report['finalization_error'])
+        except BaseException as audit_error:
+            # fail先写内存锁存；即使审计盘不可写，也不能跳过原120秒等待。
+            report['failure_audit_error'] = type(audit_error).__name__ + ': ' + str(audit_error)
+        report.update(failed_id=ledger.failed, token=ledger.token, not_before_ns=ledger.not_before_ns)
+        try:
+            write(root / 'final-result-rejected.json', json.dumps(report, ensure_ascii=False, indent=2).encode('utf-8'))
+        except BaseException as persist_error:
+            report['rejection_persist_error'] = type(persist_error).__name__ + ': ' + str(persist_error)
+    finally:
+        if ledger.failed is not None:
+            report.update(accepted=False, failed_id=ledger.failed, token=ledger.token, not_before_ns=ledger.not_before_ns)
+            # 包括更早failure.json落盘失败；保留原对象，未知在途对象不因900秒到期强杀。
+            while clock.monotonic_ns() < ledger.not_before_ns or owner.process is not None and owner.poll() is None:
+                sleep(.1)
+    return report
+
+
 def run(configuration):
     clock = Clock(); started = clock.monotonic_ns()
     context = authorize(configuration)
@@ -77,20 +113,10 @@ def run(configuration):
                 deadline_unknown = True
             time.sleep(.1)
     finally:
-        if owner.process is not None: owner.poll()
-        report = dict(context=asdict(context), original_identity=owner.identity, original_exit=owner.exit_code,
-                      failed_id=ledger.failed, token=ledger.token, not_before_ns=ledger.not_before_ns,
-                      deadline_ns=owner.deadline, finished_ns=clock.monotonic_ns(), elapsed_seconds=(clock.monotonic_ns()-started)/SECOND,
-                      accepted=owner.accepted and ledger.failed is None and clock.monotonic_ns() < owner.deadline,
-                      failure=failure, actual_object_processes=int(owner.process is not None), desktop_queries=0,
-                      product_launches=0, control_services=0, screenshots=0, inputs=0, ready_for_live=False, qt_verified=False)
-        write_once(root / 'final-result.json', json.dumps(report, ensure_ascii=False, indent=2).encode('utf-8'))
-        if report['accepted'] and clock.monotonic_ns() >= owner.deadline:
-            ledger.fail('object-final-persist', '最终回执持久化越过原5秒截止')
-            report.update(accepted=False, failed_id=ledger.failed, token=ledger.token, not_before_ns=ledger.not_before_ns)
-            write_once(root / 'final-result-rejected.json', json.dumps(report, ensure_ascii=False).encode('utf-8'))
-            while clock.monotonic_ns() < ledger.not_before_ns: time.sleep(.1)
-        events.close()
+        try:
+            if owner.process is not None: owner.poll()
+            report = finalize(ledger, owner, root, started, failure)
+        finally: events.close()
     return report
 
 

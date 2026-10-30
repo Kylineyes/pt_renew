@@ -17,7 +17,7 @@ from async_product_client.product import tree_hashes
 from async_product_client.probe_environment import GENERATED
 from async_product_client.uia_object import UiaObjectOwner, validate_uia_object_apartment
 from test_async_product_client import Clock
-from run_async_uia_object import authorize
+from run_async_uia_object import authorize, finalize
 import probe_async_uia_object
 
 
@@ -124,6 +124,56 @@ class ObjectTests(unittest.TestCase):
         env['PI_MODEL']='other'
         with patch.dict(os.environ,env),self.assertRaises(ValueError):authorize(config)
         self.assertEqual(self.calls,[])
+
+    def test_final_receipt_deadline_and_disk_failures_latch_and_wait_without_new_requests(self):
+        for mode in ('on-time', 'late-before', 'late-write', 'write-error', 'all-writes-error', 'failure-audit-error'):
+            with self.subTest(mode=mode):
+                clock=Clock(); ledger=Ledger(context=self.context, clock=clock, enabled=True, cleanup_deadline_ns=910*SECOND)
+                ledger.token='object-settle'; deadline=clock.now+5*SECOND
+                owner=SimpleNamespace(identity={'pid':42}, exit_code=0, accepted=True, process=object(), deadline=deadline,
+                                      poll=lambda:0)
+                writes=[]; sleeps=[]
+                if mode=='late-before':clock.tick(5)
+                if mode=='failure-audit-error':
+                    ledger.emit=lambda row:(_ for _ in ()).throw(OSError('账本盘不可写'))
+                def write(path, raw):
+                    writes.append((path.name,json.loads(raw)))
+                    if mode=='late-write' and path.name=='final-result.json':clock.tick(5)
+                    if mode in ('write-error','failure-audit-error') and path.name=='final-result.json' or mode=='all-writes-error':
+                        raise OSError('回执盘不可写')
+                def sleep(seconds):sleeps.append(seconds);clock.tick(seconds)
+                report=finalize(ledger, owner, self.root, 0, None, write=write, sleep=sleep)
+                self.assertEqual(owner.deadline,deadline);self.assertEqual(ledger.token,'object-settle')
+                self.assertEqual([row['kind'] for row in ledger.events], [] if mode=='on-time' else ['failed'])
+                if mode=='on-time':
+                    self.assertTrue(report['accepted']);self.assertEqual(sleeps,[])
+                else:
+                    self.assertFalse(report['accepted']);self.assertEqual(ledger.failed,'object-final-persist')
+                    self.assertGreaterEqual(clock.now,ledger.not_before_ns)
+                    self.assertGreaterEqual(sum(sleeps),119.99)
+                    self.assertEqual(writes[-1][0],'final-result-rejected.json')
+                    self.assertEqual(writes[-1][1]['failed_id'],ledger.failed)
+                    if mode=='failure-audit-error':self.assertIn('账本盘不可写',report['failure_audit_error'])
+
+    def test_final_receipt_keeps_first_failure_and_original_cooldown(self):
+        self.ledger.fail('first-failure','原拒绝')
+        saved=self.ledger.failed,self.ledger.token,self.ledger.not_before_ns
+        owner=SimpleNamespace(identity=None, exit_code=1, accepted=False, process=object(), deadline=self.clock.now+5*SECOND,
+                              poll=lambda:1)
+        report=finalize(self.ledger,owner,self.root,0,{'reason':'原拒绝'},write=lambda *args:None,sleep=self.clock.tick)
+        self.assertFalse(report['accepted']);self.assertEqual(saved,(self.ledger.failed,self.ledger.token,self.ledger.not_before_ns))
+        self.assertGreaterEqual(self.clock.now,self.ledger.not_before_ns)
+
+    def test_final_receipt_retains_unknown_original_process_until_original_poll_exit(self):
+        self.ledger.fail('first-failure','原拒绝')
+        polls=[]
+        def poll():
+            polls.append(self.clock.now)
+            return 0 if len(polls)>=3 else None
+        owner=SimpleNamespace(identity=None,exit_code=None,accepted=False,process=object(),deadline=self.clock.now+5*SECOND,poll=poll)
+        report=finalize(self.ledger,owner,self.root,0,None,write=lambda *args:None,sleep=self.clock.tick)
+        self.assertFalse(report['accepted']);self.assertEqual(len(polls),3)
+        self.assertGreaterEqual(polls[0],self.ledger.not_before_ns)
 
     def test_disabled_child_request_loads_no_com_or_uia(self):
         folder=self.root/'child';folder.mkdir();path=folder/'request.json'

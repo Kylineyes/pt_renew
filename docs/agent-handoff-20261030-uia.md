@@ -1,5 +1,7 @@
 # PT Renew 新代理统一交接：2026-10-30 UIA阶段后
 
+2026-10-31最新进展见[UIA对象生命周期修复与新单次核验](uia-object-lifecycle-review.md)：新增清理/最终回执失败收尾修复，仓库428项、独立候选234项通过；全新指定Pi任务单次对象严格COM三次初始化/三次释放、原Popen同PID/exit0及原5秒限定通过。旧failed及其结算不改，Qt/完整冷探针/文件框/全链和产品全动作仍未过，ready_for_live=false。下一步先准备真实Qt/完整冷探针新任务，NET31/铜22、32次和原全部时限保持。以下按历史阶段阅读。
+
 用户要求整理当前进度和接下来计划，由其安排新agent接手。本次只整理交接文档，不继续开发，不创建Task/Dispatch，不启动产品、控制服务、探针、UIA对象、截图或输入。**产品方案仍 `ready_for_live=false`，新离线候选 `max_product_launches=0`。**
 
 ## 接手入口与Git
