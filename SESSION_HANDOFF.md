@@ -1,5 +1,7 @@
 # PT Renew 当前进度与新会话交接
 
+2026-10-31产品发布范围更新：按用户明确“进行发布，你合并并操作gh”的新授权，整理 **v0.11.0-alpha 只读版**，版本、关于文案和独立Windows包已统一；产品Release构建、CTest10/10及指定Pi真实主窗／关于图／原Popen正常退出核验完成。发布内容不含独立编辑候选，仍无保存／DRC／生产输出。详情见[发布说明](docs/releases/v0.11.0-alpha.md)、[构建打包](docs/releases/v0.11.0-alpha-build.md)及[实际窗口验收](docs/releases/v0.11.0-alpha-verification.md)。本次授权包含通过gh将发布准备从dev合入main；此前不得自行操作main的历史约束不代表本次缺少授权。此前异步实验ready_for_live=false及全部旧失败结论保持，以下按历史阅读。
+
 2026-10-31最新进展见[UIA对象生命周期修复与新单次核验](docs/uia-object-lifecycle-review.md)：新增清理/最终回执失败收尾修复，仓库428项、独立候选234项通过；全新指定Pi任务单次对象严格COM三次初始化/三次释放、原Popen同PID/exit0及原5秒限定通过。旧failed及其结算不改，Qt/完整冷探针/文件框/全链和产品全动作仍未过，ready_for_live=false。下一步先准备真实Qt/完整冷探针新任务，NET31/铜22、32次和原全部时限保持。以下按历史阶段阅读。
 
 **新agent先完整读取[UIA阶段后统一交接入口](docs/agent-handoff-20261030-uia.md)和本机 `.local-analysis/CURRENT_AGENT_HANDOFF.md`。** 本次用户要求整理进度和计划交给新agent，已停止扩展实现和启动现场。实现基线为 `dev=0506464d03cc40f28b2448305bfb46f962b0ff6f`，最终交接Git见 `.local-analysis/agent-handoff-20261030-uia/final-git-state.json`。首次真实UIA对象Task保持failed已结算，离线修复419项/最终候选225项通过但未再实际执行；ready_for_live=false。以下按阶段历史读取，旧入口/旧数字不得覆盖新统一交接。
