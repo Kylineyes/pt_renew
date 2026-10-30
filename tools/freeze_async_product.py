@@ -39,9 +39,10 @@ def freeze(destination, *, references, inputs):
                                      'tools/control_geometry.py', 'tools/audit_async_race.py',
                                      'tests/test_async_product_client.py', 'tests/test_async_product_adapters.py',
                                      'tests/test_async_product_gate.py', 'tests/test_async_product_native.py',
+                                     'tests/test_async_product_probe.py',
                                      'tests/test_audit_async_race.py',
                                      'tests/test_probe_async_images.py', 'tests/test_freeze_async_product.py',
-                                     'docs/async-product-gate-binding.md',
+                                     'docs/async-product-bounded-probe.md', 'docs/async-product-gate-binding.md',
                                      'docs/async-product-evidence-adapters.md', 'docs/async-product-client-offline.md',
                                      'docs/async-product-client-contract.md')]
     for name in names:
@@ -73,6 +74,8 @@ def freeze(destination, *, references, inputs):
                 application_uuid_binding_offline_tested=True, gate_event_adapter_offline_tested=True,
                 unique_release_offline_tested=True, native_window_adapter_offline_tested=True,
                 native_window_adapter_verified=False, file_dialog_stage_verified=False,
+                bounded_probe_offline_tested=True, main_discovery_offline_tested=True,
+                bounded_probe_runtime_verified=False, probe_max_queries=32, probe_query_timeout_ms=5000,
                 default_enabled=False, watchdog_ms=60000, t1_read_ack_ms=20000,
                 t2_edit_read_ack_ms=50000, t3_release_start_before_ms=55000,
                 release_completion_before_ms=60000, local_wait_chunk_ms=1000,
@@ -80,8 +83,8 @@ def freeze(destination, *, references, inputs):
                 close_original_popen_wait_ms=5000, close_stop_margin_ms=40000,
                 diagnostic_budget_seconds=600, total_budget_seconds=900,
                 budget_armed=False,
-                blockers=['仍缺UIA有界COM探针/文件框阶段及完整原Popen外层启动链接入',
-                          '指定模型新读图结果须单独审阅，离线事件/测试不授予现场时限通过',
+                blockers=['仍缺原生文件框阶段和产品/探针/服务/客户端的完整原Popen退出见证接入',
+                          '有界探针与主窗发现尚无真实产品UIA/COM兼容性与时限证明',
                           '尚无新Task/Dispatch及具体时间范围的最终审阅材料'])
     with (candidate / 'plan.json').open('x', encoding='utf-8') as out:
         json.dump(plan, out, ensure_ascii=False, indent=2)

@@ -1,6 +1,12 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-30。最新阶段为[应用UUID、原门闩与可信窗口接入](docs/async-product-gate-binding.md)，从核对的`dev=origin/dev=42d7556b589232eceb803cbebdc5eace04015726`建立`feat/async-product-gate-binding`。新增不可变应用随机UUID绑定、门闩前实际read基线、原JSONL/request清单映射、唯一SetEvent后原gate-released确认和默认禁用native/UIA窗口采集；27项新增测试及仓库281项Python测试通过，10组旧参考/22/23/22摘要不变。产品启动/桌面请求0，ready_for_live=false。
+更新时间：2026-10-30。最新阶段为[有界UIA探针与主窗发现](docs/async-product-bounded-probe.md)，从`dev=00907260907058747d0c623e9a4e36e0af32b100`建立`feat/async-product-bounded-probe`。独立STA/DPI子探针、父原Popen有界等待/协作停止/本地reap和一次初始主HWND发现均默认禁用，14项新增测试、仓库295项Python测试通过（27.856秒）。产品/COM/UIA现场/桌面请求0，未新增图片任务，ready_for_live=false。
+
+父等待超时不等于COM调用已停止；保留原Popen和unknown、不强杀/不重试，迟到退出0只证明生命周期，不采纳迟到UIA结果。主窗按精确标题/owner/原Popen和mainWindow UIA根/物理rect核对后唯一绑定，未知不聚焦或输入。下一步补原生文件框独立阶段和全部原Popen链，再审阅包含冷探针加载成本的20/50/55/60秒总预算。新证据在`.local-analysis/async-product-bounded-probe/`，旧任务/批准/失败与归档双图36.22394秒样本保持只读；必要控制授权持续，实际控制前仍说明具体时间与范围。
+
+以下保留前阶段历史，最新范围以本阶段报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[应用UUID、原门闩与可信窗口接入](docs/async-product-gate-binding.md)，从核对的`dev=origin/dev=42d7556b589232eceb803cbebdc5eace04015726`建立`feat/async-product-gate-binding`。新增不可变应用随机UUID绑定、门闩前实际read基线、原JSONL/request清单映射、唯一SetEvent后原gate-released确认和默认禁用native/UIA窗口采集；27项新增测试及仓库281项Python测试通过，10组旧参考/22/23/22摘要不变。产品启动/桌面请求0，ready_for_live=false。
 
 新Run `run_2cca64780fb9` / Task `task_c257068934b4` / Dispatch `ctx_01d8d1a98c97`归档图任务限定succeeded。实际Pi `deng/gpt-6.1-sol high` session `01a188e4-680f-74d8-a046-d5e506d19612`的18条assistant、17冻结文件、两张唯一read成功image/hash及原JSONL前缀、32文件worker证据均经父独立复核。图一request→ack13.7759396秒、图二16.1056135秒、request1→ack2完整36.22394秒，仅本次归档样本；不包括产品截图/编辑/release/收尾、不代表未来时限上界。图二仍为历史取消后图，不补记门闩内编辑或产品GUI通过。唯一done `msg_825a2c42c45d`父已验收ack，external_terminal retained/processAction=none；所有旧failed/abandoned保持。
 
