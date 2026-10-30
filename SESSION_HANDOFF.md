@@ -1,6 +1,14 @@
 # PT Renew 当前进度与新会话交接
 
-更新时间：2026-10-30。最新阶段为[原生NET文件框与原Popen账本](docs/async-product-file-dialog.md)，从核对的`dev=origin/dev=9b13adaec08a936aff4bd2c1f3bc5e8cea9d7218`建立`feat/async-product-file-dialog`。独立文件框read→唯一冻结路径Type→后验/路径图read→明确打开/取消，以及产品/探针同创建原Popen账本均已离线接入；新增16项、仓库311项Python测试通过（27.607秒）。产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+更新时间：2026-10-30。最新阶段为[统一产品会话与创建者见证](docs/async-product-session.md)，从核对的`dev=origin/dev=259ab96e4091d697c5708e863a4f8862b45d9204`建立`feat/async-product-session`。接通冻结A命令行与原接受事件/read基线、可见NET/铜按钮、B文件框、目标原请求、竞争各read关口和dirty正常收尾；补跨创建者原Popen报告递归审计。新增15项、仓库326项Python测试通过（35.030秒），产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
+
+本阶段查明并修正实验主窗标题缺失`【独立异步实验构建】`后缀问题，原EXE不改。完整假流程实计NET37次native/106次冷探针（门闩前72）、铜24次native/54次冷探针，均超过冻结32次上限；T1门闩图4探针配置等待合计20秒，至编辑图16次合计80秒，未计其他成本。不是实测耗时或未来上下界，但确定当前结构不能作为现场完整预算。下一步先受限批量观察降冷启动数量并保持身份/DPI/焦点/前后/post_native，再重算预算；不擅自提高32次或延长60秒。
+
+创建者relay要求父原Popen已退出0和创建身份，子报告按上下文/角色/摘要递归绑定，外层根必须仍存活时保存的同Popen退出后才能结算；报告JSON不能补作缺失原身份。协议已假链验证，真实MCP服务/客户端/监督器生产启动器与交换仍未接通。新证据在`.local-analysis/async-product-session/`；旧任务/批准/失败及归档36.22394秒证据只读。必要控制授权持续，实际控制前先给可审阅冻结结果与具体时间范围。
+
+以下保留前阶段历史，最新状态以上述报告为准。
+
+前阶段更新时间：2026-10-30。此前阶段为[原生NET文件框与原Popen账本](docs/async-product-file-dialog.md)，从核对的`dev=origin/dev=9b13adaec08a936aff4bd2c1f3bc5e8cea9d7218`建立`feat/async-product-file-dialog`。独立文件框read→唯一冻结路径Type→后验/路径图read→明确打开/取消，以及产品/探针同创建原Popen账本均已离线接入；新增16项、仓库311项Python测试通过（27.607秒）。产品/COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
 
 普通Type仍拒绝，文件框只可用同Ledger/token/冻结A/B副本的一次性凭据，press_enter=false；读图后控件/路径/焦点变化也拒绝。打开前保留原触发时钟，框消失只记submitted/load_verified=false。控件ID1148/1/2及按钮名称为待真实核验候选，不以假API宣称Windows/Qt兼容。原账本保存创建后身份未知对象，后来exit0不改原失败；产品/探针已接入，服务/客户端/监督器和已发现子孙跨创建者完整链仍缺。下一步继续命令/模块串联及完整原Popen见证与冻结总预算。
 

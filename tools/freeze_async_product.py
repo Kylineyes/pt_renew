@@ -40,9 +40,10 @@ def freeze(destination, *, references, inputs):
                                      'tests/test_async_product_client.py', 'tests/test_async_product_adapters.py',
                                      'tests/test_async_product_gate.py', 'tests/test_async_product_native.py',
                                      'tests/test_async_product_probe.py', 'tests/test_async_product_file_dialog.py',
+                                     'tests/test_async_product_session.py', 'tests/test_async_product_witness.py',
                                      'tests/test_audit_async_race.py',
                                      'tests/test_probe_async_images.py', 'tests/test_freeze_async_product.py',
-                                     'docs/async-product-file-dialog.md', 'docs/async-product-bounded-probe.md', 'docs/async-product-gate-binding.md',
+                                     'docs/async-product-session.md', 'docs/async-product-file-dialog.md', 'docs/async-product-bounded-probe.md', 'docs/async-product-gate-binding.md',
                                      'docs/async-product-evidence-adapters.md', 'docs/async-product-client-offline.md',
                                      'docs/async-product-client-contract.md')]
     for name in names:
@@ -67,6 +68,7 @@ def freeze(destination, *, references, inputs):
     for label, reference in references.items():
         require(tree_hashes(reference['root'], ignore_bytecode=True) == reference['files'],
                 '冻结期间只读参考改变：' + label)
+    from async_product_client.budget import session_budget
     plan = dict(schema_version=1, purpose='offline-product-client', ready_for_live=False,
                 permission_confirmed=False, task_id=None, dispatch_id=None, run_id=None, session_id=None,
                 max_product_launches=0, live_adapter_frozen=False, model_timing_verified=False,
@@ -77,7 +79,8 @@ def freeze(destination, *, references, inputs):
                 bounded_probe_offline_tested=True, main_discovery_offline_tested=True,
                 bounded_probe_runtime_verified=False, probe_max_queries=32, probe_query_timeout_ms=5000,
                 file_dialog_offline_tested=True, original_popen_registry_offline_tested=True,
-                process_chain_runtime_verified=False,
+                process_chain_runtime_verified=False, session_offline_tested=True,
+                creator_relay_offline_tested=True, session_budgets={kind: session_budget(kind) for kind in ('net', 'copper')},
                 default_enabled=False, watchdog_ms=60000, t1_read_ack_ms=20000,
                 t2_edit_read_ack_ms=50000, t3_release_start_before_ms=55000,
                 release_completion_before_ms=60000, local_wait_chunk_ms=1000,
@@ -85,8 +88,9 @@ def freeze(destination, *, references, inputs):
                 close_original_popen_wait_ms=5000, close_stop_margin_ms=40000,
                 diagnostic_budget_seconds=600, total_budget_seconds=900,
                 budget_armed=False,
-                blockers=['原生文件框/控件/路径输入尚无真实GUI兼容性和时限证据',
-                          '原Popen账本已接产品和探针，服务/客户端/监督器及未知子孙退出链仍未接通',
+                blockers=['当前NET106/铜54次冷探针超过原32次上限，须先优化观察批处理和完整预算',
+                          '原生文件框/控件/路径输入尚无真实GUI兼容性和时限证据',
+                          '创建者relay审计已实现，服务/客户端/监督器生产启动器尚未实际发布并交换报告',
                           '有界探针与主窗发现尚无真实产品UIA/COM兼容性与时限证明',
                           '尚无新Task/Dispatch及具体时间范围的最终审阅材料'])
     with (candidate / 'plan.json').open('x', encoding='utf-8') as out:

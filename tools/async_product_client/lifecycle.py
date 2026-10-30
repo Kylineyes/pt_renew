@@ -6,7 +6,8 @@ from .core import positive, require
 
 class ProcessRegistry:
     def __init__(self, ledger, *, required_roles=('product', 'service', 'client', 'supervisor')):
-        require(required_roles and len(set(required_roles)) == len(required_roles), '进程角色清单无效')
+        require(isinstance(required_roles, (tuple, list)) and len(set(required_roles)) == len(required_roles),
+                '进程角色清单无效；空清单仅用于明确无直接子进程的创建者')
         self.ledger, self.required_roles = ledger, tuple(required_roles)
         self.entries = {}
         self.gaps = {}
@@ -62,7 +63,7 @@ class ProcessRegistry:
     def report(self):
         rows = {key: {k: v for k, v in row.items() if k != 'process'} for key, row in self.entries.items()}
         missing = sorted(set(self.required_roles) - {row['role'] for row in rows.values()})
-        lifecycle = bool(rows) and not missing and not self.gaps and all(row['accepted_exit'] for row in rows.values())
+        lifecycle = (bool(rows) or not self.required_roles) and not missing and not self.gaps and all(row['accepted_exit'] for row in rows.values())
         return dict(entries=rows, discovered_gaps=dict(self.gaps), missing_roles=missing,
                     lifecycle_complete=lifecycle, action_succeeded=lifecycle and self.ledger.failed is None,
                     failed_id=self.ledger.failed, token=self.ledger.token, not_before_ns=self.ledger.not_before_ns,

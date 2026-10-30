@@ -72,10 +72,11 @@ class OwnedProductProcess:
     """供ProductOwner注入的创建器；客户端自身持续持有Popen和实验owner身份。"""
 
     def __init__(self, ledger, *, kind, experiment_directory, board_copy, evidence_root,
-                 enabled=False, popen=None, handle_api=None, owner_pid=None, registry=None, registry_key='product'):
+                 enabled=False, popen=None, handle_api=None, owner_pid=None, registry=None, registry_key='product', initial_net=None):
         require(kind in ('net', 'copper'), '实验种类无效')
         self.ledger, self.kind = ledger, kind
         self.registry, self.registry_key = registry, registry_key
+        self.initial_net = initial_net
         self.experiment_directory = Path(experiment_directory).resolve()
         self.board_copy = Path(board_copy).resolve()
         self.root = Path(evidence_root).resolve()
@@ -98,6 +99,11 @@ class OwnedProductProcess:
         require(not self.root.exists() and not self.experiment_directory.exists(), '必须使用全新创建日志和应用实验目录')
         require(self.root != self.experiment_directory and not self.root.is_relative_to(self.experiment_directory),
                 '应用事件目录必须与客户端日志目录分离')
+        if self.initial_net is not None:
+            from .file_dialog import NetFileSpec
+            require(type(self.initial_net) is NetFileSpec and Path(self.initial_net.path).name == 'a.net',
+                    '初始命令行网表只能是冻结A副本')
+            self.initial_net.verify()
         self.used = True
         self.root.mkdir(parents=True, exist_ok=False)
         self.experiment_directory.mkdir(parents=True, exist_ok=False)
@@ -106,7 +112,9 @@ class OwnedProductProcess:
                 self.streams.append((self.root / name).open('xb'))
             command = [argv[0], '--async-experiment-dir', str(self.experiment_directory),
                        '--async-experiment-kind', self.kind, '--async-experiment-owner', str(self.owner_pid),
-                       '--async-experiment-skip', '1' if self.kind == 'net' else '0', str(self.board_copy)]
+                       '--async-experiment-skip', '1' if self.kind == 'net' else '0']
+            if self.initial_net is not None: command += ['--netlist', self.initial_net.path]
+            command.append(str(self.board_copy))
             self.ledger.desktop_allowed()
             self.ledger.event('product_popen_attempt', command=command, owner_pid=self.owner_pid,
                               stdout=str(self.root / 'stdout.log'), stderr=str(self.root / 'stderr.log'))

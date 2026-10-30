@@ -1,6 +1,8 @@
 # 产品竞争客户端的实现约束
 
-本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[原生NET文件框与原Popen账本](async-product-file-dialog.md)新增16项测试，仓库311项Python测试通过。原生文件框独立read/路径Type/再read/明确选择及产品/探针原Popen账本默认禁用，尚无真实GUI/COM兼容性或完整原退出链；ready_for_live=false。
+本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[统一产品会话与创建者见证](async-product-session.md)新增15项、仓库326项Python测试通过。两条完整假会话和跨创建者报告已接通，修正实验主窗后缀；当前NET106/铜54次冷探针超过原32次上限，必须先批量优化观察并重算全动作预算，ready_for_live=false。没有产品/COM/桌面或新GUI证据，真实生产启动/原Popen链仍待接入。
+
+此前[原生NET文件框与原Popen账本](async-product-file-dialog.md)新增16项测试，仓库311项Python测试通过。原生文件框独立read/路径Type/再read/明确选择及产品/探针原Popen账本默认禁用，尚无真实GUI/COM兼容性或完整原退出链；ready_for_live=false。
 
 此前[有界UIA探针与主窗发现](async-product-bounded-probe.md)新增14项测试、仓库295项Python测试通过；父有界等待/协作停止和主HWND发现默认禁用，尚未进行真实Qt UIA/COM现场或产品启动，ready_for_live=false。仍缺原生文件框明确阶段和完整原Popen退出链；冷探针成本尚不能纳入已验证60秒预算。
 

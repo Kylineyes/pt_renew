@@ -28,7 +28,7 @@ class ProbeFixture:
         self.package = self.root / 'package'; (self.package / 'windows_mcp').mkdir(parents=True)
         for index in range(77): (self.package / 'windows_mcp' / f'module{index}.py').write_bytes(str(index).encode())
         self.modules = self.root / 'tools'; (self.modules / 'async_product_client').mkdir(parents=True)
-        for name in ('probe_worker.py', 'native.py', 'core.py', 'product.py', 'events.py', 'race.py', '__init__.py', 'file_dialog.py'):
+        for name in ('probe_worker.py', 'native.py', 'core.py', 'product.py', 'events.py', 'race.py', '__init__.py', 'file_dialog.py', 'commands.py'):
             (self.modules / 'async_product_client' / name).write_bytes(name.encode())
         self.calls, self.processes = [], []
         self.mode = 'valid'
@@ -211,7 +211,7 @@ class DiscoveryTests(unittest.IsolatedAsyncioTestCase):
         folder = self.root / str(len(list(self.root.iterdir()))); folder.mkdir()
         f = NativeFixture(folder)
         f.rig.owner.identity = None
-        title = f.rig.policy.title(False) if loaded else 'PT Renew · 内存编辑 · 不支持保存'
+        title = f.rig.policy.title(False) if loaded else 'PT Renew · 内存编辑 · 不支持保存【独立异步实验构建】'
         f.rows[99]['title'] = title
         f.uia_rows[99]['root'].update(name=title, automation_id='mainWindow', control_type=50032)
         f.uia_rows[99]['modal'] = False
