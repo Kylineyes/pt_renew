@@ -1,5 +1,7 @@
 # PT Renew 当前进度与新会话交接
 
+**新代理先读[2026-10-30统一接手入口](docs/agent-handoff-20261030.md)。** 实现基线为`dev=53922ab39dda1a0c07739f557ea9d5cbc5dd0c01`，本次只整理交接、不再扩展实现或启动现场。最新本机入口为`.local-analysis/CURRENT_AGENT_HANDOFF.md`；旧`.local-analysis/NEXT_AGENT_BRIEF.md`和各阶段Task/批准/失败/冻结保持只读。最终交接Git状态见`.local-analysis/agent-handoff-20261030/final-git-state.json`。
+
 更新时间：2026-10-30。最新阶段为[批量窗口观察与冷探针预算](docs/async-product-batch-observation.md)，从核对的`dev=origin/dev=cdfd0b8ef678bcdc0e9f059b6dc3218315a20a23`建立`feat/async-product-batch-observation`。同一次完整native/UIA观察在一个受限子进程内执行，保留每窗两轮UIA和全部前后核验；合并紧邻无输入的重复观察。新增13项、仓库339项Python测试通过（34.214秒），产品/真实COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
 
 完整NET/铜假会话实计30/21次批量原Popen，加一次主窗发现31/22次，未提高32次上限；单窗/整窗共用原截止和计数。父原Popen身份与退出0继续核验，子查询句柄仅读birth/image支持在途身份，不冒作创建句柄或退出证明。普通输入post_native、实际read/ack及双轮UIA/DPI/owner/焦点/按钮稳定性不删减。
