@@ -1,3 +1,9 @@
+# 首次真实UIA对象核验failed，代理覆盖已离线修复
+
+最新见[单次对象核验](async-uia-object-compat.md)：新Pi deng/gpt-6.1-sol high Task实际创建原UIA单例，但只记录2次init/2次uninit，严格3次验收拒绝、原exit1，完成120.091秒零请求收尾，Task failed已结算。父审计实际候选6622和私有156文件均不变。静态及假API复现定位enums星号导出覆盖core局部ctypes代理，已离线修复并补停止检查不被原except Exception吞掉，仓库419项通过；没有第二次真实调用，也不提升Qt/完整冷探针/全动作。ready_for_live=false、原32次及全部截止保持。下一步先审阅新离线候选及失败，任何新任务必须新具体材料/上下文/时间范围，不恢复已结算组。
+
+以下保留前阶段结果。
+
 # 探针专用依赖与COM清理已接入，继续真实UIA兼容性验证
 
 最新见[探针运行时](async-product-probe-runtime.md)：从 `dev=6479a1a` 分支提取同原来源的完整156文件comtypes探针包，隔离每个子进程缓存，新增模块局部COM原调用计数/平衡和父子分段时钟。静态确认原UIA导入会额外初始化及缓存锁可能超5秒；一次仅COM依赖导入本地核验原Popen/exit0及2次init/2次uninit，父最终落盘2.867147秒，未创建UIA对象/查询桌面。当前ready_for_live=false，真实Qt/UIA/冷探针/全动作仍待指定Pi现场；原5秒、32次、20/50/55/60及600/900不扩大。

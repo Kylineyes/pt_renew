@@ -1,5 +1,7 @@
 # PT Renew 当前进度与新会话交接
 
+最新见[单次UIA对象核验](docs/async-uia-object-compat.md)及[独立工作者报告](docs/uia-object-compat-worker.md)。从 `dev=462bc56` 分支首次以Pi deng/gpt-6.1-sol high新Task核验真实UIA对象，原单例曾创建，但严格3次COM验收拒绝、原退出1，Task failed已结算，120.091秒零新请求完成；旧结果不改。父定位星号导出覆盖局部ctypes代理，补离线修复与419项测试，未重跑真实UIA。ready_for_live=false，NET31/铜22与原32次/时限不扩大。证据 `.local-analysis/async-product-uia-compat/`。
+
 最新开发见[探针专用依赖、私有缓存与COM生命周期](docs/async-product-probe-runtime.md)。从 `dev=6479a1a` 独立分支将探针依赖独立为原完整包中的156文件comtypes，增加私有工作/缓存、只读审计、真实COM初始化计数及分段时钟。一次仅COM导入进程取得同原Popen/exit0、两次初始化与两次释放平衡，父全区间2.867147秒；未创建UIA对象或查询桌面，不能当真实UIA/Qt/全动作通过。NET31/铜22、32上限与 `ready_for_live=false` 保持，新证据 `.local-analysis/async-product-probe-runtime/`。
 
 最新开发见[实际兼容性驱动与基础解释器依赖](docs/async-product-drivers.md)。从 `dev=4f3ac63` 独立分支实现逐条命令邮箱、实际客户端/监督器入口和创建前完整材料核验；新无GUI实测确认虚拟环境重定向器PID不一致，改用基础Python加完整冻结依赖。6,267文件依赖副本的隔离导入及原Popen退出0已验证，真实控制服务/Qt/UIA/全动作时限仍未验证，`ready_for_live=false`，NET31/铜22及32次上限保持。新证据 `.local-analysis/async-product-drivers/`。
