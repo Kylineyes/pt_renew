@@ -68,7 +68,7 @@ def normalize_result(raw, *, tool, arguments):
         else:
             raise ValueError('原MCP回执含未知内容类型')
     require((tool == 'Snapshot' and len(row['images']) == 1)
-            or (tool in ('Click', 'Shortcut') and not row['images']), '原工具缺图、多图或输入意外返回图像')
+            or (tool in ('Click', 'Shortcut', 'Type') and not row['images']), '原工具缺图、多图或输入意外返回图像')
     return row
 
 
@@ -91,10 +91,28 @@ class McpProductTransport:
             json.dump(row, out, ensure_ascii=False, indent=2)
             out.flush()
 
+    async def file_dialog_type(self, permit):
+        from .file_dialog import FileTypePermit
+        require(type(permit) is FileTypePermit, '文件框Type必须使用本客户端一次性凭据')
+        arguments = permit.consume(self.ledger)
+        return await self._call('Type', arguments, file_permit=permit)
+
     async def __call__(self, tool, arguments):
+        return await self._call(tool, arguments)
+
+    async def _call(self, tool, arguments, *, file_permit=None):
         self.ledger.desktop_allowed()
         require(self.enabled and self.validate is not None, '原MCP适配器默认禁用或缺少冻结schema验证器')
-        require(tool in ('Snapshot', 'Click', 'Shortcut'), '产品适配器拒绝其他MCP工具入口')
+        require(tool in ('Snapshot', 'Click', 'Shortcut') or tool == 'Type' and file_permit is not None,
+                '产品适配器拒绝其他MCP工具入口')
+        if tool == 'Type':
+            require(file_permit.ledger is self.ledger and file_permit.used
+                    and file_permit.arguments == arguments and file_permit.parent == self.ledger.token
+                    and set(arguments) == {'text', 'loc', 'clear', 'press_enter', 'caret_position'}
+                    and arguments['clear'] is True and arguments['press_enter'] is False
+                    and arguments['caret_position'] == 'idle' and isinstance(arguments['text'], str)
+                    and isinstance(arguments['loc'], list) and len(arguments['loc']) == 2
+                    and all(type(x) is int for x in arguments['loc']), '文件框Type协议或凭据不符')
         if tool == 'Shortcut':
             require(arguments in ({'shortcut': 'delete'}, {'shortcut': 'alt+f4'}), '产品适配器拒绝未冻结快捷键')
             require(arguments != {'shortcut': 'alt+f4'} or self.ledger.cleanup_active,

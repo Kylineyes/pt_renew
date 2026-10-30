@@ -138,15 +138,15 @@ class ReviewGate:
                 app_deadline_ns, expected):
         ledger = self.ledger
         ledger.desktop_allowed()
-        require(ident not in self.requests and stage in ('baseline', 'gate', 'edit', 'final', 'dirty-modal'),
+        require(ident not in self.requests and stage in ('baseline', 'gate', 'edit', 'final', 'dirty-modal', 'file-dialog', 'file-path'),
                 '图像request ID重复或阶段未知')
         require(positive(gate_request_id) and positive(deadline_mono_ns)
-                and (app_deadline_ns is None if stage in ('baseline', 'dirty-modal') else positive(app_deadline_ns)),
+                and (app_deadline_ns is None if stage in ('baseline', 'dirty-modal', 'file-dialog', 'file-path') else positive(app_deadline_ns)),
                 '缺少原应用请求/截止或混用模态与应用时钟')
         require(ledger.clock.monotonic_ns() < deadline_mono_ns <= ledger.cleanup_deadline_ns,
                 '图像request已过原截止')
         snapshot.validate(self.verifier.image_loader)
-        require(stage == 'dirty-modal' or snapshot.hwnd == self.identity.hwnd, '图像不属于精确产品主HWND')
+        require(stage in ('dirty-modal', 'file-dialog', 'file-path') or snapshot.hwnd == self.identity.hwnd, '图像不属于精确产品主HWND')
         require(snapshot.sha256 not in self.used_images, '旧图hash禁止复用')
         require(snapshot.end_wall_ns <= ledger.clock.wall_ns(), '截图墙钟在未来')
         require(expected and all(isinstance(k, str) for k in expected), '必须冻结图像内容判据')

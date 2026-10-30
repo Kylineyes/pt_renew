@@ -7,6 +7,7 @@ from pathlib import Path
 
 from .core import positive, require
 from .product import MODAL_TITLE
+from .file_dialog import FILE_CLASS, FILE_TITLE
 
 
 class ReadOnlyWin32:
@@ -129,7 +130,9 @@ class ReadOnlyUia:
         self.checkpoint()
         result = dict(root=root_row, modal=bool(pattern.IsModal) if pattern else None,
                       buttons=[], focus=None, readonly=True)
-        if root_row['name'] == MODAL_TITLE:
+        file_dialog = root_row['name'] == FILE_TITLE and root_row['cls'] == FILE_CLASS
+        if file_dialog: result['file_elements'] = []
+        if root_row['name'] == MODAL_TITLE or file_dialog:
             pending, count = [(root, 0)], 0
             while pending:
                 control, depth = pending.pop()
@@ -137,7 +140,19 @@ class ReadOnlyUia:
                 require(count <= 256 and depth <= 8, 'dirty模态UIA子树超出冻结边界')
                 row = self.element(control)
                 require(row['pid'] == pid, 'UIA模态子树混入其他PID')
-                if row['control_type'] == 50000:
+                if file_dialog and ((row['control_type'] == 50004 and row['automation_id'] == '1148')
+                                    or (row['control_type'] == 50000 and row['automation_id'] in ('1', '2'))):
+                    self.checkpoint()
+                    box = control.BoundingRectangle
+                    row.update(rect=[box.left, box.top, box.right, box.bottom], descendant_verified=True)
+                    if row['control_type'] == 50004:
+                        self.checkpoint()
+                        value = control.GetPattern(self.uia.PatternId.ValuePattern)
+                        require(value is not None, '文件名控件不支持只读ValuePattern')
+                        self.checkpoint(); row['value'] = value.Value
+                        self.checkpoint(); row['read_only'] = bool(value.IsReadOnly)
+                    result['file_elements'].append(row)
+                elif row['control_type'] == 50000 and not file_dialog:
                     require(row['name'] in ('放弃更改', '取消'), 'dirty模态出现未知按钮')
                     self.checkpoint()
                     box = control.BoundingRectangle
@@ -239,6 +254,15 @@ class ProductNative:
                     if button['default']: default.append(name)
                 require(set(buttons) == {'放弃更改', '取消'} and default == ['取消'], 'dirty模态必须唯一默认取消和明确放弃按钮')
                 row.update(modal=True, default_button='取消', buttons=buttons)
+            if before['cls'] == FILE_CLASS and before['title'] == FILE_TITLE:
+                require(hwnd != identity.hwnd and before['owner'] == identity.hwnd and uia.get('modal') is True,
+                        '原生文件框owner或模态关系不符')
+                elements = {}
+                for element in uia.get('file_elements', []):
+                    key = {'1148': 'filename', '1': 'open', '2': 'cancel'}.get(element.get('automation_id'))
+                    require(key is not None and key not in elements, '文件框控件ID缺失或重复')
+                    elements[key] = element
+                row.update(modal=True, file_controls=elements, file_focus=focus)
             windows.append(row)
         main = next(row for row in windows if row['hwnd'] == identity.hwnd)
         if any(row.get('modal') is True for row in windows):
