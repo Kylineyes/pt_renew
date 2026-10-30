@@ -1,6 +1,7 @@
 """可信原生窗口采集与只读UIA桥接；默认禁用，不激活、截图或发送输入。"""
 from __future__ import annotations
 
+import inspect
 import os
 from pathlib import Path
 
@@ -100,24 +101,32 @@ class ReadOnlyWin32:
 class ReadOnlyUia:
     """只读已冻结模块；调用方负责COM线程初始化及有界探针生命周期，不接受外部UIA JSON。"""
 
-    def __init__(self, uia, *, package_root):
+    def __init__(self, uia, *, package_root, checkpoint=None):
         root = Path(package_root).resolve()
         require(Path(uia.__file__).resolve().is_relative_to(root / 'windows_mcp/uia'), 'UIA模块不来自冻结包')
         self.uia = uia
+        self.checkpoint = checkpoint or (lambda: None)
 
-    @staticmethod
-    def element(control):
+    def element(self, control):
+        self.checkpoint()
         require(control is not None, 'UIA控件不存在')
-        return dict(pid=int(control.ProcessId), hwnd=int(control.NativeWindowHandle), name=control.Name,
-                    cls=control.ClassName, automation_id=control.AutomationId,
-                    control_type=int(control.ControlType), enabled=bool(control.IsEnabled),
-                    offscreen=bool(control.IsOffscreen))
+        fields = {'pid': ('ProcessId', int), 'hwnd': ('NativeWindowHandle', int), 'name': ('Name', str),
+                  'cls': ('ClassName', str), 'automation_id': ('AutomationId', str),
+                  'control_type': ('ControlType', int), 'enabled': ('IsEnabled', bool), 'offscreen': ('IsOffscreen', bool)}
+        row = {}
+        for name, (attribute, convert) in fields.items():
+            self.checkpoint()
+            row[name] = convert(getattr(control, attribute))
+        return row
 
     def inspect(self, hwnd, pid):
+        self.checkpoint()
         root = self.uia.ControlFromHandle(hwnd)
         root_row = self.element(root)
         require(root_row['pid'] == pid and root_row['hwnd'] == hwnd, 'UIA根身份与原HWND/PID不同')
+        self.checkpoint()
         pattern = root.GetPattern(self.uia.PatternId.WindowPattern)
+        self.checkpoint()
         result = dict(root=root_row, modal=bool(pattern.IsModal) if pattern else None,
                       buttons=[], focus=None, readonly=True)
         if root_row['name'] == MODAL_TITLE:
@@ -130,13 +139,18 @@ class ReadOnlyUia:
                 require(row['pid'] == pid, 'UIA模态子树混入其他PID')
                 if row['control_type'] == 50000:
                     require(row['name'] in ('放弃更改', '取消'), 'dirty模态出现未知按钮')
+                    self.checkpoint()
                     box = control.BoundingRectangle
+                    self.checkpoint()
                     legacy = control.GetLegacyIAccessiblePattern()
+                    self.checkpoint()
                     row.update(rect=[box.left, box.top, box.right, box.bottom],
                                default=bool(int(legacy.State) & 0x100) if legacy else None,
                                descendant_verified=True)
                     result['buttons'].append(row)
+                self.checkpoint()
                 for child in control.GetChildren(): pending.append((child, depth + 1))
+        self.checkpoint()
         focused = self.uia.GetFocusedControl()
         if focused is not None:
             focus = self.element(focused)
@@ -147,10 +161,16 @@ class ReadOnlyUia:
                 if parent_row['pid'] != pid: break
                 if parent_row['hwnd'] == hwnd:
                     matched = True; break
+                self.checkpoint()
                 parent = parent.GetParentControl()
             focus['descendant_verified'] = matched
             result['focus'] = focus
         return result
+
+
+async def query_uia(uia, hwnd, pid):
+    row = uia.inspect(hwnd, pid)
+    return await row if inspect.isawaitable(row) else row
 
 
 class ProductNative:
@@ -185,7 +205,8 @@ class ProductNative:
             geometry = self.api.geometry(hwnd)
             require(geometry.get('coordinate_space') == 'physical-desktop-pixels'
                     and geometry.get('thread_context_restored') is True, '物理rect或DPI线程恢复未知')
-            uia = self.uia.inspect(hwnd, identity.pid)
+            uia = await query_uia(self.uia, hwnd, identity.pid)
+            self.ledger.desktop_allowed()
             root = uia.get('root', {})
             require(uia.get('readonly') is True and root.get('pid') == identity.pid and root.get('hwnd') == hwnd
                     and root.get('name') == before['title'] and root.get('cls') == before['cls']
@@ -225,8 +246,10 @@ class ProductNative:
         self.ledger.desktop_allowed()
         for hwnd in handles:
             self.ledger.desktop_allowed()
+            uia_after = await query_uia(self.uia, hwnd, identity.pid)
+            self.ledger.desktop_allowed()
             require(self.api.window(hwnd) == raw_windows[hwnd] and self.api.geometry(hwnd) == geometries[hwnd]
-                    and self.uia.inspect(hwnd, identity.pid) == uia_rows[hwnd],
+                    and uia_after == uia_rows[hwnd],
                     '采集其他窗口期间原窗口/焦点/按钮状态改变')
         require(self.api.desktop() == desktop and self.api.foreground() == foreground
                 and set(self.api.enumerate(identity.pid)) == set(handles), '窗口采集结束前桌面/前景/窗口集合改变')

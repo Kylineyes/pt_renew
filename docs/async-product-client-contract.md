@@ -1,6 +1,8 @@
 # 产品竞争客户端的实现约束
 
-本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[应用UUID与门闩接入](async-product-gate-binding.md)新增27项测试、仓库281项Python测试通过。独立应用UUID、原事件/release及native/UIA窄适配默认禁用；新归档任务两图实际read/ack取得36.22394秒完整观察区间，但没有产品动作/收尾或未来时限保证，ready_for_live=false。仍缺有界COM探针、初始主窗/文件框阶段及完整原Popen链。
+本文件配合[离线预检](async-race-offline-preflight.md)，描述产品客户端的接口和验证要求。最新[有界UIA探针与主窗发现](async-product-bounded-probe.md)新增14项测试、仓库295项Python测试通过；父有界等待/协作停止和主HWND发现默认禁用，尚未进行真实Qt UIA/COM现场或产品启动，ready_for_live=false。仍缺原生文件框明确阶段和完整原Popen退出链；冷探针成本尚不能纳入已验证60秒预算。
+
+此前[应用UUID与门闩接入](async-product-gate-binding.md)新增27项测试、仓库281项Python测试通过。独立应用UUID、原事件/release及native/UIA窄适配默认禁用；新归档任务两图实际read/ack取得36.22394秒完整观察区间，但没有产品动作/收尾或未来时限保证，ready_for_live=false。仍缺有界COM探针、初始主窗/文件框阶段及完整原Popen链。
 
 以下保留前阶段范围：此前[原始回执与原Popen适配](async-product-evidence-adapters.md)新增20项测试、仓库254项Python测试通过；原MCP/region与原句柄窄适配默认禁用，仍缺native/UIA/文件框及完整全链接入。新指定模型图片任务在编码预检失败后已failed结算，实际read/ack0，时序未取得，ready_for_live=false。
 
