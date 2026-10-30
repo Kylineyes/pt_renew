@@ -224,7 +224,8 @@ class BatchTests(unittest.IsolatedAsyncioTestCase):
         def isolated_modules():
             with patch.dict(sys.modules):
                 for name in list(sys.modules):
-                    if name == 'windows_mcp' or name.startswith('windows_mcp.'): sys.modules.pop(name)
+                    if (name == 'windows_mcp' or name.startswith('windows_mcp.')
+                            or name == 'comtypes' or name.startswith('comtypes.')): sys.modules.pop(name)
                 yield
         saved_path=list(sys.path)
         try:
@@ -263,8 +264,8 @@ class BatchTests(unittest.IsolatedAsyncioTestCase):
             with self.assertRaises(ValueError):
                 probe_worker.run_uia(dict(pid=42,hwnd=99),self.root/'package',checkpoint=stop,kind='native-observation')
         self.assertEqual(f.calls,[])
-        self.assertEqual(com,['init','uninit'])
-        self.assertEqual(contexts[-1],123)
+        self.assertEqual(com,[])
+        self.assertEqual(contexts,[])
 
     def test_query_handle_verifies_birth_image_liveness_and_closes_without_exit_claim(self):
         import ctypes

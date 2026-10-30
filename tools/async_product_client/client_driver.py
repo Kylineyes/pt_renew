@@ -13,6 +13,7 @@ from async_product_client.driver import DriverMailbox, ProductDriver
 from async_product_client.events import decode_object
 from async_product_client.file_dialog import NetFileSpec
 from async_product_client.product import ProductOwner, tree_hashes
+from async_product_client.probe_environment import validate_probe_environment
 from async_product_client.python_environment import environment
 from async_product_client.review import PiReadVerifier
 from async_product_client.runtime import FrozenProgram
@@ -47,10 +48,12 @@ def verify_materials(configuration):
             == product['package_files'] and product['package_root'] == server['package_root'], '服务/探针未共享完整冻结77文件包')
     require(tree_hashes(product['module_root'], ignore_bytecode=True) == product['module_files'], '产品探针完整模块摘要不符')
     dependencies = environment(product['python_environment'])
-    require(dependencies is not None and product['python_environment'] == service.python_environment
+    require(dependencies is not None
+            and dependencies.files == {name: sha for name, sha in service.python_environment['files'].items()
+                                       if name.startswith('comtypes/')}
             and Path(product['interpreter']).resolve() == Path(service.interpreter).resolve()
-            and product['interpreter_sha256'] == service.interpreter_sha256, '服务/探针必须共享直接基础解释器及冻结依赖')
-    dependencies.verify()
+            and product['interpreter_sha256'] == service.interpreter_sha256, '探针须为同一完整依赖中的comtypes原字节，解释器保持一致')
+    validate_probe_environment(dependencies)
     require(not any(name.upper().startswith(('QT_', 'QML', 'PT_ASYNC_', 'PT_RENEW_ASYNC_', 'PT_ENABLE_ASYNC', 'PYTHON'))
                     for name in product['environment']), '产品继承环境未清理Qt/实验/Python变量')
 

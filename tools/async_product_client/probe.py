@@ -39,6 +39,7 @@ class BoundedUiaProbe:
         self.popen, self.handle_api, self.sleeper = popen or subprocess.Popen, handle_api or OriginalHandleApi(), sleeper
         self.nonce_factory = nonce_factory or (lambda: str(uuid.uuid4()))
         self.children = []
+        self.timings = []
         self.active = False
         self.failed = False
 
@@ -77,7 +78,9 @@ class BoundedUiaProbe:
 
         from .python_environment import environment
         dependencies = environment(self.python_environment)
-        if dependencies is not None: dependencies.verify()
+        if dependencies is not None:
+            from .probe_environment import validate_probe_environment
+            validate_probe_environment(dependencies)
 
     async def inspect(self, hwnd, pid):
         return await self._query(hwnd, pid, kind='single-uia')
@@ -91,14 +94,18 @@ class BoundedUiaProbe:
         self.ledger.desktop_allowed()
         require(self.enabled and not self.active and not self.failed
                 and len(self.children) < self.max_queries and positive(hwnd), '探针禁用、正在执行、已有失败或次数耗尽')
+        timing = dict(started_ns=self.ledger.clock.monotonic_ns(), accepted=False)
+        self.timings.append(timing)
         try:
             deadline = self.ledger.call_deadline(self.timeout_ns, deadline_ns=self.deadline_ns)
             info = self.product_identity()
             require(pid == info['pid'], '探针目标PID与原Popen不一致')
             self.sources()
+            timing['precheck_finished_ns'] = self.ledger.clock.monotonic_ns()
             self.ledger.remaining(deadline)
         except BaseException:
             self.failed = True
+            timing['failed_ns'] = self.ledger.clock.monotonic_ns()
             raise
         self.active = True
         child = None
@@ -123,7 +130,9 @@ class BoundedUiaProbe:
             try: stderr = (folder / 'stderr.log').open('xb')
             except BaseException:
                 stdout.close(); raise
+            timing['request_written_ns'] = self.ledger.clock.monotonic_ns()
             child = dict(process=None, identity=None, folder=str(folder), streams=[stdout, stderr],
+                         timing=timing,
                          request_sha256=digest(request_path.read_bytes()), request=request,
                          exit_code=None, accepted=False, outcome='unknown')
             self.children.append(child)
@@ -138,6 +147,7 @@ class BoundedUiaProbe:
                                          str(self.module_root / 'async_product_client/probe_worker.py'), str(request_path)],
                                          cwd=str(folder), stdin=subprocess.DEVNULL, stdout=stdout, stderr=stderr,
                                          shell=False, close_fds=True)
+            timing['popen_created_ns'] = self.ledger.clock.monotonic_ns()
             require(child['process'] is not None, '探针创建结果未知，不允许重试')
             if self.registry is not None:
                 child['registry_key'] = f'uia-probe-{len(self.children)}'
@@ -157,6 +167,7 @@ class BoundedUiaProbe:
                 code = child['process'].poll()
                 if code is not None:
                     require(type(code) is int and code == child['process'].returncode, '探针原Popen退出证据不一致')
+                    timing['exit_observed_ns'] = self.ledger.clock.monotonic_ns()
                     child['exit_code'] = code
                     child['outcome'] = 'exited'
                     self.close_streams(child)
@@ -179,6 +190,10 @@ class BoundedUiaProbe:
                     and type(result.get('input_calls')) is int and result['input_calls'] == 0
                     and result.get('com_uninitialized') is True and result.get('dpi_restored') is True,
                     '只读探针结果身份/nonce/原请求/COM或DPI恢复证据不符')
+            if self.python_environment is not None:
+                from .com_apartment import validate_com_report
+                validate_com_report(result.get('com_apartment'))
+                require(result.get('private_runtime_unchanged') is True, '探针私有依赖执行后改变')
             require(type(result.get('started_ns')) is int and type(result.get('finished_ns')) is int
                     and request['created_mono_ns'] <= result['started_ns'] <= result['finished_ns']
                     <= self.ledger.clock.monotonic_ns() < deadline, '探针时序越过原截止或时钟矛盾')
@@ -196,16 +211,24 @@ class BoundedUiaProbe:
             self.ledger.desktop_allowed()
             require(self.ledger.clock.monotonic_ns() < deadline, '最终核对耗时跨越探针原截止')
             child['result_sha256'] = digest(raw)
+            timing['validation_finished_ns'] = self.ledger.clock.monotonic_ns()
+            with (folder / 'parent-timing.json').open('x', encoding='utf-8') as out:
+                json.dump(dict(timing, deadline_ns=deadline, meaning='接收前已发生阶段；最终日志成本仍受原截止检查'),
+                          out, ensure_ascii=False, indent=2)
+            self.ledger.remaining(deadline)
             self.ledger.event('uia_probe_accepted', identity=child['identity'], request_sha256=child['request_sha256'],
                               result_sha256=child['result_sha256'], original_popen=True)
             self.ledger.remaining(deadline)
+            timing.update(finished_ns=self.ledger.clock.monotonic_ns(), accepted=True)
             child['accepted'] = True
             return row
         except BaseException:
             self.failed = True
+            timing['failed_ns'] = self.ledger.clock.monotonic_ns()
             if child is not None:
                 stop_path = Path(child['folder']) / 'stop-requested'
-                with stop_path.open('xb') as out: out.write(b'parent-failed\n')
+                if not stop_path.exists():
+                    with stop_path.open('xb') as out: out.write(b'parent-failed\n')
                 child['stop_requested'] = True
             if child is not None and child['process'] is None:
                 self.close_streams(child)

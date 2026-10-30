@@ -33,7 +33,15 @@ class MaterialTests(unittest.IsolatedAsyncioTestCase):
             (f.modules / name).write_text('# 假启动器\n', encoding='utf-8')
         dependencies = root / 'dependencies'; dependencies.mkdir()
         (dependencies / 'fake.py').write_text('# 假依赖\n', encoding='utf-8')
+        from async_product_client.probe_environment import GENERATED
+        for name in GENERATED | {'comtypes/__init__.py'}:
+            path = dependencies / name; path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('# 假COM依赖\n', encoding='utf-8')
         environment = dict(root=str(dependencies), files=tree_hashes(dependencies), version=list(sys.version_info[:3]))
+        probe_root = root / 'probe-dependencies'
+        import shutil
+        shutil.copytree(dependencies / 'comtypes', probe_root / 'comtypes')
+        probe_environment = dict(root=str(probe_root), files=tree_hashes(probe_root), version=list(sys.version_info[:3]))
         interpreter = Path(sys._base_executable).resolve(); files = tree_hashes(f.modules)
         program = FrozenProgram(str(interpreter), digest(interpreter.read_bytes()), str(f.modules), tuple(files.items()),
                                 'async_product_client/client_driver.py', environment)
@@ -57,7 +65,7 @@ class MaterialTests(unittest.IsolatedAsyncioTestCase):
                        environment={'PATH': 'unused'}, interpreter=str(interpreter), interpreter_sha256=program.interpreter_sha256,
                        package_root=str(f.package), package_files=tree_hashes(f.package / 'windows_mcp'),
                        module_root=str(f.modules), module_files=files, diagnostic_deadline_ns=ledger.diagnostic_deadline_ns,
-                       revision=2, python_environment=environment)
+                       revision=2, python_environment=probe_environment)
         f.configuration = dict(approval=str(approval_path), approval_sha256=digest(approval_path.read_bytes()),
                                service_program=asdict(replace(program, entry='async_product_client/service_driver.py')),
                                service_configuration=dict(package_root=str(f.package), trace=str(root / 'trace.jsonl'),
