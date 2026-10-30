@@ -216,87 +216,106 @@ class ProductNative:
         self.ledger.desktop_allowed()
         require(self.enabled and self.uia is not None, '窗口采集默认禁用或缺少可信只读UIA探针')
         identity = self.identity()
-        desktop = self.api.desktop()
-        require(desktop == 'Default', '锁屏或输入桌面未知')
-        foreground = self.api.foreground()
-        handles = self.api.enumerate(identity.pid)
-        require(identity.hwnd in handles and foreground in handles and len(handles) == len(set(handles)),
-                '精确主HWND缺失、非目标前景或窗口枚举重复')
-        windows, raw_windows, geometries, uia_rows = [], {}, {}, {}
-        for hwnd in handles:
-            self.ledger.desktop_allowed()
-            before = self.api.window(hwnd)
-            require(before['pid'] == identity.pid and before['visible'] is True, '窗口PID/可见性改变')
-            geometry = self.api.geometry(hwnd)
-            require(geometry.get('coordinate_space') == 'physical-desktop-pixels'
-                    and geometry.get('thread_context_restored') is True, '物理rect或DPI线程恢复未知')
-            uia = await query_uia(self.uia, hwnd, identity.pid)
-            self.ledger.desktop_allowed()
-            root = uia.get('root', {})
-            require(uia.get('readonly') is True and root.get('pid') == identity.pid and root.get('hwnd') == hwnd
-                    and root.get('name') == before['title'] and root.get('cls') == before['cls']
-                    and root.get('enabled') == before['enabled'], '只读UIA根与原生窗口身份不符')
-            require(self.api.window(hwnd) == before and self.api.geometry(hwnd) == geometry,
-                    'UIA采集前后原窗口/物理rect改变')
-            self.identity()
-            raw_windows[hwnd], geometries[hwnd], uia_rows[hwnd] = before, geometry, uia
-            row = dict(before, birth=identity.birth, image=identity.image, **geometry, focus_kind='unknown')
-            focus = uia.get('focus') or {}
-            if (focus.get('pid') == identity.pid and focus.get('descendant_verified') is True
-                    and focus.get('enabled') is True and focus.get('offscreen') is False):
-                if focus.get('automation_id') == 'boardCanvas' and focus.get('name') == '板图工作区' and focus.get('control_type') == 50033:
-                    row['focus_kind'] = 'canvas'
-                elif focus.get('control_type') in (50004, 50030): row['focus_kind'] = 'text'
-            if 'commands' in uia:
-                commands = {}
-                for button in uia['commands']:
-                    key = button.get('automation_id')
-                    require(key in COMMANDS and key not in commands, 'NET可见命令ID未知或重复')
-                    commands[key] = button
-                row['commands'] = commands
-            if before['title'] == MODAL_TITLE:
-                require(hwnd != identity.hwnd and before['owner'] == identity.hwnd and uia.get('modal') is True,
-                        'dirty模态缺少同原生owner及UIA模态证明')
-                buttons, default = {}, []
-                for button in uia.get('buttons', []):
-                    name, box = button.get('name'), button.get('rect', [])
-                    require(name in ('放弃更改', '取消') and name not in buttons and button.get('pid') == identity.pid
-                            and button.get('control_type') == 50000 and button.get('descendant_verified') is True
-                            and button.get('enabled') is True and button.get('offscreen') is False
-                            and type(button.get('default')) is bool and len(box) == 4
-                            and all(type(x) is int for x in box)
-                            and row['rect'][0] <= box[0] < box[2] <= row['rect'][2]
-                            and row['rect'][1] <= box[1] < box[3] <= row['rect'][3], 'dirty模态按钮归属/物理矩形/默认状态未知')
-                    buttons[name] = box
-                    if button['default']: default.append(name)
-                require(set(buttons) == {'放弃更改', '取消'} and default == ['取消'], 'dirty模态必须唯一默认取消和明确放弃按钮')
-                row.update(modal=True, default_button='取消', buttons=buttons)
-            if before['cls'] == FILE_CLASS and before['title'] == FILE_TITLE:
-                require(hwnd != identity.hwnd and before['owner'] == identity.hwnd and uia.get('modal') is True,
-                        '原生文件框owner或模态关系不符')
-                elements = {}
-                for element in uia.get('file_elements', []):
-                    key = {'1148': 'filename', '1': 'open', '2': 'cancel'}.get(element.get('automation_id'))
-                    require(key is not None and key not in elements, '文件框控件ID缺失或重复')
-                    elements[key] = element
-                row.update(modal=True, file_controls=elements, file_focus=focus)
-            windows.append(row)
-        main = next(row for row in windows if row['hwnd'] == identity.hwnd)
-        if any(row.get('modal') is True for row in windows):
-            require(main['enabled'] is False, 'dirty模态存在时主窗并未禁用')
-        self.ledger.desktop_allowed()
-        for hwnd in handles:
-            self.ledger.desktop_allowed()
-            uia_after = await query_uia(self.uia, hwnd, identity.pid)
-            self.ledger.desktop_allowed()
-            require(self.api.window(hwnd) == raw_windows[hwnd] and self.api.geometry(hwnd) == geometries[hwnd]
-                    and uia_after == uia_rows[hwnd],
-                    '采集其他窗口期间原窗口/焦点/按钮状态改变')
-        require(self.api.desktop() == desktop and self.api.foreground() == foreground
-                and set(self.api.enumerate(identity.pid)) == set(handles), '窗口采集结束前桌面/前景/窗口集合改变')
-        self.identity()
-        result = dict(input_desktop=desktop, locked=False, foreground_stable=True,
-                      foreground=next(row for row in windows if row['hwnd'] == foreground), windows=windows)
+        result = await collect_native(identity, self.api, self.uia,
+                                      checkpoint=self.ledger.desktop_allowed, verify_identity=self.identity)
         self.observations.append(result)
         self.ledger.event('product_native_observation', result=result, readonly=True)
         return result
+
+
+async def collect_native(identity, api, uia_api, *, checkpoint, verify_identity):
+    """同一观察内完整执行双轮UIA和原生交叉检查，可在独立子进程中复用。"""
+    class CheckedApi:
+        def __getattr__(self, name):
+            original = getattr(api, name)
+            def call(*args, **kwargs):
+                checkpoint()
+                value = original(*args, **kwargs)
+                checkpoint()
+                return value
+            return call
+    checked = CheckedApi()
+    checkpoint()
+    verify_identity()
+    desktop = checked.desktop()
+    require(desktop == 'Default', '锁屏或输入桌面未知')
+    foreground = checked.foreground()
+    handles = checked.enumerate(identity.pid)
+    require(identity.hwnd in handles and foreground in handles and len(handles) == len(set(handles)),
+            '精确主HWND缺失、非目标前景或窗口枚举重复')
+    windows, raw_windows, geometries, uia_rows = [], {}, {}, {}
+    for hwnd in handles:
+        checkpoint()
+        before = checked.window(hwnd)
+        require(before['pid'] == identity.pid and before['visible'] is True, '窗口PID/可见性改变')
+        geometry = checked.geometry(hwnd)
+        require(geometry.get('coordinate_space') == 'physical-desktop-pixels'
+                and geometry.get('thread_context_restored') is True, '物理rect或DPI线程恢复未知')
+        uia = await query_uia(uia_api, hwnd, identity.pid)
+        checkpoint()
+        root = uia.get('root', {})
+        require(uia.get('readonly') is True and root.get('pid') == identity.pid and root.get('hwnd') == hwnd
+                and root.get('name') == before['title'] and root.get('cls') == before['cls']
+                and root.get('enabled') == before['enabled'], '只读UIA根与原生窗口身份不符')
+        require(checked.window(hwnd) == before and checked.geometry(hwnd) == geometry,
+                'UIA采集前后原窗口/物理rect改变')
+        verify_identity()
+        raw_windows[hwnd], geometries[hwnd], uia_rows[hwnd] = before, geometry, uia
+        row = dict(before, birth=identity.birth, image=identity.image, **geometry, focus_kind='unknown')
+        focus = uia.get('focus') or {}
+        if (focus.get('pid') == identity.pid and focus.get('descendant_verified') is True
+                and focus.get('enabled') is True and focus.get('offscreen') is False):
+            if focus.get('automation_id') == 'boardCanvas' and focus.get('name') == '板图工作区' and focus.get('control_type') == 50033:
+                row['focus_kind'] = 'canvas'
+            elif focus.get('control_type') in (50004, 50030): row['focus_kind'] = 'text'
+        if 'commands' in uia:
+            commands = {}
+            for button in uia['commands']:
+                key = button.get('automation_id')
+                require(key in COMMANDS and key not in commands, 'NET可见命令ID未知或重复')
+                commands[key] = button
+            row['commands'] = commands
+        if before['title'] == MODAL_TITLE:
+            require(hwnd != identity.hwnd and before['owner'] == identity.hwnd and uia.get('modal') is True,
+                    'dirty模态缺少同原生owner及UIA模态证明')
+            buttons, default = {}, []
+            for button in uia.get('buttons', []):
+                name, box = button.get('name'), button.get('rect', [])
+                require(name in ('放弃更改', '取消') and name not in buttons and button.get('pid') == identity.pid
+                        and button.get('control_type') == 50000 and button.get('descendant_verified') is True
+                        and button.get('enabled') is True and button.get('offscreen') is False
+                        and type(button.get('default')) is bool and len(box) == 4
+                        and all(type(x) is int for x in box)
+                        and row['rect'][0] <= box[0] < box[2] <= row['rect'][2]
+                        and row['rect'][1] <= box[1] < box[3] <= row['rect'][3], 'dirty模态按钮归属/物理矩形/默认状态未知')
+                buttons[name] = box
+                if button['default']: default.append(name)
+            require(set(buttons) == {'放弃更改', '取消'} and default == ['取消'], 'dirty模态必须唯一默认取消和明确放弃按钮')
+            row.update(modal=True, default_button='取消', buttons=buttons)
+        if before['cls'] == FILE_CLASS and before['title'] == FILE_TITLE:
+            require(hwnd != identity.hwnd and before['owner'] == identity.hwnd and uia.get('modal') is True,
+                    '原生文件框owner或模态关系不符')
+            elements = {}
+            for element in uia.get('file_elements', []):
+                key = {'1148': 'filename', '1': 'open', '2': 'cancel'}.get(element.get('automation_id'))
+                require(key is not None and key not in elements, '文件框控件ID缺失或重复')
+                elements[key] = element
+            row.update(modal=True, file_controls=elements, file_focus=focus)
+        windows.append(row)
+    main = next(row for row in windows if row['hwnd'] == identity.hwnd)
+    if any(row.get('modal') is True for row in windows):
+        require(main['enabled'] is False, 'dirty模态存在时主窗并未禁用')
+    checkpoint()
+    for hwnd in handles:
+        checkpoint()
+        uia_after = await query_uia(uia_api, hwnd, identity.pid)
+        checkpoint()
+        require(checked.window(hwnd) == raw_windows[hwnd] and checked.geometry(hwnd) == geometries[hwnd]
+                and uia_after == uia_rows[hwnd],
+                '采集其他窗口期间原窗口/焦点/按钮状态改变')
+    require(checked.desktop() == desktop and checked.foreground() == foreground
+            and set(checked.enumerate(identity.pid)) == set(handles), '窗口采集结束前桌面/前景/窗口集合改变')
+    verify_identity()
+    result = dict(input_desktop=desktop, locked=False, foreground_stable=True,
+                  foreground=next(row for row in windows if row['hwnd'] == foreground), windows=windows)
+    return result

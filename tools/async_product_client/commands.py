@@ -40,12 +40,10 @@ class ProductCommand:
     async def capture(self, ident, parent):
         with self.ledger.operation(ident, parent):
             self.check(); require(self.stage == 'new', '可见命令图不可重复发布')
-            before = await self.io.observe(dirty=False)
-            self.button(before)
-            shot = await self.io.capture(dirty=False)
-            after = await self.io.observe(dirty=False)
+            shot = await self.io.capture(dirty=False, stable=True)
+            after = self.io.capture_targets[shot.call_id]
+            self.button(after)
             self.check()
-            require(before == after, '命令截图期间目标/按钮变化')
             self.target = copy.deepcopy(after)
             self.review = ident + '-image'
             self.reviews.request(self.review, stage='command', snapshot=shot, gate_request_id=self.request_id,
@@ -57,9 +55,8 @@ class ProductCommand:
     async def ack(self, ident, parent, **evidence):
         with self.ledger.operation(ident, parent):
             self.check(); require(self.stage == 'requested', '可见命令ack乱序')
-            require(await self.io.observe(dirty=False) == self.target, '读图前按钮/焦点已经改变')
             self.reviews.ack(self.review, **evidence)
-            require(await self.io.observe(dirty=False) == self.target, '读图期间按钮/焦点改变')
+            require(await self.io.observe(dirty=False) == self.target, '读图或ack核对期间按钮/焦点改变')
             self.check(); self.stage = 'read'
 
     async def click(self, ident, parent, *, image_point):

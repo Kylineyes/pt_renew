@@ -127,8 +127,9 @@ class NetFileDialog:
         self.ledger.event('file_dialog_observed', result=native)
         return target
 
-    async def capture(self, ident, stage):
-        before = await self.observe()
+    async def capture(self, ident, stage, *, before=None):
+        if before is None: before = await self.observe()
+        if self.bound_hwnd is None: self.bound_hwnd = before['hwnd']
         shot = await self.io.snapshot_api(before)
         after = await self.observe()
         require(before == after and shot.hwnd == before['hwnd'] and shot.physical_rect == tuple(before['rect']),
@@ -144,8 +145,6 @@ class NetFileDialog:
         with self.ledger.operation(ident, parent):
             self.check()
             require(self.stage == 'new', '文件框阶段已开始，禁止重置')
-            target = await self.observe()
-            self.bound_hwnd = target['hwnd']
             self.dialog_review = ident + '-image'
             await self.capture(self.dialog_review, 'file-dialog')
             self.stage = 'dialog-requested'
@@ -156,11 +155,9 @@ class NetFileDialog:
             self.check()
             require(self.stage in ('dialog-requested', 'path-requested'), '文件框ack乱序')
             review = self.dialog_review if self.stage == 'dialog-requested' else self.path_review
-            before = await self.observe()
-            require(before == self.review_windows[review], '发布图像后文件框控件/路径/焦点已经变化')
             self.reviews.ack(review, call_id=call_id, result_id=result_id, judgment=judgment, summary=summary)
             after = await self.observe()
-            require(before == after, '文件框实际read期间控件/路径变化')
+            require(after == self.review_windows[review], '图像发布至实际read/ack完成期间文件框控件/路径/焦点变化')
             if self.stage == 'path-requested':
                 require(after['file_controls']['filename']['value'] == self.spec.path, '实际read确认路径并非冻结副本')
             self.stage = 'dialog-read' if self.stage == 'dialog-requested' else 'path-read'
@@ -190,7 +187,7 @@ class NetFileDialog:
                     and focus.get('pid') == self.io.owner.identity.pid and focus.get('descendant_verified') is True,
                     'Type后冻结路径值/文件名焦点后验不符')
             self.path_review = ident + '-image'
-            await self.capture(self.path_review, 'file-path')
+            await self.capture(self.path_review, 'file-path', before=after)
             self.stage = 'path-requested'
         return self.path_review
 

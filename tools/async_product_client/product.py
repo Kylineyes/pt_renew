@@ -1,6 +1,7 @@
 """产品创建所有者、Qt窗口归属及输入；与诊断Tk关闭模块无依赖。"""
 from __future__ import annotations
 
+import copy
 import asyncio
 from dataclasses import dataclass
 from pathlib import Path
@@ -136,6 +137,7 @@ class ProductIO:
         self.ledger, self.owner, self.policy = ledger, owner, policy
         self.native_api, self.transport, self.snapshot_api = native, transport, snapshot
         self.attempts = []
+        self.capture_targets = {}
 
     async def observe(self, *, stage='main', dirty=False):
         self.ledger.desktop_allowed()
@@ -192,7 +194,7 @@ class ProductIO:
         await self._send('Shortcut', dict(shortcut='delete'), 'Pressed delete.')
         await self.observe(dirty=True)
 
-    async def capture(self, *, stage='main', dirty=False):
+    async def capture(self, *, stage='main', dirty=False, stable=False):
         target = await self.observe(stage=stage, dirty=dirty)
         self.ledger.desktop_allowed()
         shot = await self.snapshot_api(target)
@@ -201,4 +203,8 @@ class ProductIO:
         require(shot.hwnd == target['hwnd'] == after['hwnd']
                 and tuple(target['rect']) == shot.physical_rect == tuple(after['rect']),
                 '截图前后目标或物理矩形改变')
+        if stable:
+            require(target == after, '稳定截图前后控件/焦点状态改变')
+            require(shot.call_id not in self.capture_targets, '稳定截图原调用ID重复')
+            self.capture_targets[shot.call_id] = copy.deepcopy(after)
         return shot
