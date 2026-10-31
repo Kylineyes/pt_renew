@@ -44,8 +44,12 @@ struct Component {
 };
 
 struct BoardDocument {
+    // 摘要、字节数与记录数始终描述原输入，工作副本仅更新图元和修订身份。
+    quint64 workingRevision = 0;
     QString filePath, sha256;
     QString sourceContext;
+    // 载入时冻结的原字节用于受限另存为；Qt字节数组在文档副本间共享。
+    QByteArray sourceBytes;
     qint64 byteSize = 0;
     QList<Track> tracks;
     QList<Pad> pads;

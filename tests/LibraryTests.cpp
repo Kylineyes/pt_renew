@@ -198,6 +198,33 @@ private slots:
         QTest::keyClick(preview,Qt::Key_Escape); QTRY_VERIFY(!browser->isVisible());
     }
 
+    void libraryPreviewCannotInvokeBoardEditing() {
+        QTemporaryDir directory;
+        QFile pcb(directory.filePath(QStringLiteral("board.pcb"))); QVERIFY(pcb.open(QIODevice::WriteOnly));
+        pcb.write("PCB FILE 4\nFT\n0 0 100 100 10 1\nENDPCB\n"); pcb.close();
+        QFile lib(directory.filePath(QStringLiteral("fixture.lib"))); QVERIFY(lib.open(QIODevice::WriteOnly));
+        lib.write(library({{0,"OWN_TEST",1,track()}})); lib.close();
+        pt::MainWindow window; window.show(); window.activateWindow(); QVERIFY(QTest::qWaitForWindowActive(&window));
+        QVERIFY(window.inspectFile(pcb.fileName())); auto* main=window.findChild<pt::BoardCanvas*>(QStringLiteral("boardCanvas"));
+        QVERIFY(main->focusPrimitive({pt::PrimitiveKind::Track,0})); QVERIFY(window.moveSelectedTrack({10,20}));
+        QVERIFY(main->focusPrimitive({pt::PrimitiveKind::Track,0}));
+        auto* browser=window.findChild<pt::LibraryBrowser*>(); QVERIFY(browser->loadLibrary(lib.fileName())); browser->showBrowser();
+        QVERIFY(QTest::qWaitForWindowActive(browser)); auto* preview=browser->findChild<pt::BoardCanvas*>();
+        QVERIFY(!preview->document()->sourceContext.isEmpty()); QVERIFY(preview->focusPrimitive({pt::PrimitiveKind::Track,0}));
+        preview->setFocus(); QTRY_COMPARE(QApplication::focusWidget(),preview);
+        const auto original=window.editSession().document(); const auto libraryStart=preview->document()->tracks[0].start;
+        QVERIFY(!window.findChild<QAction*>(QStringLiteral("move.track"))->isEnabled());
+        QVERIFY(!window.findChild<QAction*>(QStringLiteral("delete.track"))->isEnabled());
+        QVERIFY(!window.findChild<QAction*>(QStringLiteral("edit.undo"))->isEnabled());
+        QVERIFY(!window.deleteSelectedTrack()); QVERIFY(!window.moveSelectedTrack({100,100}));
+        QTest::keyClick(preview,Qt::Key_Delete); QTest::keyClick(preview,Qt::Key_Z,Qt::ControlModifier);
+        QTest::keyClick(preview,Qt::Key_Y,Qt::ControlModifier);
+        QCOMPARE(window.editSession().document(),original); QCOMPARE(preview->document()->tracks[0].start,libraryStart);
+        browser->hide(); window.activateWindow(); main->setFocus(); QTRY_COMPARE(QApplication::focusWidget(),main);
+        QVERIFY(window.findChild<QAction*>(QStringLiteral("edit.undo"))->isEnabled());
+        window.findChild<QAction*>(QStringLiteral("edit.undo"))->trigger(); QVERIFY(!window.editSession().dirty());
+    }
+
     void browsingLibraryCannotReplaceMainBoard() {
         QTemporaryDir directory;
         QFile pcb(directory.filePath(QStringLiteral("board.pcb"))); QVERIFY(pcb.open(QIODevice::WriteOnly)); pcb.write("PCB FILE 4\nENDPCB\n"); pcb.close();

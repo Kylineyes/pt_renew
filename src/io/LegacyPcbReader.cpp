@@ -213,7 +213,7 @@ BoardReadResult LegacyPcbReader::parse(const QByteArray& bytes, const QString& s
     const auto textBytes=bytes.left(end);
     try {
         auto board = Reader(textBytes).run();
-        board->filePath = source; board->byteSize = bytes.size();
+        board->filePath = source; board->byteSize = bytes.size(); board->sourceBytes = bytes;
         board->sha256 = QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex());
         if (board->embeddedNetlist) {
             auto netlist=std::make_shared<Netlist>(*board->embeddedNetlist);

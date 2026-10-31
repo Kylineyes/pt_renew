@@ -57,8 +57,14 @@ NetlistBrowser::NetlistBrowser(QWidget* parent):QDockWidget(QStringLiteral("网�
     });
     rebuild();
 }
-void NetlistBrowser::setBoard(std::shared_ptr<const BoardDocument> board) {
-    ++m_generation;m_board=std::move(board);m_external.reset();m_error.clear();rebuild();
+void NetlistBrowser::setBoard(std::shared_ptr<const BoardDocument> board, bool preserveExternal) {
+    ++m_generation;m_board=std::move(board);
+    if (!preserveExternal) m_external.reset();
+    m_notice = preserveExternal
+        ? (m_loading ? QStringLiteral("工作文档已更新；正在读取的 NET 结果已放弃，请重新打开 NET。已有网表已重新映射，旧铜层结论已清除。")
+                     : QStringLiteral("工作文档已更新；已有网表已重新映射，旧铜层结论已清除，请重新分析。"))
+        : QString();
+    m_error.clear();rebuild();
 }
 void NetlistBrowser::chooseFile() {
     if (m_loading) return;
@@ -67,7 +73,7 @@ void NetlistBrowser::chooseFile() {
 }
 void NetlistBrowser::requestFile(const QString& path) {
     if (m_loading) return;
-    ++m_generation;const auto generation=m_generation;m_external.reset();m_error.clear();rebuild();
+    ++m_generation;const auto generation=m_generation;m_error.clear();m_notice.clear();rebuild();
     m_loading=true;m_copper->setEnabled(false);m_open->setEnabled(false);m_clear->setEnabled(true);m_status->setText(QStringLiteral("正在后台读取网表；移除外部网表可放弃结果。"));
     auto* watcher=new QFutureWatcher<NetlistReadResult>(this);
     connect(watcher,&QFutureWatcher<NetlistReadResult>::finished,this,[this,watcher,generation] {
@@ -78,7 +84,8 @@ void NetlistBrowser::requestFile(const QString& path) {
 }
 bool NetlistBrowser::loadFile(const QString& path) { if (m_loading) return false; ++m_generation;return apply(LegacyNetlistReader::readFile(path)); }
 bool NetlistBrowser::apply(const NetlistReadResult& result) {
-    m_external=result.netlist;m_useExternal=true;m_error=result.error;rebuild();emit netlistLoaded(result.succeeded());return result.succeeded();
+    m_external=result.netlist; m_useExternal=true;
+    m_error=result.error;m_notice.clear();rebuild();emit netlistLoaded(result.succeeded());return result.succeeded();
 }
 void NetlistBrowser::clearExternal() { ++m_generation;m_external.reset();m_error.clear();rebuild(); }
 void NetlistBrowser::focusSearch() { show();raise();m_search->setFocus(Qt::ShortcutFocusReason);m_search->selectAll(); }
@@ -96,8 +103,9 @@ void NetlistBrowser::runCopperAnalysis() {
     connect(watcher,&QFutureWatcher<CopperAnalysis>::finished,this,[this,watcher,generation,board,network] {
         const auto report=watcher->result();watcher->deleteLater();m_analyzing=false;
         m_copper->setEnabled(m_board!=nullptr && m_active!=nullptr && !m_loading);
-        if (generation!=m_copperGeneration) return;
-        m_copperReport=QStringLiteral("板图摘要：%1\n网表摘要：%2\n\n").arg(board->sha256,network->sha256)+copperAnalysisText(report);
+        if (generation!=m_copperGeneration || board!=m_board || network!=m_active) return;
+        m_copperReport=QStringLiteral("原板图输入 SHA-256：%1\n当前工作文档修订：%2\n网表摘要：%3\n\n")
+            .arg(board->sha256).arg(board->workingRevision).arg(network->sha256)+copperAnalysisText(report);
         m_coverageStatus->setText(QStringLiteral("未覆盖图元：%1 条诊断，列出 %2 条；双击或 Enter 定位，隐藏图层不会自动开启。")
             .arg(report.coverageIssueCount).arg(report.coverageIssues.size()));
         for (const auto& issue:report.coverageIssues) {
@@ -149,6 +157,7 @@ void NetlistBrowser::filter() {
     else text=QStringLiteral("尚无网表。可打开外部 NET；载入含 NETDEF 的板图后自动查看内嵌网络。");
     if (!m_board && m_active) text.prepend(QStringLiteral("未载入板图：仅查看声明，未执行焊盘映射。\n"));
     if (!m_error.isEmpty()) text.prepend(QStringLiteral("载入失败：%1\n").arg(m_error));
+    if (!m_notice.isEmpty()) text.prepend(m_notice+QLatin1Char('\n'));
     m_status->setText(text);
     if (!first) { m_nets->setCurrentRow(-1);showCurrent(); }
     else if (!m_nets->currentItem() || m_nets->currentItem()->isHidden()) m_nets->setCurrentItem(first);

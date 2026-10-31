@@ -206,7 +206,8 @@ private slots:
         auto* layers=window.findChild<QListWidget*>(QStringLiteral("layerList"));
         layers->item(0)->setCheckState(Qt::Unchecked); QVERIFY(!canvas->layerVisible(1));
         QVERIFY(file.open(QIODevice::WriteOnly)); file.write(wrap("NETDEF\nGND\n")); file.close();
-        QVERIFY(!window.inspectFile(path)); QVERIFY(!canvas->document());
+        QVERIFY(!window.inspectFile(path)); QVERIFY(canvas->document());
+        QCOMPARE(canvas->document()->tracks.size(),1);
         QVERIFY(!window.findChild<QAction*>(QStringLiteral("file.save"))->isEnabled());
     }
 };

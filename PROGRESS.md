@@ -1,5 +1,7 @@
 # PT Renew 当前进度
 
+2026-10-31最新状态与接手顺序见[编辑与另存为统一交接](docs/agent-handoff-20261031-save-as.md)。开发主线已支持自由走线编辑和另存为新PCB，Debug/Release各12组及本机真实Qt核验通过；原件和已有目标不覆盖，原软件重开/原生文件框等边界待验。已发布alpha仍只读，本轮不发新版本；用户要求完成本轮后交给新agent，以下保留历史。
+
 更新时间：2026-10-27。最新接手入口为[SESSION_HANDOFF.md](SESSION_HANDOFF.md)，协作规则见[AGENTS.md](AGENTS.md)。
 
 **稳定`dev`产品源码及既有本地发布包保持0.10.0。** 最新工作按临时接手计划任务A完成异步淘汰源码审查与可重复实验设计，不集成0.11.0实现、不替换`dist/`。0.11.0总体验收仍未通过；上一轮已通过项、现场尝试和未覆盖项见[剩余验收报告](docs/basic-editing-remaining-acceptance.md)，此前主要编辑证据见[实际编辑报告](docs/basic-editing-actual-edit-acceptance.md)。

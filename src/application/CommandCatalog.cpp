@@ -29,18 +29,21 @@ const QList<MenuSpec>& commandCatalog() {
             command("current.pad", "焊盘参数(&P)"), command("current.via", "过孔参数(&V)")}},
         {QStringLiteral("D"), QStringLiteral("删除(&D)"), {
             command("delete.arc", "删除圆弧(&A)"), command("delete.component", "删除元件(&C)"),
-            command("delete.pad", "删除焊盘(&P)"), command("delete.track", "删除走线(&T)"),
+            command("delete.pad", "删除焊盘(&P)"), command("delete.track", "删除所选自由走线(&T)", {"Delete"}, true),
             command("delete.via", "删除过孔(&V)")}},
         {QStringLiteral("E"), QStringLiteral("编辑(&E)"), {
-            command("selection.clear", "清除只读选择(&C)", {"Esc"}, true),
+            command("edit.undo", "撤销(&U)", {"Ctrl+Z"}, true),
+            command("edit.redo", "重做(&R)", {"Ctrl+Y"}, true),
+            command("selection.clear", "清除选择(&C)", {"Esc"}, true),
             command("selection.next", "切换重叠图元(&N)", {"Ctrl+Tab"}, true),
             command("edit.arc", "编辑圆弧(&A)"), command("edit.component", "编辑元件(&C)"),
             command("edit.pad", "编辑焊盘(&P)"), command("edit.track", "编辑走线(&T)"),
             command("edit.string", "编辑文字(&S)")}},
         {QStringLiteral("F"), QStringLiteral("文件(&F)"), {
-            command("file.open", "打开板图（只读）(&L)", {"Ctrl+O"}, true),
+            command("file.open", "打开板图工作副本(&L)", {"Ctrl+O"}, true),
             command("file.close", "关闭板图(&C)", {"Ctrl+W"}, true),
             command("file.save", "保存板图(&S)", {"Ctrl+S"}),
+            command("file.save_as", "另存为新 PCB（保留原件）(&A)", {"Ctrl+Shift+S"}, true),
             command("app.exit", "退出程序(&Q)", {"Alt+F4"}, true)}},
         {QStringLiteral("G"), QStringLiteral("网格(&G)"), {
             command("view.grid", "显示网格(&V)", {"Ctrl+G"}, true, true),
@@ -67,7 +70,7 @@ const QList<MenuSpec>& commandCatalog() {
             command("library.add", "添加封装(&A)"), command("library.merge", "合并封装库(&M)")}},
         {QStringLiteral("M"), QStringLiteral("移动(&M)"), {
             command("move.component", "移动元件(&C)"), command("move.pad", "移动焊盘(&P)"),
-            command("move.track", "移动走线(&T)"), command("move.break", "打断走线(&B)")}},
+            command("move.track", "移动所选自由走线(&T)", {}, true), command("move.break", "打断走线(&B)")}},
         {QStringLiteral("N"), QStringLiteral("网络(&N)"), {
             command("netlist.load", "只读载入外部 NET(&G)", {"Ctrl+Shift+N"}, true),
             command("netlist.browse", "网络与引脚映射(&N)", {"Ctrl+Alt+N"}, true),

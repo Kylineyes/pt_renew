@@ -1,6 +1,6 @@
 #pragma once
 
-#include "domain/BoardDocument.h"
+#include "application/BoardEditSession.h"
 #include <QHash>
 #include <QMainWindow>
 
@@ -21,10 +21,18 @@ class MainWindow final : public QMainWindow {
     Q_OBJECT
 public:
     explicit MainWindow(QWidget* parent = nullptr);
+    ~MainWindow() override;
     bool inspectFile(const QString& path);
     void requestOpenFile(const QString& path);
     void openLibrary(const QString& path);
     void openNetlist(const QString& path);
+    const BoardEditSession& editSession() const { return m_editSession; }
+    bool moveSelectedTrack(QPointF delta, QString* error = nullptr);
+    bool deleteSelectedTrack();
+    bool saveAsFile(const QString& path, QString* error = nullptr);
+
+protected:
+    void closeEvent(QCloseEvent* event) override;
 
 signals:
     void commandInvoked(const QString& id);
@@ -33,12 +41,20 @@ signals:
 private:
     bool applyReadResult(const BoardReadResult& result, const QString& path);
     void createMenus();
+    bool confirmDiscard();
+    bool selectedTrackEditable() const;
+    void moveTrackDialog();
+    void saveAsDialog();
+    void publishWorkingDocument();
+    void updateEditingActions();
+    void updateFileInfo();
     void executeCommand(const QString& id);
     void showLegacyMenu(const QString& key);
     void clearFileInfo();
     void updateViewStatus();
     void updateSelectionInfo();
     void updateMeasurementInfo();
+    BoardEditSession m_editSession;
     BoardCanvas* m_canvas = nullptr;
     QDockWidget* m_infoDock = nullptr;
     QPlainTextEdit* m_infoText = nullptr;
@@ -54,6 +70,8 @@ private:
     QHash<QString, QMenu*> m_menus;
     quint64 m_loadGeneration = 0;
     bool m_loading = false;
+    QString m_savedPath, m_savedSha256;
+    qint64 m_savedBytes = 0;
 };
 
 }

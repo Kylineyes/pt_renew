@@ -1,5 +1,7 @@
 # PT Renew 当前进度与新会话交接
 
+2026-10-31最新接手入口：[编辑与另存为后的统一交接](docs/agent-handoff-20261031-save-as.md)。用户要求本轮开发完成后由新agent接手，当前dev已接续基础编辑并实现保留原件的受限另存为；Debug/Release各12/12组、WritingTests40项及指定Pi真实Qt五函数核验通过。下一步优先文件往返与原软件/原生文件框兼容性，不重做已有模块。本轮不创建tag、不发布、不操作main，全部旧failed及异步ready_for_live=false边界保持。以下按历史阶段阅读。
+
 2026-10-31产品发布范围更新：按用户明确“进行发布，你合并并操作gh”的新授权，整理 **v0.11.0-alpha 只读版**，版本、关于文案和独立Windows包已统一；产品Release构建、CTest10/10及指定Pi真实主窗／关于图／原Popen正常退出核验完成。发布内容不含独立编辑候选，仍无保存／DRC／生产输出。详情见[发布说明](docs/releases/v0.11.0-alpha.md)、[构建打包](docs/releases/v0.11.0-alpha-build.md)及[实际窗口验收](docs/releases/v0.11.0-alpha-verification.md)。本次授权包含通过gh将发布准备从dev合入main；此前不得自行操作main的历史约束不代表本次缺少授权。此前异步实验ready_for_live=false及全部旧失败结论保持，以下按历史阅读。
 
 2026-10-31最新进展见[UIA对象生命周期修复与新单次核验](docs/uia-object-lifecycle-review.md)：新增清理/最终回执失败收尾修复，仓库428项、独立候选234项通过；全新指定Pi任务单次对象严格COM三次初始化/三次释放、原Popen同PID/exit0及原5秒限定通过。旧failed及其结算不改，Qt/完整冷探针/文件框/全链和产品全动作仍未过，ready_for_live=false。下一步先准备真实Qt/完整冷探针新任务，NET31/铜22、32次和原全部时限保持。以下按历史阶段阅读。
