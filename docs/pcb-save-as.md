@@ -35,6 +35,6 @@
 
 `tests/WritingTests.cpp`覆盖原字节往返、移动与删除后的精确内容、来源及范围伪造、未支持图元修改、保存点分支、原路径／已有目标／NTFS路径拒绝、保存取消、保存失败保留历史，以及真实Qt移动框／文件框／重开流程。300字符目标名用于确定性触发临时文件已写入后的发布失败，并检查临时文件已清理；文件框期间编辑用例核对修订变化不会写出。
 
-产品Debug／Release均运行全部CTest。GUI核验使用Qt Windows平台及链接同一产品UI的独立`pt-writing-tests`驱动，操作真实MainWindow、移动框、Qt文件框和命令；截图由指定Pi `deng/gpt-6.1-sol high`实际读取。该方式不等于直接操作发行EXE，也不证明Windows原生文件框、原AUTOTRAX重开或全部历史格式兼容。
+产品Debug／Release的全部CTest均为 **12/12组通过**，每配置QtTest310项（含初始化/清理），其中WritingTests **40项**、EditingTests23项。最后完整CTest区间约Release4.70秒、Debug19.61秒，以本机原日志为准；两组Python格式研究测试是CTest独立组，不和历史控制工具全集混算。GUI核验使用Qt Windows平台及链接同一产品UI的独立`pt-writing-tests`驱动，操作真实MainWindow、移动框、Qt文件框和命令；五业务函数（含初始化/清理共7项）一次通过、原进程退出0，四图由指定Pi `deng/gpt-6.1-sol high`实际读取。详见[独立核验报告](pcb-save-as-verification.md)。该方式不等于直接操作发行EXE，也不证明Windows原生文件框、原AUTOTRAX重开或全部历史格式兼容。
 
 原固定候选的完整NET／铜竞争、900000mil极端现场、系统会话结束及原字形运行时边界仍按原报告保留。此开发阶段不把自动测试或另存往返计作这些旧现场通过；完整DRC、元件编辑、新增图元、布线和生产输出仍未实现。
