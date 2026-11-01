@@ -14,7 +14,7 @@ bool sameSource(const PrimitiveSource& a, const PrimitiveSource& b, bool lines) 
 }
 bool same(const Track& a, const Track& b, bool lines) {
     return a.start == b.start && a.end == b.end && a.width == b.width && a.layer == b.layer
-        && a.extra == b.extra && sameSource(a.source, b.source, lines);
+        && a.extra == b.extra && sameSource(a.source, b.source, lines) && (!lines || a.identity == b.identity);
 }
 bool same(const Pad& a, const Pad& b, bool lines) {
     return a.center == b.center && a.width == b.width && a.height == b.height && a.shape == b.shape
@@ -107,7 +107,7 @@ BoardWriteResult LegacyPcbWriter::prepare(const BoardDocument& original, const B
         || current.filePath != original.filePath || current.recordCounts != original.recordCounts
         || !sameOtherGeometry(original, current, true) || !sameNetlist(original.embeddedNetlist, current.embeddedNetlist, true))
         return fail(QStringLiteral("当前另存为仅支持自由走线移动或删除，检测到其他文档修改。"));
-    // 按原来源行建立对应关系，不把删除后的数组下标误当记录身份。
+    // 载入身份必须与原来源行一致，新建身份不能借用旧行绕过新增限制。
     const auto spans = lineSpans(raw);
     QMap<qsizetype, qsizetype> indices;
     for (qsizetype i = 0; i < original.tracks.size(); ++i) {
@@ -120,6 +120,8 @@ BoardWriteResult LegacyPcbWriter::prepare(const BoardDocument& original, const B
     for (const auto& track : current.tracks) {
         const auto found = indices.constFind(track.source.line);
         if (found == indices.cend() || found.value() <= previous) return fail(QStringLiteral("不支持新增、重复或重排走线。"));
+        if (track.identity != original.tracks[found.value()].identity)
+            return fail(QStringLiteral("走线身份与原记录不一致；新增走线的文件编码尚未开放。"));
         previous = found.value(); surviving.insert(track.source.line, track);
     }
     QList<Replacement> replacements;

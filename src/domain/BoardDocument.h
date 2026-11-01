@@ -1,6 +1,7 @@
 #pragma once
 
 #include "domain/PrimitiveId.h"
+#include "domain/TrackIdentity.h"
 #include "domain/Netlist.h"
 #include <QList>
 #include <QPointF>
@@ -20,6 +21,7 @@ struct Track {
     // 部分实测文件有第七字段，先原样保留，尚不推断其电气语义。
     std::optional<int> extra;
     PrimitiveSource source;
+    TrackIdentity identity;
 };
 struct Pad {
     QPointF center;

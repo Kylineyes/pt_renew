@@ -134,6 +134,10 @@ private slots:
     void boundaryCoordinatesAndLargeBoardHistory() {
         auto board=std::make_shared<pt::BoardDocument>();
         board->tracks.fill({{0,0},{10,10},10,1},200000);
+        for (qsizetype i=0; i<board->tracks.size(); ++i) {
+            board->tracks[i].source.line = 2 + 2*i;
+            board->tracks[i].identity = pt::TrackIdentity::loaded(board->tracks[i].source.line);
+        }
         pt::BoardEditSession session; session.reset(board);
         QVERIFY(session.moveTrack({pt::PrimitiveKind::Track,0},session.revision(),{999990,-1000000}));
         QCOMPARE(session.document()->tracks[0].end,QPointF(1000000,-999990));

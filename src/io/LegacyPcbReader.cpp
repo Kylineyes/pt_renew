@@ -88,6 +88,7 @@ public:
                 Track track{{qreal(v[0]), qreal(v[1])}, {qreal(v[2]), qreal(v[3])}, v[4], v[5], {}};
                 if (m_fieldCount == 7) { track.extra = v[6]; m_extraTrackField = true; }
                 track.source = source;
+                track.identity = TrackIdentity::loaded(recordLine);
                 m_board->tracks.append(track);
                 break;
             }
