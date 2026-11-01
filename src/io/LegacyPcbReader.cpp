@@ -16,19 +16,30 @@ struct ParseError { QString message; };
 
 class Reader {
 public:
-    explicit Reader(const QByteArray& bytes) : m_bytes(bytes) {}
+    Reader(const QByteArray& bytes, LegacyPcbLayout& layout) : m_bytes(bytes), m_layout(layout) {}
     std::shared_ptr<BoardDocument> run() {
         if (line().trimmed() != "PCB FILE 4") fail(QStringLiteral("仅支持 PCB FILE 4 文件头。"));
         bool ended = false;
         bool inComponent = false;
         while (m_offset < m_bytes.size()) {
+            const auto recordOffset = m_offset;
             const auto tag = line().trimmed();
+            const auto tagLineEnding = lineEnding(recordOffset, m_offset);
             if (tag.isEmpty()) continue;
             const qsizetype recordLine = m_line;
             const PrimitiveSource source{recordLine, inComponent ? m_board->components.size()-1 : -1};
             if (++m_records > maximumRecords) fail(QStringLiteral("记录数超过 200000 的安全限制。"));
             if (tag == "ENDPCB") {
                 if (inComponent) fail(QStringLiteral("元件尚未以 ENDCOMP 结束。"));
+                m_layout.endPcbOffset = recordOffset;
+                record(tag, recordLine, recordOffset);
+                if (!m_layout.geometryAfterNetdef) {
+                    auto& candidate = m_layout.insertion;
+                    candidate.kind = m_layout.netdefCount ? LegacyPcbInsertionKind::BeforeTrailingNetdefs : LegacyPcbInsertionKind::BeforeEndPcb;
+                    candidate.byteOffset = m_layout.netdefCount ? m_layout.trailingNetdefsOffset : recordOffset;
+                    candidate.anchorLineEnding = m_layout.netdefCount ? m_firstNetdefLineEnding : tagLineEnding;
+                    candidate.unavailableReason.clear();
+                }
                 ended = true;
                 while (m_offset < m_bytes.size()) {
                     if (!line().trimmed().isEmpty()) fail(QStringLiteral("ENDPCB 后仍有数据。"));
@@ -40,7 +51,13 @@ public:
                 const auto sectionStart=m_offset;
                 const auto result=LegacyNetlistReader::readEmbedded(m_bytes,m_offset,m_line);
                 if (!result.error.isEmpty()) throw ParseError{result.error};
+                observeNewlines(m_offset, result.nextOffset);
                 m_offset=result.nextOffset; m_line=result.nextLine;
+                if (m_layout.netdefCount++ == 0) {
+                    m_layout.trailingNetdefsOffset = recordOffset;
+                    m_firstNetdefLineEnding = tagLineEnding;
+                }
+                record(tag, recordLine, recordOffset);
                 if (!m_netlist) { m_netlist=std::make_shared<Netlist>(); m_netlist->embedded=true; }
                 m_netNodes+=result.net.nodes.size();m_netBytes+=result.nextOffset-sectionStart;
                 if (m_netNodes>200000 || m_netlist->nets.size()>=20000 || m_netBytes>8*1024*1024) fail(QStringLiteral("NETDEF 网络或节点超过安全限制。"));
@@ -51,6 +68,9 @@ public:
             }
             if (tag == "COMP") {
                 if (inComponent) fail(QStringLiteral("不允许嵌套 COMP。"));
+                if (m_layout.netdefCount) interleavedGeometry();
+                m_componentOffset = recordOffset;
+                m_componentLine = recordLine;
                 ++m_board->recordCounts[QStringLiteral("COMP")];
                 Component c;
                 c.designator = textLine(); c.footprint = textLine(); c.comment = textLine();
@@ -73,12 +93,14 @@ public:
                 if (!inComponent) fail(QStringLiteral("ENDCOMP 没有对应的 COMP。"));
                 ++m_board->recordCounts[QStringLiteral("ENDCOMP")];
                 inComponent = false;
+                record("COMP", m_componentLine, m_componentOffset);
                 continue;
             }
             if (tag.size() != 2 || (tag[0] != 'F' && tag[0] != 'C') || !QByteArray("TPVAFS").contains(tag[1])) {
                 fail(QStringLiteral("尚不支持记录 %1；为避免丢失数据，已停止载入。").arg(QString::fromLatin1(tag.left(80))));
             }
             if ((tag[0] == 'C') != inComponent) fail(QStringLiteral("自由图元与元件图元的所属范围不正确。"));
+            if (!inComponent && m_layout.netdefCount) interleavedGeometry();
             ++m_board->recordCounts[QString::fromLatin1(tag)];
             switch (tag[1]) {
             case 'T': {
@@ -128,6 +150,7 @@ public:
                 break;
             }
             }
+            if (!inComponent) record(tag, recordLine, recordOffset);
         }
         if (!ended) fail(QStringLiteral("缺少 ENDPCB 文件结束标记。"));
         if (m_extraTrackField) m_board->warnings.append(QStringLiteral("部分走线有第七附加字段，已保留原值但未解释其电气属性；仅显示已验证的几何字段。"));
@@ -145,6 +168,32 @@ public:
         return m_board;
     }
 private:
+    void record(const QByteArray& tag, qsizetype line, qsizetype begin) {
+        m_layout.topLevelRecords.append({tag, line, begin, m_offset});
+    }
+    void interleavedGeometry() {
+        m_layout.geometryAfterNetdef = true;
+        m_layout.trailingNetdefsOffset = -1;
+        m_layout.insertion.unavailableReason = QStringLiteral("NETDEF 后再次出现几何或 COMP，交错布局不提供新增插入候选。");
+    }
+    QByteArray lineEnding(qsizetype begin, qsizetype end) const {
+        if (end <= begin || m_bytes[end - 1] != '\n') return {};
+        return end - begin >= 2 && m_bytes[end - 2] == '\r' ? QByteArray("\r\n") : QByteArray("\n");
+    }
+    // NETDEF 由共享子解析器消费；仅观测其已确认区间内的换行，不重新判断标签。
+    void observeNewlines(qsizetype begin, qsizetype end) {
+        auto& facts = m_layout.newlines;
+        for (auto i = begin; i < end; ++i) {
+            if (m_bytes[i] == '\n') {
+                const bool crlf = i > 0 && m_bytes[i - 1] == '\r';
+                if (crlf) ++facts.crlfCount;
+                else ++facts.lfCount;
+                if (facts.firstLineEnding.isEmpty()) facts.firstLineEnding = crlf ? "\r\n" : "\n";
+            } else if (m_bytes[i] == '\r' && (i + 1 >= m_bytes.size() || m_bytes[i + 1] != '\n')) {
+                ++facts.bareCarriageReturnCount;
+            }
+        }
+    }
     [[noreturn]] void fail(const QString& message) const {
         throw ParseError{QStringLiteral("第 %1 行：%2").arg(m_line).arg(message)};
     }
@@ -155,7 +204,9 @@ private:
         ++m_line;
         if (stop - m_offset > 65536) fail(QStringLiteral("单行超过 64 KiB。"));
         auto result = m_bytes.mid(m_offset, stop - m_offset);
+        const auto begin = m_offset;
         m_offset = end < 0 ? m_bytes.size() : end + 1;
+        observeNewlines(begin, m_offset);
         if (result.endsWith('\r')) result.chop(1);
         return result;
     }
@@ -198,6 +249,9 @@ private:
         return {{qreal(v[0]), qreal(v[1])}, v[2], v[3] & 3, v[4], v[5], (v[3] & 16) != 0, {}};
     }
     const QByteArray& m_bytes;
+    LegacyPcbLayout& m_layout;
+    qsizetype m_componentOffset = -1, m_componentLine = 0;
+    QByteArray m_firstNetdefLineEnding;
     qsizetype m_offset = 0, m_line = 0, m_records = 0, m_fieldCount = 0;
     bool m_nonAscii = false, m_extraTrackField = false;
     std::shared_ptr<BoardDocument> m_board = std::make_shared<BoardDocument>();
@@ -207,13 +261,32 @@ private:
 }
 
 BoardReadResult LegacyPcbReader::parse(const QByteArray& bytes, const QString& source) {
-    if (bytes.size() > maximumBytes) return {{}, QStringLiteral("文件超过 64 MiB 安全限制。")};
-    if (bytes.contains('\0')) return {{}, QStringLiteral("PCB 文本中不允许二进制零字节。")};
+    const auto result = parseWithLayout(bytes, source);
+    return {result.document, result.error};
+}
+
+LegacyPcbLayoutReadResult LegacyPcbReader::parseWithLayout(const QByteArray& bytes, const QString& source) {
+    const auto failure = [](const QString& error) {
+        LegacyPcbLayoutReadResult result;
+        result.error = error;
+        result.layout.insertion.unavailableReason = QStringLiteral("严格解析失败，不提供任何局部布局：%1").arg(error);
+        return result;
+    };
+    if (bytes.size() > maximumBytes) return failure(QStringLiteral("文件超过 64 MiB 安全限制。"));
+    if (bytes.contains('\0')) return failure(QStringLiteral("PCB 文本中不允许二进制零字节。"));
     const auto end=dosTextEnd(bytes);
-    if (end<0) return {{},QStringLiteral("DOS EOF 后存在非空白数据，禁止截断板图。")};
+    if (end<0) return failure(QStringLiteral("DOS EOF 后存在非空白数据，禁止截断板图。"));
     const auto textBytes=bytes.left(end);
     try {
-        auto board = Reader(textBytes).run();
+        LegacyPcbLayout layout;
+        layout.sourceByteSize = bytes.size();
+        layout.textEndOffset = end;
+        layout.dosEofOffset = end < bytes.size() ? end : -1;
+        layout.newlines.textEndsWithNewline = textBytes.endsWith('\n');
+        auto board = Reader(textBytes, layout).run();
+        layout.unverifiedReasons.append(QStringLiteral("尚未验证原软件接受新增记录的插入布局。"));
+        if (layout.netdefCount && !layout.geometryAfterNetdef) layout.unverifiedReasons.append(QStringLiteral("尾部 NETDEF 前插入仅为语法候选，尚无原软件兼容验收。"));
+        layout.unverifiedReasons.append(QStringLiteral("新增 FT 默认字段、附加属性和换行编码尚未核定；观测换行不能作为默认写出规则。"));
         board->filePath = source; board->byteSize = bytes.size(); board->sourceBytes = bytes;
         board->sha256 = QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex());
         if (board->embeddedNetlist) {
@@ -222,9 +295,9 @@ BoardReadResult LegacyPcbReader::parse(const QByteArray& bytes, const QString& s
             netlist->warnings.append(QStringLiteral("NETDEF 来自公开结构描述和合成测试，本地原始 PCB 尚无可用实例对照；元数据未作电气解释。"));
             board->embeddedNetlist=netlist;
         }
-        return {board, {}};
+        return {board, layout, {}};
     } catch (const ParseError& error) {
-        return {{}, error.message};
+        return failure(error.message);
     }
 }
 

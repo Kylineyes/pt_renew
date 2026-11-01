@@ -1,5 +1,5 @@
 #pragma once
-#include "domain/BoardDocument.h"
+#include "io/LegacyPcbLayout.h"
 
 namespace pt {
 
@@ -8,6 +8,7 @@ class LegacyPcbReader {
 public:
     static BoardReadResult readFile(const QString& path);
     static BoardReadResult parse(const QByteArray& bytes, const QString& source = {});
+    static LegacyPcbLayoutReadResult parseWithLayout(const QByteArray& bytes, const QString& source = {});
 };
 
 }
