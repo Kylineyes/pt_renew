@@ -14,6 +14,8 @@ include(CTest)
 add_library(pt_core STATIC
     src/application/BoardEditSession.h
     src/application/BoardEditSession.cpp
+    src/application/TrackPlacementSession.h
+    src/application/TrackPlacementSession.cpp
     src/application/CommandCatalog.cpp
     src/application/CommandCatalog.h
     src/application/ComponentTableModel.h
@@ -25,6 +27,7 @@ add_library(pt_core STATIC
     src/domain/BoardDocument.h
     src/domain/BoardDocument.cpp
     src/io/LegacyPcbReader.h
+    src/io/LegacyPcbLayout.h
     src/io/LegacyPcbReader.cpp
     src/io/LegacyPcbWriter.h
     src/io/LegacyPcbWriter.cpp
@@ -107,6 +110,21 @@ if(BUILD_TESTING)
         message(STATUS "未找到 Python 3：跳过覆盖模块及文字研究工具测试，Qt 应用构建不受影响。")
     endif()
     find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
+    foreach(test_name IN ITEMS pcb-layout track-placement)
+        if(test_name STREQUAL "pcb-layout")
+            set(test_source tests/PcbLayoutTests.cpp)
+        else()
+            set(test_source tests/TrackPlacementTests.cpp)
+        endif()
+        qt_add_executable(pt-${test_name}-tests ${test_source})
+        set_target_properties(pt-${test_name}-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+        target_link_libraries(pt-${test_name}-tests PRIVATE pt_core Qt6::Test)
+        if(MSVC)
+            target_compile_options(pt-${test_name}-tests PRIVATE /utf-8 /W4 /permissive-)
+        endif()
+        add_test(NAME pt-${test_name}-tests COMMAND pt-${test_name}-tests -o -,txt -o ${test_name}-test-results.txt,txt)
+        set_tests_properties(pt-${test_name}-tests PROPERTIES TIMEOUT 30)
+    endforeach()
     qt_add_executable(pt-track-creation-tests tests/TrackCreationTests.cpp)
     set_target_properties(pt-track-creation-tests PROPERTIES WIN32_EXECUTABLE FALSE)
     target_link_libraries(pt-track-creation-tests PRIVATE pt_core Qt6::Test)
