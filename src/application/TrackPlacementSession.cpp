@@ -87,7 +87,7 @@ bool TrackPlacementSession::checkContext(
     return false;
 }
 
-std::optional<TrackPlacementRequest> TrackPlacementSession::confirm(
+std::optional<TrackPlacementRequest> TrackPlacementSession::prepareRequest(
     const std::shared_ptr<const BoardDocument>& currentDocument,
     quint64 currentRevision, bool targetLayerVisible, QString* error) {
     if (error) error->clear();
@@ -105,8 +105,14 @@ std::optional<TrackPlacementRequest> TrackPlacementSession::confirm(
     if (m_width <= 0 || m_width > 1000000 || (m_layer != 1 && m_layer != 6))
         return fail(error, QStringLiteral("放置参数已失效，请重新开始。")), std::nullopt;
 
-    TrackPlacementRequest request{*m_start, *m_end, m_width, m_layer, m_revision, m_document};
-    clear();
+    return TrackPlacementRequest{*m_start, *m_end, m_width, m_layer, m_revision, m_document};
+}
+
+std::optional<TrackPlacementRequest> TrackPlacementSession::confirm(
+    const std::shared_ptr<const BoardDocument>& currentDocument,
+    quint64 currentRevision, bool targetLayerVisible, QString* error) {
+    auto request = prepareRequest(currentDocument, currentRevision, targetLayerVisible, error);
+    if (request) clear();
     return request;
 }
 
