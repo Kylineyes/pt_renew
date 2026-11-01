@@ -1,5 +1,7 @@
 # 自由走线前置能力并行开发
 
+> 后续进展：[第二轮并行开发](parallel-track-preflight.md)已完成显式编码、未编码插入预检和提交控制，最新 Debug／Release 各 19/19 组通过。以下保留首轮任务及 15/15 组结果；产品入口和新增文件写出仍未开放。
+
 2026-11-02，用户要求可并发事项交给子 agent，并保证修改独立。本轮统一从 `dev=6a29de0db7ba8f4d0dcc2d6822f0ed1f3a08499c` 派发，父协调分支为 `integration/track-foundation-wave`。任务运行记录为 `run_cb7e43c2f6f6`。
 
 ## 文件所有权与集成方式
