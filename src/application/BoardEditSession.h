@@ -19,17 +19,21 @@ public:
     bool editable(PrimitiveId id, quint64 revision) const;
     bool moveTrack(PrimitiveId id, quint64 revision, QPointF delta, QString* error = nullptr);
     bool deleteTrack(PrimitiveId id, quint64 revision);
+    // 仅供核心编辑使用；新增 FT 的原文件编码尚未核定，界面与写出入口不开放。
+    bool addTrack(QPointF start, QPointF end, int width, int layer, quint64 revision, QString* error = nullptr);
     bool undo();
     bool redo();
 private:
-    struct Operation { qsizetype index; Track before; std::optional<Track> after; };
-    void apply(const Operation& operation, bool forward);
-    void record(Operation operation);
+    struct Operation { qsizetype index; std::optional<Track> before, after; };
+    bool apply(const Operation& operation, bool forward);
+    bool record(Operation operation);
     std::shared_ptr<const BoardDocument> m_original, m_current;
     std::vector<Operation> m_history;
     size_t m_position = 0;
     std::optional<size_t> m_savedPosition = 0;
     quint64 m_revision = 0;
+    quint64 m_nextTrackSequence = 1;
+    bool m_identitiesValid = false;
 };
 
 }
