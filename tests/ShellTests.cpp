@@ -199,7 +199,7 @@ private slots:
         QCOMPARE(canvas->zoom(), 16.0);
     }
 
-    void readOnlyBoardKeepsEditingDisabled() {
+    void sourceReadOnlyAndFailedOpenKeepsCurrentBoard() {
         QTemporaryDir temporary;
         const QString path = temporary.filePath(QStringLiteral("sample.pcb"));
         QFile file(path);
@@ -209,16 +209,18 @@ private slots:
         pt::MainWindow window;
         QVERIFY(window.inspectFile(path));
         auto* text = window.findChild<QPlainTextEdit*>(QStringLiteral("fileInfoText"));
-        QVERIFY(text->toPlainText().contains(QStringLiteral("只读预览")));
+        QVERIFY(text->toPlainText().contains(QStringLiteral("原输入（始终只读")));
+        QVERIFY(text->toPlainText().contains(QStringLiteral("不覆盖任何已有文件")));
+        QVERIFY(window.findChild<QAction*>(QStringLiteral("file.save_as"))->isEnabled());
         QVERIFY(window.findChild<QAction*>(QStringLiteral("file.close"))->isEnabled());
         QVERIFY(!window.findChild<QAction*>(QStringLiteral("file.save"))->isEnabled());
         window.findChild<QAction*>(QStringLiteral("file.close"))->trigger();
         QVERIFY(text->toPlainText().contains(QStringLiteral("尚未打开文件")));
         QVERIFY(window.inspectFile(path));
         QVERIFY(!window.inspectFile(temporary.filePath(QStringLiteral("missing.pcb"))));
-        QVERIFY(!window.windowTitle().contains(QStringLiteral("sample.pcb")));
-        QVERIFY(!window.findChild<QAction*>(QStringLiteral("file.close"))->isEnabled());
-        QVERIFY(text->toPlainText().contains(QStringLiteral("探测失败")));
+        QVERIFY(window.windowTitle().contains(QStringLiteral("sample.pcb")));
+        QVERIFY(window.findChild<QAction*>(QStringLiteral("file.close"))->isEnabled());
+        QVERIFY(text->toPlainText().contains(QStringLiteral("未修改")));
     }
 };
 

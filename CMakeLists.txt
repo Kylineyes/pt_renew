@@ -12,6 +12,8 @@ find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Widgets Concurrent)
 include(CTest)
 
 add_library(pt_core STATIC
+    src/application/BoardEditSession.h
+    src/application/BoardEditSession.cpp
     src/application/CommandCatalog.cpp
     src/application/CommandCatalog.h
     src/application/ComponentTableModel.h
@@ -19,10 +21,13 @@ add_library(pt_core STATIC
     src/domain/Measurement.h
     src/domain/DocumentInfo.h
     src/domain/PrimitiveId.h
+    src/domain/TrackIdentity.h
     src/domain/BoardDocument.h
     src/domain/BoardDocument.cpp
     src/io/LegacyPcbReader.h
     src/io/LegacyPcbReader.cpp
+    src/io/LegacyPcbWriter.h
+    src/io/LegacyPcbWriter.cpp
     src/io/DosText.h
     src/domain/Netlist.h
     src/io/LegacyNetlistReader.h
@@ -102,6 +107,30 @@ if(BUILD_TESTING)
         message(STATUS "未找到 Python 3：跳过覆盖模块及文字研究工具测试，Qt 应用构建不受影响。")
     endif()
     find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
+    qt_add_executable(pt-track-creation-tests tests/TrackCreationTests.cpp)
+    set_target_properties(pt-track-creation-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-track-creation-tests PRIVATE pt_core Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-track-creation-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-track-creation-tests COMMAND pt-track-creation-tests -o -,txt -o track-creation-test-results.txt,txt)
+    set_tests_properties(pt-track-creation-tests PROPERTIES TIMEOUT 30)
+    qt_add_executable(pt-writing-tests tests/WritingTests.cpp)
+    set_target_properties(pt-writing-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-writing-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-writing-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-writing-tests COMMAND pt-writing-tests -o -,txt -o writing-test-results.txt,txt)
+    set_tests_properties(pt-writing-tests PROPERTIES TIMEOUT 90)
+    qt_add_executable(pt-editing-tests tests/EditingTests.cpp)
+    set_target_properties(pt-editing-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-editing-tests PRIVATE pt_ui Qt6::Test)
+    if(MSVC)
+        target_compile_options(pt-editing-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-editing-tests COMMAND pt-editing-tests -o -,txt -o editing-test-results.txt,txt)
+    set_tests_properties(pt-editing-tests PROPERTIES TIMEOUT 90)
     qt_add_executable(pt-shell-tests tests/ShellTests.cpp)
     set_target_properties(pt-shell-tests PROPERTIES WIN32_EXECUTABLE FALSE)
     target_link_libraries(pt-shell-tests PRIVATE pt_ui Qt6::Test)

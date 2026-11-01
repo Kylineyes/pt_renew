@@ -12,7 +12,7 @@ class NetlistBrowser final : public QDockWidget {
     Q_OBJECT
 public:
     explicit NetlistBrowser(QWidget* parent=nullptr);
-    void setBoard(std::shared_ptr<const BoardDocument> board);
+    void setBoard(std::shared_ptr<const BoardDocument> board, bool preserveExternal = false);
     void chooseFile();
     void requestFile(const QString& path);
     bool loadFile(const QString& path);
@@ -55,6 +55,6 @@ private:
     bool m_analyzing=false;
     bool m_loading=false;
     quint64 m_generation=0;
-    QString m_error;
+    QString m_error, m_notice;
 };
 }

@@ -20,7 +20,7 @@ public:
     void zoomOut();
     void centerView();
     void resetView();
-    void setDocument(std::shared_ptr<const BoardDocument> document);
+    void setDocument(std::shared_ptr<const BoardDocument> document, bool preserveView = false);
     const BoardDocument* document() const { return m_document.get(); }
     void setNetPads(const QList<qsizetype>& pads);
     const QList<qsizetype>& netPads() const { return m_netPads; }

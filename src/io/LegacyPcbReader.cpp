@@ -88,6 +88,7 @@ public:
                 Track track{{qreal(v[0]), qreal(v[1])}, {qreal(v[2]), qreal(v[3])}, v[4], v[5], {}};
                 if (m_fieldCount == 7) { track.extra = v[6]; m_extraTrackField = true; }
                 track.source = source;
+                track.identity = TrackIdentity::loaded(recordLine);
                 m_board->tracks.append(track);
                 break;
             }
@@ -213,7 +214,7 @@ BoardReadResult LegacyPcbReader::parse(const QByteArray& bytes, const QString& s
     const auto textBytes=bytes.left(end);
     try {
         auto board = Reader(textBytes).run();
-        board->filePath = source; board->byteSize = bytes.size();
+        board->filePath = source; board->byteSize = bytes.size(); board->sourceBytes = bytes;
         board->sha256 = QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex());
         if (board->embeddedNetlist) {
             auto netlist=std::make_shared<Netlist>(*board->embeddedNetlist);
