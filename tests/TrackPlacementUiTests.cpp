@@ -190,6 +190,25 @@ private slots:
         QVERIFY(window.beginTrackPlacement(10,1)); action(window,"file.close")->trigger(); idle(window);
         QVERIFY(!window.editSession().document());
     }
+    void modalCancellationPreservesExistingSelection() {
+        pt::MainWindow window; QVERIFY(window.inspectFile(m_path)); expose(window);
+        auto* canvas = window.findChild<pt::BoardCanvas*>();
+        QVERIFY(canvas->focusPrimitive({pt::PrimitiveKind::Track,0}));
+        const auto selection = canvas->selection();
+        QDialog dialog(&window); dialog.setWindowModality(Qt::WindowModal); dialog.show();
+        QCOMPARE(canvas->selection(),selection);
+        dialog.hide();
+        QVERIFY(window.beginTrackPlacement(10,1));
+        dialog.show(); idle(window);
+        QVERIFY(!window.editSession().dirty());
+    }
+    void idleCanvasEscapePropagatesToDialog() {
+        QDialog dialog; pt::BoardCanvas canvas(&dialog);
+        dialog.resize(800,600); canvas.resize(800,600); dialog.show(); dialog.activateWindow();
+        QVERIFY(QTest::qWaitForWindowActive(&dialog)); canvas.setFocus();
+        QTest::keyClick(&canvas,Qt::Key_Escape);
+        QTRY_VERIFY(!dialog.isVisible());
+    }
     void backendFailurePreservesPreviewAndHistory() {
         pt::MainWindow window; QVERIFY(window.inspectFile(m_path));
         // 构造后端不能编辑的模型，覆盖控制器拒绝提交后保留预览的主窗分支。

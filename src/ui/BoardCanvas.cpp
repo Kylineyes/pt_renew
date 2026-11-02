@@ -320,7 +320,8 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
 }
 
 void BoardCanvas::keyPressEvent(QKeyEvent* event) {
-    if (event->key()==Qt::Key_Escape && event->modifiers()==Qt::NoModifier) {
+    if ((m_trackPlacementMode || m_measurementMode)
+        && event->key()==Qt::Key_Escape && event->modifiers()==Qt::NoModifier) {
         emit interactionCancelRequested();
         setTrackPlacementPreview(false); setMeasurementMode(false); clearSelection();
         event->accept(); return;

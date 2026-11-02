@@ -209,7 +209,7 @@ bool MainWindow::eventFilter(QObject* watched, QEvent* event) {
     if (trackPlacement().state() != TrackPlacementState::Idle) {
         auto* widget = qobject_cast<QWidget*>(watched);
         if (event->type() == QEvent::Show && widget && widget->isWindow()
-            && widget->windowModality() != Qt::NonModal) cancelInteraction();
+            && widget->windowModality() != Qt::NonModal) cancelTrackPlacement();
     }
     return QMainWindow::eventFilter(watched, event);
 }
@@ -384,7 +384,7 @@ void MainWindow::executeCommand(const QString& id) {
     if (id == QStringLiteral("file.open") || id == QStringLiteral("file.close")
         || id == QStringLiteral("file.save_as") || id == QStringLiteral("library.file")
         || id == QStringLiteral("library.browse") || id == QStringLiteral("netlist.load")
-        || id == QStringLiteral("app.about") || id == QStringLiteral("app.exit")) cancelInteraction();
+        || id == QStringLiteral("app.about") || id == QStringLiteral("app.exit")) cancelTrackPlacement();
     if (id == QStringLiteral("place.track")) {
         if (!trackPlacementUserEntryAvailable()) return;
         trackPlacementDialog();
