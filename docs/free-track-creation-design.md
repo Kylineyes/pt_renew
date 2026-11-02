@@ -1,6 +1,6 @@
 # 新增自由走线与工具取消设计
 
-本页描述新增自由走线的完整目标。2026-11-02 已完成[身份与编辑历史核心](free-track-history-core.md)、[解析布局元数据](pcb-layout-analysis.md)和[临时放置状态模型](track-placement-session.md)，又在[第二轮并行开发](parallel-track-preflight.md)中完成[显式 FT 编码器](free-track-explicit-codec.md)、[未编码插入预检](track-insertion-plan.md)和[提交控制器](track-placement-controller.md)。画布预览、统一取消及新增写出仍待接入，当前 `place.track`／F3 仍为未实现入口，`LegacyPcbWriter` 继续拒绝新增图元。已有移动、删除、另存为的历史验收边界保持；原软件兼容及独立产品原生文件框的结果分别记录在对应核验报告中。
+本页描述新增自由走线的完整目标。2026-11-02 已完成[身份与编辑历史核心](free-track-history-core.md)、[解析布局元数据](pcb-layout-analysis.md)和[临时放置状态模型](track-placement-session.md)，又在[第二轮并行开发](parallel-track-preflight.md)中完成[显式 FT 编码器](free-track-explicit-codec.md)、[未编码插入预检](track-insertion-plan.md)和[提交控制器](track-placement-controller.md)。后续已增加[显式参数输出](track-explicit-output.md)与[主窗、画布和统一取消接入](track-placement-ui.md)：内部调用可组合放置、预检、编码、整体复核及全新文件发布。原软件默认字段仍未核定，产品 `place.track`／F3 受单一能力门保护并保持未实现／禁用，默认 `LegacyPcbWriter::prepare`／`saveAs` 仍拒绝新增；不得将显式内部路径当作产品新增功能已开放。已有移动、删除、另存为的历史验收边界保持；原软件兼容及独立产品原生文件框的结果分别记录在对应核验报告中。
 
 ## 最小产品范围
 
@@ -45,7 +45,7 @@
 
 ## 原字节插入与写出规则
 
-不能只删除当前 writer 的“新增”拒绝条件。读取器现已通过 `parseWithLayout` 记录语法确认的顶层记录边界、插入候选和换行事实，详见[布局元数据](pcb-layout-analysis.md)；新增写出尚未使用这些候选，原软件可接受的默认字段及换行编码仍未核定。后续须在冻结原字节上增加位置明确的插入补丁。文字、焊盘名称或 NETDEF 数据中也可能出现 `ENDPCB` 等文本，不能使用字符串查找代替语法记录边界。
+不能只删除当前 writer 的“新增”拒绝条件。读取器现已通过 `parseWithLayout` 记录语法确认的顶层记录边界、插入候选和换行事实，详见[布局元数据](pcb-layout-analysis.md)；显式参数输出已消费这些候选，原软件可接受的默认字段及换行编码仍未核定。显式路径在冻结原字节上增加位置明确的插入补丁。文字、焊盘名称或 NETDEF 数据中也可能出现 `ENDPCB` 等文本，不能使用字符串查找代替语法记录边界。
 
 初版插入位置规则如下：
 
