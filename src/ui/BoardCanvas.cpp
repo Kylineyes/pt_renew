@@ -21,6 +21,8 @@ BoardCanvas::BoardCanvas(QWidget* parent) : QWidget(parent) {
 }
 
 void BoardCanvas::setDocument(std::shared_ptr<const BoardDocument> document, bool preserveView) {
+    emit interactionCancelRequested();
+    setTrackPlacementPreview(false);
     const bool snap = m_measurementSnap;
     m_document = std::move(document);
     m_netPads.clear();
@@ -53,6 +55,7 @@ bool BoardCanvas::focusPrimitive(PrimitiveId id) {
     if (!m_document || primitiveLayer(*m_document,id)==0) return false;
     const auto bounds=primitiveBounds(*m_document,id);
     if (!bounds.isValid()) return false;
+    emit interactionCancelRequested();
     setMeasurementMode(false);clearSelection();
     centerOn(bounds.center());
     m_selection=id;update();emit selectionChanged();return true;
@@ -65,6 +68,7 @@ bool BoardCanvas::focusPad(qsizetype index) {
 void BoardCanvas::setLayerVisible(int layer, bool visible) {
     clearSnapPreview();
     if (visible) m_visibleLayers.insert(layer); else m_visibleLayers.remove(layer);
+    emit trackPlacementContextChanged();
     if (m_selection && m_document && !visible && primitiveLayer(*m_document,*m_selection)==layer) {
         clearSelection();
     } else {
@@ -119,6 +123,7 @@ void BoardCanvas::centerOn(const QPointF& position) {
 
 bool BoardCanvas::focusComponent(qsizetype index) {
     if (!m_document || index<0 || index>=m_document->components.size()) return false;
+    emit interactionCancelRequested();
     setMeasurementMode(false);
     clearSelection();
     m_componentBox=componentBounds(*m_document,index);
@@ -132,6 +137,7 @@ bool BoardCanvas::focusComponent(qsizetype index) {
 }
 
 void BoardCanvas::setMeasurementMode(bool enabled) {
+    if (enabled) { emit interactionCancelRequested(); setTrackPlacementPreview(false); }
     m_measurementMode=enabled && m_document!=nullptr;
     m_measurementStart.reset();
     m_startAnchor.reset();
@@ -140,6 +146,15 @@ void BoardCanvas::setMeasurementMode(bool enabled) {
     if (m_measurementMode) clearSelection();
     setCursor(m_measurementMode?Qt::CrossCursor:Qt::ArrowCursor);
     update(); emit measurementChanged();
+}
+
+void BoardCanvas::setTrackPlacementPreview(bool active, int width, int layer,
+                                            std::optional<QPointF> start, std::optional<QPointF> end) {
+    m_trackPlacementMode = active;
+    m_trackWidth = width; m_trackLayer = layer; m_trackStart = start; m_trackEnd = end;
+    setMouseTracking(active || (m_measurementMode && m_measurementSnap));
+    setCursor(active || m_measurementMode ? Qt::CrossCursor : Qt::ArrowCursor);
+    update();
 }
 
 void BoardCanvas::clearMeasurement() {
@@ -151,7 +166,7 @@ void BoardCanvas::clearMeasurement() {
 void BoardCanvas::setMeasurementSnapEnabled(bool enabled) {
     m_measurementSnap = enabled && m_document != nullptr;
     clearSnapPreview();
-    setMouseTracking(m_measurementMode && m_measurementSnap);
+    setMouseTracking(m_trackPlacementMode || (m_measurementMode && m_measurementSnap));
     update(); emit measurementChanged();
 }
 
@@ -255,7 +270,16 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
             QPen pen(QColor(250,250,250)); pen.setCosmetic(true); pen.setWidthF(2); pen.setStyle(Qt::DashLine);
             painter.setPen(pen); painter.setBrush(Qt::NoBrush); painter.drawRect(m_componentBox);
         }
+        if (m_trackPlacementMode && m_trackStart && m_trackEnd && m_visibleLayers.contains(m_trackLayer)) {
+            QPen pen(layerColor(m_trackLayer)); pen.setWidthF(m_trackWidth); pen.setCapStyle(Qt::RoundCap);
+            painter.setOpacity(0.65); painter.setPen(pen); painter.drawLine(*m_trackStart, *m_trackEnd);
+            painter.setOpacity(1);
+        }
         painter.restore();
+        if (m_trackPlacementMode && m_trackStart) {
+            painter.setPen(QPen(QColor(255,218,90),2)); painter.setBrush(Qt::NoBrush);
+            painter.drawEllipse(boardToScreen(*m_trackStart),5,5);
+        }
         // 测量覆盖层在屏幕坐标中绘制，线宽和端点标记不随缩放增粗。
         if (m_measurement) {
             painter.setPen(QPen(QColor(120,235,215),2,Qt::DashLine));
@@ -296,8 +320,10 @@ void BoardCanvas::paintEvent(QPaintEvent*) {
 }
 
 void BoardCanvas::keyPressEvent(QKeyEvent* event) {
-    if (m_measurementMode && event->key()==Qt::Key_Escape && event->modifiers()==Qt::NoModifier) {
-        setMeasurementMode(false); event->accept(); return;
+    if (event->key()==Qt::Key_Escape && event->modifiers()==Qt::NoModifier) {
+        emit interactionCancelRequested();
+        setTrackPlacementPreview(false); setMeasurementMode(false); clearSelection();
+        event->accept(); return;
     }
     // 兼容字母只在画布焦点内生效，不截获文件名或属性编辑框输入。
     if (event->modifiers() == Qt::NoModifier) {
@@ -326,6 +352,10 @@ void BoardCanvas::wheelEvent(QWheelEvent* event) {
 void BoardCanvas::mousePressEvent(QMouseEvent* event) {
     setFocus(Qt::MouseFocusReason);
     if (event->button()==Qt::LeftButton && m_document) {
+        if (m_trackPlacementMode) {
+            emit trackPlacementPointPicked(screenToBoard(event->position()));
+            event->accept(); return;
+        }
         if (m_measurementMode) {
             const auto snap = measurementSnapAt(event->position());
             const auto position = snap ? snap->position : screenToBoard(event->position());
@@ -372,6 +402,10 @@ void BoardCanvas::mouseMoveEvent(QMouseEvent* event) {
         event->accept();
         return;
     }
+    if (m_trackPlacementMode) {
+        emit trackPlacementEndPreviewed(screenToBoard(event->position()));
+        event->accept(); return;
+    }
     if (m_measurementMode && m_measurementSnap) {
         m_snapPreview = measurementSnapAt(event->position());
         update();
@@ -384,7 +418,7 @@ void BoardCanvas::mouseMoveEvent(QMouseEvent* event) {
 void BoardCanvas::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::MiddleButton && m_panning) {
         m_panning = false;
-        setCursor(m_measurementMode?Qt::CrossCursor:Qt::ArrowCursor);
+        setCursor(m_trackPlacementMode || m_measurementMode ? Qt::CrossCursor : Qt::ArrowCursor);
         event->accept();
         return;
     }
