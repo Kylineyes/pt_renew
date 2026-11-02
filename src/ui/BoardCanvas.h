@@ -46,12 +46,20 @@ public:
     void setMeasurementSnapEnabled(bool enabled);
     bool measurementSnapEnabled() const { return m_measurementSnap; }
     std::optional<SnapPoint> snapPreview() const { return m_snapPreview; }
+    // 只保存绘制数据；永久身份、文档修订及提交由主窗控制器管理。
+    void setTrackPlacementPreview(bool active, int width = 0, int layer = 0,
+                                  std::optional<QPointF> start = {}, std::optional<QPointF> end = {});
+    bool trackPlacementMode() const { return m_trackPlacementMode; }
 
 signals:
     void legacyMenuRequested(const QString& key);
     void viewChanged();
     void selectionChanged();
     void measurementChanged();
+    void trackPlacementPointPicked(QPointF point);
+    void trackPlacementEndPreviewed(QPointF point);
+    void interactionCancelRequested();
+    void trackPlacementContextChanged();
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -68,6 +76,9 @@ private:
     void zoomAt(qreal factor, const QPointF& anchor);
     std::optional<SnapPoint> measurementSnapAt(const QPointF& screen) const;
     void clearSnapPreview();
+    bool m_trackPlacementMode = false;
+    int m_trackWidth = 0, m_trackLayer = 0;
+    std::optional<QPointF> m_trackStart, m_trackEnd;
     bool m_gridVisible = true;
     bool m_panning = false;
     qreal m_zoom = 1.0;
