@@ -620,6 +620,14 @@ void MainWindow::publishWorkingDocument() {
 }
 
 bool MainWindow::saveAsFile(const QString& path, QString* error) {
+    return saveAsFileImpl(path, nullptr, error);
+}
+
+bool MainWindow::saveAsFileWithCreated(const QString& path, const LegacyFreeTrackCodec::Options& options, QString* error) {
+    return saveAsFileImpl(path, &options, error);
+}
+
+bool MainWindow::saveAsFileImpl(const QString& path, const LegacyFreeTrackCodec::Options* options, QString* error) {
     cancelTrackPlacement();
     if (error) error->clear();
     const auto& original = m_editSession.original();
@@ -627,7 +635,9 @@ bool MainWindow::saveAsFile(const QString& path, QString* error) {
         if (error) *error = QStringLiteral("请先载入板图并等待读取结束，在主板窗口另存为。");
         return false;
     }
-    const auto result = LegacyPcbWriter::saveAs(path, *original, *m_editSession.document());
+    const auto result = options
+        ? LegacyPcbWriter::saveAsWithCreated(path, *original, *m_editSession.document(), *options)
+        : LegacyPcbWriter::saveAs(path, *original, *m_editSession.document());
     if (!result.succeeded()) {
         if (error) *error = result.error;
         statusBar()->showMessage(QStringLiteral("另存为失败：%1；工作副本和历史已保留。").arg(result.error), 15000);
@@ -641,16 +651,21 @@ bool MainWindow::saveAsFile(const QString& path, QString* error) {
 }
 
 void MainWindow::saveAsDialog() {
+    cancelTrackPlacement();
     if (!m_actions.value(QStringLiteral("file.save_as"))->isEnabled()) return;
     const auto revision = m_editSession.revision();
+    const auto document = m_editSession.document();
+    const auto original = m_editSession.original();
+    const auto generation = m_loadGeneration;
     const auto previous = m_savedPath.isEmpty() ? m_editSession.original()->filePath : m_savedPath;
     const QFileInfo info(previous);
     const auto path = QFileDialog::getSaveFileName(this, QStringLiteral("另存为新 PCB（不覆盖已有文件）"),
         info.dir().filePath(info.completeBaseName() + QStringLiteral("-edited.pcb")),
         QStringLiteral("AUTOTRAX 板图 (*.pcb)"), nullptr, QFileDialog::DontConfirmOverwrite);
     if (path.isEmpty()) return;
-    if (revision != m_editSession.revision()) {
-        QMessageBox::warning(this, QStringLiteral("尚未另存为"), QStringLiteral("选择路径期间板图已变化，请重新另存为。"));
+    if (revision != m_editSession.revision() || document != m_editSession.document()
+        || original != m_editSession.original() || generation != m_loadGeneration || m_loading) {
+        QMessageBox::warning(this, QStringLiteral("尚未另存为"), QStringLiteral("选择路径期间板图已变化或正在载入，请重新另存为。"));
         return;
     }
     QString error;

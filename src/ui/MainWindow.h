@@ -2,6 +2,7 @@
 
 #include "application/BoardEditSession.h"
 #include "application/TrackPlacementController.h"
+#include "io/LegacyFreeTrackCodec.h"
 #include <QHash>
 #include <QMainWindow>
 
@@ -31,6 +32,9 @@ public:
     bool moveSelectedTrack(QPointF delta, QString* error = nullptr);
     bool deleteSelectedTrack();
     bool saveAsFile(const QString& path, QString* error = nullptr);
+    // 显式内部验收另存；编码选项必须由调用方指定，不代表原软件兼容或产品入口开放。
+    bool saveAsFileWithCreated(const QString& path, const LegacyFreeTrackCodec::Options& options,
+        QString* error = nullptr);
     // 显式内部验收入口；产品命令另受 CommandCatalog 中唯一能力门约束。
     bool beginTrackPlacement(int width, int layer, QString* error = nullptr);
     bool setTrackPlacementStart(QPointF point, QString* error = nullptr);
@@ -59,6 +63,7 @@ private:
     bool checkTrackPlacementContext(QString* error);
     void cancelInteraction();
     void saveAsDialog();
+    bool saveAsFileImpl(const QString& path, const LegacyFreeTrackCodec::Options* options, QString* error);
     void publishWorkingDocument();
     void updateEditingActions();
     void updateFileInfo();
