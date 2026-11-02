@@ -126,23 +126,32 @@ private slots:
         QCOMPARE(canvas->document(), committed.get()); QVERIFY(!canvas->selection());
         QVERIFY(!canvas->measurement());
         const auto createdIdentity = committed->tracks.back().identity;
-        const auto output = dir.filePath(QStringLiteral("CREATED.PCB"));
-        const auto saved = pt::LegacyPcbWriter::saveAsWithCreated(
-            output, *window.editSession().original(), *committed, explicitOptions(true));
-        QVERIFY2(saved.succeeded(), qPrintable(saved.error));
-        // 显式内部写出不伪造主窗保存点，尚未开放的产品另存路径仍须拒绝新增。
+        // 先从真实主窗验证默认产品路径拒绝新增，并保留工作文档与 dirty。
         QVERIFY(window.editSession().dirty());
         const auto unavailable = dir.filePath(QStringLiteral("PRODUCT.PCB"));
         QVERIFY(!window.saveAsFile(unavailable, &error)); QVERIFY(!error.isEmpty());
         QVERIFY(!QFile::exists(unavailable)); QCOMPARE(window.editSession().document(), committed);
         QVERIFY(window.beginTrackPlacement(15, 6, &error));
-        QVERIFY(window.setTrackPlacementStart({300,300}, &error)); window.cancelTrackPlacement();
+        QVERIFY(window.setTrackPlacementStart({300,300}, &error));
+        QVERIFY(window.previewTrackPlacementEnd({400,300}, &error));
+        const auto output = dir.filePath(QStringLiteral("CREATED.PCB"));
+        QVERIFY2(window.saveAsFileWithCreated(output, explicitOptions(true), &error), qPrintable(error));
+        // 主窗取消未提交的下一段，收到真实发布成功后标记保存点，保留当前文档身份。
+        QCOMPARE(window.trackPlacement().state(), pt::TrackPlacementState::Idle);
         QCOMPARE(window.editSession().document(), committed);
+        QCOMPARE(window.editSession().original()->filePath, input);
+        QVERIFY(!window.editSession().dirty());
+        const auto published = readFile(output); QVERIFY(!published.isEmpty());
+        QVERIFY(window.editSession().canUndo());
         auto* undo = window.findChild<QAction*>(QStringLiteral("edit.undo"));
         auto* redo = window.findChild<QAction*>(QStringLiteral("edit.redo")); QVERIFY(undo); QVERIFY(redo);
-        undo->trigger(); QVERIFY(!window.editSession().dirty());
-        redo->trigger(); QVERIFY(window.editSession().dirty());
+        undo->trigger(); QVERIFY(window.editSession().dirty());
+        QCOMPARE(window.editSession().document()->tracks.size(), committed->tracks.size() - 1);
+        redo->trigger(); QVERIFY(!window.editSession().dirty());
         QVERIFY(window.editSession().document()->tracks.back().identity == createdIdentity);
+        QVERIFY(!window.saveAsFileWithCreated(output, explicitOptions(true), &error));
+        QVERIFY(!error.isEmpty()); QVERIFY(!window.editSession().dirty());
+        QCOMPARE(readFile(output), published);
         pt::MainWindow reopened; QVERIFY(reopened.inspectFile(output));
         QVERIFY(!reopened.editSession().dirty()); QVERIFY(!reopened.editSession().canUndo());
         QCOMPARE(reopened.editSession().document()->tracks.size(), committed->tracks.size());
