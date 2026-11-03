@@ -119,6 +119,38 @@ private slots:
         const auto result=pt::LegacyPcbWriter::prepare(*original,current);
         QVERIFY2(!result.succeeded(),qPrintable(mode)); QVERIFY(!result.error.isEmpty());
     }
+    void rejectsSubIntegerGeometryChanges_data() {
+        QTest::addColumn<QString>("mode");
+        QTest::addColumn<bool>("forgeOriginal");
+        for (const auto* mode : {"track-start", "track-end", "component-track", "pad", "via", "arc",
+                "fill-position", "fill-size", "text", "component-origin"}) {
+            for (const bool forgeOriginal : {false, true})
+                QTest::newRow(qPrintable(QString::fromLatin1(mode) + (forgeOriginal ? "-original" : "-current")))
+                    << QString::fromLatin1(mode) << forgeOriginal;
+        }
+    }
+    void rejectsSubIntegerGeometryChanges() {
+        QFETCH(QString, mode); QFETCH(bool, forgeOriginal);
+        const auto loaded = pt::LegacyPcbReader::parse(fixture()).document; QVERIFY(loaded);
+        auto altered = *loaded;
+        const auto shift = [](QPointF point) { point.setX(point.x() + 1e-13); return point; };
+        if (mode == "track-start") altered.tracks[0].start = shift(altered.tracks[0].start);
+        if (mode == "track-end") altered.tracks[0].end = shift(altered.tracks[0].end);
+        if (mode == "component-track") altered.tracks[2].start = shift(altered.tracks[2].start);
+        if (mode == "pad") altered.pads[0].center = shift(altered.pads[0].center);
+        if (mode == "via") altered.vias[0].center = shift(altered.vias[0].center);
+        if (mode == "arc") altered.arcs[0].center = shift(altered.arcs[0].center);
+        if (mode == "fill-position") altered.fills[0].rectangle.translate(1e-13, 0);
+        if (mode == "fill-size") altered.fills[0].rectangle.setWidth(altered.fills[0].rectangle.width() + 1e-13);
+        if (mode == "text") altered.texts[0].position = shift(altered.texts[0].position);
+        if (mode == "component-origin") altered.components[0].origin = shift(altered.components[0].origin);
+        QTemporaryDir directory; QVERIFY(directory.isValid());
+        const auto target = directory.filePath("fractional.pcb");
+        // 冻结原模型和工作模型都必须精确核对，不能静默丢弃小数修改再发布。
+        const auto result = pt::LegacyPcbWriter::saveAs(target, forgeOriginal ? altered : *loaded, altered);
+        QVERIFY2(!result.succeeded(), qPrintable(mode)); QVERIFY(!result.error.isEmpty());
+        QVERIFY(!QFile::exists(target)); QCOMPARE(loaded->sourceBytes, fixture());
+    }
     void originalSnapshotMustMatchBytes() {
         const auto original=pt::LegacyPcbReader::parse(fixture()).document;
         auto forged=*original; forged.tracks[0].width=123;

@@ -217,6 +217,21 @@ private slots:
         rejected(Writer::prepareWithCreated(*original, current, six()));
     }
 
+    void fractionalLoadedEditCannotDisappearDuringCreatedPublish() {
+        QTemporaryDir dir; QVERIFY(dir.isValid());
+        const auto original = pt::LegacyPcbReader::parse(fixture()).document; QVERIFY(original);
+        pt::BoardEditSession session; session.reset(original);
+        QVERIFY(session.addTrack({1, 2}, {3, 4}, 5, 6, session.revision()));
+        auto current = *session.document();
+        current.tracks[0].start.rx() += 1e-13;
+        QVERIFY(current.tracks[0].start.x() != original->tracks[0].start.x());
+        const auto target = dir.filePath("fractional-created.pcb");
+        const auto result = Writer::saveAsWithCreated(target, *original, current, six());
+        QVERIFY(!result.succeeded()); QVERIFY(!result.error.isEmpty()); QVERIFY(!QFile::exists(target));
+        QCOMPARE(current.tracks.last().identity, session.document()->tracks.last().identity);
+        QCOMPARE(original->sourceBytes, fixture()); QVERIFY(session.dirty());
+    }
+
     void netdefRefusedWithCreatedAndPreservedWithoutCreated_data() {
         QTest::addColumn<QByteArray>("input");
         QTest::newRow("trailing") << (header + oldTrack + net() + "ENDPCB\n");
