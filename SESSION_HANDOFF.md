@@ -1,7 +1,6 @@
 # PT Renew 当前进度与新会话交接
 
-**2026-11-03 最新父验收：[输入语义与连续捕获两槽结果](docs/native-capture-checkpoint.md)。** 已离线证明公开 `Shortcut f11+p` 会先释放 F11 再发送 Unicode p，修订客体读图审核、菜单两阶段、截止与收尾约束并冻结隔离工具包。父两次真实现场均未取得连续客体图或文件状态，目标／服务／driver 均原创建者正常 wait0、未强杀，7 张宿主图与实际 image 回执字节匹配。原软件单线样例和默认 FT 字段仍缺，普通新增门关闭，产品源码不变。完整能力和历史24/24见[统一交接](docs/agent-handoff-20261103-pcb-check.md)，上轮核心82项审查见[并行结果](docs/native-evidence-wave.md)；以下保留历史。
-
+**2026-11-04 新 agent 统一入口：[输入核验与两槽现场后的交接](docs/agent-handoff-20261104-capture.md)。** 本轮已完成交接前只读补验：源码／CLI摘要、两槽六组原wait0、7图与原会话回执、安装／副本／冻结摘要及任务结算均相符，并在新目录复跑快捷键4例与旧驱动12项。产品源码不变，原软件连续客体图／文件状态／单线保存重开仍未取得，正式新增门关闭。本次仅整理，由用户安排新agent；以下按历史阶段阅读。
 2026-10-31最新接手入口：[编辑与另存为后的统一交接](docs/agent-handoff-20261031-save-as.md)。用户要求本轮开发完成后由新agent接手，当前dev已接续基础编辑并实现保留原件的受限另存为；Debug/Release各12/12组、WritingTests40项及指定Pi真实Qt五函数核验通过。下一步优先文件往返与原软件/原生文件框兼容性，不重做已有模块。本轮不创建tag、不发布、不操作main，全部旧failed及异步ready_for_live=false边界保持。以下按历史阶段阅读。
 
 2026-10-31产品发布范围更新：按用户明确“进行发布，你合并并操作gh”的新授权，整理 **v0.11.0-alpha 只读版**，版本、关于文案和独立Windows包已统一；产品Release构建、CTest10/10及指定Pi真实主窗／关于图／原Popen正常退出核验完成。发布内容不含独立编辑候选，仍无保存／DRC／生产输出。详情见[发布说明](docs/releases/v0.11.0-alpha.md)、[构建打包](docs/releases/v0.11.0-alpha-build.md)及[实际窗口验收](docs/releases/v0.11.0-alpha-verification.md)。本次授权包含通过gh将发布准备从dev合入main；此前不得自行操作main的历史约束不代表本次缺少授权。此前异步实验ready_for_live=false及全部旧失败结论保持，以下按历史阅读。
