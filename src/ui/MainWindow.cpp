@@ -33,6 +33,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSessionManager>
+#include <QScopedValueRollback>
 #include <QKeyEvent>
 
 namespace pt {
@@ -181,7 +182,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     connect(m_canvas, &BoardCanvas::viewChanged, this, &MainWindow::updateViewStatus);
     connect(qApp, &QGuiApplication::commitDataRequest, this, [this](QSessionManager& manager) {
         if (!m_editSession.dirty()) return;
-        ++m_loadGeneration;
+        invalidatePendingLoad();
         if (!manager.allowsInteraction() || !confirmDiscard()) manager.cancel();
     });
     connect(qApp, &QApplication::focusChanged, this, [this] {
@@ -396,7 +397,7 @@ void MainWindow::executeCommand(const QString& id) {
         saveAsDialog();
     } else if (id == QStringLiteral("file.close")) {
         // 先撤销待载入结果，避免读取完成在放弃确认框内再弹出换图确认。
-        ++m_loadGeneration;
+        invalidatePendingLoad();
         if (confirmDiscard()) clearFileInfo();
     } else if (id == QStringLiteral("move.track")) {
         moveTrackDialog();
@@ -497,31 +498,41 @@ void MainWindow::requestOpenFile(const QString& path) {
     connect(watcher, &QFutureWatcher<BoardReadResult>::finished, this, [this, watcher, generation, path] {
         const auto result = watcher->result();
         watcher->deleteLater();
+        // 过期任务只回收自身，不能解锁后续载入或改写其动作状态。
+        if (generation != m_loadGeneration) return;
         m_loading = false;
         updateEditingActions();
         m_actions.value(QStringLiteral("file.open"))->setEnabled(true);
-        if (generation == m_loadGeneration) {
-            const bool success = applyReadResult(result, path);
-            emit boardLoadFinished(success);
-        }
+        const bool success = applyReadResult(result, path, generation);
+        if (generation == m_loadGeneration) emit boardLoadFinished(success);
     });
     watcher->setFuture(QtConcurrent::run([path] { return LegacyPcbReader::readFile(path); }));
 }
 
-bool MainWindow::inspectFile(const QString& path) {
-    cancelTrackPlacement();
+void MainWindow::invalidatePendingLoad() {
     ++m_loadGeneration;
-    return applyReadResult(LegacyPcbReader::readFile(path), path);
+    m_loading = false;
+    m_actions.value(QStringLiteral("file.open"))->setEnabled(true);
+    updateEditingActions();
 }
 
-bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& path) {
+bool MainWindow::inspectFile(const QString& path) {
+    cancelTrackPlacement();
+    invalidatePendingLoad();
+    const auto generation = m_loadGeneration;
+    return applyReadResult(LegacyPcbReader::readFile(path), path, generation);
+}
+
+bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& path, quint64 generation) {
+    if (generation != m_loadGeneration) return false;
     if (!result.succeeded()) {
         statusBar()->showMessage(QStringLiteral("读取失败：%1；当前工作副本和历史已保留。").arg(result.error), 15000);
         if (!m_editSession.document()) m_infoText->setPlainText(QStringLiteral("探测失败：%1\n未载入板图。").arg(result.error));
         m_actions.value(QStringLiteral("file.close"))->setEnabled(m_editSession.document()!=nullptr);
         return false;
     }
-    if (!confirmDiscard()) return false;
+    // 放弃确认会进入嵌套事件循环，返回后仍须属于同一次载入。
+    if (!confirmDiscard() || generation != m_loadGeneration) return false;
     m_editSession.reset(result.document);
     m_savedPath.clear(); m_savedSha256.clear(); m_savedBytes = 0;
     m_canvas->setDocument(m_editSession.document());
@@ -539,7 +550,7 @@ bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& p
 
 void MainWindow::clearFileInfo() {
     cancelTrackPlacement();
-    ++m_loadGeneration;
+    invalidatePendingLoad();
     m_editSession.reset();
     m_savedPath.clear(); m_savedSha256.clear(); m_savedBytes = 0;
     m_canvas->setDocument(nullptr);
@@ -556,8 +567,13 @@ void MainWindow::clearFileInfo() {
 }
 
 bool MainWindow::confirmDiscard() {
+    if (m_confirmingDiscard) return false;
     cancelTrackPlacement();
     if (!m_editSession.dirty()) return true;
+    QScopedValueRollback<bool> confirming(m_confirmingDiscard, true);
+    const auto generation = m_loadGeneration;
+    const auto revision = m_editSession.revision();
+    const auto document = m_editSession.document();
     QMessageBox box(QMessageBox::Warning, QStringLiteral("放弃工作副本更改？"),
         QStringLiteral("工作副本有尚未另存为的更改。\n如需保留，请取消并使用“文件 → 另存为新 PCB”。\n放弃后无法恢复这些更改。"), QMessageBox::NoButton, this);
     box.setObjectName(QStringLiteral("discardChangesDialog"));
@@ -565,11 +581,12 @@ bool MainWindow::confirmDiscard() {
     auto* cancel = box.addButton(QStringLiteral("取消"), QMessageBox::RejectRole);
     box.setDefaultButton(cancel); box.setEscapeButton(cancel);
     box.exec();
-    return box.clickedButton() == discard;
+    return box.clickedButton() == discard && generation == m_loadGeneration
+        && revision == m_editSession.revision() && document == m_editSession.document();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-    ++m_loadGeneration;
+    invalidatePendingLoad();
     if (confirmDiscard()) event->accept();
     else event->ignore();
 }
