@@ -8,7 +8,7 @@
 
 | 方向 | 分支／工作树 | 修改范围 | 实际指定模型 |
 | --- | --- | --- | --- |
-| 原软件短观察及单线样例 | `verify/native-short-observation`／`native-startup-diagnosis` | 仅新专题报告、全新忽略证据目录；本次实际仅写离线材料 | 沿用 Pi `deng/gpt-6.1-sol high` |
+| 原软件短观察及单线样例 | `verify/native-short-observation`／`native-startup-diagnosis` | 仅新专题报告、全新忽略证据目录；本次实际交付离线报告与材料 | 沿用 Pi `deng/gpt-6.1-sol high` |
 | 默认 FT 字段静态数据流 | `research/native-ft-defaults`／`research-native-ft-defaults` | 仅新静态报告及隔离分析目录；实际零工具、零修改 | Pi `glm/glm-5.3 high` |
 | 新增核心边界审查与必要修复 | `fix/track-core-boundaries`／`review-track-core-boundaries` | 三个 application 模块及对应测试、独立报告；实际仅提交报告 | Pi `deng/gpt-6.1-sol high` |
 
@@ -38,7 +38,7 @@
 
 ## 未完成：原软件现场；已交付离线短方案
 
-`task_53dde472a74d`／`ctx_5712b8eb277d` 沿用 Pi 会话 `01a19f6a-a52d-7333-95f3-2972829f4e9f`。原模型与推理事件、实际 assistant 及成功工具均核对为 `deng/gpt-6.1-sol high`。本轮先出现 Connection error／Request timed out，恢复后仍有数分钟的工具间隔，最长约 14 分钟；这些完整间隔包含模型请求、重试和调度，不能全部归因于纯推理耗时。
+`task_53dde472a74d`／`ctx_5712b8eb277d` 沿用 Pi 会话 `01a19f6a-a52d-7333-95f3-2972829f4e9f`。原模型与推理事件、实际 assistant 及成功工具均核对为 `deng/gpt-6.1-sol high`。[子任务离线报告](native-short-observation.md) 提交 `1ea54249b2ad80206f892d873b756e444a3af30f` 只有该报告，父核对后已 no-ff 集成；唯一 worker_done 明确为 failed，父按真实目标未完成验收、release 并 ack。本轮先出现 Connection error／Request timed out，恢复后仍有数分钟的工具间隔，最长约 14 分钟；这些完整间隔包含模型请求、重试和调度，不能全部归因于纯推理耗时。
 
 父在目标／服务启动前收敛为离线交付，没有给 GO。新分支上产生四份忽略材料：`prepare_offline.py`、`session-audit.json`、`reference-materials.json`、`short-plan.json`。方案 SHA-256 为 `72817fd675ef36fe5395296dd068b8fd304463d2ffaad2887479367d62232eb1`；父核对 9 项旧参考文件大小／SHA，确认脚本仅提取会话与参考材料，没有运行旧驱动、启动目标、建立服务或请求桌面。
 
@@ -54,4 +54,4 @@
 
 父证据根为 `main-2/.local-analysis/native-evidence-wave/`，包含三路 spec／start 原回执、`session-audit-current.json`、GLM 失败结算、`parent-core-audit.json`、`parent-native-offline-audit.json`、`parent-image-review.json` 与最终 Git／任务结算。子核心证据在相邻工作树 `.local-analysis/track-core-boundary-review/`，原软件离线方案在相邻 `native-startup-diagnosis/.local-analysis/native-short-observation/`；均不提交原软件、截图或忽略材料。
 
-任务结算及最终 dev／origin/dev SHA 以父忽略目录 `final-state.json` 为准。外部 Pi 终端 release 的 retained／processAction none 不等于 Pi OS 退出；父收尾检查收件箱和 reclaimable 清空后再报告完成。
+任务结算及最终 dev／origin/dev SHA 以父忽略目录 `final-state.json` 为准。核心 succeeded、GLM failed／Dispatch abandoned、原软件 failed 均已结算，父已处理两份唯一 worker_done。外部 Pi 终端 release 的 retained／processAction none 不等于 Pi OS 退出；最终收件箱和 reclaimable 核对另存父结算记录。
