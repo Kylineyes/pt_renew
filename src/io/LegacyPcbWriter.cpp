@@ -12,35 +12,42 @@ namespace pt {
 namespace {
 constexpr qsizetype maximumBytes = 64 * 1024 * 1024;
 
+// 文件模型要求精确一致；Qt 几何类型的模糊相等会放过小数篡改并静默丢弃修改。
+bool samePoint(const QPointF& a, const QPointF& b) {
+    return a.x() == b.x() && a.y() == b.y();
+}
+bool sameRectangle(const QRectF& a, const QRectF& b) {
+    return a.x() == b.x() && a.y() == b.y() && a.width() == b.width() && a.height() == b.height();
+}
 bool sameSource(const PrimitiveSource& a, const PrimitiveSource& b, bool lines) {
     return a.component == b.component && (!lines || (a.line == b.line && a.byteOffset == b.byteOffset));
 }
 bool same(const Track& a, const Track& b, bool lines) {
-    return a.start == b.start && a.end == b.end && a.width == b.width && a.layer == b.layer
+    return samePoint(a.start, b.start) && samePoint(a.end, b.end) && a.width == b.width && a.layer == b.layer
         && a.extra == b.extra && sameSource(a.source, b.source, lines) && (!lines || a.identity == b.identity);
 }
 bool same(const Pad& a, const Pad& b, bool lines) {
-    return a.center == b.center && a.width == b.width && a.height == b.height && a.shape == b.shape
+    return samePoint(a.center, b.center) && a.width == b.width && a.height == b.height && a.shape == b.shape
         && a.drill == b.drill && a.planeFlags == b.planeFlags && a.layer == b.layer && a.name == b.name
         && sameSource(a.source, b.source, lines);
 }
 bool same(const Via& a, const Via& b, bool lines) {
-    return a.center == b.center && a.diameter == b.diameter && a.drill == b.drill && sameSource(a.source, b.source, lines);
+    return samePoint(a.center, b.center) && a.diameter == b.diameter && a.drill == b.drill && sameSource(a.source, b.source, lines);
 }
 bool same(const Arc& a, const Arc& b, bool lines) {
-    return a.center == b.center && a.radius == b.radius && a.quadrants == b.quadrants && a.width == b.width
+    return samePoint(a.center, b.center) && a.radius == b.radius && a.quadrants == b.quadrants && a.width == b.width
         && a.layer == b.layer && sameSource(a.source, b.source, lines);
 }
 bool same(const Fill& a, const Fill& b, bool lines) {
-    return a.rectangle == b.rectangle && a.layer == b.layer && sameSource(a.source, b.source, lines);
+    return sameRectangle(a.rectangle, b.rectangle) && a.layer == b.layer && sameSource(a.source, b.source, lines);
 }
 bool same(const BoardText& a, const BoardText& b, bool lines) {
-    return a.position == b.position && a.height == b.height && a.direction == b.direction && a.stroke == b.stroke
+    return samePoint(a.position, b.position) && a.height == b.height && a.direction == b.direction && a.stroke == b.stroke
         && a.layer == b.layer && a.mirrored == b.mirrored && a.value == b.value && sameSource(a.source, b.source, lines);
 }
 bool same(const Component& a, const Component& b, bool) {
     return a.designator == b.designator && a.footprint == b.footprint && a.comment == b.comment
-        && a.origin == b.origin && a.placement == b.placement;
+        && samePoint(a.origin, b.origin) && a.placement == b.placement;
 }
 template<class T> bool sameList(const QList<T>& a, const QList<T>& b, bool lines) {
     if (a.size() != b.size()) return false;
@@ -157,7 +164,7 @@ BoardWriteResult LegacyPcbWriter::prepare(const BoardDocument& original, const B
             || before.extra != after->extra || !sameSource(before.source, after->source, true))
             return fail(QStringLiteral("不支持修改元件内部走线或走线宽度、图层和附加字段。"));
         const auto delta = after->start - before.start;
-        if (after->end - before.end != delta) return fail(QStringLiteral("当前仅支持走线整体平移，不支持改变走线形状。"));
+        if (!samePoint(after->end - before.end, delta)) return fail(QStringLiteral("当前仅支持走线整体平移，不支持改变走线形状。"));
         const qreal coordinates[] = {after->start.x(), after->start.y(), after->end.x(), after->end.y()};
         for (auto value : coordinates) if (!coordinate(value)) return fail(QStringLiteral("走线坐标必须是 ±1000000 mil 内的整数。"));
         // 仅替换前四个数值词；保留分隔符、换行及未解释的第七字段原字节。
