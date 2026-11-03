@@ -62,3 +62,13 @@
 现成 `slot/lifecycle-close.json`、`lifecycle-wait.json`、`lifecycle-stop.json` 不依赖原图审核；仍必须单个投递、等实际完成。失败静默期间不投桌面请求，看到 `cleanup-only-ready.json` 才按父决定收尾。最终真实证据应包括目标 `*-exit.json`、`control-exit.json`、`driver-exit.json` 及上层原 Popen wait；未退出或非零要如实报告。
 
 本 Git 提交仅包含本报告，冻结包及证据按规则留在忽略目录。没有合 dev、push、main/tag/dist 操作，父负责验收与集成。
+
+## 第二槽离线冻结补记
+
+父报告首槽业务失败：15:22:38 UTC 菜单 Click 前检测前景变为 WindowsPowerShell，未发送 Click；静默 120 秒后父以精确身份正常 WM_CLOSE 收尾，目标 63496、服务 57976、driver 7660 均由原创建者取得 wait 0。以上是父转达的现场结果，本 worker 未执行或重新验收该现场，正常退出不代表捕获业务通过。
+
+按新任务 `task_1e5b34acc232/ctx_2d207d616347` 授权，仅新建同包下 `slot-retry-01/`。原安装 `D:/project/pt_renew/pt` 的 99 项与原冻结清单精确一致，从该原安装全新复制、核对后再去 `TRAXEDIT.DFT` 并加入已冻结的 SYN1，得到既定 runtime 99 项与 inputs 1 项。新旧输入字节一致，原安装和旧 slot 完整文件集合/大小/SHA 前后均未变化，驱动三模块及旧启动入口摘要不变；没有复用运行后 runtime 作为新源。
+
+新 plan SHA-256 为 `86048dfa2bf0efa7ef67fb8d5fdd5e1d9728b824789f8c724a3076fd588fcf67`，新配置为 `e2931daeac67ece9c8f0b64012814ec334066c45f0b315580a3f54d7a57b9486`。配置日志、捕获、双挂载和 plan 输入/输出/冻结文件全部重绑新槽；captures 为空、输出不存在，13 项检查、语法及原 driver 的纯 AST preflight 通过，真实进程退出 0，外层同步等待 0.3222774 秒。新证据为 `retry-01-preparation/frozen-package-retry-01.json`、旧槽前后清单和 `retry-01-prepare-wait.json`，没有运行 driver 顶层、COM/UIA、服务或目标。
+
+新槽绑定父原 session `01a1a15a-5307-7312-a21c-9c61e64983f5` 和上述新 task/dispatch；父须另写 GO 批准新 plan 和具体时段。父通过原 Popen 直接启动 `[BASE, 包根/desktop_session.py, 包根/slot-retry-01]` 并保留 HANDLE/真实 wait；**旧 `start-owner.py` 固定旧 slot，本轮不使用也不修改**。第二槽 `frozen-package.json` 已给完整 argv。父现场在 App 聚焦与后续输入之间仅通过 tools.read/write 读取原图、写审核及唯一 inbox 请求，submit 仅备用，driver 自身验证仍全部执行；本 worker 不宣称第二槽 GUI、捕获或真实退出通过。
