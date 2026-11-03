@@ -1,6 +1,6 @@
 # PT Renew 当前进度与新会话交接
 
-**2026-11-03 本轮并行推进与父验收：[原软件短观察和新增核心](docs/native-evidence-wave.md)。** 三路修改范围独立：新增核心无修复审查及定向验证通过（82 passed，含初始化／清理）；GLM 静态路线配额失败；原软件路线因连接错误和明显延迟只交付离线短方案，未放行新现场，单线目标未完成。产品源码不变，普通新增入口继续关闭，默认 FT 字段仍未知。完整能力、历史 Debug／Release 各24/24及既有Qt现场见[统一交接](docs/agent-handoff-20261103-pcb-check.md)；以下保留历史阶段。
+**2026-11-03 最新父验收：[输入语义与连续捕获两槽结果](docs/native-capture-checkpoint.md)。** 已离线证明公开 `Shortcut f11+p` 会先释放 F11 再发送 Unicode p，修订客体读图审核、菜单两阶段、截止与收尾约束并冻结隔离工具包。父两次真实现场均未取得连续客体图或文件状态，目标／服务／driver 均原创建者正常 wait0、未强杀，7 张宿主图与实际 image 回执字节匹配。原软件单线样例和默认 FT 字段仍缺，普通新增门关闭，产品源码不变。完整能力和历史24/24见[统一交接](docs/agent-handoff-20261103-pcb-check.md)，上轮核心82项审查见[并行结果](docs/native-evidence-wave.md)；以下保留历史。
 
 2026-10-31最新接手入口：[编辑与另存为后的统一交接](docs/agent-handoff-20261031-save-as.md)。用户要求本轮开发完成后由新agent接手，当前dev已接续基础编辑并实现保留原件的受限另存为；Debug/Release各12/12组、WritingTests40项及指定Pi真实Qt五函数核验通过。下一步优先文件往返与原软件/原生文件框兼容性，不重做已有模块。本轮不创建tag、不发布、不操作main，全部旧failed及异步ready_for_live=false边界保持。以下按历史阶段阅读。
 

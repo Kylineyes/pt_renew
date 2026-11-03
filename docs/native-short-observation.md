@@ -1,5 +1,7 @@
 # 原 AUTOTRAX 短观察方案与本轮阻塞
 
+后续已完成[本机输入语义复现与两槽现场](native-capture-checkpoint.md)：公开 `Shortcut f11+p` 实际先释放 F11 再发 Unicode p，所以下文的该快捷键建议属于已被修正的历史方案，不能直接执行。后续采用当前原图确认的 Capture 菜单路径，但两槽仍未完成连续客体图，失败与正常退出按新报告保留。
+
 本轮真实目标未通过：没有执行新现场，没有新增客体截图，没有核定工作文件名和图元计数，也没有取得原软件新建单线、另存及重开样例。父协调者在本轮模型多次连接失败、工具间隔已达十余分钟后明确不放行现场，要求交付离线短方案，避免活目标等待模型。没有把离线检查、历史图像或工具回执写成新 GUI 成功，产品能力门与默认字段均未修改。
 
 基线 `origin/dev=3fd6e5fa2b241ef8c61bf6ecd7b46c4839b34be6`，新分支 `verify/native-short-observation`。切分支前工作树干净，只提交本报告；本树 `.local-analysis/native-short-observation/` 是全新忽略证据目录。沿用 Pi 会话 `01a19f6a-a52d-7333-95f3-2972829f4e9f`，实际环境和会话 assistant 事件为 `deng/gpt-6.1-sol high`，成功工具事件已存入 `session-audit.json`；没有切模型、派生代理、合并或推送。
