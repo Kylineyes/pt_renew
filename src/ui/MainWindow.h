@@ -53,7 +53,8 @@ signals:
     void boardLoadFinished(bool succeeded);
 
 private:
-    bool applyReadResult(const BoardReadResult& result, const QString& path);
+    bool applyReadResult(const BoardReadResult& result, const QString& path, quint64 generation);
+    void invalidatePendingLoad();
     void createMenus();
     bool confirmDiscard();
     bool selectedTrackEditable() const;
@@ -92,6 +93,7 @@ private:
     QHash<QString, QMenu*> m_menus;
     quint64 m_loadGeneration = 0;
     bool m_loading = false;
+    bool m_confirmingDiscard = false;
     QString m_savedPath, m_savedSha256;
     qint64 m_savedBytes = 0;
 };
