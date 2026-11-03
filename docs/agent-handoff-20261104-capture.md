@@ -1,10 +1,10 @@
 # PT Renew 新 agent 统一交接：输入核验与两槽现场之后
 
-本次用户要求“先进行所需验证，然后整理当前进度和下一步计划，我让新 agent 接手”。本轮只完成交接核验与文档，不派发接手者、不启动新开发或桌面现场。新 agent 先读 `AGENTS.md` 和本页；Git、原始日志和证据优先于旧进度文字。
+本次用户要求整理当前进度和接下来的计划，由用户自行安排新 agent。沿用本页与已有提示词，不另起重复交接副本；本次只核对最新 Git、源码／CLI 摘要、临时材料归档和入口，不派发接手者、不启动新开发或桌面现场。新 agent 先读 `AGENTS.md` 和本页；Git、原始日志和证据优先于旧进度文字。
 
 ## 当前基线与完成范围
 
-整理前 `dev=origin/dev=远端dev=acb983dbf2d5069f090f969ed526c2b828e35a6e`，工作区干净。本交接从该基线的 `docs/handoff-capture-20261104` 提交，按 no-ff 合 dev 并推送；最终 SHA 见本机 `.local-analysis/handoff-capture-20261104/final-state.json`，不要把整理前 SHA 当最终 HEAD。
+本次更新前 `dev=origin/dev=远端dev=e3912446922f49c390f17150d4d029a92bbc9e0f`，工作区干净。该基线已包含上次交接 `859d9b9`／合并 `ea3f7af`，以及临时文件规范 `4e2b8f7`／合并 `e391244`。本次从 `docs/handoff-temp-policy` 更新本页，按 no-ff 合 dev 并推送；最终 SHA 见本机 `.local-analysis/handoff-capture-20261104/final-state.json`，不要把更新前 SHA 当最终 HEAD。上一版最终核验已另存该目录 `final-state-before-temp-policy.json`。
 
 产品源码、正式测试、仓库 tools 与根 CMake／预设仍与已测候选 `d2ee381161fdb444255f7db931aa1f1290aa5bd7` 相同。后续提交只有文档与合并，本轮未操作 main、tag、发布或 dist。当前本地 `main=3e13f69528cfc033718ef8352b8d3fb7bce915bd`，本地跟踪 `origin/main=cfb6a8893aaf8d8b5778a24c00fc97813c5f083d`；两者不能混称“main 保持同一 SHA”，本轮没有合并、推送或更新 main。
 
@@ -73,6 +73,17 @@ CLI：先 `& ./scripts/Enter-QtEnv.ps1`，再 `& ./build/release/pt-pcb-check.ex
 
 没有源码变化，不重跑完整构建／24 组、不启动新子任务或桌面。核验日志与最终 Git 见本机专题 `verification.json`、`final-state.json`。
 
+## 最新空间清理与复用要求
+
+用户明确要求整理本项目在 `D:/temp` 创建的可删材料、尽量复用文件并将规范写入 `AGENTS.md`。已完成以下工作：
+
+- `D:/temp/pt-renew-session-inventory-20261103` 的 13 个文件共 271027 字节，完整压缩为项目忽略目录 `.local-analysis/temp-maintenance/session-inventory-20261103.zip`，归档 62099 字节。逐文件集合／大小／SHA-256 核对通过后删除原目录；按内容字节净减少 208928 字节，约 204 KiB，不声称释放大额空间。
+- 会话盘点及历史删除记录完整保留，归档 SHA-256 为 `062206494a3c47573d5df4d620ede20735a8c52dd0f1316d229ad5dddbe64e9b`，清单在 `.local-analysis/temp-maintenance/cleanup-result.json`。后续直接读取 ZIP 中所需文件，不为查看或接手再完整解压／复制。不要运行归档内的历史删除脚本。
+- `D:/temp` 当前只剩其他项目的 `dragon-takeover`，本项目未改动它；其他工作树、冻结现场、原始会话与原软件未清理。
+- `AGENTS.md` 已增加“临时文件、复用与空间管理”：开始先盘点已有工具／依赖／构建，优先参数化复用；临时文件集中在项目忽略目录；生成前估算体积、限制重复日志与版本；清理可重建产物，核验后压缩必要材料；冻结输入、原图和失败记录只读。必须新建的隔离运行槽按验证需求建立，但不为每次查询、无变化复验或交接再复制整套材料。
+
+本次交接只做只读复核和现有文档更新，没有重复复制现场或重新执行无变化测试。原 `24/24`、`82 passed` 和两槽失败均维持下文既有证据范围。
+
 ## 下一步顺序与并行边界
 
 1. **先做菜单点击的离线时序／坐标核对。** 对第二槽 `step-003-focus-owned-post`、`step-004-menu-one-*` 的原图、capture-scope、Snapshot 文本元数据、native-before/after、请求响应和原 JSONL 时间线逐项对齐。检查 Click 实际 screen-space 发送、窗口物理／逻辑矩形、DPI 上下文和目标前景在调用中的变化；提出能由证据区分的假设。不要只凭回执宣称“菜单已开”，不要重做长通用控制框架或无差别开第三槽。
@@ -88,7 +99,8 @@ CLI：先 `& ./scripts/Enter-QtEnv.ps1`，再 `& ./build/release/pt-pcb-check.ex
 
 | 路径（相对 workspaces/pt_renew） | 用途 |
 | --- | --- |
-| `main-2/.local-analysis/handoff-capture-20261104/` | 本交接核验、新提示词、旧入口备份、最终 Git／Task 状态 |
+| `main-2/.local-analysis/handoff-capture-20261104/` | 复用的交接入口、提示词、原补验和最新 Git／Task 状态；旧最终核验保留 |
+| `main-2/.local-analysis/temp-maintenance/` | 唯一会话盘点 ZIP、原文件摘要清单与清理结果；不重复解压／运行历史脚本 |
 | `main-2/.local-analysis/native-capture-checkpoint/` | 原 AST 输入复现、父旧驱动复现、冻结包核验、两槽身份退出／完整摘要审计、7 图回执匹配 |
 | `review-track-core-boundaries/.local-analysis/native-capture-driver-review/final-candidate/` | 正式冻结 driver/gate/submit、首 `slot` 和 `slot-retry-01` 原件、配置、日志、图片、GO、Popen退出 |
 | `review-track-core-boundaries/.local-analysis/native-capture-driver-review/` | 12／16／36 项假 fixture、main假环境、冻结与第二槽准备证据 |
