@@ -71,6 +71,6 @@
 
 审查与最终工具包 Task `task_46be31be3ba2`／`ctx_c38cc667f1c9` succeeded，报告提交 `fa938a95de8cb19a58c0dee49649a9b91d2f6d28`；第二槽准备 Task `task_1e5b34acc232`／`ctx_2d207d616347` succeeded，补记提交 `a97f6c123fc4609b1ea99f78f7da87262af04667`。两者 success 只指离线工具包与准备，不包含父 GUI；父处理三个唯一 worker_done 后 release 并 ack，external_terminal／retained／processAction none 不等于 Pi OS 已退出。
 
-后续先离线对齐实际 Snapshot 坐标元数据、Click 发送和前后窗口身份／时序，找到能解释菜单未出现的具体依据，再安排新现场；不继续无差别重开槽。旧 `Shortcut f11+p` 假设已排除，菜单路径仍需要真实连续验证。原软件单线保存重开、FT 默认字段及兼容性继续未通过；普通新增门和默认 writer 的 Created 拒绝、NETDEF 新增拒绝保持。产品源码没有改变，不重跑无变化的完整 Debug／Release 矩阵。
+后续离线核对已完成，见[第二槽菜单点击审计](native-menu-click-audit.md)：原图／请求／原生窗口／父会话时序已对齐，安装原 AST 假鼠标验证没有自动截图比例换算；约 0.574 秒采样间隔内的前景变化仍缺少调用内部观测，根因未定。下一步先离线检查最小只读观测器，以明确诊断目标安排现场；不继续无差别重开槽。旧 `Shortcut f11+p` 假设已排除，菜单路径仍需要真实连续验证。旧现场两槽失败及本文原有证据范围保持。原软件单线保存重开、FT 默认字段及兼容性继续未通过；普通新增门和默认 writer 的 Created 拒绝、NETDEF 新增拒绝保持。产品源码没有改变，不重跑无变化的完整 Debug／Release 矩阵。
 
 父证据在 `main-2/.local-analysis/native-capture-checkpoint/`：快捷键原 AST 假 API 结果、旧缺口父复现、最终包 preflight、两槽原身份退出／摘要审计、7 图字节回执匹配和最终状态。子冻结包及两槽原件在相邻 `review-track-core-boundaries/.local-analysis/native-capture-driver-review/final-candidate/`。这些忽略材料、截图与原软件副本均不提交；报告按独立分支 no-ff 集成到 dev，最终 SHA 与任务／收件箱核对见父 `final-state.json`。
