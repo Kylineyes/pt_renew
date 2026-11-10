@@ -21,7 +21,7 @@
 | A可见端点与部分笔画图像支持 | 通过，有限对照 | 顶点和右上端点命中预测像素；右下最后着色像素距预测端点1像素；不是全部笔画或绘图算法验收 |
 | 内部视图缩放值及完整/简化路径 | 未验证 | 原生图比例可测，不等于读取内部缩放变量；没有截获运行绘线或简化调用 |
 | 实际导入变换状态、字体远指针 | 未验证 | 未读取DS:d59a或字体指针；可见形状不能证明这些全局状态 |
-| F、高度240/251/252、AA/A A、旋转镜像 | 未验证 | 13份隔离场景已准备，除A240外均未启动；不能把准备完成记为行为通过 |
+| <a id="explore-ex-014"></a> F、高度240/251/252、AA/A A、旋转镜像 | 未验证 | 13份隔离场景已准备，除A240外均未启动；不能把准备完成记为行为通过  [探索 EX-014](exploration-backlog.md#ex-014) |
 | 输入前后摘要与清理 | 通过 | 15组文件集合及SHA-256全部无变化；目标、桌面客户端及其MCP子进程均已退出 |
 
 ## 本轮与上轮的区别及实际操作
@@ -36,7 +36,11 @@ C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysi
 
 本轮DOSBox-X为2026.10.01，映像SHA-256 `a82adcfa7af2784566cfeff74c077cefed08505396db2948b7e6aa7d4cee0832`。实际启动命令使用本轮 `scenes/a240/dosbox.conf`，cwd为本轮 `runtime/pt`。stderr第2行明确记录本轮配置加载，独立日志第68行记录执行pt.EXE；随后第130–131行记录SCREEN.PCB打开。日志与Status共同支持载入结论，单凭执行日志不判定载入通过。
 
+<a id="explore-ex-003"></a>
+
 按已加载的orca-cli技能及本机公开帮助操作，首先确认PID21804、HWND2691042及可辨启动页。Orca `press-key Return`、`hotkey Shift+Return`曾返回成功但未立即取得可辨工作画面；宿主Capture菜单则有可见响应。通过Main→Capture keyboard后，再次Return取得A与尺标画面，但未以先后关系认定哪个单独动作解决了输入。后续Orca Return/Shift+I未唤出菜单，Shift+I出现了输入法候选；Esc取消候选、Ctrl+Space切换当前输入状态后仍未取得Information。一次客体右键也未取得可辨菜单。
+
+[探索 EX-003](exploration-backlog.md#ex-003)。
 
 当时原生前景持续属于目标，未遇锁屏或控制门禁拒绝。向父代理报告后，在同一授权范围内使用已安装Windows-MCP的**公开受门禁通道**核对输入兼容性。新客户端只建一个stdio连接，每步先查ControlStatus，最多等待30秒；所有Shortcut/Click前再强制核对原生PID/HWND，失配即停止。没有修改第三方包、控制阈值或门禁，也没有绕过拒绝切换入口。
 

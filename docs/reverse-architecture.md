@@ -60,7 +60,11 @@
 | U | Un-Delete | 恢复删除 |
 | Z | Zoom | 视图 |
 
+<a id="explore-ex-006"></a>
+
 `Repeat` 和 `Un-Delete` 在原主菜单中的精确调度方式还需运行时确认；新版先保留入口，尚未实现的业务禁用并明确标识。
+
+[探索 EX-006](exploration-backlog.md#ex-006)。
 
 ### 一个命令，多种入口
 

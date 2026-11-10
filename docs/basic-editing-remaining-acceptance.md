@@ -28,7 +28,11 @@
 
 - m038回执`CONTROL_PREEMPTED`、`executed_steps=0`未被旧分类自动设为争用截止，但失败锁存有效，后续m039未执行。另行完整180秒零桌面请求后才诊断。原`preempted-retreat.json`因PowerShell5缺TickCount64把单调截止误写180，原件保留；[单调校正](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/basic-editing-remaining-acceptance/preempted-retreat-monotonic-correction.json)依据事件双时钟补正，未把错误元数据当有效截止。
 - m025 Ctrl+0及m140 Delete已执行，后置Snapshot返回`CONTROL_UNAVAILABLE`；完整退让后只读恢复，没有重发动作。m133的user同样停链完整退让。
+<a id="explore-ex-038"></a>
+
 - m146请求supported路径，但0366图文件名框出现无关中文；来源未知。保留原请求和图像，另行完整180秒退让，压缩后只读诊断，再通过文件列表选择并截图0373核对`supported.pcb`，0385才确认载入。没有将Type成功当加载成功。
+
+[探索 EX-038](exploration-backlog.md#ex-038)。
 - m188菜单点击已执行，后置Snapshot返回“Previous screenshot flash did not close before capture”，无图像；本轮正确锁存失败，诊断/显式resume后0464单独补观察，没有重发菜单点击。
 - 候选正常退出后，post_native因前景不再属于目标而保守停链。保留180秒截止，以进程句柄退出码确认，再显式retire；没有恢复已退出PID或重发放弃。
 
@@ -41,7 +45,7 @@
 | 严格文本焦点 | 明确点击ΔX框，123→Delete空→Ctrl+Z恢复123→Ctrl+Y空；板图5图元/3走线、修订2及几何不变，取消后Undo/Redo禁用。通过。 | `checkpoint-1.json`；0024/0032/0036/0040/0048 |
 | 旧式/现代入口与历史 | 画布M→T及现代移动菜单打开相同移动框；D→T实际删除，E→U/E→R实际撤销/重做。移动无独立现代快捷键，记N/A。 | `command-matrix.json`、`checkpoint-2-3.json` |
 | 可视远移与reset | 单次ΔX/ΔY均10000，移出旧视野后显式reset可见可选，属性(10100,10100)→(10400,10500)、宽10mil/长500mil；Undo原几何clean、Redo远处dirty，底层隐藏保持。通过此范围。 | 0126/0130/0134/0147/0157 |
-| 900000极端远移 | 提交dirty修订3、100%视图及底层隐藏保持；reset后亚像素，三次未命中远处属性。未验证该极端完整可见性/属性，不以10000结果外推。 | `checkpoint-3.json`；0075、0095 |
+| <a id="explore-ex-031"></a> 900000极端远移 | 提交dirty修订3、100%视图及底层隐藏保持；reset后亚像素，三次未命中远处属性。未验证该极端完整可见性/属性，不以10000结果外推。 | `checkpoint-3.json`；0075、0095  [探索 EX-031](exploration-backlog.md#ex-031) |
 | 五类只读图元 | 自由焊盘FP、过孔FV、圆弧FA、填充FF、文字FS逐类选中后Delete不改6图元/1走线、clean修订19，移动自由线命令禁用，末尾Undo/Redo禁用。通过。 | `checkpoint-2-readonly.json`；0259/0271/0281/0291/0301/0307 |
 | 定向取消与历史 | Ctrl+W取消、换empty.pcb取消、missing.pcb原生拒绝后取消、窗口关闭取消，均保留工作与历史；Undo原端点/长500/clean及Redo删除有直接图。missing只证明原生拒绝。通过各已测路径。 | `checkpoint-5.json`；0173/0181/0185/0197/0205/0209/0217/0227/0231/0235/0243 |
 | 铜分析迟到 | 新合成板3905图元/3903走线，元素上界3915<4000；两次机会均未捕获后台运行中→编辑先完成→迟到结果未覆写的完整时间线。停止该类，未覆盖。 | `checkpoint-4-races.json`；0333/0337/0341/0347、m140回执 |

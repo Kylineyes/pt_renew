@@ -67,7 +67,11 @@ JSON 标记 `evidence: "static_instruction_derivation"` 和 `runtime_verified: f
 
 ## 后续受控机器码验证
 
+<a id="explore-ex-016"></a>
+
 verification-41 使用现有 Unicorn 直接执行摘要匹配 EXE 的文字解释器和辅助函数，对 21,792 个组合、105,504 条中心线、字符起点、最终位置及请求线宽完成交叉核验，未发现与当前工具的差异；另验证对象绘制包装和方向查表函数。详见 [机器码验证报告](legacy-text-machine-verification.md)。这些证据验证指定全局状态下的函数级行为，没有执行 DOS 启动、PCB 导入或 VGA 绘图；完整运行/像素对照仍未完成，工具的 `evidence` 与 `runtime_verified=false` 保持原样，不接入 Qt 字形或铜层判定。
+
+[探索 EX-016](exploration-backlog.md#ex-016)。
 
 ## 验证与待办
 

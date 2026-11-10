@@ -52,7 +52,7 @@ Git ignore 是普通 add/commit 的排除规则，不是安全权限控制；`gi
 | `TRAXEDIT.OVR` | 274,574 | 外置覆盖模块，开头为 `TPOV`，包含编辑器与版本等字符串 |
 | `TRAXPLOT.EXE` | 230,048 | 绘图/输出程序，MZ |
 | `TRAXPLOT.OVR` | 75,941 | 绘图覆盖模块，开头为 `TPOV` |
-| `GVIEW.EXE` | 208,064 | 配套查看程序，MZ；本次未验证具体运行功能 |
+| <a id="explore-ex-026"></a> `GVIEW.EXE` | 208,064 | 配套查看程序，MZ；本次未验证具体运行功能  [探索 EX-026](exploration-backlog.md#ex-026) |
 | `GRAPHSET.EXE` | 19,792 | 图形驱动选择工具，MZ |
 | `GRAPH.DRV` | 4,096 | 与 `VGA640.DRV` 的 SHA-256 完全一致；字符串为 VGA 640×480 |
 | `TRAXSTD.LIB` | 151,328 | 二进制封装库，包含 `PCB 4 LIBRARY` 标识 |
@@ -155,11 +155,19 @@ cycles=fixed 3000
 
 现有 DFT 包含 `D:\PT\TRAXEDIT.DMP`、`C:\WIN\WD1EL.PCB`、`C:\WIN\POWER3.PCB`、`C:\TRAXSTD.LIB` 等历史路径。这些不是当前安装目录结构，后续必须整理。
 
+<a id="explore-ex-005"></a>
+
 只读挂载错误符合旧 Pascal 程序以读写方式打开资源文件时失败的表现，但尚未跟踪其 DOS 文件打开模式，**具体原因仍是推测**。成功探测同时改变了驱动模拟、输出后端、CPU 速度、配置和启动参数，**没有隔离出前一次异常的唯一原因**。
+
+[探索 EX-005](exploration-backlog.md#ex-005)。
 
 截图保留在被忽略的 `.local-analysis/`：`pt-initial.png`、`pt-vga.png`、`pt-editor.png`、`pt-placed.png`。这些是本机诊断材料，不作为可发布的原软件资源提交。
 
+<a id="explore-ex-026-2"></a>
+
 这是启动与样例加载验证，非性能基准。未验证：保存/重新加载、库浏览、中文与非 ASCII 文件名、大型板、打印、Gerber/钻孔输出、DRC、自动布线、Windows 10 实机运行以及长时间稳定性。
+
+[探索 EX-026](exploration-backlog.md#ex-026)。
 
 ## 6. 重建技术选型
 

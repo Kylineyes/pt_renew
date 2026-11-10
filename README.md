@@ -34,6 +34,6 @@ ctest --preset debug
 
 [文档导航](docs/README.md)按“能力概览 → 软件主题 → 实现与验证 → 原始报告”组织。可直接选择[板图](docs/topics/board.md)、[交互测量](docs/topics/interaction.md)、[编辑保存](docs/topics/editing.md)、[封装库](docs/topics/library.md)、[网络检查](docs/topics/connectivity.md)、[原软件研究](docs/topics/legacy.md)或[工程验证](docs/topics/engineering.md)。
 
-开发接手读[HANDOFF](HANDOFF.md)；按问题追查全部报告使用[资料索引](docs/reference-index.md)。协作遵循[AGENTS](AGENTS.md)：独立分支开发、验证后合入 dev，main 由用户处理。
+开发接手读[HANDOFF](HANDOFF.md)；探索 agent 从[工程逻辑待办](docs/exploration-backlog.md)领取事项，并遵循[研究与沉淀规则](docs/exploration-workflow.md)。按问题追查全部报告使用[资料索引](docs/reference-index.md)。协作遵循[AGENTS](AGENTS.md)：独立分支开发、验证后合入 dev，main 由用户处理。
 
 原软件、安装介质、用户板图、库及字体不随本项目授权分发；pt/、pt_install/、.local-analysis/、SDK、构建、截图和数据库不提交。测试优先使用自主合成数据，写入验证使用隔离副本。

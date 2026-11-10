@@ -50,7 +50,11 @@ A完成后单次Ctrl+Alt+C触发算法入口门闩。[0047图](C:/Users/rikideng
 
 图0059确认原自由线属性、A来源和clean修订2；[0061图](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/async-gui-recovered-120/0061-Snapshot-00.png)显示算法门闩中的分析状态。关键段真实选线/Delete一次，应用发布修订3、dirty=true、tracks=0且A摘要保持；紧接的新修订截图0064返回CONTROL_UNAVAILABLE、没有image，驱动立即失败锁存并本地cancel，没有有效release。
 
+<a id="explore-ex-034"></a>
+
 同应用纳秒：`worker-entered 962061188600 < gate-ready 962061212000 < document-published 964054500300 < aborted 965028184600 < worker-returned 965031504000 < callback-discarded 965031610300`。旧修订2结果返回时当前修订3，generation_matches=false、board_matches=false、net_matches=true，experiment_aborted=true。
+
+[探索 EX-034](exploration-backlog.md#ex-034)。
 
 完整120秒后仅补[0066图](C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysis/async-gui-recovered-120/0066-Snapshot-00.png)：实际2图元/0走线、dirty修订3、NET_A及A摘要`130e3b1e50c62762d72c57d73fc79955ec1d724c70cffad4ee0a9dd755baa974`保留，旧铜报告/诊断未恢复。该日志与事后UI支持“中止路径中的旧结果确实丢弃”，但缺门闩内编辑截图且没有gate-released，**不满足有效竞争验收**；不拿事后图修补失败时间线。未重发Delete或增加分析。
 

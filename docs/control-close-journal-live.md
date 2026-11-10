@@ -66,7 +66,11 @@ SnapshotJournal实际`retry_count=1, failure_count=0, errors=[], truncated=false
 
 [监督器最终账本](../.local-analysis/control-close-journal-live-worker/original-evidence/supervisor-chain-exit.json)含9个已发现子孙全部原持柄exit0，capture_errors空，客户端原Popen.wait=0；UIA原subprocess回执0，诊断窗另有客户端创建时原Popen退出0。runner独立重算完整processes而非仅信成功标记，见[runner结果](../.local-analysis/control-close-journal-live-worker/original-evidence/runner-result.json)。外层见[runner原退出](../.local-analysis/control-close-journal-live-worker/runner-popen-exit.json)、[launcher原退出](../.local-analysis/control-close-journal-live-worker/launcher-popen-exit.json)、[owner原退出](../.local-analysis/control-close-journal-live-worker/owner-popen-exit.json)、[父owner](../.local-analysis/control-close-journal-live-worker/parent-owner-exit.json)、[父recorder](../.local-analysis/control-close-journal-live-worker/parent-recorder-exit.json)。
 
+<a id="explore-ex-039"></a>
+
 没有runner-error、supervisor-fatal、client-fatal、硬截止遗留或退避原件，不以当前PID消失替代退出码。本轮已知链无遗留；50ms轮询仍不能排除整个寿命短于间隔的未知子进程，因此结论仅覆盖已发现且原持柄的链及独立原Popen探针。
+
+[探索 EX-039](exploration-backlog.md#ex-039)。
 
 ## 分项结论与只读保护
 

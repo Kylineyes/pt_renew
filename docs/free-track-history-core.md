@@ -41,7 +41,11 @@ QtTest 项数包含初始化／清理。新增 `TrackCreationTests` 仅链接核
 
 ## 下一阶段
 
+<a id="explore-ex-007"></a>
+
 1. 核定原 AUTOTRAX 隔离单线新建／保存样例的 FT 默认字段及合法插入布局。黑底白线问题仍未解决；后续指定 GLM 的并行静态任务再次配额失败、零工具调用，未产生新的格式证据。
+
+[探索 EX-007](exploration-backlog.md#ex-007)。
 2. 读取器已提供[严格布局元数据](pcb-layout-analysis.md)，后续又完成[未编码插入预检](track-insertion-plan.md)及[显式合成编码器](free-track-explicit-codec.md)。原软件格式规则明确后，组合实际输出的大小／语义复核及新文件发布，逐字保留原记录；尾部和交错 NETDEF 的新增仍未开放。
 3. [独立放置状态模型](track-placement-session.md)和[提交控制器](track-placement-controller.md)已实现，新增后端拒绝时保留有效预览。后续接入参数、画布起点／终点预览、统一取消命令与菜单／F3，再完成指定模型的真实窗口交互、dirty 原生文件往返和原软件重开验收。
 

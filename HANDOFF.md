@@ -4,7 +4,7 @@
 
 ## 最短阅读路径
 
-1. 阅读[AGENTS](AGENTS.md)，确认语言、独立分支、原件保护、临时材料复用和验证要求。
+1. 阅读[AGENTS](AGENTS.md)，确认语言、独立分支、原件保护、临时材料复用和验证要求；探索任务先按[工作规则](docs/exploration-workflow.md)从[工程逻辑待办](docs/exploration-backlog.md)领取一项，登记并同步归属。
 2. 核对实际 git status / log 与 origin/dev；分支或历史文档中的 SHA 不代替实时状态。
 3. 阅读[PROGRESS](PROGRESS.md)了解已完成与阻塞，再进入相关主题。当前 FT 默认字段及正式新增缺口读[编辑保存](docs/topics/editing.md)和[原软件研究](docs/topics/legacy.md)。
 4. 需要继续现场时完整读取[技术交接](docs/agent-handoff-20261104-capture.md)、[两槽结果](docs/native-capture-checkpoint.md)和[最新审计](docs/native-menu-click-audit.md)；不能直接运行旧计划或恢复旧 GO。

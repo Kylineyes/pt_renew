@@ -80,4 +80,8 @@ stderr 明确记录本轮绝对路径 `SYN1.conf` 被加载，以及工作目录
 
 `python .local-analysis/native-ft-sample/prepare.py` 及最终只读 `python .local-analysis/native-ft-sample/audit_after.py` 均退出 0；证据见 `prepare-output.txt`／`prepare-exit.txt`、`audit-output.txt`／`audit-exit.txt`。最终审计确认 11 图原 image 回执、冻结文件未变、原安装和输入完整集合未变、运行副本零变化、一个目标／一个服务、双原 Popen 退出 0，以及截止后零桌面请求。仅文档收尾，不涉及产品构建或测试变更。
 
+<a id="explore-ex-007"></a>
+
 本轮已获得启动页、可辨几何和主菜单、实际配置加载／日志／标准流及正常退出证据；空板、新建 FT、用户选择参数、新文件保存、原软件重开及默认编码仍未完成。后续必须在新的明确任务和现场范围内解决可预测菜单交互，再取新建／保存样例；本轮不开放新增写出、GUI 入口或 NETDEF 插入兼容能力，不修改旧 failed／runtime 未验证结论，也不创建发布、标签或合并推送 dev／main。
+
+[探索 EX-007](exploration-backlog.md#ex-007)。

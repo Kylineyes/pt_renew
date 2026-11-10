@@ -80,7 +80,11 @@ log console=true
 | `resolve config path` | F 第 235 行及第 481 行 | 文件注释定义为解析包含路径的配置选项，但明确排除 `[autoexec]`；参考值为 `true`，不能依赖它替 MOUNT 解析相对路径 |
 | 后续只读查询入口 | L 第 354、359 行 | `config -axtype` 显示 autoexec，`config -get "section property"` 返回当前属性；本次未执行这些客体命令 |
 
+<a id="explore-ex-005"></a>
+
 **尚未证实的加载规则**：本机范围内没有足够说明或源码，无法精确确认显式 `-conf` 成功/失败时对当前目录、程序目录、用户目录默认配置的搜索与继承条件，也不能确认多个文件的属性覆盖和 `[autoexec]` 是替换还是追加。未指定的键不能简单认为继承 I 或 U；F/R 中的参考值也不能直接视为本次有效值。这些未知应由下一轮实际启动的配置来源记录、可用的有效配置查询或后续获准的对应版本源码核对来收敛，不扩大本任务搜索范围。
+
+[探索 EX-005](exploration-backlog.md#ex-005)。
 
 S 的 `processes-launch.json` 第 7 行记录 PID 46020 的命令行只有一个 `-conf`，参数指向 S 的 `dosbox-c21-no-dft.conf`，未出现 `-userconf`、`-defaultconf`、`-noautoexec` 或 `-set`。该配置第 1–3 行设置 `output=opengl`，第 8 行设置 `machine=vgaonly`，第 15 行设置 `cycles=fixed 10000`，第 18–24 行为 autoexec，依次挂载 C/D、切换 C、`cd \pt`、`pt C21.PCB`。这是磁盘内容和主机启动命令的证据；不能据此宣称所有命令已在客体内成功执行、PCB 已加载或菜单已进入。
 

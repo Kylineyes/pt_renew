@@ -53,7 +53,11 @@ a010只查询原Popen退出码并退役，保存[窗口exit0](../../main-2/.loca
 
 累计GetDC/ReleaseDC各8516、CreateCompatibleDC/CreateDIBSection/memmove/DeleteDC/DeleteObject各7、SelectObject14、UpdateLayeredWindow8509。逐surface身份、尺寸/字节、API次数/失败数、分段与起止时间均与冻结正常schema一致。owner-exit和shutdown各1，cleanup_errors0、balanced=true，surface/屏幕DC/内存DC/位图/选择关系/保留字节余额全部0、failed=false；最后trace-closed/dropped0。
 
+<a id="explore-ex-037"></a>
+
 冻结`replay_control_health.py`的[健康重放](../../main-2/.local-analysis/control-bitmap-surface/live/health-replay.json)与原记录一致：1188样本均healthy，没有stale区间或fail-open。本次单组没有观察到过期，不能证明历史稳定性问题已修复。父独立审计记录上传墙钟总计约4.25547秒、最慢约0.108514秒；这些数包含诊断和调度成本，本次还增加50ms进程枚举开销，不能与历史不等长样本直接推导性能改善、CPU成本、倍率或唯一根因。
+
+[探索 EX-037](exploration-backlog.md#ex-037)。
 
 trace SHA-256为`231a46f329f303ba20106d0c5c24fc291b516e7ff0afd8449bd3c2911b1fa86d`。本次真实trace与离线fake-api-trace严格区分，假API测试未作为现场证据。
 

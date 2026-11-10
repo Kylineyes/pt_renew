@@ -4,7 +4,11 @@
 
 ## 产品能力门
 
+<a id="explore-ex-029"></a>
+
 `pt::trackPlacementUserEntryAvailable()` 是唯一产品入口能力门，目前返回 `false`。`place.track` 因此仍显示“未实现”并禁用，菜单、F3、画布旧式 P→T 都使用同一个 QAction 和命令分派。F3 采用画布 `WidgetShortcut`，不抢文本框焦点。
+
+[探索 EX-029](exploration-backlog.md#ex-029)。
 
 原软件新增 FT 的默认编码尚未核定，当前基线 writer 仍拒绝新增。不得仅因本阶段的内部放置测试通过而打开能力门，也不能将测试中明确给出的宽度、层、无附加字段当作原软件默认值。后续须由协调者根据原软件证据和保存闭环验证决定开放；本阶段没有连接默认编码或新增保存参数。
 

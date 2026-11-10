@@ -41,7 +41,11 @@
 | 关闭/停止 | 主窗/dirty模态原规则正常关闭、原Popen退出后服务EOF及报告 | 未读dirty框先放弃、未退出产品先停服务 |
 | 失败 | 保留首次失败/token/120秒/原截止，冷却后明确取消及关闭 | 竞争、release、Delete、任意工具入口或新连接追ready |
 
+<a id="explore-ex-035"></a>
+
 实际read继续由 `PiReadVerifier` 核对指定 `deng/gpt-6.1-sol high` 的原JSONL/image/hash及内容判断；邮箱和驱动不自动提供ack，也不代替截图子代理。基础依赖接入同样用于独立探针，父的5秒上限包含源码/完整依赖预检、原创建、结果核验和落盘，冷成本尚未现场验证。
+
+[探索 EX-035](exploration-backlog.md#ex-035)。
 
 ## 验证、冻结与剩余条件
 

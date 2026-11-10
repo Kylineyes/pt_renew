@@ -45,7 +45,11 @@ ENDPCB 边界由原 `Reader::run` 的顶层语法分支产生。文字内容、�
 
 交错输入仍可通过原 `parse` 正常读取；`geometryAfterNetdef=true`，`unavailableReason` 明确说明不能提供新增插入候选。即使后面另有尾部 NETDEF，也不会恢复候选或错误报告一个完整尾部区。
 
+<a id="explore-ex-010"></a>
+
 `isValid()` 只表达语法候选是否存在。`originalSoftwareInsertionVerified` 当前始终为 `false`；`unverifiedReasons` 记录原软件插入布局以及新增 FT 默认字段、附加属性和换行编码尚未核定。只有存在尾部候选时才附加尾部 NETDEF 的未验证说明，不把交错输入描述成仍有尾部候选。本阶段未改变 writer 的新增拒绝规则、编辑模型或产品界面。
+
+[探索 EX-010](exploration-backlog.md#ex-010)。
 
 ## 换行观测与原字节保护
 

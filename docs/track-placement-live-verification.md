@@ -60,9 +60,17 @@
 
 ## 失败、未覆盖和证据限制
 
+<a id="explore-ex-029"></a>
+
 - **现场 F3 未验证**：`p302-f3` 的 `press-key F3` 被 Orca 以 `invalid_argument / Unsupported key: F3` 拒绝；`p303-f3-hotkey` 的 `hotkey F3` 则被本地参数校验以 `Hotkey requires a modifier and one key` 拒绝，两者均未送达产品。父随后要求保留工具边界，不另造注入；不能将此记录为产品失败或“F3 不新增已通过”。F3 与文本焦点的自动化测试结果应与现场证据分列。
+
+[探索 EX-029](exploration-backlog.md#ex-029)。
 - **Ctrl+Z 快捷键未通过现场确认**：第二槽 `s214-undo` 因 `window_not_focused` 未发送；第三槽 `t312-undo` 加 `--restore-window` 后 RPC 成功，但原图仍为 3 图元 dirty，因此不能把快捷键计为成功。之后菜单 Undo/Redo 成功只证明共享命令行为。没有实际通过的 Ctrl+Y 现场证据。
+<a id="explore-ex-029-2"></a>
+
 - **文本 P 只观察到有限状态**：`p313-text-p-0.png` 中搜索框显示输入法预编辑 `P` 和候选窗，未见放置菜单；`p314-commit-text-0.png` 回车后搜索框为空。没有完整验证文本编辑快捷键，不能把预编辑状态冒称已提交文本输入。画布 P 唤出菜单、P→T、菜单 Esc 退出也未完成现场验证。
+
+[探索 EX-029](exploration-backlog.md#ex-029)。
 - **隐藏目标层、菜单 Esc 的统一取消未覆盖**，不能由显式取消按钮推导这些路径已通过。原生另存框和保存重开属于可选回归，本轮未执行；没有任何新增保存或原软件兼容通过结论。
 - **旧索引失败保留**：第一槽 `d08-cancel` 原错误为 `element 107 is not in the current cached snapshot; run get-app-state again and use a fresh element index`，随后按已读图坐标取消成功。第二槽 `s202/s203` 也发生旧索引失效；未删除失败回执。
 - **第一槽逐步读图不完整**：`d05-endx-0.png`、`d06-endy-0.png` 没有可核验的成功 image 回执，不能补造提交之前的读图时序。第一槽部分原图为 2272×1481，read 返回缩放图为 2000×1304，不能声称缩图 SHA 等于原 PNG。第二、三槽主要窗口原图为 1522×1006；普通产品为 1462×906，菜单截图尺寸更小。

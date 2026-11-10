@@ -9,6 +9,7 @@ PT Renew 用 C++ / Qt 6 重建 DOS AUTOTRAX 的 Windows 桌面工作流。先了
 | 下载、启动和常用操作 | [项目首页](../README.md) → [使用指南](usage.md) |
 | 当前开发到哪里、还缺什么 | [当前能力与推进顺序](../PROGRESS.md) |
 | 接手开发 | [接手步骤](../HANDOFF.md) |
+| 领取一个未知工程问题 | [探索待办](exploration-backlog.md) → [研究与沉淀规则](exploration-workflow.md) |
 
 已发布的 **v0.11.0-alpha 是只读版本**；当前 dev 已加入自由 FT 移动、删除、历史和受限另存。内部显式新增链路已完成，正式新增入口仍关闭。版本号相近不代表功能范围相同。
 
@@ -34,6 +35,7 @@ PT Renew 用 C++ / Qt 6 重建 DOS AUTOTRAX 的 Windows 桌面工作流。先了
 
 ## 文档维护方式
 
+- 工程未知在原文段落和[探索待办](exploration-backlog.md)之间建立双向链接；探索 agent 依[工作规则](exploration-workflow.md)领取、自由扩展阅读并修正文档。独立新未知入队，完成事项沉淀到正文后从待办删除。
 - 新能力先更新对应主题和[当前进度](../PROGRESS.md)，再链接实现或验证报告；不把每次工具尝试追加到首页。
 - 同一功能继续补充现有主题；确有独立问题时新增专题并加入[完整索引](reference-index.md)。历史报告保留原结论和边界。
 - [HANDOFF](../HANDOFF.md)负责接手步骤，[PROGRESS](../PROGRESS.md)负责当前状态，[SESSION_HANDOFF](../SESSION_HANDOFF.md)保留旧入口兼容；详细现场身份与本机路径集中在[技术交接](agent-handoff-20261104-capture.md)。

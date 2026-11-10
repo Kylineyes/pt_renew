@@ -15,7 +15,11 @@ Snapshot仍使用原工具参数use_vision=true/use_ui_tree=false/use_annotation
 
 历史NET对照PID37300和铜对照39768的原始日志、最终图、launch/exit0复制controls并冻结；与本轮候选SHA和输入摘要一致，代码验证有效release→returned→accepted和无编辑/aborted。它们属于历史前置，不虚写成本轮新对照。父明确批准`msg_f2e1a6c17afd`并生成新phase-two-approval后才启动单MCP连接，运行源码此后不改。
 
+<a id="explore-ex-033"></a>
+
 本轮总体结论为 **failed**：两次竞争都从当前门闩图正确定位并实际删除走线，应用发布修订3/dirty/零走线/A来源；但Delete后截图分别遭遇`USER_CONTROL`和`CONTROL_UNAVAILABLE`，两次都立即cancel中止，没有有效`gate-released`。它们只能证明中止路径上的旧结果丢弃，不能建立完整竞争验收，后来补图不能补正门闩内缺图；两次预算全部消费，没有重发Delete、补试或第三个候选。
+
+[探索 EX-033](exploration-backlog.md#ex-033)。
 
 | 项目 | NET竞争 | 铜竞争 |
 | --- | --- | --- |
@@ -28,7 +32,11 @@ Snapshot仍使用原工具参数use_vision=true/use_ui_tree=false/use_annotation
 | 有效release / 判定 | 无 / failed | 无 / failed |
 | 正常退出 | `an017-retire` Popen exit0 | `ac024-retire` Popen exit0 |
 
+<a id="explore-ex-034"></a>
+
 两次桌面点击坐标随dock布局变化而改变，实际Click及Delete均走相同Guard和真实工具，不从应用内部直接编辑。NET的B返回摘要仍为`fc8cc17b…ca77b`，旧generation4对当前5发生discard，最终图保留NET_A及A摘要`130e3b1e…baa974`；铜返回的是旧revision2/3铜元素，当前revision3、generation/board不匹配、NET仍匹配，最终没有把旧铜报告恢复。两者回调都有`experiment_aborted=true`，不将discard单独包装成有效竞争通过。
+
+[探索 EX-034](exploration-backlog.md#ex-034)。
 
 同一候选应用的纳秒时序如下，原始日志保留全部字段；`gate-released`均缺失。
 
