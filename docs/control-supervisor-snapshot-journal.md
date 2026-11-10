@@ -1,6 +1,10 @@
 # 监督器账本快照失败时保留原进程
 
+<a id="explore-ex-039"></a>
+
 2026-10-29，基于`dev=acb9c87`，在独立`fix/control-supervisor-snapshot-journal`分支实现，提交`a37ed03`。第三候选现场的监督器在替换`supervisor-chain-held.json`时遇到PermissionError，原异常路径随后关闭子孙查询句柄并退出1，客户端仍继续原预算，导致后续退出证明缺口。现场原件及failed结论见[第三候选报告](control-owned-close-v3-live.md)，不由本修复追溯改写。
+
+[探索 EX-039](exploration-backlog.md#ex-039)。
 
 `SnapshotJournal`只处理周期账本快照的写入，不操作桌面或进程生命周期。PermissionError最多3次写入尝试、两次各10毫秒等待；其它OSError一次后锁存。持续写入失败只累加失败次数及最多64条诊断，继续原进程枚举和持柄等待。原客户端及全部已发现子孙退出后，监督器调用原Popen.wait取得退出码，再将失败次数、重试次数、诊断和截断标记写入最终退出报告。有持续失败时，即使原进程均退出0，verified仍为false、监督器返回1，不能把生命周期完成改为完整通过。
 

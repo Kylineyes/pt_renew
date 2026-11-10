@@ -22,7 +22,11 @@
 
 本轮唯一启动在14:27:54（UTC+08:00）发生，Run `run_0ca568a11b7b` / Task `task_304e9df22f4d` / Dispatch `ctx_818a32eb5b79`，两批准绑定`msg_fa696d8887f7`。runner读取见证器身份JSON遭遇PermissionError，未写release、未执行监督器，服务/桌面请求/窗口均0，GUI、专用关闭、资源和健康均未执行。外层runner/launcher/owner原Popen和句柄均exit1，父recorder/owner原句柄均exit1；握手child50968没有原Popen或原句柄退出码，保持unverifiable。独立报告`8d41db3`及父[失败审计](../.local-analysis/control-owned-close/parent-independent-failure-audit.json)结论一致。旧live172、旧候选110、原包77及产品22/23/22全量摘要不变。
 
+<a id="explore-ex-039"></a>
+
 本轮失败后只在独立`fix/control-witness-handshake-read`分支离线修复见证器，提交`837baf8`、合入`33f4673`：身份文件的FileNotFoundError/PermissionError只在原握手截止内重读，不启动新进程或放行目标；构造器创建进程后任何读取/解析/校验异常均附带原pending_launch供调用方等待。底层权限错误原因仍未证实，修复不改写本组失败及child退出缺口。新增3项实质回归后[140项离线测试全部通过](../.local-analysis/control-owned-close/tests-handshake-fixed.log)，不与137项历史结果叠加。
+
+[探索 EX-039](exploration-backlog.md#ex-039)。
 
 第三候选已经由新任务唯一执行，见[第三候选现场](control-owned-close-v3-live.md)：GUI两图/双回调、7寿命7663上传零账本及3420健康分项通过；关闭preflight拒绝且Alt+F4未发送，监督器账本替换失败、子孙原退出码不完整，整组failed。诊断窗66968/birth134377322138115927/HWND15010430在晚到精确句柄查询时仍live；服务按原900秒截止退出，不补关或恢复。
 

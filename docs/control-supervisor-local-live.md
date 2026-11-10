@@ -55,7 +55,11 @@
 
 [runner-held](../../main-2/.local-analysis/control-supervisor-local-runner/live/runner-held.json)、[监督器身份](../../main-2/.local-analysis/control-supervisor-local-runner/live/supervisor-identity.json)、[监督器链退出](../../main-2/.local-analysis/control-supervisor-local-runner/live/supervisor-chain-exit.json)与[runner-result](../../main-2/.local-analysis/control-supervisor-local-runner/live/runner-result.json)中实际监督器 PID/创建时间一致，方案SHA匹配，Witness目录的identity/popen-exit对应同一实际PID且退出0。链报告发现9个精确子孙身份，全部exit0、无重复、capture_errors为空，client原Popen0；未用进程当前不存在或venv父外壳0代替实际退出。
 
+<a id="explore-ex-039"></a>
+
 证据侧[runner原持柄](../../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/runner-popen-held.json)/[退出](../../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/runner-popen-exit.json)、[launcher原持柄](../../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/launcher-popen-held.json)/[退出](../../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/launcher-popen-exit.json)分别对应同一PID/创建时间且Popen与句柄均0。短命UIA探针另保留[原communicate退出回执](../../main-2/.local-analysis/control-supervisor-local-runner/live/uia-probe-exit.json)，窗口另保留[原Popen退出回执](../../main-2/.local-analysis/control-supervisor-local-runner/live/window-exit.json)。监督器每50ms枚举，无法排除整个生命周期短于采样间隔的未知进程；这些证据不声称无限覆盖。
+
+[探索 EX-039](exploration-backlog.md#ex-039)。
 
 owner 的[原始启动记录](../../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/owner-start-process.json)与[自身身份](../../verify-control-local-runner-live/.local-analysis/control-supervisor-local-live/owner-identity.json)一致，父在运行期间保存[精确持柄](../../main-2/.local-analysis/control-supervisor-local-runner/parent-owner-held.json)，并从同一原句柄取得[真实exit0](../../main-2/.local-analysis/control-supervisor-local-runner/parent-owner-exit.json)，未以当前不存在替代退出。父[独立全链审计](../../main-2/.local-analysis/control-supervisor-local-runner/parent-independent-live-audit.json)另外核对11113行 trace、closed/dropped0、原图 read 记录、回调、冻结集合和全部已知退出，服务寿命为501.2558秒；与本 worker 的独立离线审计结论一致。
 

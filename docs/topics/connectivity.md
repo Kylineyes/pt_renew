@@ -26,7 +26,11 @@
 | [NetlistBrowser.h](../../src/ui/NetlistBrowser.h) | 来源、筛选、高亮、后台结果 |
 | [InspectNetlist.cpp](../../tools/InspectNetlist.cpp)、[InspectCopper.cpp](../../tools/InspectCopper.cpp) | 两种不同含义的只读 CLI |
 
+<a id="explore-ex-022"></a>
+
 铜几何采用确定与可能包络，圆弧按实际象限处理；贯穿孔采用理想镀通假设。未解释 extra、铜文字、平面及不支持轮廓都可能使覆盖不完整。只要全板覆盖不足，网络状态保持“无法确定”，不能凭局部路径报告通过。
+
+[探索 EX-022](../exploration-backlog.md#ex-022)。
 
 编辑或换图使旧分析失效；后台结果依文档身份与代次核对后才可发布。完整 NET／铜竞争现场的旧缺口仍保留，不能由局部测试通过自动补齐。
 
@@ -34,11 +38,19 @@
 
 PLACED.PCB + DEMO.NET 的 36 个声明元件、88 网络、370 节点已有唯一映射证据。既有铜模型报告 430 对象、5211 次比较、21 组跨网接触候选；88 网络均无法确定。候选用于人工核对，不能读成 21 个短路。
 
+<a id="explore-ex-021"></a>
+
 真实 NETDEF 样例仍缺，当前结构主要依公开格式与合成测试。铜文字等覆盖缺口未消除；资源限制、模型近似及理想孔假设也必须随报告解释。CLI 退出码不能脱离具体 succeeded、board_loaded、覆盖和限制字段单独作为工程结论。
+
+[探索 EX-021](../exploration-backlog.md#ex-021)。
 
 ## 下一步怎样推进
 
+<a id="explore-ex-024"></a>
+
 先补真实 NETDEF 与单几何原程序对照，明确文字、平面、附加字段和接触语义，再扩展模型。DRC、布线和生产输出分别需要规则、参考结果和输出往返验证，目前没有可直接开放的实现。
+
+[探索 EX-024](../exploration-backlog.md#ex-024)。
 
 ## 按需深入
 

@@ -55,7 +55,11 @@
 
 第三槽沿用同一 Pi 会话，经上下文压缩后继续。诊断窗口已实际验证整数输入、预览、新增提交和编辑菜单撤销／重做：撤销为 2 图元 clean，重做为 3 图元 dirty，均有指定模型实际读图。关闭确认框选择放弃后，原创建者记录 `waitReturn=0`、`forcedDeadlineTermination=false`。点击关闭后的 RPC 曾因目标已退出返回 `app_not_found`，以原持有 Popen 的真实 wait 记录确认退出，不将该竞态误写成仍存活或控制失败。
 
+<a id="explore-ex-029"></a>
+
 同槽普通产品原图确认“放置走线(T)（未实现）”禁用且标有 F3；选择已有自由走线，删除后为 1 图元 dirty，编辑菜单撤销后恢复 2 图元 clean，随后正常关闭且原 Popen wait 为 0。F3 被本机电脑控制接口以 `Unsupported key: F3` 拒绝；恢复焦点后的 Ctrl+Z 请求虽成功返回，现场画面未变化，改用菜单完成历史命令。P 文本输入还受 IME 预编辑影响。上述真实快捷键送达、完整文本焦点、隐藏目标层及原生另存框未在本轮全面通过；对应 QtTest 通过不替代这些真实窗口缺口。详细结果见[真实窗口报告](track-placement-live-verification.md)。
+
+[探索 EX-029](exploration-backlog.md#ex-029)。
 
 原软件随后按 13:35–14:05 新时段取得一个真实 DOSBox 进程，但窗口捕获与精确物理矩形屏幕图均为不可辨黑底白线；物理图与同一时刻窗口图摘要一致，不能仅归因 Orca 捕获。只操作宿主 Capture 菜单、Take screenshot 和正常关闭，客体截图目录没有产物；未确认 SYN1、空板或计数，未向客体发送 Return／Shift+I／编辑／保存，也没有生成 `FTNEW.PCB`。启动 owner 首次因 `-conf` 被自身参数解析拒绝，修正后才创建目标，该失败与软件运行失败分别记录。目标 PID 9716 由原 owner 63316 持有 Popen，05:55:07Z 真实 wait0，未强制终止；5 张现场图均有指定模型成功 image 回执。单 Return 启动转换建议处理时目标已经关闭，未执行，也未为建议重启。本轮完整单线 Task 按 failed 结算，详见[原软件现场报告](native-ft-created-roundtrip.md)。
 

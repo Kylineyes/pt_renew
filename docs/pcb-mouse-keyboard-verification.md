@@ -24,4 +24,8 @@
 
 后续 Pi 文件收尾连续出现 `Connection error`／`Request timed out`，原 JSONL 的最终错误与 TUI 闲置状态得到确认；协调者将该 Dispatch 标记 abandoned、Task failed，保留终端和原始记录，不冒称收到第二段 worker_done。独立产品的实际键鼠及原生文件框结果见[产品核验报告](product-mouse-keyboard-verification.md)。
 
+<a id="explore-ex-009"></a>
+
 本报告证明已实际发送并观察了本轮鼠标、键盘输入，以及后续宿主正常关闭；未证明 `SYN1` 在原 AUTOTRAX 中正确载入、走线计数为 5、移动／删除及未修改对象兼容。未改变历史 failed、字形 runtime=false 或异步验收边界。
+
+[探索 EX-009](exploration-backlog.md#ex-009)。

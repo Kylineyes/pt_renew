@@ -1,6 +1,10 @@
 # 主窗载入生命周期与写出保留：独立现场验收
 
+<a id="explore-ex-030"></a>
+
 最终固定候选 `374b1d7fdf0e06fd0a7b31890348cc243f7306ca` 的本轮核心范围通过真实 Qt 界面验收：读取排队期间编辑和 Undo/Redo、失败保留、同步失败 inspect 使旧读取过期、双闸门下旧回调不能解除后续 busy、关闭确认取消、真实主窗另存保存点与输出重开。未发现上述已执行路径的产品缺陷；模态重入、同步成功替换、Created 新增及默认拒绝没有在本次现场重演，不纳入本次独立现场通过结论。
+
+[探索 EX-030](exploration-backlog.md#ex-030)。
 
 本工作在 `verify/parallel-save-hardening` 独立分支，只修改本报告和自有 `.local-analysis/parallel-save-hardening-live/`，未修改根 CMake、`src/`、`tests/` 或其他工作树。父代理完成产品集成与正式全量测试，本报告不把父测试当作本代理新跑。
 

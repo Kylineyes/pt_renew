@@ -81,6 +81,10 @@ runner stdout为860字节、stderr为0；UIA子stdout/stderr均为0。原字节�
 
 ## 结论边界与证据入口
 
+<a id="explore-ex-035"></a>
+
 实际窗口/桌面枚举及查询、事件订阅、截图、输入钩子、键鼠、PT产品、控制服务和NET/铜竞争均0，`max_product_launches=0`、`ready_for_live=false`。本组成功证明当前冻结及当前运行中的原对象创建、严格COM清理、原Popen退出0和原5秒关口；Qt主窗、整窗UIA双轮、文件框、GUI兼容性、真实产品全动作预算及完整竞争仍未验证，本工作者未进入下一现场阶段。
+
+[探索 EX-035](exploration-backlog.md#ex-035)。
 
 关键证据位于本树`.local-analysis/uia-object-lifecycle/`：`worker-identity.json`、`static-review.md`、`static-rereview.md`、前后摘要核对、`tool-execution.json`、`independent-execution-audit.json`和`execution/`原请求/子结果/账本/verified/final-result。报告可由父独立审计整合；下一阶段范围及新批准由父另行组织。

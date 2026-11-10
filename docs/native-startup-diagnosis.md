@@ -38,7 +38,11 @@
 2. 精确前景下只发送一次公开 `Shortcut enter`，宿主后图仍相同，两个662×566 PNG的 SHA-256均为 `f102ec6ad53b460feb3cf9ecbd98577cc7c75838f9cebf56e5c99723b0479b6f`。
 3. 独立日志新增两行：计数 `882485906` 的 `file open command 2 file SYN1.PCB`，随后 `882631081` 的 `file open command 0 file SYN1.PCB`。这是输入后客体状态推进的实际日志证据，不只是主机 API 成功回执；打开请求本身仍不能代替 GUI 文件名／计数确认。
 4. 根据实际读到的宿主 Capture 菜单，点击 **Take screenshot**。DOSBox 保存 `E/captures/pt_000.png`；本模型实际读取该原图，看到红色板图外框、内部水平线、十字光标，以及底部黄色状态栏。底栏可辨 `X:2000 Y:2000 mils`、`L:Top Layer`、`P:ROUND62`、`T:12 S:60 G:25`。这些值只是当时状态，不是新建走线参数或文件计数验收。
+<a id="explore-ex-002"></a>
+
 5. 同步宿主截图仍显示黑底白横线。这一对照足以证明本实例存在客体图像与宿主呈现不一致；不能泛化为历史每次失败都具有相同客体状态，也尚未定位到具体显卡、SDL、窗口刷新或输入实现。
+
+[探索 EX-002](exploration-backlog.md#ex-002)。
 6. 根据实际宿主 Video 菜单选择 **Reset window size** 后，宿主图仍黑线，不能称已恢复显示。
 
 客体原图为 **640×480、2371字节**，SHA-256：

@@ -49,7 +49,11 @@ if (!plan.succeeded()) {
 
 ## NETDEF 和能力边界
 
+<a id="explore-ex-010"></a>
+
 有新段时，只接受 `netdefCount=0` 且候选为 `BeforeEndPcb` 的严格布局。尾部 NETDEF 返回“原软件排序尚未验证，本版暂不支持”，交错 NETDEF 与几何／COMP 返回明确的交错拒绝错误。不会依据尾部候选自行开放插入；即使原尾部 NETDEF 字节可完整保留，也不代表新增后的排序已获原软件验证。
+
+[探索 EX-010](exploration-backlog.md#ex-010)。
 
 `baseLayout.originalSoftwareInsertionVerified` 保持读取器返回的 `false`，未核定说明完整保留。`anchorLineEnding` 和其他换行字段只作观测，不成为新增 FT 的缺省编码。预检器不估算未知新增编码的字节数，不编码、不拼接新增 FT，也不调用任何文件保存接口。未来采用显式编码策略后，仍需对完整输出执行大小检查、严格重解析、语义比较及原软件兼容验收，并沿用新文件发布保护。
 

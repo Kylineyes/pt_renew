@@ -38,7 +38,11 @@
 
 账本区分`lifecycle_complete`与`action_succeeded`。所有必需角色正常退出0且无身份/子孙缺口才可完成生命周期；原动作若已有failed ID，即使后来各进程exit0，动作仍失败且token/冷却截止不改。GUI字段始终false，未知短命子孙覆盖始终不宣称通过。
 
+<a id="explore-ex-035"></a>
+
 默认必需角色为product/service/client/supervisor。当前只接入产品和探针；客户端自身、外层监督器及MCP服务的创建所有者跨进程原句柄回执尚未集成，缺失角色会明确列出，不能把局部账本当全链完成。发现没有原Popen的子孙只能登记不可消除的gap，不能用进程后来不存在、迟到查询句柄或重新登记PID修补。封存后的账本禁止新增身份，不删除原缺口。
+
+[探索 EX-035](exploration-backlog.md#ex-035)。
 
 ## 验证与下一步
 

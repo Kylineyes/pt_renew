@@ -1,6 +1,10 @@
 # 不可变图层资源复用：原生适配器与待许可现场候选
 
+<a id="explore-ex-037"></a>
+
 本阶段完成默认关闭的Win32适配器、原`_Layer`生命周期接入、独立资源审计及客户端批准检查。本文记录最初离线候选；后续[真实现场结果](control-bitmap-surface-live.md)已完成双图/双回调、7正常寿命8509上传及零账本，但整体因监督器独立退出码缺失按failed结算。[见证器直启修正](control-witness-launch.md)仅完成离线测试，尚未追加现场。性能与长期稳定性仍未验证，`runtime_verified=false`保持。 稳定产品/dist保持0.10.0；控制稳定性、固定0.11.0和NET／铜完整竞争结论均保持未通过。
+
+[探索 EX-037](exploration-backlog.md#ex-037)。
 
 分支`feat/control-bitmap-surface`从`dev=705c239`建立。依据[上一阶段的局部成本边界](control-upload-offline-analysis.md)实施最小实验。本轮没有启动GUI、真实控制服务或钩子，没有截图、输入或恢复旧Pi会话，也没有创建新Task/Dispatch或生成有效桌面批准。
 

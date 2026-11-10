@@ -20,7 +20,11 @@ trace有且仅一次`indicator-health-installed`，`heartbeat_first=true, phases
 
 32条慢阶段（>=0.05秒或异常时记录）：_build_layers1、change-and-acknowledge5、_monitor_rects2、layer.set_opacity9、layer.hide2、pump-messages13；均无异常。最长pump-messages约0.4996500秒，最长_monitor_rects约0.4354969秒。健康采样有597次观察到阶段，包含健康时的_build_layers/_monitor_rects/layer/pump等；4847次阶段为空，标为阶段unknown。可见阶段及phase_age只是采样时的关联，不足以将整个超过1秒间隙归因于透明度API、单个阶段、累积工作或系统调度中的某一项。
 
+<a id="explore-ex-036"></a>
+
 完整trace247057行，末尾trace-closed/dropped0，未报告写入错误；包括5444健康样本、32阶段、130743条input-processed、110201条hook-event、288对rehook-recovery。高频诊断开销可能改变调度，没有无诊断同条件对照，不能外推为原工具长期性能或历史故障必然原因，不归因用户。日志零丢失仅支持本次记录完整，phase空值、精确底层慢因及长期可靠性仍unknown。
+
+[探索 EX-036](exploration-backlog.md#ex-036)。
 
 关闭优先Alt+F4，但h011前检非目标，executed=false、没有调用该关闭Shortcut。完整120秒后h012仅对本Popen精确身份一次WM_CLOSE生命周期正常关闭，原日志normal-close/mainloop-returned1/1，h013原Popen确认exit0后退役；没有再向已死窗口发送消息，没有日志组的多余生命周期请求。五链44840/61712/63132/64700/72612停止前持有精确创建时间句柄，h014正常stop后全部exit0，UIA探针exit0，termination_calls0。原failed/token/budget/截止保留，2次Guard退避审计`early_requests=[]`。父独立持有窗口及链身份也全部exit0，并独立验证健康/回调时序；图像内容由指定工作者实际读图，父审计不冒称父读图。
 

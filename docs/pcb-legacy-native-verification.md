@@ -58,7 +58,11 @@
 
 ## 通过与未完成范围
 
+<a id="explore-ex-009"></a>
+
 通过的是本轮隔离准备、当前产品核心生成、独立字节比较、指定模型六图实际读取、AUTOTRAX 合成源板可见布局／主菜单及拒绝后的按约停止与服务正常退出。GUI 目标总体未完成，受限另存为的原软件兼容性仍未验收。
+
+[探索 EX-009](exploration-backlog.md#ex-009)。
 
 未执行或未取得证据的范围为：Work File Name 和 Information／Status 计数、修改／未改对象的原软件属性、`SYN1.PCB` 新输出重开、真实源／输出对照，以及独立产品打开→选择→移动／删除→Windows 原生另存框→新目标→重开、取消、已有目标和关闭保护。未修改原字形 `runtime_verified=false`、异步竞争 `ready_for_live=false`、旧次数／时限或其他历史结论。
 
