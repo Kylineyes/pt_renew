@@ -165,7 +165,7 @@
 
 ### EX-008 既有 FT 第七附加字段的电气与保存语义
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_d913518e29a3 / ctx_abb7c92f8325；分支：research/ex008-ft-extra；会话／证据：Pi 01a1cb42-06ef-7017-9f48-3ada4f0d4276，deng/gpt-6.1-sol high（本轮用户授权），本工作树 `.local-analysis/ex-008/`。
 - 类型：格式语义。依赖：无，可先独立研究。
 - 原文细节：[topics/board.md：细节1](topics/board.md#explore-ex-008)；[copper-analysis.md：细节2](copper-analysis.md#explore-ex-008)。
 - 已知：六／七字段均可读取，已有字段原样保留；铜分析对含 extra 的铜走线继续保守拒绝完整覆盖，值为 0 也不例外。
