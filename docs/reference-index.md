@@ -8,11 +8,12 @@
 
 ## 板图与文件
 
-先读[主题概览或接手入口](topics/board.md)。本组 3 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/board.md)。本组 4 篇，以下保留原报告标题。
 
 - [PCB 严格只读核验命令](pcb-check.md)
 - [PCB 严格语法布局元数据](pcb-layout-analysis.md)
 - [PCB FILE 4 只读解析与显示](pcb-readonly.md)
+- [FT 第七字段：读入归一化、保存与预布走线消费者](ft-extra-static-semantics.md)
 
 ## 命令、视图与测量
 
@@ -59,9 +60,10 @@
 
 ## 封装库与元件
 
-先读[主题概览或接手入口](topics/library.md)。本组 1 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/library.md)。本组 2 篇，以下保留原报告标题。
 
 - [PCB 4 LIBRARY 二进制分析与只读浏览](library-analysis.md)
+- [LIB 目录状态的静态路径与残留边界](library-directory-state.md)
 
 ## 网络、铜层与检查
 
@@ -204,7 +206,7 @@
 
 ## 探索队列与共识
 
-[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 146 篇专题报告。
+[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 148 篇专题报告。
 
 ## 增补与追溯规则
 
