@@ -264,11 +264,11 @@
 
 ### EX-017 LIB 目录残留、未分配、别名与保留标志
 
-- 状态：研究中；负责人：task_b61ab7998498／ctx_897a4a52cf7d；分支：research/ex017-lib-directory；会话／证据：Pi 01a1cb42-0ab9-77f9-a99c-99f1ca944f37（deng/gpt-6.1-sol，high；本轮用户覆盖旧模型限制），本工作树 `.local-analysis/ex-017/`（身份核验 `identity.json`）。
+- 状态：受阻；负责人：task_b61ab7998498／ctx_897a4a52cf7d；分支：research/ex017-lib-directory；会话／证据：Pi 01a1cb42-0ab9-77f9-a99c-99f1ca944f37（deng/gpt-6.1-sol，high；本轮用户覆盖旧模型限制），本工作树 `.local-analysis/ex-017/`（身份 `identity.json`、目录 `directory-audit.json`、路径 `paths.json`）；原因：静态阶段已有收获，合法别名、非零保留字段及其他版本缺样例／完整路径，未做真实库操作差分。
 - 类型：格式语义。依赖：无，可先独立研究。
 - 原文细节：[library-analysis.md：细节1](library-analysis.md#explore-ex-017)。
-- 已知：四库目录与记录边界已结构核验；FFFF 槽可能残留名称，重复指针／未知标志不预览。
-- 要回答：FFFF、保留字段、别名指针和数据残留对应删除、未分配还是历史状态？其他版本目录如何组织？
+- 已知：四库 318 个有指针条目、474 个 count/start 双 FFFF 槽和 8 个普通名称残留；原查名排除 FFFF，删除只改指针保留名称／计数，新库初始化双 FFFF，新增复用首空槽，改名只写第一记录，压缩按同名去重；见[静态路径与剩余边界](library-directory-state.md#directory-result)。重复指针／未知标志仍拒绝。
+- 要回答：剩余为合法别名指针、非零保留字段及其他版本布局，以及中断／失败的目录状态；取得有来源样例后追踪实际消费者，必要时另安排隔离原库增删／复用差分，不按名称或未引用数据猜测恢复。详见[后续证据条件](library-directory-state.md#remaining-directory-unknowns)。
 - 完成条件：用原库操作前后差异或可达读写路径恢复目录状态机和布局，明确安全预览／拒绝规则，不按名称恢复失效槽。
 
 <a id="ex-018"></a>

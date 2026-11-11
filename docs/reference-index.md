@@ -59,9 +59,10 @@
 
 ## 封装库与元件
 
-先读[主题概览或接手入口](topics/library.md)。本组 1 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/library.md)。本组 2 篇，以下保留原报告标题。
 
 - [PCB 4 LIBRARY 二进制分析与只读浏览](library-analysis.md)
+- [LIB 目录状态的静态路径与残留边界](library-directory-state.md)
 
 ## 网络、铜层与检查
 
