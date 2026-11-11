@@ -156,6 +156,14 @@ class ObserverTests(unittest.TestCase):
                 native.assert_not_called()
             self.assertEqual(output.read_text(encoding='utf-8'), '原件')
 
+    def test_cancel_before_next_api_does_not_query_or_read_error(self):
+        api = FakeApi()
+        value = candidate.Observer(api, cancelled=lambda: True,
+                                   last_error=lambda: self.fail('不能读取错误码'))
+        with self.assertRaises(InterruptedError):
+            value.call('GetForegroundWindow')
+        self.assertEqual(api.calls, [])
+
     def test_unknown_api_rejected_before_call(self):
         api = FakeApi()
         with self.assertRaisesRegex(ValueError, '拒绝'):
