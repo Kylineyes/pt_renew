@@ -62,7 +62,13 @@
 
 ## 下一步计划：按依赖推进
 
-当前已接续 EX-001：Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213`，Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`，实际模型及工具回执已核验为 `deng/gpt-6.1-sol / high`。复用 `explore-ex001-observer` 工作树，新分支 `research/ex001-live-observation`，证据 `.local-analysis/ex-001-continuation/`。领取 `f19a6e4` 已同步共享 dev，父已放行最小工具改动、离线验证及新冻结现场方案准备；实机查询、服务和桌面现场须先提交具体方案供父审查，当前未放行现场。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`，原 provider 会话只读。
+当前已接续 EX-001：Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213`，Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`，实际模型及工具回执已核验为 `deng/gpt-6.1-sol / high`。复用 `explore-ex001-observer` 工作树，新分支 `research/ex001-live-observation`，证据 `.local-analysis/ex-001-continuation/`。领取 `f19a6e4` 已同步共享 dev。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`，原 provider 会话只读。
+
+本次现场方案已推进至 v3：首候选因停止信号缺口未放行；v2 在 Windows PowerShell 5.1 文件加载时因 UTF-8 无 BOM 产生解析错误，owner／driver／服务／目标均未启动，原 GO 已撤销。修后实际 `-File` 离线检查通过，v3 plan `98a52590a8483bc6c7ed6860f6e42de1e5f3806bb9e1a78e626cc86044460d48`、driver `353f60a6d04987a2547f6da8bf086a8e12fd28fd52587c60491b56a93ef64d5c` 已审查，19 冻结项／99 runtime／1 input 独立核验一致。v3 GO 为 2026-11-11 UTC 18:00–18:20，18:13 起只收尾；文件状态已到目标启动后，尚无菜单后验或完整完成结论。旧候选、失败与原启动器字节保持只读。
+
+用户随后明确“现在开放两个小时给你的控制时间，你调节子agent的控制顺序”。父于同机 UTC `2026-11-11T18:02:12.1522606Z` 登记总窗口至 `20:02:12Z`（北京时间 11 月 12 日 02:02:12–04:02:12）。授权覆盖后续必要键鼠和子 agent 控制顺序，由父自主调度，不重复索同一许可；全部子 agent 继续 Pi、`deng/gpt-6.1-sol / high`。当前 EX-001 worker 独占桌面，其他 agent 仅可离线工作；切换操作者必须先核实前一现场正常收尾和原持柄等待结果。运行中的 v3 GO 不改写，新的总授权不解除冻结方案、控制门或拒绝静默约束。
+
+在前置通过的条件下，暂按 UTC 18:20 前完成 EX-001、18:20–18:50 接 EX-004、18:50–19:10 接 EX-005、19:10–19:50 接 EX-007 组织新阶段；这些是调度预算，不是未审方案的输入指令或成功承诺。可按实际结果在总窗口内调整尚未开始的阶段，受阻则先解决必要前置，不盲排后续动作。UTC 19:55:12 起至少保留最后 7 分钟整体收尾；不得在总窗口之外继续输入。父审核与 GO 证据在 `.local-analysis/ex-001-continuation/scene-review-v2.json`、`scene-review-v3.json` 和 `control-window.json`。
 
 1. **优先接 EX-001 的最小现场前准备。** 读[观测候选下一阶段](docs/native-menu-click-audit.md#readonly-observer-next)及 `tools/observe_legacy_click.py`，不要重新实现通用控制框架。先确定只读查询兼容、采样耗时、同机单调锚点及与常驻驱动／文件信号的绑定；最多 3 秒仅是新采样启动上界，不能中断在途阻塞 Win32 调用。静态准备不足以清除根因事项。
 2. **一名操作者做一次明确菜单动作。** 根据当下原图和精确新身份组织新隔离槽，观测器预启动，避免聚焦后再开 shell。一次公开菜单打开动作加真实后图；失败即停止业务，不重发 Click、不盲改倍率，不预排菜单项。先核一次后验，再进入 [EX-004](docs/exploration-backlog.md#ex-004) 的两轮新 640×480 客体 PNG，逐张确认文件集合差、摘要与指定模型实际 read。
