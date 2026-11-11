@@ -88,10 +88,10 @@
 
 ### EX-001 菜单点击期间的前景、光标与命中窗口变化
 
-- 状态：研究中；负责人：task_3903c40083a3／ctx_cdfee6b64af8；分支：research/ex001-readonly-observer；会话／证据：Pi 01a1cb26-1411-7553-be7e-98cfa74d0e98（deng/gpt-6.1-sol high），Orca 2930bf6d-29b4-46e5-8f58-30f170d8d47c；本工作树 .local-analysis/ex-001/。
+- 状态：受阻；负责人：task_3903c40083a3／ctx_cdfee6b64af8；分支：research/ex001-readonly-observer；会话／证据：Pi 01a1cb26-1411-7553-be7e-98cfa74d0e98（deng/gpt-6.1-sol high），Orca 2930bf6d-29b4-46e5-8f58-30f170d8d47c；本工作树 .local-analysis/ex-001/，离线候选已交付，完整闭环待父另行组织真实动作时序与菜单后验，本轮禁止现场。
 - 类型：行为根因。依赖：无，可先独立研究。
 - 原文细节：[native-menu-click-audit.md：细节1](native-menu-click-audit.md#explore-ex-001)；[topics/legacy.md：细节2](topics/legacy.md#explore-ex-001)。
-- 已知：安装原 AST 已排除 Click 自动乘二；第二槽无父 shell 插入。前景变化只定位到约 0.574 秒采样间隔。
+- 已知：安装原 AST 已排除 Click 自动乘二；第二槽无父 shell 插入。前景变化只定位到约 0.574 秒采样间隔；[最小只读候选与10项假 API验证已沉淀](native-menu-click-audit.md#readonly-observer-offline)，未作实机查询或动作后验，剩余未知与[下一阶段最小假设](native-menu-click-audit.md#readonly-observer-next)仍在本项范围。
 - 要回答：一次公开 Click 内，前景、逻辑／物理光标和命中窗口怎样变化？哪些外部 DPI、API 返回或菜单瞬时状态可观测，哪些仍不能证明实际接收者？
 - 完成条件：先离线核验最小只读观测器；再据明确假设取得一次动作的时序与菜单后验，记录已排除解释和剩余边界。证据不足时保留事项，不盲改坐标。
 
