@@ -159,7 +159,7 @@ cycles=fixed 3000
 
 只读挂载错误符合旧 Pascal 程序以读写方式打开资源文件时失败的表现，但尚未跟踪其 DOS 文件打开模式，**具体原因仍是推测**。成功探测同时改变了驱动模拟、输出后端、CPU 速度、配置和启动参数，**没有隔离出前一次异常的唯一原因**。
 
-[探索 EX-005](exploration-backlog.md#ex-005)。
+[探索 EX-005](exploration-backlog.md#ex-005)。后续[新冻结场景的有效值／AXTYPE、Enter后板图及状态受阻证据](legacy-dosbox-configuration.md#effective-state-attempt)已补充；仍没有独立证明本节历史只读挂载失败的唯一原因。
 
 截图保留在被忽略的 `.local-analysis/`：`pt-initial.png`、`pt-vga.png`、`pt-editor.png`、`pt-placed.png`。这些是本机诊断材料，不作为可发布的原软件资源提交。
 

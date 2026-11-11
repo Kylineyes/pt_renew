@@ -41,7 +41,7 @@
 ## 下一步怎样推进
 
 1. [两轮新客体 PNG 及真实逐图读取](../native-capture-checkpoint.md#continuous-capture-conclusion)已完成，四组原创建链正常wait0；复用此有限结论和当前图方式，不复用已退出槽、旧GO或坐标。
-2. 两张客体均为 AUTOTRAX 1.57 启动页，宿主仍黑底白横线；尚未据此确认工作文件名、计数或编辑状态，接[配置及状态 EX-005](../exploration-backlog.md#ex-005)。
+2. 两轮捕获结论中的客体均为启动页；后续[EX-005新场景](../legacy-dosbox-configuration.md#effective-state-attempt)已取得关键有效配置和一次Enter后的五线板图，但Shift+I后出现IME候选框，Information／Status的工作文件名／计数仍缺。先按[输入通道 EX-003](../exploration-backlog.md#ex-003)及[配置状态 EX-005](../exploration-backlog.md#ex-005)剩余边界处理，不向单线写入跨越。
 3. 取得 Information / Status 的文件名与计数，确认空板及层、宽、端点，新建单段并保存到全新 8.3 文件。
 4. 原 AUTOTRAX 重开、图像、字节、日志及摘要共同核定字段，再交[编辑主题](editing.md)接通正式产品。
 
