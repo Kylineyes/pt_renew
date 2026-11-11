@@ -4,7 +4,7 @@
 
 <a id="explore-ex-006"></a>
 
-后续 [verification-35 现场验证](legacy-menu-live-verification.md) 已实际观察到启动页、主菜单、Information 和 Status，并取得 `C21.PCB` 工作文件名及文字计数；以下地址链仍属于静态证据。[verification-36](legacy-text-object-verification.md) 已取得文字内容、高度和线宽属性，并依据原图将两轮 Tracks 读数修正为 4，与四条 FT 记录一致。宏展开和独立字形几何仍未完成运行对照。
+后续 [verification-35 现场验证](legacy-menu-live-verification.md) 已实际观察到启动页、主菜单、Information 和 Status，并取得 `C21.PCB` 工作文件名及文字计数；以下地址链仍属于静态证据。[verification-36](legacy-text-object-verification.md) 已取得文字内容、高度和线宽属性，并依据原图将两轮 Tracks 读数修正为 4，与四条 FT 记录一致。宏展开和独立字形几何仍未完成运行对照。后续[宏与命令静态状态模型](legacy-command-dispatch-static.md)已细化录制、队列满、递归截断、Repeat 模板与 Un-Delete 删除链，未改变运行未验证的边界。
 
 [探索 EX-006](exploration-backlog.md#ex-006)。
 

@@ -74,7 +74,7 @@
 
 ## 原软件行为与兼容研究
 
-先读[主题概览或接手入口](topics/legacy.md)。本组 34 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/legacy.md)。本组 35 篇，以下保留原报告标题。
 
 - [PT 现状调查与 Windows 迁移建议](initial-assessment.md)
 - [DOSBox-X 本机日志与配置加载证据](legacy-dosbox-configuration.md)
@@ -83,6 +83,7 @@
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)
 - [原菜单运行核验与桌面观测诊断](legacy-menu-runtime-validation.md)
 - [Information、Status 与 KEY 宏的独立静态复核](legacy-menu-static-validation.md)
+- [KEY 宏、Repeat 与 Un-Delete 的静态状态模型](legacy-command-dispatch-static.md)
 - [DOS 覆盖模块映射与文字研究入口](legacy-overlays.md)
 - [PCB 文字字段到解释器的静态路径](legacy-pcb-text-path.md)
 - [原文字形边界计算模式补验](legacy-text-boundary-verification.md)
@@ -203,7 +204,7 @@
 
 ## 探索队列与共识
 
-[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 145 篇历史报告。
+[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 146 篇专题报告。
 
 ## 增补与追溯规则
 

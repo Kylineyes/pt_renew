@@ -62,7 +62,7 @@
 
 <a id="explore-ex-006"></a>
 
-`Repeat` 和 `Un-Delete` 在原主菜单中的精确调度方式还需运行时确认；新版先保留入口，尚未实现的业务禁用并明确标识。
+后续[静态状态模型](legacy-command-dispatch-static.md#repeat-placement)已核定 `Repeat` 按图元模板、次数与偏移重复放置，[`Un-Delete`](legacy-command-dispatch-static.md#undelete-stack)按删除类型栈恢复对象链；两者不等于通用重复上一命令／撤销。实际运行响应仍需确认；新版先保留入口，尚未实现的业务禁用并明确标识。
 
 [探索 EX-006](exploration-backlog.md#ex-006)。
 
