@@ -47,7 +47,7 @@
 
 ## 首轮四项独立探索的交付与剩余未知
 
-四个首轮独立 Pi 会话实际均为 **`deng/gpt-6.1-sol / high`**，当时只完成离线／静态阶段，完整 Task 均按 failed 结算。后续 EX-001 实机接续 Task 已 succeeded，完成条件闭环并删除待办；其它三项仍受阻，队列当前共 42 项。
+四个首轮独立 Pi 会话实际均为 **`deng/gpt-6.1-sol / high`**，当时只完成离线／静态阶段，完整 Task 均按 failed 结算。后续 EX-001 实机接续及 EX-004 两轮客体捕获 Task 均已 succeeded，完成条件闭环并删除待办；EX-006／008／017 仍受阻，队列当前共 41 项。
 
 | 事项／研究提交 | 已沉淀结论与验证 | 接续时的具体缺口 |
 | --- | --- | --- |
@@ -62,16 +62,18 @@
 
 ## 下一步计划：按依赖推进
 
-EX-001 接续 Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213` 已 succeeded，交付 `4266c5294d644893639a8c7c13fff72779b6cc6d`；Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`，实际模型及工具回执为 `deng/gpt-6.1-sol / high`。工作树 `explore-ex001-observer`、分支 `research/ex001-live-observation`、证据 `.local-analysis/ex-001-continuation/` 保留。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`。新主线为 EX-004，将复用该实际 Pi 会话和工作树，以新 Task／独立分支／新槽接续，不给已结算 Dispatch 追加业务。
+EX-001 接续 Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213` 已 succeeded，交付 `4266c5294d644893639a8c7c13fff72779b6cc6d`。同一 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0` 随后完成 EX-004 Task `task_57c256b62a70`／Dispatch `ctx_9bb156265144`，交付 `ceee461eb2dd7e20c1e290612a28833b6ebe1765`；实际模型始终 `deng/gpt-6.1-sol / high`。两轮各一张新客体 PNG，路径／动作独立、均为 640×480／6155 字节，图像同为可辨 AUTOTRAX 1.57 启动页，字节相同符合原条件。四次各 190 样本覆盖完整，十张原图匹配实际 read 回执，target／service／driver／owner 四组身份匹配且 wait0，最晚 UTC 18:58:48 退出。父另实际读两张客体原图并核集合差、单调锚点和四组原 wait；没有板名／计数或编辑通过结论。
+
+工作树 `explore-ex001-observer`、分支 `research/ex001-live-observation`／`research/ex004-continuous-capture`、证据 `.local-analysis/ex-001-continuation/`／`.local-analysis/ex-004/` 保留。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`。下一主线 EX-005 继续复用实际 Pi／工作树，以新 Task、独立分支和新槽接续，不给已结算 Dispatch 追加业务。
 
 首候选因停止信号缺口未放行；v2 因 PowerShell 5.1 加载无 BOM UTF-8 脚本解析失败而零现场，原 GO 撤销。修后 v3 一次菜单后验通过，但公开 Alt+F4 后原目标 wait5 秒超时；完整 120.001889 秒零新增桌面请求后，经父另审正常退出 helper，依据新图一次正常宿主 X 收尾。七组已知原创建／退出链均精确匹配且真实 wait0，最晚 UTC 18:16:09 退出。父已独立核原件及采样覆盖。v3、独立收尾槽、旧 GO 和失败证据全部只读，不能续跑；完整事实见[实机结论](docs/native-menu-click-audit.md#live-menu-conclusion)。
 
-用户明确“现在开放两个小时给你的控制时间，你调节子agent的控制顺序”。父于同机 UTC `2026-11-11T18:02:12.1522606Z` 登记总窗口至 `20:02:12Z`（北京时间 11 月 12 日 02:02:12–04:02:12）。授权覆盖后续必要键鼠和子 agent 控制顺序，由父自主调度，不重复索同一许可；全部子 agent 继续 Pi、`deng/gpt-6.1-sol / high`。EX-001 现场已经正常收尾，EX-004 接续期间仍由同一实际 Pi 操作者独占桌面，其他 agent 仅可离线工作；切换操作者必须核实前一现场正常收尾及原持柄等待结果。新的总授权不解除冻结方案、控制门或拒绝静默约束。
+用户明确“现在开放两个小时给你的控制时间，你调节子agent的控制顺序”。父于同机 UTC `2026-11-11T18:02:12.1522606Z` 登记总窗口至 `20:02:12Z`（北京时间 11 月 12 日 02:02:12–04:02:12）。授权覆盖后续必要键鼠和子 agent 控制顺序，由父自主调度，不重复索同一许可；全部子 agent 继续 Pi、`deng/gpt-6.1-sol / high`。EX-001／004 现场已经正常收尾，后续 EX-005 接续仍由同一实际 Pi 操作者独占桌面，其他 agent 仅可离线工作；切换操作者必须核实前一现场正常收尾及原持柄等待结果。新的总授权不解除冻结方案、控制门或拒绝静默约束。
 
 剩余总窗口按实际交付进度顺延 EX-004 → EX-005 → EX-007；各阶段先登记共享领取、准备具体方案及新冻结 GO，不直接执行原临时预算中的时刻或输入。UTC 19:55:12 起至少保留最后 7 分钟整体收尾，所有输入不得超过 UTC 20:02:12。父审查、闭环判断及授权记录在 `.local-analysis/ex-001-continuation/`，含 `completion-decision.json`、`cleanup-scene-review.json`、`control-window.json`。
 
 1. **消费一次菜单观测结论。** 读[实机时序与支持范围](docs/native-menu-click-audit.md#live-menu-conclusion)，复用已有观测／驱动／真实等待工具；不重做最小观测器，不把有限通过外推为旧因果恢复。
-2. **优先完成两轮客体捕获。** 接 [EX-004](docs/exploration-backlog.md#ex-004)，一名操作者按当前原图依次打开 Capture 菜单并审核，再选择已确认截图项；每轮恰一张新非空 640×480 PNG，分别核文件集合差、摘要与指定模型实际 read。使用新冻结槽，正常宿主 X 收尾范围预先明确。
+2. **消费已完成的两轮客体捕获。** 读[两轮客体捕获结论](docs/native-capture-checkpoint.md#continuous-capture-conclusion)，复用逐步菜单实际 read、全目录集合差、新图摘要与客体 read、同驱动正常 X／原 wait 流程。已退出槽和坐标不复用，启动页不能替代实际工作状态。
 3. **可靠观察后取得状态和单线样例。** [EX-005](docs/exploration-backlog.md#ex-005) 核有效配置、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 在确认空板、层／宽／端点后新建一段，以全新 8.3 文件另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略。静态保存函数、内部合成参数或某一层样例不能替代完整证据。
 4. **最后接正式产品入口。** 用 `pt-pcb-check` 核结构，再复用现有显式 MainWindow／writer 路径接默认策略与唯一能力门；新增 NETDEF 仍需专门证据。按 [EX-029](docs/exploration-backlog.md#ex-029) 验证菜单／F3／P→T、文本焦点、整数取点、取消、隐藏层／模态／换图、历史、Windows 原生另存及原软件重开，不重做已有核心。
 
@@ -81,7 +83,7 @@ EX-001 接续 Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213` 已 succeed
 
 ## 原软件现场事实与继续时的约束
 
-最新一次菜单观测已经取得真实后验并正常收尾，详见[实机结论](docs/native-menu-click-audit.md#live-menu-conclusion)；仍未产生新客体 PNG 或 NEWFT。更早两槽的历史结果见 [native-capture-checkpoint](docs/native-capture-checkpoint.md)及[驱动审查](docs/native-capture-driver-review.md)：两槽均 failed，guest PNG 均 0，NEWFT 未产生，原退出和完整摘要证据保留。旧 PID 全是历史证据，不操作它们。
+最新[两轮新客体捕获](docs/native-capture-checkpoint.md#continuous-capture-conclusion)已通过并正常收尾，仍未产生 NEWFT 或确认板名／计数；客体可辨而宿主黑底白线的边界留 EX-002。此前[一次菜单观测](docs/native-menu-click-audit.md#live-menu-conclusion)同样通过。更早两槽的历史结果见 [native-capture-checkpoint](docs/native-capture-checkpoint.md)及[驱动审查](docs/native-capture-driver-review.md)：两槽均 failed，guest PNG 均 0，NEWFT 未产生，原退出和完整摘要证据保留。旧 PID 全是历史证据，不操作它们。
 
 已排除公开 `Shortcut f11+p` 会保持 F11 的假设：安装函数先释放 F11，再发送 Unicode p。菜单标注 F11+P 不证明该接口已送达等价组合。第二槽 Click(545,160) 已发送，但约 0.574 秒前后采样只见终端前景，没有菜单后验；Click 不自动乘二、父聚焦后无 shell 插入都已核对，根因仍未定。更早已有单张可辨客体图、C21／A240 局部状态及宿主黑线而客体可辨的证据，不能覆盖最近失败或推广全部黑屏同因。
 

@@ -55,4 +55,4 @@
 
 未完成项明确为：连续两张新客体截图、F11+P实际成功发送、File／Information／Status文件名计数、空板、单线层／宽／端点、原软件新保存字节及重开。默认 FT 六／七字段、附加值、换行、布局与兼容性仍未知；`trackPlacementUserEntryAvailable()`保持关闭，不把离线阶段交付当作真实单线目标成功。
 
-[探索 EX-004](exploration-backlog.md#ex-004)。
+该历史短方案的连续捕获缺口后来由[两轮新 PNG、完整集合差及真实 read](native-capture-checkpoint.md#continuous-capture-conclusion)补齐；文件状态／单线保存和默认字段仍分别等待后续事项，旧 F11+p 建议不恢复。

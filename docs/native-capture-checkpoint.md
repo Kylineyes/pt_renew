@@ -1,4 +1,6 @@
-# 原软件连续捕获：输入语义与新槽核验
+# 原软件连续客体捕获：输入语义、两槽历史与两轮新图
+
+后续[同一新目标中的两轮真实客体捕获](#continuous-capture-conclusion)已完成：每轮各新增一张非空 640×480 PNG、逐张真实 read，正常宿主 X 及四组原创建链均 wait0。两张图都是 AUTOTRAX 1.57 启动页；不据此宣称板名／计数、PCB 编辑或保存重开已完成。下文两槽失败是此前阶段的原事实，仍保留。
 
 本轮从 `dev=672351eb89734c0b508fadfefc577af09928a550` 继续，父分支 `verify/native-capture-checkpoint`，Run `run_c9bab9d00b23`。原软件操作者与离线审查者沿用各自原 Pi 会话，实际模型为 `deng/gpt-6.1-sol high`，独立工作树和证据目录。父负责独立复现、交叉验收与集成；普通产品新增入口仍关闭。
 
@@ -75,6 +77,62 @@
 
 后续离线核对已完成，见[第二槽菜单点击审计](native-menu-click-audit.md)：原图／请求／原生窗口／父会话时序已对齐，安装原 AST 假鼠标验证没有自动截图比例换算；约 0.574 秒采样间隔内的前景变化仍缺少调用内部观测，根因未定。后续[实机短时观测及一次菜单后验](native-menu-click-audit.md#live-menu-conclusion)已取得：新槽189样本无失败、前景稳定、光标到达请求点、指定模型真实读到Capture菜单，原目标及服务链最后正常wait0；旧前景触发者仍不可恢复，不把新成功覆盖两槽失败。下一步按该结论的消费者边界准备两轮新客体捕获，不复用已退出槽或旧GO。旧 `Shortcut f11+p` 假设已排除，菜单路径仍需要真实连续验证。旧现场两槽失败及本文原有证据范围保持。原软件单线保存重开、FT 默认字段及兼容性继续未通过；普通新增门和默认 writer 的 Created 拒绝、NETDEF 新增拒绝保持。产品源码没有改变，不重跑无变化的完整 Debug／Release 矩阵。
 
-[探索 EX-004](exploration-backlog.md#ex-004)。
+以上是旧两槽未闭环时的记录。后续[两轮独立新 PNG、文件集合差及真实读图结论](#continuous-capture-conclusion)已补齐原事项；旧失败、快捷键解析事实和适用限制保持。
 
 父证据在 `main-2/.local-analysis/native-capture-checkpoint/`：快捷键原 AST 假 API 结果、旧缺口父复现、最终包 preflight、两槽原身份退出／摘要审计、7 图字节回执匹配和最终状态。子冻结包及两槽原件在相邻 `review-track-core-boundaries/.local-analysis/native-capture-driver-review/final-candidate/`。这些忽略材料、截图与原软件副本均不提交；报告按独立分支 no-ff 集成到 dev，最终 SHA 与任务／收件箱核对见父 `final-state.json`。
+
+## 同一新目标中的两轮真实客体捕获
+
+<a id="continuous-capture-conclusion"></a>
+
+曾对应 EX-004 的完成条件已经满足：同一个全新隔离目标内，连续两轮均按当下图打开 Capture、实际读取菜单、选择已确认的 `Take screenshot`，每轮取得完整集合差证明的唯一新增非空 **640×480** PNG，并由指定模型逐张真实 `read`。**两张内容相同是当前启动页未改变的事实，不影响两个独立新路径／两次动作成立；它不能证明打开过编辑器、当前工作文件名／计数或默认 FT 编码。** 本次没有 `Enter`、Information／Status、PCB 新增／另存或重开动作。
+
+### 当前身份、冻结与动作顺序
+
+Task `task_57c256b62a70`／Dispatch `ctx_9bb156265144`，独立分支 `research/ex004-continuous-capture`，沿用 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`。环境、原 UTF-8 JSONL 的 model／thinking 事件、所有 assistant 和成功工具回执持续为 **`deng/gpt-6.1-sol / high`**，没有恢复已结算 Dispatch 或切模型。领取提交先由父推共享 dev 后才准备；父审阅当前工具、真实 AST 假结果、完整冻结项并首次写新 GO。
+
+新槽为本工作树 `.local-analysis/ex-004/candidate/slot/`，plan SHA-256 `8e6f88674ef65c512b154127219d4b0ab18ea257d988da9624d9051486b95a96`；driver `e9e639e791dbc3b11283de82a83c4bf461b19b7eeb89eccd96b26e5330c6aa81`，gate `a1c70a9a71c00aef7c60ccdc6f26cff26ff72ba707d70badd0aeb2081ad6e94a`。20 项冻结项、runtime 99 项、inputs 1 项均预检；只复制约 1.98 MB 必要运行文件，不用硬链接或新下载。UTC **18:48–19:13**，**19:06 起仅收尾**；本 Pi 是唯一操作者，父不发桌面请求。更大的用户控制窗口不改写这份 GO。旧双槽及前次菜单观测／失败证据只读。
+
+新原目标 PID `10772`、FILETIME `134388965400999898`、HWND `2822238`，均由本 driver 原 Popen/HANDLE 绑定；这些是历史证据，不是后续可用 PID。启动后的真实兼容采样 **33 样本**，最大单样本 **4.9051 ms**、最大启动间隔 **15.2851 ms**，无失败；兼容线程真实 join 后再建立聚焦前常驻线程。一次公开精确标题 App 后，每个业务步骤只通过 read/write 逐步审核与投递，不插入 shell。
+
+当前图为 1920×1080 全屏缩放图时，依据当下 3840×2160 虚拟桌面及 region=null 将图点乘二；未把同一规则套到后来的 662×566 裁剪图。两轮 Open 分别由各自当下图定位 Capture，截图项也分别实际 read 菜单后定位。四次默认 Click 坐标恰好重合为 Open `(548,160)`、截图项 `(620,194)`，属于各轮新图确认结果，不能作为未来固定坐标；没有使用已否定的公开 `Shortcut f11+p`。
+
+| 轮次 | 公开选择截图项的请求／响应 UTC | 捕获前后完整文件集合 | 新客体原图 |
+| --- | --- | --- | --- |
+| 第一轮 | 18:52:13.825821 → 18:52:14.391995；单调 RPC 0.5655154 秒 | 18:52:13.764494 空集 → 18:52:15.774659 恰一文件 | `captures/pt_000.png`，6155 字节，640×480 |
+| 第二轮 | 18:55:15.606982 → 18:55:16.172957；单调 RPC 0.5653332 秒 | 18:55:15.545947 仅第一张 → 18:55:17.556426 恰两文件，第一张大小／SHA 不变 | `captures/pt_001.png`，6155 字节，640×480 |
+
+两个新 PNG 的 SHA-256 均为 `e473d5d1817063b927ca7493c3920f78b6282ccf4ed70f87badaf9161ad665e6`。两次完整目录快照分别保存 UTC、同机 `perf_counter_ns`、所有文件的路径／大小／SHA；单调锚点满足 before < 发送 < 响应 < after。两轮各只有一张新 PNG，旧文件没有改写或删除，没有额外非 PNG。真实 image 回执中有两次独立客体图读取，不能只用相同 SHA 的第一次回执冒充第二次 read。
+
+四次业务 Click 各 **190 样本**、独立 JSONL／请求／响应／摘要；最大单样本分别 **1.3205／2.0554／2.7151／3.5639 ms**，最大启动间隔分别 **11.5128／12.4190／13.3457／13.9871 ms**，均无失败、取消或超限。发送前覆盖 **53.8087–54.6187 ms**，响应后覆盖 **1372.7684–1375.5989 ms**；本候选的完整 RPC 与至少 100 ms 后段要求均通过。时间只标公开请求与外部采样，不冒称 Windows 按下送达时刻或实际接收者。
+
+### 宿主与客体的本次不同呈现
+
+<a id="host-guest-difference"></a>
+
+两轮宿主图都呈黑底白横线；对应新客体 PNG 却清楚显示灰底 Protel 图案、`AUTOTRAX - PCB Layout Program / Version 1.57`、版权和 `LOADED GRAPHICS DRIVER: VGA 640x480`。本指定模型实际读到两张菜单、两张新客体及相应宿主；共 **8 张唯一宿主 PNG + 2 张客体 PNG**，十张原字节 SHA 全部逐一匹配本 Pi 原 JSONL 的真实 image 工具回执。菜单可读只证明宿主菜单状态，客体启动页只证明当时客体呈现，二者不能替代板名／计数或编辑状态。
+
+这给[EX-002](exploration-backlog.md#ex-002)已有宿主／客体呈现差异补充了新版本、冻结配置及并行证据，**没有确定 OpenGL／SDL／刷新哪一个是原因，也没有排除其他历史黑屏成因**。本轮未改变渲染后端或为黑线盲目重发输入。下一步只可据当前客体状态设计 [EX-005](exploration-backlog.md#ex-005) 的有效配置和工作文件核定，不能把命令行 `SYN1.PCB` 或宿主 `PT` 标题当成已经进入 SYN1 编辑器。
+
+### 正常退出与原创建者证据
+
+第二张客体与宿主真实 read 后，立即投生命周期 `CleanupSnapshot`，在新的 662×566 未缩小裁剪图内实际确认宿主 X；当下裁剪原点 `(89,100)`、X 图内约 `(616,22)`，所以一次正常默认 `Click(705,122)`。当前原目标稳定前景，无需额外 CleanupFocus；没有 Alt+F4、第二控制连接、外部 helper、WM_CLOSE、强杀或业务重发。随后由原 driver 对原目标显式 `WaitExit`，再 Stop 正常关闭服务，原 owner 链逐级真实等待。
+
+| 原创建者实际等待对象 | PID | 原创建／退出身份匹配及真实返回 |
+| --- | --- | --- |
+| DOSBox-X 目标／driver 原 Popen | 10772 | wait0，UTC 18:58:21.588855 |
+| 公开控制服务／driver 原 Popen | 46588 | wait0，18:58:48.302805 |
+| driver／owner 原 Popen | 29120 | wait0，18:58:48.311145 |
+| owner／上层原 .NET Process 与 HANDLE | 64876 | WaitForExit=0，18:58:48.3230726 |
+
+四组分别精确比较 PID、创建 FILETIME、映像、原 HANDLE；有 Popen 的还比较原对象身份，均一致。FILETIME 用原 JSON 的 Python／PowerShell 整数，未经过 JavaScript Number。观测线程也真实 join。本轮没有现场拒绝或 `stopped-error`，没有需要执行静默的现场失败；120 秒零新增请求规则持续存在于冻结驱动中，不能把未触发写成执行过。全部已知原持柄链在业务截止之前完成，隐藏外层 PowerShell 自身无原 Popen 退出证明，仍不外推为其原退出码。
+
+### 工具验证、原件保护和后续消费者
+
+新增 [prepare_legacy_capture.py](../tools/prepare_legacy_capture.py) 复用已有准备器、审核门、常驻采样与 BOM owner；仅把单菜单限制扩展为严格两轮，并在同 driver 预先声明看图 CloseX。门核 nonce／session／Task／Dispatch、当前原 PNG 字节重算及已有 guest 实际审核；缺第一张客体审核不能第二轮，第二轮之后拒第三轮。captures 检查覆盖递归完整文件集合，既有文件变化、零／多文件、额外非 PNG 或错误尺寸都拒绝。正常 CloseX 仍必须当前图审核、精确身份／稳定前景／标题栏范围，显式原 WaitExit 后才允许 Stop。
+
+离线验证为当前 gate／集合差 **21 项**、当前 driver AST **9 步**两轮假主循环、当前真实动作／Rpc 定义的 **13 项**停止阶段注错，均通过；原 BOM 启动器的真实 PowerShell 5.1 `-File` **1 项含 2 子例**亦通过，未因此创建现场进程。源码与 product src/CMake 无关，不重复无变化的产品构建或旧采样模块测试。初次 gate 测试只捕获 RuntimeError，预期缺 review 的 FileNotFoundError 使测试提前结束；补入预期 OSError 后通过，门没有因测试改为允许缺审核。一次进程级 SSH 参数引号错误后修正并成功 fetch；这两次失败均未启动现场，原回执保留。
+
+收尾独立审计：原安装 **99 项**、旧含双槽包 **399 项**、前次 EX-001 全组证据 **584 项**、本次 runtime **99 项**及 inputs **1 项**的完整集合／大小／SHA 前后一致；`NEWFT.PCB` 未产生。captures 恰两张新 PNG。证据集中于本树 `.local-analysis/ex-004/` 的 `live-audit.json`、`readonly-before.json`、冻结包、逐步审核／trace、模型身份、原创建及退出记录，均不提交。已退出槽不作为下一阶段活现场，旧坐标、PID 或 GO 不复用。
+
+这份有限通过允许后续消费[有效配置与工作状态 EX-005](exploration-backlog.md#ex-005)，再进入[单线保存重开 EX-007](exploration-backlog.md#ex-007)；后续须新 Task／分支／方案／GO，并保持逐图实际 read 和正常原 wait。本次没有核定默认 FT、NETDEF 新增、铜覆盖或正式新增门，产品保守规则不变。最终文档检查 **153 份 Markdown／1017 个本地链接／41 个开放事项／103 个来源细节／137 份索引报告，零错误**，`git diff --check` 通过。只清理可重建假 fixture 和本轮模块缓存 **175075 字节**，归档占用 **0**，净减少 **175075 字节**；收尾证据目录约 **19.07 MB**，输入／原图／冻结包／失败原件保留。
