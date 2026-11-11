@@ -64,17 +64,23 @@
 
 EX-001 接续 Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213` 已 succeeded，交付 `4266c5294d644893639a8c7c13fff72779b6cc6d`。同一 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0` 随后完成 EX-004 Task `task_57c256b62a70`／Dispatch `ctx_9bb156265144`，交付 `ceee461eb2dd7e20c1e290612a28833b6ebe1765`；实际模型始终 `deng/gpt-6.1-sol / high`。两轮各一张新客体 PNG，路径／动作独立、均为 640×480／6155 字节，图像同为可辨 AUTOTRAX 1.57 启动页，字节相同符合原条件。四次各 190 样本覆盖完整，十张原图匹配实际 read 回执，target／service／driver／owner 四组身份匹配且 wait0，最晚 UTC 18:58:48 退出。父另实际读两张客体原图并核集合差、单调锚点和四组原 wait；没有板名／计数或编辑通过结论。
 
-工作树 `explore-ex001-observer`、分支 `research/ex001-live-observation`／`research/ex004-continuous-capture`、证据 `.local-analysis/ex-001-continuation/`／`.local-analysis/ex-004/` 保留。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`。下一主线 EX-005 继续复用实际 Pi／工作树，以新 Task、独立分支和新槽接续，不给已结算 Dispatch 追加业务。
+工作树 `explore-ex001-observer`、分支 `research/ex001-live-observation`／`research/ex004-continuous-capture`、证据 `.local-analysis/ex-001-continuation/`／`.local-analysis/ex-004/` 保留。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`。EX-005 随后以同一实际 Pi 的新 Task `task_215b58349614`／Dispatch `ctx_0c55cb76da25`、分支 `research/ex005-effective-state` 和 `.local-analysis/ex-005/` 接续，阶段提交 `082aca3`，底栏纠错 `72c620c` 已完成。该完整事项仍 failed／受阻，已结算任务不追加现场业务。
+
+EX-005 当次 CONFIG 查询实得 `opengl / vgaonly / fixed 10000 / 16 / 本槽 captures`，AXTYPE 顺序和早期显式配置加载日志已保留。一次 Enter 后新客体为矩形四边加横线，与合成 5FT 输入相符；实际底栏为 `1:Top Layer / P:ROUND62 / T:12 / S:60 / G:25`。报告最初误读底栏，经父读原图发现并由原 Pi 复读纠正，原误读／冻结审核保持历史原件；底栏标签不是文件名、计数或自建单线默认策略。
+
+单次 Shift+I 后宿主原图出现 IME 候选框，没有 Information 客体后验；未追加 Capture／Status／Esc、切换输入法或重发。UTC 19:33:49 起完整 120.001481 秒零新增桌面请求，之后当前图正常 X 收尾，target／service／driver／owner 四组原创建／退出身份匹配且真实 wait0，最晚 19:39:34 退出。父实际读了 Enter 后客体和 IME 宿主图，独立核四组原 wait、静默及配置值。十二张原图匹配原 Pi 实际 read 回执，完整原件摘要未变，清理可重建材料净减少 196955 字节。完整结论见[配置与状态阶段记录](docs/legacy-dosbox-configuration.md#effective-state-attempt)，输入未知双向归入已有 EX-003。
+
+当前所有原软件现场与已知持柄链均已正常退出。剩余控制时间不足以准备并完成新的可靠状态／单线场景，不再开启桌面现场；后续先做 EX-003 的离线输入通道分析，不能把离线结论当新现场批准。Information／Status 工作文件名和计数、完整来源覆盖仍在 EX-005，EX-007 尚未启动，产品门不变。
 
 首候选因停止信号缺口未放行；v2 因 PowerShell 5.1 加载无 BOM UTF-8 脚本解析失败而零现场，原 GO 撤销。修后 v3 一次菜单后验通过，但公开 Alt+F4 后原目标 wait5 秒超时；完整 120.001889 秒零新增桌面请求后，经父另审正常退出 helper，依据新图一次正常宿主 X 收尾。七组已知原创建／退出链均精确匹配且真实 wait0，最晚 UTC 18:16:09 退出。父已独立核原件及采样覆盖。v3、独立收尾槽、旧 GO 和失败证据全部只读，不能续跑；完整事实见[实机结论](docs/native-menu-click-audit.md#live-menu-conclusion)。
 
-用户明确“现在开放两个小时给你的控制时间，你调节子agent的控制顺序”。父于同机 UTC `2026-11-11T18:02:12.1522606Z` 登记总窗口至 `20:02:12Z`（北京时间 11 月 12 日 02:02:12–04:02:12）。授权覆盖后续必要键鼠和子 agent 控制顺序，由父自主调度，不重复索同一许可；全部子 agent 继续 Pi、`deng/gpt-6.1-sol / high`。EX-001／004 现场已经正常收尾，后续 EX-005 接续仍由同一实际 Pi 操作者独占桌面，其他 agent 仅可离线工作；切换操作者必须核实前一现场正常收尾及原持柄等待结果。新的总授权不解除冻结方案、控制门或拒绝静默约束。
+用户明确“现在开放两个小时给你的控制时间，你调节子agent的控制顺序”。父于同机 UTC `2026-11-11T18:02:12.1522606Z` 登记总窗口至 `20:02:12Z`（北京时间 11 月 12 日 02:02:12–04:02:12）。授权覆盖后续必要键鼠和子 agent 控制顺序，由父自主调度，不重复索同一许可；全部子 agent 继续 Pi、`deng/gpt-6.1-sol / high`。EX-001／004／005 现场已全部正常收尾，当前不再启动桌面现场，后续仅离线准备；切换操作者必须核实前一现场正常收尾及原持柄等待结果。新的总授权不解除冻结方案、控制门或拒绝静默约束。
 
-剩余总窗口按实际交付进度顺延 EX-004 → EX-005 → EX-007；各阶段先登记共享领取、准备具体方案及新冻结 GO，不直接执行原临时预算中的时刻或输入。UTC 19:55:12 起至少保留最后 7 分钟整体收尾，所有输入不得超过 UTC 20:02:12。父审查、闭环判断及授权记录在 `.local-analysis/ex-001-continuation/`，含 `completion-decision.json`、`cleanup-scene-review.json`、`control-window.json`。
+剩余主线为离线收敛 EX-003 输入／IME 通道 → EX-005 缺失状态与配置边界 → EX-007；EX-001／004 已完成。UTC 19:55:12 起已进入本轮整体收尾，当前不再安排新现场，所有输入不得超过 UTC 20:02:12。时段结束后本次两小时控制授权不作为未来新现场的现时窗口；新的具体现场仍须依据用户届时授权和明确时段组织。父审查、闭环判断及授权记录在 `.local-analysis/ex-001-continuation/`，EX-004／005 审核分别在 `.local-analysis/ex-004/scene-review.json`、`.local-analysis/ex-005/scene-review.json`。
 
 1. **消费一次菜单观测结论。** 读[实机时序与支持范围](docs/native-menu-click-audit.md#live-menu-conclusion)，复用已有观测／驱动／真实等待工具；不重做最小观测器，不把有限通过外推为旧因果恢复。
 2. **消费已完成的两轮客体捕获。** 读[两轮客体捕获结论](docs/native-capture-checkpoint.md#continuous-capture-conclusion)，复用逐步菜单实际 read、全目录集合差、新图摘要与客体 read、同驱动正常 X／原 wait 流程。已退出槽和坐标不复用，启动页不能替代实际工作状态。
-3. **可靠观察后取得状态和单线样例。** [EX-005](docs/exploration-backlog.md#ex-005) 核有效配置、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 在确认空板、层／宽／端点后新建一段，以全新 8.3 文件另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略。静态保存函数、内部合成参数或某一层样例不能替代完整证据。
+3. **先解决输入，再补实际状态与单线样例。** [EX-003](docs/exploration-backlog.md#ex-003) 离线核命名键／Shift／Unicode 及可证明的 IME 边界，不能凭候选框猜事件接收者。[EX-005](docs/exploration-backlog.md#ex-005) 仍需有效配置来源／覆盖、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 仅在这些前置可靠后确认空板、层／宽／端点、新建一段、全新 8.3 另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略；底栏标签或合成输入不能替代完整证据。
 4. **最后接正式产品入口。** 用 `pt-pcb-check` 核结构，再复用现有显式 MainWindow／writer 路径接默认策略与唯一能力门；新增 NETDEF 仍需专门证据。按 [EX-029](docs/exploration-backlog.md#ex-029) 验证菜单／F3／P→T、文本焦点、整数取点、取消、隐藏层／模态／换图、历史、Windows 原生另存及原软件重开，不重做已有核心。
 
 可并行做 EX-006／008／017 的具体剩余静态问题，阅读和证据独立，父统一验收、共享文件及取号协调。GUI／原软件桌面始终只有一名操作者；不能为凑并行重复实现、抢焦点或把其它 agent 的推测当证据。异步产品竞争仍按 [EX-035](docs/exploration-backlog.md#ex-035) 的真实 Qt／UIA、冷探针和预算前置推进，不挤占本次原软件取证主线。
