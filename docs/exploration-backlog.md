@@ -109,7 +109,7 @@
 
 ### EX-004 连续两轮真实客体 PNG 的可靠获取
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_57c256b62a70／ctx_9bb156265144；分支：research/ex004-continuous-capture；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本工作树.local-analysis/ex-004/，先同步领取，再审阅新冻结两轮Capture及正常宿主X收尾方案。
 - 类型：验证缺口。依赖：[一次菜单时序及实际后验结论](native-menu-click-audit.md#live-menu-conclusion)。
 - 原文细节：[native-capture-checkpoint.md：细节1](native-capture-checkpoint.md#explore-ex-004)；[native-guest-save-sample.md：细节2](native-guest-save-sample.md#explore-ex-004)；[native-short-observation.md：细节3](native-short-observation.md#explore-ex-004)。
 - 已知：旧单张 640×480 客体图存在，但最近两槽 guest PNG 均为 0；公开 Shortcut f11+p 不保持 F11，这个假设已排除。
