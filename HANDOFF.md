@@ -70,17 +70,21 @@ EX-005 当次 CONFIG 查询实得 `opengl / vgaonly / fixed 10000 / 16 / 本槽 
 
 单次 Shift+I 后宿主原图出现 IME 候选框，没有 Information 客体后验；未追加 Capture／Status／Esc、切换输入法或重发。UTC 19:33:49 起完整 120.001481 秒零新增桌面请求，之后当前图正常 X 收尾，target／service／driver／owner 四组原创建／退出身份匹配且真实 wait0，最晚 19:39:34 退出。父实际读了 Enter 后客体和 IME 宿主图，独立核四组原 wait、静默及配置值。十二张原图匹配原 Pi 实际 read 回执，完整原件摘要未变，清理可重建材料净减少 196955 字节。完整结论见[配置与状态阶段记录](docs/legacy-dosbox-configuration.md#effective-state-attempt)，输入未知双向归入已有 EX-003。
 
-当前所有原软件现场与已知持柄链均已正常退出。剩余控制时间不足以准备并完成新的可靠状态／单线场景，不再开启桌面现场；后续先做 EX-003 的离线输入通道分析，不能把离线结论当新现场批准。Information／Status 工作文件名和计数、完整来源覆盖仍在 EX-005，EX-007 尚未启动，产品门不变。
+当前所有原软件现场与已知持柄链均已正常退出。EX-003 纯离线 Task `task_ca301710c5c6`／Dispatch `ctx_40040264e92f` 已以 failed 结算（完整运行条件未满足，不是测试失败），交付 `c4ddfebb08d77f3763e3e2f16eeef98cec3b4d23`，分支 `research/ex003-input-semantics`，证据 `.local-analysis/ex-003/`。沿用上述实际 Pi 模型，无新桌面查询／服务／输入／IME 设置或 GO，控制时段未延续。
+
+[原 Shortcut 离线语义](docs/native-menu-calibration.md#shortcut-offline-semantics)已核定 `shift+i` 是 Shift down → VK_I down → VK_I up → Shift up，普通 `i`／`I` 是 Unicode INPUT；仅改大小写不能据此宣称绕过 IME。假 SendInput 返回 0 或扫描码映射为 0 时仍可能给出 Pressed，故成功文字不能证明送达。16 项回归在既有 Python 3.15／3.14.8 均通过，23 个原 AST 假回放案例、18 来源大小／SHA 前后不变。真实服务线程 HKL、队列、IME／SDL／DOS 消费及鼠标坐标捕获映射仍缺证，EX-003 保留受阻；不能据静态分流宣称实际根因或修复。下次只在新明确场景中评估单一公开参数或命名键导航，仍需新客体后验，不切低层接口绕门。
+
+Information／Status 工作文件名和计数、完整来源覆盖仍在 EX-005，EX-007 尚未启动，产品门不变。下一步复用 `tools/replay_legacy_shortcut.py` 的离线事实准备最小新状态场景，不重写已验控制／捕获／原 wait 工具；没有新的有效现场时段时不启动原软件或发送输入。
 
 首候选因停止信号缺口未放行；v2 因 PowerShell 5.1 加载无 BOM UTF-8 脚本解析失败而零现场，原 GO 撤销。修后 v3 一次菜单后验通过，但公开 Alt+F4 后原目标 wait5 秒超时；完整 120.001889 秒零新增桌面请求后，经父另审正常退出 helper，依据新图一次正常宿主 X 收尾。七组已知原创建／退出链均精确匹配且真实 wait0，最晚 UTC 18:16:09 退出。父已独立核原件及采样覆盖。v3、独立收尾槽、旧 GO 和失败证据全部只读，不能续跑；完整事实见[实机结论](docs/native-menu-click-audit.md#live-menu-conclusion)。
 
 用户明确“现在开放两个小时给你的控制时间，你调节子agent的控制顺序”。父于同机 UTC `2026-11-11T18:02:12.1522606Z` 登记总窗口至 `20:02:12Z`（北京时间 11 月 12 日 02:02:12–04:02:12）。授权覆盖后续必要键鼠和子 agent 控制顺序，由父自主调度，不重复索同一许可；全部子 agent 继续 Pi、`deng/gpt-6.1-sol / high`。EX-001／004／005 现场已全部正常收尾，当前不再启动桌面现场，后续仅离线准备；切换操作者必须核实前一现场正常收尾及原持柄等待结果。新的总授权不解除冻结方案、控制门或拒绝静默约束。
 
-剩余主线为离线收敛 EX-003 输入／IME 通道 → EX-005 缺失状态与配置边界 → EX-007；EX-001／004 已完成。UTC 19:55:12 起已进入本轮整体收尾，当前不再安排新现场，所有输入不得超过 UTC 20:02:12。时段结束后本次两小时控制授权不作为未来新现场的现时窗口；新的具体现场仍须依据用户届时授权和明确时段组织。父审查、闭环判断及授权记录在 `.local-analysis/ex-001-continuation/`，EX-004／005 审核分别在 `.local-analysis/ex-004/scene-review.json`、`.local-analysis/ex-005/scene-review.json`。
+剩余主线为消费 EX-003 已有离线语义、在新场景补输入／IME 运行边界 → EX-005 缺失状态与配置边界 → EX-007；EX-001／004 已完成。原两小时窗口 UTC 20:02:12 已结束，现场均提前退出，之后仅执行严格离线分析。该时段不能作为未来新现场的现时窗口；新的具体现场依据用户届时授权和明确时段组织。父审核证据仍在 `.local-analysis/ex-001-continuation/`、`.local-analysis/ex-004/scene-review.json`、`.local-analysis/ex-005/scene-review.json`。
 
 1. **消费一次菜单观测结论。** 读[实机时序与支持范围](docs/native-menu-click-audit.md#live-menu-conclusion)，复用已有观测／驱动／真实等待工具；不重做最小观测器，不把有限通过外推为旧因果恢复。
 2. **消费已完成的两轮客体捕获。** 读[两轮客体捕获结论](docs/native-capture-checkpoint.md#continuous-capture-conclusion)，复用逐步菜单实际 read、全目录集合差、新图摘要与客体 read、同驱动正常 X／原 wait 流程。已退出槽和坐标不复用，启动页不能替代实际工作状态。
-3. **先解决输入，再补实际状态与单线样例。** [EX-003](docs/exploration-backlog.md#ex-003) 离线核命名键／Shift／Unicode 及可证明的 IME 边界，不能凭候选框猜事件接收者。[EX-005](docs/exploration-backlog.md#ex-005) 仍需有效配置来源／覆盖、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 仅在这些前置可靠后确认空板、层／宽／端点、新建一段、全新 8.3 另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略；底栏标签或合成输入不能替代完整证据。
+3. **消费输入语义，再补实际状态与单线样例。** [EX-003](docs/exploration-backlog.md#ex-003) 的[命名键／Shift／Unicode 原 AST 语义](docs/native-menu-calibration.md#shortcut-offline-semantics)已取得，剩余真实输入队列与客体响应不能凭候选框猜定。[EX-005](docs/exploration-backlog.md#ex-005) 仍需有效配置来源／覆盖、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 仅在这些前置可靠后确认空板、层／宽／端点、新建一段、全新 8.3 另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略；底栏标签或合成输入不能替代完整证据。
 4. **最后接正式产品入口。** 用 `pt-pcb-check` 核结构，再复用现有显式 MainWindow／writer 路径接默认策略与唯一能力门；新增 NETDEF 仍需专门证据。按 [EX-029](docs/exploration-backlog.md#ex-029) 验证菜单／F3／P→T、文本焦点、整数取点、取消、隐藏层／模态／换图、历史、Windows 原生另存及原软件重开，不重做已有核心。
 
 可并行做 EX-006／008／017 的具体剩余静态问题，阅读和证据独立，父统一验收、共享文件及取号协调。GUI／原软件桌面始终只有一名操作者；不能为凑并行重复实现、抢焦点或把其它 agent 的推测当证据。异步产品竞争仍按 [EX-035](docs/exploration-backlog.md#ex-035) 的真实 Qt／UIA、冷探针和预算前置推进，不挤占本次原软件取证主线。

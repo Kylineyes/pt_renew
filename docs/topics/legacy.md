@@ -11,7 +11,7 @@
 | 软件部分 | 要回答的问题 | 当前依据 |
 | --- | --- | --- |
 | 启动与默认配置 | 真正载入哪个文件、采用什么参数？ | 配置／日志及 Information / Status；历史 DFT 路径不能照搬 |
-| 菜单与键盘 | 菜单字段、宏、按键序列如何调度？ | [宏与命令状态模型](../legacy-command-dispatch-static.md)、MNU / KEY 静态路径和局部菜单现场 |
+| 菜单与键盘 | 菜单字段、宏、按键序列如何调度？ | [宏与命令状态模型](../legacy-command-dispatch-static.md)、[Shortcut原AST的VK／Unicode分流与IME边界](../native-menu-calibration.md#shortcut-offline-semantics)、MNU / KEY及局部现场 |
 | 文件新增与保存 | 新 FT 的宽、层、extra、换行和布局是什么？ | 默认策略仍缺自建单线的保存重开证据 |
 | 文字 | 字符如何产生中心线、方向、边界和像素？ | 静态路径、受控机器码、A240 局部现场，整体 runtime_verified=false |
 | 模块 | EXE、OVR 和配套输出工具如何分工？ | MZ / TPOV 结构与调用候选，未恢复完整源码 |
@@ -41,7 +41,7 @@
 ## 下一步怎样推进
 
 1. [两轮新客体 PNG 及真实逐图读取](../native-capture-checkpoint.md#continuous-capture-conclusion)已完成，四组原创建链正常wait0；复用此有限结论和当前图方式，不复用已退出槽、旧GO或坐标。
-2. 两轮捕获结论中的客体均为启动页；后续[EX-005新场景](../legacy-dosbox-configuration.md#effective-state-attempt)已取得关键有效配置和一次Enter后的五线板图，但Shift+I后出现IME候选框，Information／Status的工作文件名／计数仍缺。先按[输入通道 EX-003](../exploration-backlog.md#ex-003)及[配置状态 EX-005](../exploration-backlog.md#ex-005)剩余边界处理，不向单线写入跨越。
+2. 两轮捕获结论中的客体均为启动页；后续[EX-005新场景](../legacy-dosbox-configuration.md#effective-state-attempt)已取得关键有效配置和一次Enter后的五线板图，但Shift+I后出现IME候选框，Information／Status的工作文件名／计数仍缺。后续[原AST／假API](../native-menu-calibration.md#shortcut-offline-semantics)已核精确VK／Unicode分流和成功文字限度，但没有新队列／IME／客体消费证据；[输入通道 EX-003](../exploration-backlog.md#ex-003)及[配置状态 EX-005](../exploration-backlog.md#ex-005)仍受阻，不向单线写入跨越。
 3. 取得 Information / Status 的文件名与计数，确认空板及层、宽、端点，新建单段并保存到全新 8.3 文件。
 4. 原 AUTOTRAX 重开、图像、字节、日志及摘要共同核定字段，再交[编辑主题](editing.md)接通正式产品。
 
