@@ -1,0 +1,2 @@
+# 冻结启动器保留编辑器约定的 UTF-8 BOM 与 CRLF，禁止 Git 隐式改写现场摘要。
+tools/Start-LegacyObservationOwner.ps1 -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
