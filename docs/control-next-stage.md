@@ -1,10 +1,12 @@
-# 首次真实UIA对象核验failed，代理覆盖已离线修复
+# 控制工具与异步客户端的阶段演进记录
 
-2026-10-31最新接手入口：[编辑与另存为后的统一交接](agent-handoff-20261031-save-as.md)。用户要求本轮开发完成后由新agent接手，当前dev已接续基础编辑并实现保留原件的受限另存为；Debug/Release各12/12组、WritingTests40项及指定Pi真实Qt五函数核验通过。下一步优先文件往返与原软件/原生文件框兼容性，不重做已有模块。本轮不创建tag、不发布、不操作main，全部旧failed及异步ready_for_live=false边界保持。以下按历史阶段阅读。
+本报告保留各固定候选的实现、失败和取证过程，按原阶段解释其中日期、版本、计划及授权。当前进度、执行顺序、模型授权和本机证据统一见 [HANDOFF](../HANDOFF.md)；本页不再作为新 agent 接手入口。
+
+历史阶段更新（2026-10-31）：当时 dev 接续基础编辑并实现保留原件的受限另存；Debug/Release 各 12/12 组、WritingTests 40 项及指定 Pi 真实 Qt 五函数核验通过。该阶段以文件往返为后续重点；固定候选和全部旧 failed、异步 ready_for_live=false 按对应报告解读，不作为当前整体状态。
 
 2026-10-31最新进展见[UIA对象生命周期修复与新单次核验](uia-object-lifecycle-review.md)：新增清理/最终回执失败收尾修复，仓库428项、独立候选234项通过；全新指定Pi任务单次对象严格COM三次初始化/三次释放、原Popen同PID/exit0及原5秒限定通过。旧failed及其结算不改，Qt/完整冷探针/文件框/全链和产品全动作仍未过，ready_for_live=false。下一步先准备真实Qt/完整冷探针新任务，NET31/铜22、32次和原全部时限保持。以下按历史阶段阅读。
 
-**当前接手统一入口：[UIA阶段后进度、证据与执行顺序](agent-handoff-20261030-uia.md)。** 用户本次只要求整理交接；本轮不扩展实现、不启动现场。新agent从最新dev独立分支，先审阅本次failed及尚未现场验证的修复，再形成新具体材料/上下文/时间范围；不恢复已结算Task或旧批准，不直接执行旧演练。
+UIA 阶段的历史交接已归并到 [HANDOFF](../HANDOFF.md#history)。下列材料用于追溯已有实现与失败，不直接恢复旧 Task、批准或演练。
 
 最新见[单次对象核验](async-uia-object-compat.md)：新Pi deng/gpt-6.1-sol high Task实际创建原UIA单例，但只记录2次init/2次uninit，严格3次验收拒绝、原exit1，完成120.091秒零请求收尾，Task failed已结算。父审计实际候选6622和私有156文件均不变。静态及假API复现定位enums星号导出覆盖core局部ctypes代理，已离线修复并补停止检查不被原except Exception吞掉，仓库419项通过；没有第二次真实调用，也不提升Qt/完整冷探针/全动作。ready_for_live=false、原32次及全部截止保持。下一步先审阅新离线候选及失败，任何新任务必须新具体材料/上下文/时间范围，不恢复已结算组。
 
@@ -28,7 +30,7 @@
 
 以下保留上一阶段交接与历史。
 
-新代理统一入口：[当前进度、证据与下一步顺序](agent-handoff-20261030.md)。最新本机摘要为`.local-analysis/CURRENT_AGENT_HANDOFF.md`，旧任务及旧接手简报只读。以下顶部是最新实现状态，后续保留段落按历史阅读。
+此前的多份接手入口和本机简报已撤下，历史原文可从 [HANDOFF 的追溯说明](../HANDOFF.md#history)定位。以下继续保留各阶段技术依据，当前实现以较新专题为准。
 
 2026-10-30最新结果见[批量窗口观察与冷探针预算](async-product-batch-observation.md)。从`dev=cdfd0b8`独立分支将同一次完整native/UIA观察放入单个受限子进程，保留每窗两轮UIA及全部身份/owner/物理rect/焦点/按钮/窗口集合/前景复核，父仍核对创建时原Popen与子进程退出0。新增13项、仓库339项Python测试通过，产品/实际COM/UIA/桌面请求0，无新图片任务，ready_for_live=false。
 
@@ -117,7 +119,7 @@
 
 ## 交接与授权边界
 
-接手先完整读本机`.local-analysis/NEXT_AGENT_BRIEF.md`、[AGENTS.md](../AGENTS.md)、[SESSION_HANDOFF.md](../SESSION_HANDOFF.md)、本文及[实现报告](async-product-client-offline.md)。本轮补充简报另写`.local-analysis/async-product-client-offline/NEXT_AGENT_BRIEF.md`，原简报和全部旧任务/失败/批准/归档证据保持只读。
+当前接手只读 [HANDOFF](../HANDOFF.md) 与 [AGENTS](../AGENTS.md)，再按任务阅读[产品客户端实现报告](async-product-client-offline.md)。本页曾引用的本机 NEXT_AGENT_BRIEF 等只保留在历史证据／归档中，不再作为执行入口；原失败、冻结、输出和 worker 证据仍只读。
 
 必要控制授权持续，不重复索权；每次现场先完成具体可审阅结果并说明实际时间与范围。本阶段没有安排现场，不虚构开始时间。首次真实拒绝完整120秒无输入/截图/状态/原生桌面请求；Snapshot须有image且指定会话实际read，输入后观察失败只补观察不重发；不关闭指示层、不放宽1秒阈值、不热改或绕拒绝。
 

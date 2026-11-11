@@ -6,7 +6,7 @@
 
 ## 冻结审阅与批准
 
-已完整读`AGENTS.md`、`SESSION_HANDOFF.md`、`docs/control-next-stage.md`和`docs/control-owned-close.md`，审阅专用关闭模块、client/budget/step/driver/Step.ps1、原Guard/DiagnosticGuard、双方批准及连续监督器链。父在启动前补强了空白或畸形Shortcut回执的拒绝逻辑，提供第二份独立冻结；本轮仅使用`main-2/.local-analysis/control-owned-close/frozen-v2/candidate`，111文件，清单SHA-256为`cfca1f09dbc38ce905c0edb33d2b97120588775065598f4dad849c9341922103`。旧frozen保持只读。
+已完整读`AGENTS.md`、当时的旧会话交接（现归并至 [HANDOFF](../HANDOFF.md#history)）、`docs/control-next-stage.md`和`docs/control-owned-close.md`，审阅专用关闭模块、client/budget/step/driver/Step.ps1、原Guard/DiagnosticGuard、双方批准及连续监督器链。父在启动前补强了空白或畸形Shortcut回执的拒绝逻辑，提供第二份独立冻结；本轮仅使用`main-2/.local-analysis/control-owned-close/frozen-v2/candidate`，111文件，清单SHA-256为`cfca1f09dbc38ce905c0edb33d2b97120588775065598f4dad849c9341922103`。旧frozen保持只读。
 
 第二版关闭路径只允许本轮客户端原Popen绑定，完成唯一诊断组后，经过原门禁和精确目标/前景检查，至多一次原Shortcut Alt+F4；严格核对冻结成功回执，再等待原Popen退出0并退役。错误、取消、未知和超时保留失败token/冷却/截止，普通输入的后验保持。限定范围离线审阅未发现关闭模块的阻断缺陷；父提供的137项假API及无GUI测试通过，仅作为离线证据，不替本轮现场。见[离线审阅索引](../.local-analysis/control-owned-close-live/offline-review.md)。
 

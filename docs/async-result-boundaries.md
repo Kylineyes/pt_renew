@@ -47,7 +47,7 @@ NET过期判断只依赖请求代次；铜分析判断同时依赖代次和文�
 
 这证明了**请求后编辑、完成回调处理时拒绝旧结果**，且不是只验证某个布尔值。测试并未给工作线程加同步栅栏：工作线程可能尚未调度，也可能已经计算完但GUI完成回调尚在队列中。故不能推导“真实读取/计算仍在执行时，操作者在GUI先完成了编辑”。测试也未逐一隔离铜回调三个拒绝条件来证明每个条件单独充分。
 
-`pendingOpenProtectsEditsMadeDuringReadAndDropsClosedResults`（同文件`:337–353`）验证的是PCB换图请求和关闭的保护，不能补作NET读取证据。已有Debug/Release全套结果见[交接文档](../SESSION_HANDOFF.md)，本轮源码无变化，未重复构建或重跑常规矩阵。
+`pendingOpenProtectsEditsMadeDuringReadAndDropsClosedResults`（同文件`:337–353`）验证的是PCB换图请求和关闭的保护，不能补作NET读取证据。已有Debug/Release全套结果见[统一交接](../HANDOFF.md#history)，本轮源码无变化，未重复构建或重跑常规矩阵。
 
 ## 统一实验判据
 

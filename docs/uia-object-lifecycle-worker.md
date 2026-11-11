@@ -12,7 +12,7 @@
 - 原session：该证据根下`sessions/2026-10-30T15-44-16-063Z_1ad5d64c-f53d-4a80-8a0c-d97720126a8b.jsonl`。
 - 批准绑定的已读取原前缀：178383字节，SHA256=`89a8b9154541fc1bfc01f0e851d213436a9f714c55ad8a25cf64b43a7ab9906f`；执行前后均重新只读核对。身份与当前可用工具列表记录于`worker-identity.json`。
 
-完整读取本树`AGENTS.md`及父`docs/agent-handoff-20261030-uia.md`、`docs/async-uia-object-compat.md`、`docs/uia-object-compat-worker.md`。静态审阅父`com_apartment.py`、`uia_object.py`、`probe_async_uia_object.py`、`run_async_uia_object.py`和`tests/test_async_product_probe_runtime.py`；另读`core.py`、`probe_workspace.py`核对截止及依赖审计。
+完整读取本树`AGENTS.md`及父[当时交接（已归并）](../HANDOFF.md#history)、`docs/async-uia-object-compat.md`、`docs/uia-object-compat-worker.md`。静态审阅父`com_apartment.py`、`uia_object.py`、`probe_async_uia_object.py`、`run_async_uia_object.py`和`tests/test_async_product_probe_runtime.py`；另读`core.py`、`probe_workspace.py`核对截止及依赖审计。
 
 父COM修改覆盖了普通回调失败后继续清理已知余额、原释放结果未知不重试、清理异常不报告balanced及core部分导入不阻断已知清理。阶段一发现两条最终回执缺口：进入finally前过期可能只得到accepted=false而未锁存failed/120秒，最终回执写盘异常也可能跳过统一收尾；prepared消息为`msg_9d6aa8d5b3f4`，原阻塞ask为`msg_84b1d73835a1`。父接受并离线修复，未修改旧失败组或活进程。
 

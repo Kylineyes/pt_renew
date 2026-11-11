@@ -1,6 +1,6 @@
 # 原阶段剩余时限、创建者运行器与失败收尾
 
-从已核对的 `dev=origin/dev=afb22b787c5faa4693430eaf6114386d6d24b9dc` 建立独立分支 `feat/async-product-deadlines`。本阶段继续[统一交接](agent-handoff-20261030.md)指定顺序：先补剩余 deadline，再接实际原 Popen 报告交换和各阶段失败收尾。所有生产入口默认禁用，`ready_for_live=false`、`max_product_launches=0`。没有启动真实控制服务、产品、COM/UIA、输入钩子、桌面请求或新的图片任务。
+从已核对的 `dev=origin/dev=afb22b787c5faa4693430eaf6114386d6d24b9dc` 建立独立分支 `feat/async-product-deadlines`。本阶段继续[统一交接](../HANDOFF.md#history)指定顺序：先补剩余 deadline，再接实际原 Popen 报告交换和各阶段失败收尾。所有生产入口默认禁用，`ready_for_live=false`、`max_product_launches=0`。没有启动真实控制服务、产品、COM/UIA、输入钩子、桌面请求或新的图片任务。
 
 ## 时限从原输入前起算
 
