@@ -155,7 +155,7 @@ F 第 912–915 行确实描述 `page flip debug line` 和 `vertical retrace pol
 
 本次经当前 Enter 后客体审核及既有 Information 通道证据，发送一次获批 `Shortcut shift+i`；发前一次性 marker 为 UTC `19:32:41.159088`，响应 `19:32:41.716053` 为 `Pressed shift+i`。该次实际宿主后图左上出现 Windows 输入法候选框，含 `I / i / lc / ID / Id` 等候选；没有可用的 Information 客体后验。收尾当前图候选框仍在，同目标线程的可见 ATL／Cicero 窗记录一并保留。
 
-这些证据**不能证明 Shift+I 全部由谁消费、是否有部分事件到达 DOS 客体或为何走到候选框**；也不能把 DOSBox stderr 中 keyboard layout／mapper 为 US 当作 Windows 输入线程已经绕开 IME。没有为补图而继续鼠标 Capture，没有重发 Shift+I、改输入法、切控制接口、补 Status 或 Esc。此未解释通道问题补入已有[EX-003](exploration-backlog.md#ex-003)，不新建同义队列；有效配置／文件名计数的剩余条件仍在 [EX-005](exploration-backlog.md#ex-005)，不能通过删项弱化条件。
+这些证据**不能证明 Shift+I 全部由谁消费、是否有部分事件到达 DOS 客体或为何走到候选框**；也不能把 DOSBox stderr 中 keyboard layout／mapper 为 US 当作 Windows 输入线程已经绕开 IME。没有为补图而继续鼠标 Capture，没有重发 Shift+I、改输入法、切控制接口、补 Status 或 Esc。此未解释通道问题补入已有[EX-003](exploration-backlog.md#ex-003)，不新建同义队列。后续[安装原AST／假API离线核验](native-menu-calibration.md#shortcut-offline-semantics)已确定该参数走VK而非普通字母Unicode通道，并限定Pressed及扫描码/IME证明范围；没有新输入或修复结论。有效配置／文件名计数的剩余条件仍在 [EX-005](exploration-backlog.md#ex-005)，不能通过删项弱化条件。
 
 模型据真实图停止业务，原 driver 在 UTC **19:33:49.056230** 记录 `Refused`；`quiet-period-ended` 为 **19:35:49.057711**，完整 **120.001481 秒**零新增桌面请求，采样已 done。父确认维持停止和原正常收尾范围，不恢复业务或延写 GO。之后只有 CleanupSnapshot、当前图正常宿主 X 一次、原 WaitExit；无需额外聚焦、连接或 helper。
 

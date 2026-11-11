@@ -40,7 +40,7 @@ C:/Users/rikideng/orca/workspaces/pt_renew/verify-text-screen-sol/.local-analysi
 
 按已加载的orca-cli技能及本机公开帮助操作，首先确认PID21804、HWND2691042及可辨启动页。Orca `press-key Return`、`hotkey Shift+Return`曾返回成功但未立即取得可辨工作画面；宿主Capture菜单则有可见响应。通过Main→Capture keyboard后，再次Return取得A与尺标画面，但未以先后关系认定哪个单独动作解决了输入。后续Orca Return/Shift+I未唤出菜单，Shift+I出现了输入法候选；Esc取消候选、Ctrl+Space切换当前输入状态后仍未取得Information。一次客体右键也未取得可辨菜单。
 
-[探索 EX-003](exploration-backlog.md#ex-003)。
+[探索 EX-003](exploration-backlog.md#ex-003)。以上保持当时的实际通道和场景事实；后续[原AST／假API核验](native-menu-calibration.md#shortcut-offline-semantics)确认Shift字母与普通字符的源码分流，但新场景相同公开参数仍出现IME候选，因此本次旧成功不推广为所有输入状态或客体均通过。
 
 当时原生前景持续属于目标，未遇锁屏或控制门禁拒绝。向父代理报告后，在同一授权范围内使用已安装Windows-MCP的**公开受门禁通道**核对输入兼容性。新客户端只建一个stdio连接，每步先查ControlStatus，最多等待30秒；所有Shortcut/Click前再强制核对原生PID/HWND，失配即停止。没有修改第三方包、控制阈值或门禁，也没有绕过拒绝切换入口。
 
