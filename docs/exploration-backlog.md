@@ -97,7 +97,7 @@
 
 ### EX-003 宿主按键、DOS 鼠标与菜单选择的实际映射
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_ca301710c5c6／ctx_40040264e92f；分支：research/ex003-input-semantics；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本树.local-analysis/ex-003/，本Task严格纯离线提取公开Shortcut原函数AST及假API验证，不启动桌面查询/目标/服务/输入或新GO。
 - 类型：输入语义。依赖：无，可先独立研究。
 - 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#ime-state-boundary)。
 - 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入；新配置场景一次Enter后客体板图可辨，但单次公开Shift+I后出现Windows输入法候选框，未有Information后验，未重发/切IME，事件接收与消费原因仍待证。
