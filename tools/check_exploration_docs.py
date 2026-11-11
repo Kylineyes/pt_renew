@@ -61,6 +61,9 @@ def resolve(source: Path, target: str):
         # 本机绝对证据路径与外部网址不属于可移植文档链接核验。
         return None
     filename, _, fragment = target.partition('#')
+    # 忽略证据不随 clone 或新工作树分发，不能把本机缺失当仓库断链。
+    if '.local-analysis' in Path(unquote(filename).replace('\\', '/')).parts:
+        return None
     return ((source.parent / unquote(filename)).resolve() if filename else source,
             unquote(fragment))
 
