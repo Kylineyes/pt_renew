@@ -42,7 +42,8 @@ def bind(user):
 
 
 class Observer:
-    def __init__(self, user=None, *, clock=time.perf_counter_ns, last_error=None):
+    def __init__(self, user=None, *, clock=time.perf_counter_ns, last_error=None,
+                 cancelled=lambda: False, on_failure=lambda row: None):
         if user is None:
             if sys.platform != "win32":
                 raise RuntimeError("只读原生采样仅支持 Windows")
@@ -50,17 +51,24 @@ class Observer:
         self.user = user
         self.clock = clock
         self.last_error = last_error or ctypes.get_last_error
+        self.cancelled = cancelled
+        self.on_failure = on_failure
 
     def call(self, name, *args, convert=lambda value: value, failed=lambda value: False,
              error_defined=False):
         if name not in SIGNATURES:
             raise ValueError("拒绝非只读采样 API")
+        if self.cancelled():
+            raise InterruptedError("已取消采样，不再启动新 Win32 查询")
         start = self.clock()
         raw = getattr(self.user, name)(*args)
         # 只有文档定义失败返回值和 GetLastError 的调用才读取错误码。
         error = self.last_error() if failed(raw) and error_defined else None
-        return {"api": name, "start_ns": start, "end_ns": self.clock(),
-                "value": convert(raw), "failed": bool(failed(raw)), "win32_error": error}
+        row = {"api": name, "start_ns": start, "end_ns": self.clock(),
+               "value": convert(raw), "failed": bool(failed(raw)), "win32_error": error}
+        if row['failed']:
+            self.on_failure(row)
+        return row
 
     def point(self, name):
         point = wintypes.POINT()
@@ -136,13 +144,13 @@ def validate(windows, request_point, duration, interval):
 
 
 def sample_for(observer, windows, request_point, duration, interval, emit, *,
-               clock=time.perf_counter_ns, sleep=time.sleep):
+               clock=time.perf_counter_ns, sleep=time.sleep, stop=lambda: False):
     """串行查询不是原子快照；记录每次调用时间，不补造错过的采样。"""
     validate(windows, request_point, duration, interval)
     start = clock()
     deadline = start + int(duration * 1e9)
     count = 0
-    while clock() < deadline:
+    while not stop() and clock() < deadline:
         sample = observer.sample(windows, request_point)
         sample["sequence"] = count
         emit(sample)

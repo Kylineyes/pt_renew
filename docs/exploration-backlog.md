@@ -12,7 +12,6 @@
 
 | 编号 | 探索问题 | 类型 |
 | --- | --- | --- |
-| [EX-001](#ex-001) | 菜单点击期间的前景、光标与命中窗口变化 | 行为根因 |
 | [EX-002](#ex-002) | DOSBox 宿主呈现与客体状态不一致的条件 | 行为根因 |
 | [EX-003](#ex-003) | 宿主按键、DOS 鼠标与菜单选择的实际映射 | 输入语义 |
 | [EX-004](#ex-004) | 连续两轮真实客体 PNG 的可靠获取 | 验证缺口 |
@@ -78,22 +77,11 @@
 
 ## 如何选择下一项
 
-可以立即从离线分析开始的首要项为 [EX-001](#ex-001)，与当前原软件取证主线一致。随后依赖关系为 [EX-004](#ex-004) → [EX-007](#ex-007) → [EX-029](#ex-029)；输入语义 [EX-003](#ex-003)、配置状态 [EX-005](#ex-005) 可先独立收敛。其它事项不按编号代表优先级。
+[一次菜单动作的实机时序与后验](native-menu-click-audit.md#live-menu-conclusion)已取得；原软件取证主线继续 [EX-004](#ex-004) → [EX-007](#ex-007) → [EX-029](#ex-029)。输入语义 [EX-003](#ex-003)、配置状态 [EX-005](#ex-005) 可先独立收敛。其它事项不按编号代表优先级。
 
 依赖表示完成该事项所需的已有结论；前置未结时仍可领取并开展不依赖它的阅读、静态分析或方案工作，不能越过证据边界宣布闭环。依赖项完成删除后，应将依赖链接改成其结论文档。
 
 ## 探索事项
-
-<a id="ex-001"></a>
-
-### EX-001 菜单点击期间的前景、光标与命中窗口变化
-
-- 状态：研究中；负责人：task_0dbd022cdd62／ctx_93fb7c0c4213；分支：research/ex001-live-observation；会话／证据：Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca pi_2632e2cf_f698_483b_89ab_ad9510adbcf2 的独立 worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本工作树 .local-analysis/ex-001-continuation/，接续实机兼容、单调时序绑定及一次菜单后验，先同步领取，再由父验收新冻结现场方案。
-- 类型：行为根因。依赖：无，可先独立研究。
-- 原文细节：[native-menu-click-audit.md：细节1](native-menu-click-audit.md#explore-ex-001)；[topics/legacy.md：细节2](topics/legacy.md#explore-ex-001)。
-- 已知：安装原 AST 已排除 Click 自动乘二；第二槽无父 shell 插入。前景变化只定位到约 0.574 秒采样间隔；[最小只读候选与10项假 API验证已沉淀](native-menu-click-audit.md#readonly-observer-offline)，未作实机查询或动作后验，剩余未知与[下一阶段最小假设](native-menu-click-audit.md#readonly-observer-next)仍在本项范围。
-- 要回答：一次公开 Click 内，前景、逻辑／物理光标和命中窗口怎样变化？哪些外部 DPI、API 返回或菜单瞬时状态可观测，哪些仍不能证明实际接收者？
-- 完成条件：先离线核验最小只读观测器；再据明确假设取得一次动作的时序与菜单后验，记录已排除解释和剩余边界。证据不足时保留事项，不盲改坐标。
 
 <a id="ex-002"></a>
 
@@ -112,8 +100,8 @@
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
 - 类型：输入语义。依赖：无，可先独立研究。
-- 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)。
-- 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件。
+- 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)。
+- 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入。
 - 要回答：鼠标捕获、INT 33h 坐标、SDL 事件、IME、命名键／Unicode 字符和当前菜单高亮如何影响实际选择？误入 BLOCK 和 Return 差异能否解释？
 - 完成条件：对有明确问题的最小动作建立输入通道→客体响应对照，记录坐标、捕获及输入状态；不将回执或时间先后当作送达因果。
 
@@ -122,7 +110,7 @@
 ### EX-004 连续两轮真实客体 PNG 的可靠获取
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
-- 类型：验证缺口。依赖：[EX-001](#ex-001)。
+- 类型：验证缺口。依赖：[一次菜单时序及实际后验结论](native-menu-click-audit.md#live-menu-conclusion)。
 - 原文细节：[native-capture-checkpoint.md：细节1](native-capture-checkpoint.md#explore-ex-004)；[native-guest-save-sample.md：细节2](native-guest-save-sample.md#explore-ex-004)；[native-short-observation.md：细节3](native-short-observation.md#explore-ex-004)。
 - 已知：旧单张 640×480 客体图存在，但最近两槽 guest PNG 均为 0；公开 Shortcut f11+p 不保持 F11，这个假设已排除。
 - 要回答：当前可用的公开 Capture 路径能否连续产生两张新的、可读的客体原图，并证明每张图对应的动作与时刻？
@@ -497,8 +485,8 @@
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
 - 类型：行为根因。依赖：无，可先独立研究。
-- 原文细节：[control-user-timeline.md：细节1](control-user-timeline.md#explore-ex-038)；[basic-editing-remaining-acceptance.md：细节2](basic-editing-remaining-acceptance.md#explore-ex-038)；[desktop-control-recovery.md：细节3](desktop-control-recovery.md#explore-ex-038)。
-- 已知：user 的最近事件续期和曾恢复 ready 已证；injected=false 不标识操作者、设备或来源进程。多个旧文件框／前景异常来源未证。
+- 原文细节：[control-user-timeline.md：细节1](control-user-timeline.md#explore-ex-038)；[basic-editing-remaining-acceptance.md：细节2](basic-editing-remaining-acceptance.md#explore-ex-038)；[desktop-control-recovery.md：细节3](desktop-control-recovery.md#explore-ex-038)；[native-menu-click-audit.md：细节4](native-menu-click-audit.md#foreground-source-boundary)。
+- 已知：user 的最近事件续期和曾恢复 ready 已证；injected=false 不标识操作者、设备或来源进程。多个旧文件框／前景异常来源未证；新槽一次稳定前景及真实菜单后验已取得，但不能恢复旧第二槽终端激活者，外部命中预测也不标识真实接收者或激活来源。
 - 要回答：在不更改门禁或干扰他人输入的前提下，哪些设备／进程／事件来源可合法只读观测；怎样区分输入续期、目标激活与其它前景变化？旧 VK192 释放事件为何漏失、保持集合与实际键态何时会分离？
 - 完成条件：定义必要且最小的来源观测与证据限度，能解释的事件写结论，不能恢复的旧来源明确不可追溯；不凭日志猜用户或要求关闭未知程序。
 

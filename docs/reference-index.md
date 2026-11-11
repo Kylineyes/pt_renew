@@ -106,7 +106,7 @@
 - [原 AUTOTRAX 单线样例现场核验](native-ft-sample-verification.md)
 - [原软件单线样例尝试：客体捕获与投递修复](native-guest-save-sample.md)
 - [原 AUTOTRAX 菜单选择校准](native-menu-calibration.md)
-- [第二槽菜单点击离线审计与最小只读观测候选](native-menu-click-audit.md#readonly-observer-offline)
+- [菜单点击审计、实机短时观测与一次菜单后验](native-menu-click-audit.md#live-menu-conclusion)
 - [原软件样例取证与只读 PCB 核验命令](native-sample-wave.md)
 - [原 AUTOTRAX 短观察方案与本轮阻塞](native-short-observation.md)
 - [原 AUTOTRAX 启动与输入定向诊断](native-startup-diagnosis.md)
