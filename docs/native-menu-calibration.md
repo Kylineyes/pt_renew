@@ -1,6 +1,6 @@
 # 原 AUTOTRAX 菜单选择校准
 
-本轮先离线复核 2026-11-02 单线样例现场的原图、RPC、窗口矩形及输入通道。**File 点击坐标已经包含裁剪原点，不能将误入 BLOCK 简单归为漏加偏移；单字符 Shortcut 与 Shift 修饰的字母走不同输入通道，下一现场应优先复用已有成功记录的 Shift+I。** DOS 客体指针与菜单高亮的关系仍待实测，尚未据此核定 FT 默认字段。
+本轮先离线复核 2026-11-02 单线样例现场的原图、RPC、窗口矩形及输入通道。**File 点击坐标已经包含裁剪原点，不能将误入 BLOCK 简单归为漏加偏移；单字符 Shortcut 与 Shift 修饰的字母走不同输入通道。** 当时依据既有成功记录建议优先复用 Shift+I；后续 EX-005 的相同公开参数却出现 IME 候选框，因此该建议不构成普遍保证，最新[原 AST／假 API 结论与消费者边界](#shortcut-offline-semantics)已限定其范围。DOS 客体指针与菜单高亮的关系仍待实测，尚未据此核定 FT 默认字段。
 
 本轮沿用 Pi `deng/gpt-6.1-sol high`，分支 `verify/native-menu-calibration`，fetch 后 `HEAD=origin/dev=fbda57f66abeb04e8aab574667e465b735405c9c`。模型／thinking 事件、实际 assistant 和成功工具回执见本工作树忽略目录 `.local-analysis/native-menu-calibration/session-audit.json`。随后附加监督 Task `task_5762f1bd719e`／Dispatch `ctx_001465cfe3a8`；范围仅限本报告、原软件单线保存重开报告及本地证据，不改 writer、UI、CMake，不自行合 dev 或推送。
 
@@ -37,7 +37,7 @@
 
 只读核对当前安装 Windows-MCP 的 `desktop/service.py:988` 与 `uia/core.py`：单字符 `f`／`i` 直接拼入 SendKeys 字符串；没有修饰键时形成 UnicodeChar，Shift 保持状态下可匹配 CharacterCodes 并形成虚拟键按下／松开。工具文本 `Pressed f` 不等于客体收到普通物理 F 键。
 
-[已有 verification-35 现场](legacy-menu-live-verification.md)曾在确认 ASCII 输入状态后观察到普通 i 无变化，而 `Shift+I` 实际进入 Information、`Shift+S` 实际进入 Status。该记录支持复用修饰键输入通道，不证明原程序只接受大写，也不能把本次全部无响应归于输入法。新现场若出现输入法候选条，先据图取消并单独切换当前目标输入状态，再观察。
+[已有 verification-35 现场](legacy-menu-live-verification.md)曾在确认 ASCII 输入状态后观察到普通 i 无变化，而 `Shift+I` 实际进入 Information、`Shift+S` 实际进入 Status。该记录支持当时场景的修饰键通道，不证明原程序只接受大写，也不能把全部无响应归于输入法。后续同公开 Shift+I 的 IME 失败见[输入通道边界](#shortcut-offline-semantics)；遇候选框应按当前冻结方案停止及收尾，不能将本节历史切换建议当作取消、改 IME 或绕过拒绝的现时批准。
 
 旧五项输入的“动作回执到下一 Snapshot 请求”间隔依次为 5.358、7.484、6.481、6.116、5.836 毫秒，详见新索引。底层 SendKeys／Click 本身还有等待；这些时间既不是客体按键保持时间，也不是截图曝光时间。只能确认旧驱动无额外稳定等待，不能据一张即时图排除处理／绘制延迟。新驱动每步动作后应保留短等待，仍逐图决定下一动作，不预排菜单按键。
 
@@ -64,3 +64,67 @@
 本次只改研究说明与忽略目录证据，不改产品，因此不重复 Qt 构建或 CTest；Debug／Release 各19/19仍为交接中的既有证据。本报告提交前执行 `git diff --check`，不合 dev、不推送、不操作 main。
 
 后续正式移交的13:35–14:05现场已结束：新DOSBox实际运行，但稳定窗口图及目标物理屏幕均不可辨，未发送客体业务按键，原目标正常wait=0。未取得原生新建单线样例，完整事实、原图回执／摘要及未执行的单Return建议见[单线保存重开取证报告](native-ft-created-roundtrip.md)；本Task整体按failed结算，离线坐标与输入通道的确定事实仍保留上述范围。
+
+## Shortcut 原 AST 的离线通道核验
+
+<a id="shortcut-offline-semantics"></a>
+
+本节接续 [EX-003](exploration-backlog.md#ex-003)，Task `task_ca301710c5c6`／Dispatch `ctx_40040264e92f`，分支 `research/ex003-input-semantics`，证据 `.local-analysis/ex-003/`；沿用 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`，原 UTF-8 JSONL 的模型／thinking、assistant、环境及成功工具回执均为 **`deng/gpt-6.1-sol / high`**。领取先由父同步共享 dev。**本轮严格纯离线，EX-003 完整条件仍未满足，保留受阻**；没有新桌面查询、COM/UIA、截图、原软件／控制服务、键鼠、IME 设置或 GO。控制总窗口于 UTC 20:02:12 结束，没有延续现场。
+
+只读消费父原 `check_shortcut_semantics.py` 和 `audit_menu_click.py`，未执行会写回旧证据的顶层。前者已证明 F11+p 非保持组合及 Shift+I 的粗顺序；本轮补齐公开入口、真实扫描码函数、Unicode INPUT 构造、底层返回值和异常边界，不重写安装函数或控制框架。
+
+### 来源、提取及支持范围
+
+以下均相对已安装 `windows_mcp` 源码根 `C:/Users/rikideng/scoop/persist/uv/tools/versions/windows-mcp/Lib/site-packages/windows_mcp/`，不导入该包。选中节点保留原函数逻辑，移除装饰器，`ctypes.windll.user32` 指向仅记录调用的假对象；INPUT／KEYBDINPUT 结构只在内存构造。MapVirtualKeyA 和 SendInput 的返回值明确为测试值，没有查询实际 HKL、键态或接收者。
+
+| 源文件／主要原定义 | 字节数 | SHA-256 |
+| --- | ---: | --- |
+| `tools/input.py:418`，`shortcut_tool` | 19426 | `eb3bd88f950fcc76e8e9a11032363781c9c898eeb87aa9e8b74dd970361a2943` |
+| `desktop/service.py:988`，`shortcut` 及第47行别名表 | 68704 | `c116adc0d221c993a89596a14f0ac66bf924e250672cb2691a8914b0e788231e` |
+| `uia/core.py:246,1371,1390,1462,1485`，`keybd_event/SendInput/SendUnicodeChar/_VKtoSC/SendKeys` | 92107 | `3638d7ba96d7b918783e6e95b95af9978ae7a0df5b200e0966e47e56921f170e` |
+| `uia/enums.py:1064,1216,1399,1551,1661`，事件 flags／VK／命名与字符表／INPUT 结构 | 78802 | `9da1086764fffe967186cdcc6f8afa7f164971e16d72e0c9aaa8eb3ac90607c1` |
+
+四文件在回放前后逐字相同。另只读分析 `__main__.py`、`uia/__init__.py`、`infrastructure/analytics.py`、`desktop/control.py` 和 `tools/control_notifications.py` 的装饰器／线程／门禁范围；连同两个旧 AST 脚本及 EX-005 原请求／响应／窗口 JSON／PNG，共18个来源在收集期大小与 SHA 前后一致。逐定义源文件、行号及 AST SHA 见回放结果，辅助原始来源清单见 `source-evidence.json`，没有复制整套包或提交第三方源码。
+
+工具 [replay_legacy_shortcut.py](../tools/replay_legacy_shortcut.py) 只执行已核选中定义及假 API，输出排他新建；拒绝选中 AST 中导入、动态执行、文件访问和反射入口，内建命名空间也不交给原函数任意访问。Python 3.15 的结构元类所需标准库内存布局仅列明放行，不加载真实 user32。本工具用于已核安装源码，假回放**不执行公开 MCP 门、analytics 装饰器、通用 worker 线程或 hook，也不把跳过这些层的成功当公开门通过**。
+
+### 原函数实际分流和参数
+
+公开 `shortcut_tool` 先调用 `get_desktop().shortcut(shortcut)`，无异常后直接返回 `Pressed {原参数}.`。service 按 `+` 分段并逐段 strip：单字符原样拼入 SendKeys 文本，多字符加 `{}`，少数别名先替换；`uia.SendKeys(..., interval=0.01)` 没有指定 charMode，沿默认 **True**，waitTime 沿常量 **0.5 秒**。命名键查表时 upper；普通字符保持大小写，只有 hold 状态才用 CharacterCodes 转成 VK。
+
+| 公开参数 | service 交给 SendKeys 的文本 | 原解析所得底层通道 |
+| --- | --- | --- |
+| `shift+i`／`Shift+I`，含分隔符两侧空格亦同 | `{shift}i`／`{Shift}I` | Shift down → VK_I down → VK_I up → Shift up，走 `keybd_event`，没有 Unicode INPUT |
+| `shift+s` | `{shift}s` | 同样保持 Shift，字母改为 VK_S（0x53） |
+| `enter`／`return` | `{enter}`／`{return}` | VK_RETURN（0x0D）down／up |
+| `esc`／`escape` | `{esc}`／`{escape}` | VK_ESCAPE（0x1B）down／up |
+| `down`／`up` | `{down}`／`{up}` | 对应命名 VK_DOWN（0x28）／VK_UP（0x26）down／up；仍不能保证不经 IME 或客体必接收 |
+| `i`／`I`／`s` | 原字符 | `SendUnicodeChar(char, True)`；wVk=0、wScan 为 U+0069／U+0049／U+0073，flags 4／6 的两次 SendInput，不会自动加 Shift |
+| `f11+p` | `{f11}p` | F11 down／up 完毕后 Unicode p；F11 不是保持键，沿用既有否定结论 |
+
+Shift+I 的原 API 参数可以写成 `keybd_event(0x10,s(0x10),1,0)` → `(0x49,s(0x49),1,0)` → `(0x49,s(0x49),3,0)` → `(0x10,s(0x10),3,0)`。这里 **1=KeyDown(0)\|ExtendedKey(1)**，**3=KeyUp(2)\|ExtendedKey(1)**；它是 VK 注入调用，**不是物理键盘事件证明，也不是以 flag8 的 scan-only 注入**。`s(vk)` 为原 `_VKtoSC`：generic Shift／I／S／Enter／Esc 调 `MapVirtualKeyA(vk,0)`，左右修饰键等可命中固定 `_SCKeys`；返回0时继续传scan=0，并不拒绝。回放使用的 Shift=0x2A、I=0x17 等扫描码是显式假返回，不是读取到了旧现场扫描码或服务线程布局。
+
+Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0.54 秒**；Enter／Esc 两事件总 **0.52 秒**；单 Unicode 字符只有 INPUT 对之后10ms加0.5s，总 **0.51 秒**。这不是实际持键时长或 Windows 调度上界。普通 `I` 仍是大写 Unicode 码点，不能靠把参数 `i` 改成 `I` 宣称绕开 IME；`Shift+i` 与 `shift+I` 在该映射中是同一 VK 路径。
+
+字符不在 CharacterCodes 时还有边界：假回放 `shift+中` 得到 Shift down／up 后才发 Unicode 中，不是把未知字符保持在 Shift 内；补充平面字符通过原函数拆成两个 UTF-16 单元、各 down／up（如 U+1F600 的 D83D、DE00），不是一个截断 WORD。字面参数 `+` 被 service 切成空段后形成 `{}{}`，本机原解析最终在 `ord()` 对双字符报 TypeError，未调用假输入 API；它不是可靠表达加号的已验证公开参数。
+
+### 成功文字、失败与控制门的分层
+
+1. **VK 层**：原 `keybd_event` 包装是 void 调用，没有接收窗口或客体确认；假返回0不构成真实 API 有布尔失败码的证据。MapVirtualKeyA 返回0仍可生成四个 VK 调用和相同成功文字。
+2. **Unicode 层**：原 `SendInput(*inputs)` 每个 INPUT 各调用一次 `SendInput(1,...)`，只返回最后一次 ret，非总插入数；`SendUnicodeChar` 的值又被 SendKeys 忽略。假序列 `[0,1]`、`[1,0]`、`[0,0]` 都仍返回 `Pressed i.`。这证明返回传播缺少检查，**不证明旧现场 SendInput 曾返回0**，且插入数本身也不是目标消费回执。
+3. **工具层**：service 在 SendKeys 前执行 `checkpoint_current`，完成后 `record_step_current` 一次；整个 Shortcut 是一个记录步，不能把计数1当四个 Win32 事件逐个已送达。假 checkpoint 拒绝时零 API、无成功文字；假第二个 keybd_event 抛异常时只留下 Shift down 和尝试的 I down，无后续 Shift up／record-step／Pressed，原 SendKeys 没有局部 finally 事务回滚。真实门、hook和其他清理是否处理相应状态未在此验证，不从假异常断言旧现场有卡住的修饰键。
+4. **真实调度层**：安装的 Shortcut analytics 包装默认 `run_sync_in_thread=True`，静态定义会由 `asyncio.to_thread` 运行；不是在本轮证明了旧调用使用哪个线程 ID／HKL／输入队列。ControlToolGate 负责租约、context和异常映射，原服务 checkpoint 受 current-token 控制；该真实层本轮只读未运行，不能绕其拒绝或把假 controller 当控制授权。
+
+### IME 与下一次状态核定可消费的边界
+
+[EX-005 的原始失败](legacy-dosbox-configuration.md#ime-state-boundary)保留：一次 Enter 后板图可辨，随后相同公开 Shift+I 得到成功文字，但宿主出现 IME 候选框，没有 Information 后验；完整静默、正常退出及十二张原图的范围不改写。早期 C21／A240 曾在当时输入状态下通过同类公开通道进入 Information／Status，同样保留。**本次只证明 VK／Unicode 的源码分流，既不能以候选框证明所有事件被 IME 消费，也不能以旧成功或 `Pressed` 排除 IME／线程／队列差异。**
+
+服务源码在该路径没有向目标 HWND 定向输入，也没有在这些函数中核实际字符、SDL／INT33h、客体菜单选择器或 IME 开关。generic worker、自有 mapper 的US记录、原生前景与同线程候选窗各有范围；它们都不恢复旧服务输入线程 HKL、实际接收窗口、低层 hook 完整处理或 DOS 侧键码。因此不能宣布“Shift+I 的全部根因已定位／IME已修复”，更不能切换到低层输入接口绕开公开门。
+
+给未来新明确场景的最小建议是：先据当前客体图确认菜单上下文，再只改变一个公开参数或一个已声明观测条件，逐个输入后以新客体图验收。若选择命名 `enter/up/down/esc` 的菜单导航路径，本节可证明它使用对应 VK 而不是普通字母 Unicode；**是否更可靠仍要新现场证明**。大小写改写、盲目补发 Shift、清键态或改变全局输入法不由本节授权。没有新有效现场窗口时仅准备离线材料，不能写 GO；下一状态场景仍须遵守公开门、一次请求、失败静默及原创建者正常等待。
+
+### 本轮验证与剩余事项
+
+新增[回归测试](../tests/test_replay_legacy_shortcut.py)验证原 AST 的16项行为与提取边界，已分别在当前Python3.15及现有基础Python3.14.8执行，均16/16通过，未下载解释器；另有23个完整假回放案例。它们含 Shift 精确键序／flags／假扫描码、命名别名、大小写分流、Unicode UTF-16、SendInput 0 返回仍回成功、扫描码0、checkpoint零输入、半程异常不返回成功和输出不覆盖。测试不 import windows_mcp／COM/UIA，不加载真实 user32、不发送事件，来源四文件逐字未变。
+
+原始失败也保留：最初受限命名空间执行 future-import 及 Python3.15 ctypes结构布局时因缺导入白名单停止，之后一次缺 enumerate 的 NameError 出现在报告内，未据生成文件宣称通过；补齐已加载标准库布局和内建枚举后，第一次测试又把 `+` 的真实 TypeError误预期为ValueError，修正测试解释后通过。未改第三方源码来迎合测试，旧失败输出与原会话记录保持。EX-003仍缺完整实际输入通道→客体响应及坐标／捕获／状态对照，保留[原事项](exploration-backlog.md#ex-003)及剩余条件，本轮不删项。最终文档检查 **153 份 Markdown／1045 个本地链接／41 个开放事项／106 个来源细节／137 份索引报告，零错误**，`git diff --check`通过。仅清理可重建成功中间输出／本轮模块缓存 **134608 字节**，归档占用 **0**，净减少 **134608 字节**；清理时证据约 **155 KB**，没有新运行副本、下载或构建树。所有自有短时诊断子进程均由原 `subprocess.run` 等待返回0，没有本轮原软件／控制服务可声称的新退出证明，也未为清理查询桌面或全机进程。
