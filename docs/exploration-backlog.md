@@ -108,7 +108,7 @@
 
 ### EX-005 启动配置继承、DFT 和实际工作文件状态
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_215b58349614／ctx_0c55cb76da25；分支：research/ex005-effective-state；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本树.local-analysis/ex-005/，先共享同步领取，再准备配置及Information/Status新冻结场景。
 - 类型：配置语义。依赖：无，可先独立研究。
 - 原文细节：[legacy-dosbox-configuration.md：细节1](legacy-dosbox-configuration.md#explore-ex-005)；[initial-assessment.md：细节2](initial-assessment.md#explore-ex-005)；[native-created-retry.md：细节3](native-created-retry.md#explore-ex-005)。
 - 已知：旧 C21／A240 场景已有文件名和计数证据，不是当前新槽的状态。显式 -conf 的搜索／覆盖／autoexec 继承仍未核定。
