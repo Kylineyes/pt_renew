@@ -163,6 +163,7 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
     for key in ('launch_note', 'delivery_note', 'previous_slot_result', 'menu_flow'): plan.pop(key, None)
     paths = [destination / name for name in ('desktop_session.py', 'review_gate.py', 'submit.py')]
     paths += [slot / name for name in ('review_gate.py', 'submit.py', 'SYN1.conf')]
+    paths += [REPO / '.gitattributes']
     paths += [REPO / 'tools' / name for name in ('observe_legacy_click.py', 'legacy_click_sampling.py', 'legacy_observation_owner.py', 'Start-LegacyObservationOwner.ps1', 'inspect_legacy_desktop.py')]
     # 保留原控制入口等外部冻结项；排除旧启动器及旧工作树路径。
     paths += [Path(item['path']) for item in oldplan['frozen_files'] if not Path(item['path']).is_relative_to(source) and not 'orca\\workspaces' in item['path']]

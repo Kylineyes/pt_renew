@@ -1,8 +1,25 @@
-param(
+﻿param(
     [Parameter(Mandatory = $true)][string]$Slot,
-    [switch]$Detach
+    [switch]$Detach,
+    [switch]$OfflineCheck
 )
 $ErrorActionPreference = 'Stop'
+# Windows PowerShell 5.1 的 -File 对无 BOM 文件使用本机传统编码；本文件必须保留 UTF-8 BOM。
+if ($OfflineCheck) {
+    $taskBytes = [IO.File]::ReadAllBytes($PSCommandPath)
+    if ($taskBytes.Length -lt 3 -or $taskBytes[0] -ne 239 -or $taskBytes[1] -ne 187 -or $taskBytes[2] -ne 191) {
+        throw '启动器缺少 UTF-8 BOM，拒绝继续'
+    }
+    @{
+        offline_check = $true
+        detach_boundary = [bool]$Detach
+        before_any_process_creation = $true
+        script = $PSCommandPath
+        version = $PSVersionTable.PSVersion.ToString()
+        utf8_bom = $true
+    } | ConvertTo-Json
+    exit 0
+}
 $taskSlot = (Resolve-Path -LiteralPath $Slot).Path
 if ($Detach) {
     # 启动前使用隐藏宿主；聚焦之后只通过文件投递，不再启动终端。
