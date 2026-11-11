@@ -156,6 +156,18 @@ class ObserverTests(unittest.TestCase):
                 native.assert_not_called()
             self.assertEqual(output.read_text(encoding='utf-8'), '原件')
 
+    def test_api_failure_signal_prevents_next_native_query(self):
+        api = FakeApi()
+        api.fail.add('GetCursorPos')
+        failed = []
+        value = candidate.Observer(api, last_error=lambda: 5,
+            cancelled=lambda: bool(failed), on_failure=failed.append)
+        result = value.point('GetCursorPos')
+        self.assertTrue(result['failed'])
+        self.assertEqual(failed[0]['win32_error'], 5)
+        with self.assertRaises(InterruptedError): value.point('GetPhysicalCursorPos')
+        self.assertEqual(api.calls, ['GetCursorPos'])
+
     def test_cancel_before_next_api_does_not_query_or_read_error(self):
         api = FakeApi()
         value = candidate.Observer(api, cancelled=lambda: True,

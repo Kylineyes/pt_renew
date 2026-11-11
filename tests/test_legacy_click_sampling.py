@@ -69,6 +69,8 @@ class SamplingTests(unittest.TestCase):
                 self.assertTrue(job.done.wait(2))
                 self.assertTrue(job.ready.is_set())
                 self.assertIn('FileExistsError', job.summary['error'])
+                self.assertTrue(job.cancel.is_set())
+                self.assertIsNotNone(job.failure)
                 self.assertEqual(path.read_text(encoding='utf-8'), '原件')
             finally:
                 self.assertTrue(worker.close())
@@ -96,6 +98,57 @@ class SamplingTests(unittest.TestCase):
                 require_coverage(job, 100, 500_000_000)
             job.summary = original
         with self.assertRaises(RuntimeError): require_coverage(job, 1, 500_000_000)
+
+    def test_success_then_failure_and_exception_block_click(self):
+        job = SamplingJob('unused', 12, 34, [1, 2], 2, .01, True)
+        first = row()
+        job.accept(first)
+        job.guard(require_running=True, require_foreground=True, clock=lambda: first['end_ns'])
+        second = row()
+        second['query'] = {'api': 'GetCursorPos', 'failed': True, 'win32_error': 5}
+        job.accept(second)
+        sent = []
+        with self.assertRaises(RuntimeError):
+            job.guard(require_running=True, require_foreground=True)
+            sent.append('Click')
+        self.assertEqual(sent, [])
+        self.assertEqual(job.first_failures, [])
+        self.assertTrue(job.cancel.is_set())
+        self.assertIsNotNone(job.failure)
+
+        class Broken:
+            def sample(self, *args): raise OSError('接口异常')
+        with tempfile.TemporaryDirectory(prefix='pt-renew-ex001-') as directory:
+            worker = SamplingWorker(observer_factory=Broken)
+            try:
+                broken = worker.submit(SamplingJob(Path(directory)/'trace.jsonl', 12, 34, [1, 2], 1, .01, True))
+                self.assertTrue(broken.done.wait(2))
+                self.assertTrue(broken.cancel.is_set())
+                with self.assertRaisesRegex(RuntimeError, '接口异常'): broken.guard()
+            finally:
+                self.assertTrue(worker.close())
+
+    def test_online_duration_gap_and_stale_or_early_end_signals(self):
+        for change in ('duration', 'gap', 'stale', 'early_end', 'foreground'):
+            with self.subTest(change=change):
+                job = SamplingJob('unused', 12, 34, [1, 2], 2, .01, True)
+                first = row()
+                job.accept(first)
+                next_row = copy.deepcopy(first)
+                next_row['start_ns'] += 10_000_000
+                next_row['end_ns'] += 10_000_000
+                if change == 'duration': next_row['end_ns'] = next_row['start_ns'] + 30_000_001
+                if change == 'gap':
+                    next_row['start_ns'] = first['start_ns'] + 50_000_001
+                    next_row['end_ns'] = next_row['start_ns'] + 1
+                if change == 'foreground': next_row['foreground_after']['value'] = 99
+                job.accept(next_row)
+                if change == 'early_end': job.done.set()
+                now = next_row['end_ns'] + (50_000_001 if change == 'stale' else 0)
+                with self.assertRaises(RuntimeError):
+                    job.guard(require_running=True, require_foreground=True, clock=lambda: now)
+                self.assertTrue(job.cancel.is_set())
+                self.assertIsNotNone(job.failure)
 
     def test_blocked_call_is_not_claimed_stopped_by_budget_or_join(self):
         entered, release = threading.Event(), threading.Event()

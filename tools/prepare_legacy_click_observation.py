@@ -37,13 +37,29 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
         raise RuntimeError('不是已审查旧驱动')
     driver = replace(driver, "REPO = Path(r'C:/Users/rikideng/orca/workspaces/pt_renew/review-track-core-boundaries')", f'REPO = Path({str(REPO)!r})')
     driver = replace(driver, 'from inspect_legacy_desktop import inspect_desktop', 'from inspect_legacy_desktop import inspect_desktop\nfrom legacy_click_sampling import SamplingWorker, SamplingJob, require_coverage')
-    driver = replace(driver, 'dict(req, at=stamp())); self.write(req)', "dict(req, at=stamp(), perf_counter_ns=time.perf_counter_ns())); send_ns = time.perf_counter_ns(); self.write(req)")
+    driver = replace(driver, '    def __init__(self): self.p = None; self.counter = 0; self.messages = queue.Queue(); self.limit = None', '''    def __init__(self):
+        self.p = None; self.counter = 0; self.messages = queue.Queue(); self.limit = None
+        self.observation_job = None
+    def observation_guard(self, *, before_click=False):
+        if self.observation_job is not None:
+            self.observation_job.guard(require_running=before_click, require_foreground=before_click)
+    def desktop_stage(self, action):
+        self.observation_guard()
+        value = action()
+        self.observation_guard()
+        return value''')
+    driver = replace(driver, 'dict(req, at=stamp())); self.write(req)', "dict(req, at=stamp(), perf_counter_ns=time.perf_counter_ns()))\n        self.observation_guard(before_click=method == 'tools/call' and params.get('name') == 'Click')\n        send_ns = time.perf_counter_ns(); self.write(req)")
     driver = replace(driver, "save(name + '-response.json', dict(msg, at=stamp()))", "receive_ns = time.perf_counter_ns()\n        self.last_interval = (send_ns, receive_ns)\n        save(name + '-response.json', dict(msg, at=stamp(), perf_counter_ns=receive_ns, send_ns=send_ns))")
+    driver = replace(driver, '        available = self.remaining()', '        self.observation_guard()\n        available = self.remaining()')
+    driver = replace(driver, "        if 'error' in msg: raise Refused(str(msg['error']))", "        self.observation_guard()\n        if 'error' in msg: raise Refused(str(msg['error']))")
+    driver = replace(driver, '        native = inspect_desktop(); save(name + \'-native-before.json\', native)', '        native = self.desktop_stage(inspect_desktop); save(name + \'-native-before.json\', native)')
+    driver = replace(driver, '        virtual = tuple(ctypes.windll.user32.GetSystemMetrics(i) for i in (76, 77, 78, 79))', '        virtual = tuple(self.desktop_stage(lambda i=i: ctypes.windll.user32.GetSystemMetrics(i)) for i in (76, 77, 78, 79))')
+    driver = replace(driver, "save(name + '-images.json', images); save(name + '-native-after.json', inspect_desktop())", "save(name + '-images.json', images); save(name + '-native-after.json', self.desktop_stage(inspect_desktop))")
     driver = replace(driver, "except subprocess.TimeoutExpired: save('control-exit-unproven.json', dict(self.identity, at=stamp()))", "except subprocess.TimeoutExpired:\n            save('control-exit-unproven.json', dict(self.identity, at=stamp()))\n            rc = self.p.wait(); save('control-late-exit.json', dict(self.identity, wait_return=rc, at=stamp()))")
     driver = replace(driver, 'ctypes.windll.user32.SetProcessDpiAwarenessContext(ctypes.c_void_p(-4))', 'dpi_init_result = bool(ctypes.windll.user32.SetProcessDpiAwarenessContext(ctypes.c_void_p(-4)))')
     driver = replace(driver, "    save('runner-started.json'", "    save('dpi-init.json', {'result': dpi_init_result, 'note': '仅本驱动进程，不证明服务输入线程DPI'})\n    save('runner-started.json'")
     driver = replace(driver, '    cleanup_notice = False', '    cleanup_notice = False\n    sampler = SamplingWorker()\n    active_job = None\n    cleanup_focus_used = False\n    cleanup_close_used = False')
-    driver = replace(driver, '        nonlocal target, identity, root_hwnd', '        nonlocal target, identity, root_hwnd, cleanup_focus_used, cleanup_close_used')
+    driver = replace(driver, '        nonlocal target, identity, root_hwnd', '        nonlocal target, identity, root_hwnd, cleanup_focus_used, cleanup_close_used\n        rpc.observation_job = None')
     driver = replace(driver, "        root_hwnd = guard_window(native, target.pid, root_hwnd, 'Close', req['arguments'])", """        fg = native.get('foreground_after') or {}
         if fg.get('hwnd') != root_hwnd:
             if cleanup_focus_used: raise Refused('本候选只允许一次正常收尾聚焦')
@@ -64,7 +80,8 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
                 check = sampler.submit(SamplingJob(ROOT/'compatibility.jsonl', root_hwnd, target.pid,
                     [(left+right)//2, (top+bottom)//2], .35, .01, False))
                 active_job = check
-                if not check.done.wait(5): raise Refused('实机兼容采样未在五秒内真实结束')
+                if not check.done.wait(5):
+                    check.fail('实机兼容采样结束等待超过5秒'); raise Refused('实机兼容采样未在五秒内真实结束')
                 save('compatibility-summary.json', require_coverage(check))
                 joined = sampler.close()
                 save('compatibility-thread-close.json', {'joined_within_five_seconds': joined, 'at': stamp()})
@@ -77,17 +94,25 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
                     job = sampler.submit(SamplingJob(ROOT/'menu-observation.jsonl', root_hwnd, target.pid,
                         args['loc'], 2, .01, True))
                     active_job = job
-                    if not job.ready.wait(.5) or job.first_failures:
-                        job.cancel.set(); raise Refused('菜单发送前首样本缺失或失败')
+                    if not job.ready.wait(.5):
+                        job.fail('菜单发送前首样本等待超过0.5秒'); raise Refused('菜单发送前首样本等待超时')
+                    rpc.observation_job = job
+                    rpc.observation_guard(before_click=True)
                     time.sleep(.05)
+                    rpc.observation_guard(before_click=True)
+                    native = rpc.desktop_stage(inspect_desktop)
+                    save(name+'-immediate-before.json', native)
+                    guard_window(native, target.pid, root_hwnd, tool, args)
+                    rpc.observation_guard(before_click=True)
                 rpc.remaining()
                 if process_identity(target) != identity: raise Refused('发送前原Popen身份变化')
+                rpc.observation_guard(before_click=tool == 'Click')
                 rpc.tool(tool, args, name)
                 interval = rpc.last_interval
-                if job is not None and job.cancel.is_set(): raise Refused('动作内查询失败，停止业务')
+                rpc.observation_guard()
                 last_capture = rpc.snapshot(name + '-post', target.pid)
                 if job is not None:
-                    if not job.done.wait(4): raise Refused('菜单采样未真实结束')
+                    if not job.done.wait(4):\n                        job.fail('菜单采样结束等待超过4秒'); raise Refused('菜单采样未真实结束')
                     save('menu-observation-summary.json', require_coverage(job, *interval))
                     if process_identity(target) != identity: raise Refused('菜单后原Popen身份变化')""")
     driver = replace(driver, "            paths = list(inbox.glob('request-*.json'))", """            if (ROOT/'stop-business.json').exists():
@@ -95,7 +120,7 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
                 if any(stop.get(key) != plan[key] for key in ('session','task','dispatch')): raise Refused('停止信号身份不符')
                 raise Refused('操作者停止业务：' + str(stop.get('reason')))
             paths = list(inbox.glob('request-*.json'))""")
-    driver = replace(driver, "        quiet = time.monotonic() + 120", "        if active_job is not None: active_job.cancel.set()\n        quiet = time.monotonic() + 120")
+    driver = replace(driver, "        quiet = time.monotonic() + 120", "        if active_job is not None:\n            active_job.fail('驱动停止业务')\n            save('observer-failure-state.json', {'failure': active_job.failure, 'done': active_job.done.is_set(), 'summary': active_job.summary})\n        rpc.observation_job = None\n        quiet = time.monotonic() + 120")
     driver = replace(driver, '    finally:\n        if target is not None:', "    finally:\n        joined = sampler.close()\n        save('observer-close.json', {'joined_within_five_seconds': joined, 'at': stamp()})\n        if not joined:\n            sampler.thread.join()\n            save('observer-late-close.json', {'joined': True, 'at': stamp()})\n        if target is not None:")
     driver = replace(driver, '                rpc.close(); rpc = None\n                rc = target.wait();', '                rc = target.wait();')
     gate = (source / 'review_gate.py').read_text(encoding='utf-8')
