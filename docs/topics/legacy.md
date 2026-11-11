@@ -40,8 +40,8 @@
 
 ## 下一步怎样推进
 
-1. 复用[实机菜单时序与后验](../native-menu-click-audit.md#live-menu-conclusion)及明确边界，按新冻结范围领取[连续客体捕获](../exploration-backlog.md#ex-004)；不复用退出槽、旧GO或坐标。
-2. 一次动作后验可靠后，完成两轮菜单捕获与新 640×480 客体 PNG 实际读取。
+1. [两轮新客体 PNG 及真实逐图读取](../native-capture-checkpoint.md#continuous-capture-conclusion)已完成，四组原创建链正常wait0；复用此有限结论和当前图方式，不复用已退出槽、旧GO或坐标。
+2. 两张客体均为 AUTOTRAX 1.57 启动页，宿主仍黑底白横线；尚未据此确认工作文件名、计数或编辑状态，接[配置及状态 EX-005](../exploration-backlog.md#ex-005)。
 3. 取得 Information / Status 的文件名与计数，确认空板及层、宽、端点，新建单段并保存到全新 8.3 文件。
 4. 原 AUTOTRAX 重开、图像、字节、日志及摘要共同核定字段，再交[编辑主题](editing.md)接通正式产品。
 

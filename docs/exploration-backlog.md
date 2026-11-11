@@ -14,7 +14,6 @@
 | --- | --- | --- |
 | [EX-002](#ex-002) | DOSBox 宿主呈现与客体状态不一致的条件 | 行为根因 |
 | [EX-003](#ex-003) | 宿主按键、DOS 鼠标与菜单选择的实际映射 | 输入语义 |
-| [EX-004](#ex-004) | 连续两轮真实客体 PNG 的可靠获取 | 验证缺口 |
 | [EX-005](#ex-005) | 启动配置继承、DFT 和实际工作文件状态 | 配置语义 |
 | [EX-006](#ex-006) | KEY 宏、Repeat 与 Un-Delete 的上下文调度 | 命令语义 |
 | [EX-007](#ex-007) | 原 AUTOTRAX 自建单线保存重开与默认 FT 编码 | 兼容证据 |
@@ -77,7 +76,7 @@
 
 ## 如何选择下一项
 
-[一次菜单动作的实机时序与后验](native-menu-click-audit.md#live-menu-conclusion)已取得；原软件取证主线继续 [EX-004](#ex-004) → [EX-007](#ex-007) → [EX-029](#ex-029)。输入语义 [EX-003](#ex-003)、配置状态 [EX-005](#ex-005) 可先独立收敛。其它事项不按编号代表优先级。
+[一次菜单动作的实机时序与后验](native-menu-click-audit.md#live-menu-conclusion)及[两轮新客体 PNG](native-capture-checkpoint.md#continuous-capture-conclusion)已取得；原软件取证主线继续 [EX-005](#ex-005) → [EX-007](#ex-007) → [EX-029](#ex-029)。输入语义 [EX-003](#ex-003) 等可独立收敛，其他事项不按编号代表优先级。
 
 依赖表示完成该事项所需的已有结论；前置未结时仍可领取并开展不依赖它的阅读、静态分析或方案工作，不能越过证据边界宣布闭环。依赖项完成删除后，应将依赖链接改成其结论文档。
 
@@ -89,8 +88,8 @@
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
 - 类型：行为根因。依赖：无，可先独立研究。
-- 原文细节：[native-startup-diagnosis.md：细节1](native-startup-diagnosis.md#explore-ex-002)；[legacy-menu-runtime-validation.md：细节2](legacy-menu-runtime-validation.md#explore-ex-002)；[legacy-menu-live-verification.md：细节3](legacy-menu-live-verification.md#explore-ex-002)。
-- 已知：已有一轮宿主黑底白线而客体图可辨、Enter 后打开 SYN1 的直接证据；不能推广到所有旧失败。
+- 原文细节：[native-startup-diagnosis.md：细节1](native-startup-diagnosis.md#explore-ex-002)；[legacy-menu-runtime-validation.md：细节2](legacy-menu-runtime-validation.md#explore-ex-002)；[legacy-menu-live-verification.md：细节3](legacy-menu-live-verification.md#explore-ex-002)；[native-capture-checkpoint.md：细节4](native-capture-checkpoint.md#host-guest-difference)。
+- 已知：已有一轮宿主黑底白线而客体图可辨、Enter 后打开 SYN1 的直接证据；后续新冻结目标两轮客体PNG均为可辨1.57启动页而对应宿主仍黑底白线，配置/动作/两侧原图可追溯，但未改后端或确定刷新成因，不能推广到所有旧失败。
 - 要回答：OpenGL／SDL／刷新、输出后端、窗口尺寸和启动阶段分别影响什么？历史黑屏、白横线、surface 残影是否有共同原因？
 - 完成条件：复用现有日志与客体／宿主原图，给出可复现的最小单变量解释或明确的适用条件；区分已证现象、因果和无法追溯的历史。
 
@@ -104,17 +103,6 @@
 - 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入。
 - 要回答：鼠标捕获、INT 33h 坐标、SDL 事件、IME、命名键／Unicode 字符和当前菜单高亮如何影响实际选择？误入 BLOCK 和 Return 差异能否解释？
 - 完成条件：对有明确问题的最小动作建立输入通道→客体响应对照，记录坐标、捕获及输入状态；不将回执或时间先后当作送达因果。
-
-<a id="ex-004"></a>
-
-### EX-004 连续两轮真实客体 PNG 的可靠获取
-
-- 状态：研究中；负责人：task_57c256b62a70／ctx_9bb156265144；分支：research/ex004-continuous-capture；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本工作树.local-analysis/ex-004/，先同步领取，再审阅新冻结两轮Capture及正常宿主X收尾方案。
-- 类型：验证缺口。依赖：[一次菜单时序及实际后验结论](native-menu-click-audit.md#live-menu-conclusion)。
-- 原文细节：[native-capture-checkpoint.md：细节1](native-capture-checkpoint.md#explore-ex-004)；[native-guest-save-sample.md：细节2](native-guest-save-sample.md#explore-ex-004)；[native-short-observation.md：细节3](native-short-observation.md#explore-ex-004)。
-- 已知：旧单张 640×480 客体图存在，但最近两槽 guest PNG 均为 0；公开 Shortcut f11+p 不保持 F11，这个假设已排除。
-- 要回答：当前可用的公开 Capture 路径能否连续产生两张新的、可读的客体原图，并证明每张图对应的动作与时刻？
-- 完成条件：两轮分别核对捕获动作、文件集合差、唯一新增非空 640×480 PNG、摘要和指定模型实际读图；旧图复读不算新捕获。
 
 <a id="ex-005"></a>
 
@@ -143,7 +131,7 @@
 ### EX-007 原 AUTOTRAX 自建单线保存重开与默认 FT 编码
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
-- 类型：兼容证据。依赖：[EX-003](#ex-003)、[EX-004](#ex-004)、[EX-005](#ex-005)。
+- 类型：兼容证据。依赖：[EX-003](#ex-003)、[两轮客体捕获结论](native-capture-checkpoint.md#continuous-capture-conclusion)、[EX-005](#ex-005)。
 - 原文细节：[topics/editing.md：细节1](topics/editing.md#explore-ex-007)；[free-track-creation-design.md：细节2](free-track-creation-design.md#explore-ex-007)；[native-ft-created-roundtrip.md：细节3](native-ft-created-roundtrip.md#explore-ex-007)；[track-explicit-output.md：细节4](track-explicit-output.md#explore-ex-007)；[native-ft-sample-verification.md：细节5](native-ft-sample-verification.md#explore-ex-007)；[free-track-history-core.md：细节6](free-track-history-core.md#explore-ex-007)。
 - 已知：内部显式六／七字段编码与新增另存闭环已完成；NEWFT 尚未生成，不能由合成样例推默认值。
 - 要回答：原软件在已确认空板、层、宽和端点下新建一条线，实际写出六／七字段、附加值、换行、记录排序和结束布局是什么？
@@ -165,7 +153,7 @@
 ### EX-009 产品移动／删除及新增输出的原软件兼容
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
-- 类型：兼容证据。依赖：[EX-004](#ex-004)、[EX-005](#ex-005)。
+- 类型：兼容证据。依赖：[两轮客体捕获结论](native-capture-checkpoint.md#continuous-capture-conclusion)、[EX-005](#ex-005)。
 - 原文细节：[pcb-legacy-native-verification.md：细节1](pcb-legacy-native-verification.md#explore-ex-009)；[pcb-mouse-keyboard-verification.md：细节2](pcb-mouse-keyboard-verification.md#explore-ex-009)；[pcb-compat-continuation.md：细节3](pcb-compat-continuation.md#explore-ex-009)。
 - 已知：Qt 自重开、原字节保护和原生文件框往返已有证据；原软件打开合成输出及真实输出的完整兼容闭环未过。
 - 要回答：AUTOTRAX 是否实际接受产品输出，并保留工作文件、走线数量、移动／删除／新增几何和全部未改对象？
@@ -209,7 +197,7 @@
 ### EX-013 文字实际导入方向、长度截断与保存往返
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
-- 类型：运行语义。依赖：[EX-004](#ex-004)。
+- 类型：运行语义。依赖：[两轮客体捕获结论](native-capture-checkpoint.md#continuous-capture-conclusion)。
 - 原文细节：[legacy-pcb-text-path.md：细节1](legacy-pcb-text-path.md#explore-ex-013)；[legacy-text-copy-verification.md：细节2](legacy-text-copy-verification.md#explore-ex-013)。
 - 已知：FS 静态读入上限 80、对象创建上限 32，受控复制已证；DS:d59a 条件映射和方向 32／48 的实际接受未证。
 - 要回答：实际导入时坐标／方向变换全局值是什么？33–80 字符是否截到 32；驱动就绪的层校验、方向组合和保存后的字段如何变化？
@@ -231,7 +219,7 @@
 ### EX-015 真实缩放、简化字形分派、字体指针与 VGA 像素
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
-- 类型：绘图语义。依赖：[EX-004](#ex-004)。
+- 类型：绘图语义。依赖：[两轮客体捕获结论](native-capture-checkpoint.md#continuous-capture-conclusion)。
 - 原文细节：[legacy-text-screen-next.md：细节1](legacy-text-screen-next.md#explore-ex-015)；[legacy-text-screen-acceptance.md：细节2](legacy-text-screen-acceptance.md#explore-ex-015)。
 - 已知：Zoom 菜单已出现；尺标可估比例，但没有读取内部缩放、实际字体远指针或完整／简化分派。
 - 要回答：运行中采用哪张字形表、缩放和绘图路径？线宽、裁剪、像素取整、端帽及替代显示如何决定实际 VGA 图像？
