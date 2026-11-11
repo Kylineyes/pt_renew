@@ -99,8 +99,8 @@
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
 - 类型：输入语义。依赖：无，可先独立研究。
-- 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)。
-- 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入。
+- 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#ime-state-boundary)。
+- 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入；新配置场景一次Enter后客体板图可辨，但单次公开Shift+I后出现Windows输入法候选框，未有Information后验，未重发/切IME，事件接收与消费原因仍待证。
 - 要回答：鼠标捕获、INT 33h 坐标、SDL 事件、IME、命名键／Unicode 字符和当前菜单高亮如何影响实际选择？误入 BLOCK 和 Return 差异能否解释？
 - 完成条件：对有明确问题的最小动作建立输入通道→客体响应对照，记录坐标、捕获及输入状态；不将回执或时间先后当作送达因果。
 
@@ -108,10 +108,10 @@
 
 ### EX-005 启动配置继承、DFT 和实际工作文件状态
 
-- 状态：研究中；负责人：task_215b58349614／ctx_0c55cb76da25；分支：research/ex005-effective-state；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本树.local-analysis/ex-005/，先共享同步领取，再准备配置及Information/Status新冻结场景。
+- 状态：受阻；负责人：task_215b58349614／ctx_0c55cb76da25；分支：research/ex005-effective-state；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本树.local-analysis/ex-005/，关键有效配置/AXTYPE及Enter后板图已得，Shift+I后IME候选框导致停止，Information/Status文件名计数与完整加载覆盖仍缺；完整静默后四组原创建链正常wait0。
 - 类型：配置语义。依赖：无，可先独立研究。
-- 原文细节：[legacy-dosbox-configuration.md：细节1](legacy-dosbox-configuration.md#explore-ex-005)；[initial-assessment.md：细节2](initial-assessment.md#explore-ex-005)；[native-created-retry.md：细节3](native-created-retry.md#explore-ex-005)。
-- 已知：旧 C21／A240 场景已有文件名和计数证据，不是当前新槽的状态。显式 -conf 的搜索／覆盖／autoexec 继承仍未核定。
+- 原文细节：[legacy-dosbox-configuration.md：细节1](legacy-dosbox-configuration.md#explore-ex-005)；[initial-assessment.md：细节2](initial-assessment.md#explore-ex-005)；[native-created-retry.md：细节3](native-created-retry.md#explore-ex-005)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#effective-state-attempt)。
+- 已知：旧C21／A240场景的文件名和计数不能代替新槽；本轮只读CONFIG得opengl/vgaonly/fixed10000/16/本槽captures及实际AXTYPE，早期stderr报告本显式conf，Enter后新客体与5FT输入相符。Information/Status未取得，完整来源/覆盖和历史只读挂载成因仍未核定；[阶段证据与剩余边界](legacy-dosbox-configuration.md#effective-state-attempt)已沉淀。
 - 要回答：固定 DOSBox 版本如何合并配置；DFT 历史路径与命令行如何决定载入文件及默认参数；只读挂载失败是否来自 DOS 打开模式？
 - 完成条件：记录有效配置来源和覆盖规则；对具体新场景用日志、Information／Status 文件名和图元计数共同确认状态，区分静态 DFT 内容与实际生效值。
 

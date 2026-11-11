@@ -79,7 +79,7 @@
 先读[主题概览或接手入口](topics/legacy.md)。本组 35 篇，以下保留原报告标题。
 
 - [PT 现状调查与 Windows 迁移建议](initial-assessment.md)
-- [DOSBox-X 本机日志与配置加载证据](legacy-dosbox-configuration.md)
+- [DOSBox-X 配置有效值、实际 autoexec、Enter后板图与状态核定受阻](legacy-dosbox-configuration.md#effective-state-attempt)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)

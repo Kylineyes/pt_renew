@@ -57,6 +57,6 @@
 
 工作文件名、计数、空板、可靠File／Information、用户所选层／宽／端点、原生新线保存／重开均未完成。没有字段证据可供开放默认写出或UI能力门，一个未生成的文件不能推断默认值，也不证明全层或NETDEF兼容。上一轮可辨菜单事实仍见既有报告，本轮不覆盖或解释其根因。
 
-[探索 EX-005](exploration-backlog.md#ex-005)。
+[探索 EX-005](exploration-backlog.md#ex-005)。后续[新场景一次Enter后的真实客体板图](legacy-dosbox-configuration.md#effective-state-attempt)已取得，但Information／Status仍缺；该新事实不覆盖本节两槽Return失败或补成单线保存证据。
 
 本次仅新增研究文档，不改产品，故不重复Qt构建／CTest；验证为两槽实际Return请求、原图读取、原创建者正常wait及完整文件摘要审计，并在提交前执行 `git diff --check`。本Task按真实failed结算，后续由协调者统一决定最小试验与产品范围。
