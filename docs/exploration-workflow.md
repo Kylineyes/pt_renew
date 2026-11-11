@@ -73,6 +73,6 @@ python tools/check_exploration_docs.py
 | 需要从头建冷探针、文件框或创建者运行器 | [阶段截止与运行器](async-product-deadlines.md)、[探针](async-product-probe-runtime.md)、[文件框](async-product-file-dialog.md)已有；[EX-035](exploration-backlog.md#ex-035)研究真实全流程兼容与预算。 |
 | 单 UIA 对象及全部关闭路径都未过 | [严格对象生命周期](uia-object-lifecycle-worker.md)、[完整关闭组](control-close-journal-live.md)有限通过，不能扩大为 Qt、长期稳定或竞争通过。 |
 | 旧退出缺口可重新查 PID 补齐 | 原创建证据不可事后补造，旧缺口保留。[EX-039](exploration-backlog.md#ex-039)研究未来见证范围和可复现故障。 |
-| 旧 F11+p 和 Click 比例假设可以继续套用 | [输入语义](native-capture-checkpoint.md)、[点击审计](native-menu-click-audit.md)已否定相应假设；[一次菜单时序与真实后验](native-menu-click-audit.md#live-menu-conclusion)已取得，继续 [EX-004](exploration-backlog.md#ex-004)。 |
+| 旧 F11+p 和 Click 比例假设可以继续套用 | [输入语义](native-capture-checkpoint.md)、[点击审计](native-menu-click-audit.md)已否定相应假设；[一次菜单时序与真实后验](native-menu-click-audit.md#live-menu-conclusion)及[两轮真实客体捕获](native-capture-checkpoint.md#continuous-capture-conclusion)已取得，继续[工作状态 EX-005](exploration-backlog.md#ex-005)。 |
 
 以上数量是初始盘点快照，后续不要求保持 43 项。清单随研究追加、归并和删除；文档中的稳定结论才是项目知识的最终落点。

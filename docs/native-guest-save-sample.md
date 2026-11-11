@@ -35,7 +35,7 @@
 
 第二张捕获请求在模型连接延迟后于 **16:16:31** 才被消费，被冻结驱动的“最后七分钟正常收尾”检查拒绝，未发送该热键，未生成 `step-006-second-capture-hotkey-post-00.png`。后续读取该不存在文件得到 ENOENT，保留原错误；不能算第二次截图失败或客体不响应。未完成连续捕获、启动Enter及菜单／Status／空板确认，更未执行单线新增或保存。
 
-[探索 EX-004](exploration-backlog.md#ex-004)。
+以上保留旧阶段未完成事实；后续[同一新目标两轮独立新客体 PNG 的真实捕获与逐图审核](native-capture-checkpoint.md#continuous-capture-conclusion)已完成，不把新通过改写成旧第二次动作曾发送。
 
 本槽5张宿主PNG和1张客体PNG均有指定模型实际image回执；原安装99项、运行副本99项及冻结输入无变化，NEWFT.PCB未生成。
 

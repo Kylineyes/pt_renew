@@ -97,7 +97,7 @@
 - [原文字形下一现场阶段：无遮挡A、显隐恢复与缩放入口](legacy-text-screen-next.md)
 - [原文字形现场重试：A240 与独立尺标](legacy-text-screen-retry.md)
 - [原文字形的静态证据与检查工具](legacy-text.md)
-- [原软件连续捕获：输入语义与新槽核验](native-capture-checkpoint.md)
+- [原软件连续捕获：两轮新客体 PNG、逐图审核与原创建者正常退出](native-capture-checkpoint.md#continuous-capture-conclusion)
 - [原软件捕获驱动审查与隔离工具包](native-capture-driver-review.md)
 - [原软件单线重试：Return 启动转换及软件输出对照](native-created-retry.md)
 - [并行推进与父验收：原软件短观察和新增核心](native-evidence-wave.md)

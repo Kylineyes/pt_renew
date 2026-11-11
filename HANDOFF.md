@@ -71,7 +71,7 @@ EX-001 接续 Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213` 已 succeed
 剩余总窗口按实际交付进度顺延 EX-004 → EX-005 → EX-007；各阶段先登记共享领取、准备具体方案及新冻结 GO，不直接执行原临时预算中的时刻或输入。UTC 19:55:12 起至少保留最后 7 分钟整体收尾，所有输入不得超过 UTC 20:02:12。父审查、闭环判断及授权记录在 `.local-analysis/ex-001-continuation/`，含 `completion-decision.json`、`cleanup-scene-review.json`、`control-window.json`。
 
 1. **消费一次菜单观测结论。** 读[实机时序与支持范围](docs/native-menu-click-audit.md#live-menu-conclusion)，复用已有观测／驱动／真实等待工具；不重做最小观测器，不把有限通过外推为旧因果恢复。
-2. **优先完成两轮客体捕获。** 接 [EX-004](docs/exploration-backlog.md#ex-004)，一名操作者按当前原图依次打开 Capture 菜单并审核，再选择已确认截图项；每轮恰一张新非空 640×480 PNG，分别核文件集合差、摘要与指定模型实际 read。使用新冻结槽，正常宿主 X 收尾范围预先明确。
+2. **优先完成两轮客体捕获。** 接 [两轮客体捕获结论](docs/native-capture-checkpoint.md#continuous-capture-conclusion)，一名操作者按当前原图依次打开 Capture 菜单并审核，再选择已确认截图项；每轮恰一张新非空 640×480 PNG，分别核文件集合差、摘要与指定模型实际 read。使用新冻结槽，正常宿主 X 收尾范围预先明确。
 3. **可靠观察后取得状态和单线样例。** [EX-005](docs/exploration-backlog.md#ex-005) 核有效配置、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 在确认空板、层／宽／端点后新建一段，以全新 8.3 文件另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略。静态保存函数、内部合成参数或某一层样例不能替代完整证据。
 4. **最后接正式产品入口。** 用 `pt-pcb-check` 核结构，再复用现有显式 MainWindow／writer 路径接默认策略与唯一能力门；新增 NETDEF 仍需专门证据。按 [EX-029](docs/exploration-backlog.md#ex-029) 验证菜单／F3／P→T、文本焦点、整数取点、取消、隐藏层／模态／换图、历史、Windows 原生另存及原软件重开，不重做已有核心。
 
