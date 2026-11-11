@@ -51,7 +51,7 @@
 
 | 事项／研究提交 | 已沉淀结论与验证 | 接续时的具体缺口 |
 | --- | --- | --- |
-| [EX-001](docs/exploration-backlog.md#ex-001)／`c69cffa` | [Click 及只读候选](docs/native-menu-click-audit.md#readonly-observer-offline)：旧 RPC 约 0.567 秒包含 50 ms 按下间隔与默认 500 ms 等待；10 项假 API 和既有几何 6 项通过 | 真实查询兼容性、一次公开 Click 的前景／光标／命中时序与实际菜单原图后验；外部命中预测不能冒称实际接收者 |
+| [一次菜单观测结论](docs/native-menu-click-audit.md#live-menu-conclusion)／`c69cffa` | [Click 及只读候选](docs/native-menu-click-audit.md#readonly-observer-offline)：旧 RPC 约 0.567 秒包含 50 ms 按下间隔与默认 500 ms 等待；10 项假 API 和既有几何 6 项通过 | 真实查询兼容性、一次公开 Click 的前景／光标／命中时序与实际菜单原图后验；外部命中预测不能冒称实际接收者 |
 | [EX-006](docs/exploration-backlog.md#ex-006)／`6281f84` | [宏、Repeat、Un-Delete](docs/legacy-command-dispatch-static.md)：队列／录制／递归状态、模板累计放置、删除类型栈／对象链；96 项静态断言及 18 区域核验 | 实际 KEY 状态、宿主键码、录制上下文、Repeat 和 Un-Delete 运行响应；不能直接映射成 Qt 重复／通用撤销 |
 | [EX-008](docs/exploration-backlog.md#ex-008)／`bb3b540` | [FT extra](docs/ft-extra-static-semantics.md)：缺失→0、仅整数 1 置对象标志真、所核定保存路径输出显式 0／1；预布走线平滑消费者；178 记录及 30 指令核对 | 全部电气／间接消费者、非规范文本边界及原软件对照。继续保留原值和存在性，含 extra 铜走线继续覆盖不完整，不用静态归一化重写原件 |
 | [EX-017](docs/exploration-backlog.md#ex-017)／`3ff4a3d` | [LIB 目录](docs/library-directory-state.md)：查名排除 FFFF、删除只改指针保留名称／计数、双 FFFF 初始化、首空槽复用、压缩按同名去重；四库盘点、6 测试、25 根 CFG 核对 | 合法别名、非零保留字段、其他版本和中断失败状态；不按残留名称或未引用数据猜测恢复 |
