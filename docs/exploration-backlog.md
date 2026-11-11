@@ -143,7 +143,7 @@
 
 ### EX-006 KEY 宏、Repeat 与 Un-Delete 的上下文调度
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_97a62f2a4660 / ctx_54f4486b50d7；分支：research/ex006-command-dispatch；会话／证据：Pi 01a1cb42-030b-7113-982d-8f6a4bd79ba1（deng/gpt-6.1-sol，high，本轮用户授权）；本工作树 `.local-analysis/ex-006/`，身份核验 `identity-verification.json`。
 - 类型：命令语义。依赖：无，可先独立研究。
 - 原文细节：[reverse-architecture.md：细节1](reverse-architecture.md#explore-ex-006)；[legacy-menu-static-validation.md：细节2](legacy-menu-static-validation.md#explore-ex-006)；[legacy-menu-keypath.md：细节3](legacy-menu-keypath.md#explore-ex-006)。
 - 已知：MNU／KEY 装载和宏展开已有静态链，默认启用与主循环 Esc 行为已细化；真实宏状态和宿主键码未联合核定。
