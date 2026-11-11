@@ -73,7 +73,7 @@
 
 <a id="explore-ex-004"></a>
 
-后续离线核对已完成，见[第二槽菜单点击审计](native-menu-click-audit.md)：原图／请求／原生窗口／父会话时序已对齐，安装原 AST 假鼠标验证没有自动截图比例换算；约 0.574 秒采样间隔内的前景变化仍缺少调用内部观测，根因未定。下一步先离线检查最小只读观测器，以明确诊断目标安排现场；不继续无差别重开槽。旧 `Shortcut f11+p` 假设已排除，菜单路径仍需要真实连续验证。旧现场两槽失败及本文原有证据范围保持。原软件单线保存重开、FT 默认字段及兼容性继续未通过；普通新增门和默认 writer 的 Created 拒绝、NETDEF 新增拒绝保持。产品源码没有改变，不重跑无变化的完整 Debug／Release 矩阵。
+后续离线核对已完成，见[第二槽菜单点击审计](native-menu-click-audit.md)：原图／请求／原生窗口／父会话时序已对齐，安装原 AST 假鼠标验证没有自动截图比例换算；约 0.574 秒采样间隔内的前景变化仍缺少调用内部观测，根因未定。后续[只读观测候选已完成离线假 API 核验](native-menu-click-audit.md#readonly-observer-offline)，尚无实机查询或动作后验；下一步按[最小假设与边界](native-menu-click-audit.md#readonly-observer-next)另行组织现场，不继续无差别重开槽。旧 `Shortcut f11+p` 假设已排除，菜单路径仍需要真实连续验证。旧现场两槽失败及本文原有证据范围保持。原软件单线保存重开、FT 默认字段及兼容性继续未通过；普通新增门和默认 writer 的 Created 拒绝、NETDEF 新增拒绝保持。产品源码没有改变，不重跑无变化的完整 Debug／Release 矩阵。
 
 [探索 EX-004](exploration-backlog.md#ex-004)。
 
