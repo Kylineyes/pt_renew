@@ -88,7 +88,7 @@
 
 ### EX-001 菜单点击期间的前景、光标与命中窗口变化
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_3903c40083a3／ctx_cdfee6b64af8；分支：research/ex001-readonly-observer；会话／证据：Pi 01a1cb26-1411-7553-be7e-98cfa74d0e98（deng/gpt-6.1-sol high），Orca 2930bf6d-29b4-46e5-8f58-30f170d8d47c；本工作树 .local-analysis/ex-001/。
 - 类型：行为根因。依赖：无，可先独立研究。
 - 原文细节：[native-menu-click-audit.md：细节1](native-menu-click-audit.md#explore-ex-001)；[topics/legacy.md：细节2](topics/legacy.md#explore-ex-001)。
 - 已知：安装原 AST 已排除 Click 自动乘二；第二槽无父 shell 插入。前景变化只定位到约 0.574 秒采样间隔。
