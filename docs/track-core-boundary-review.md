@@ -6,7 +6,7 @@
 
 - 固定受审源码候选、起始 `HEAD` 与本轮核对的 `origin/dev`：`3fd6e5fa2b241ef8c61bf6ecd7b46c4839b34be6`。
 - 工作分支：`fix/track-core-boundaries`；工作树：`review-track-core-boundaries`。报告提交后的应用源码仍与该固定候选一致，报告提交 SHA 由本轮完成回执及本机 `final-state.json` 记录。
-- 先读 `AGENTS.md` 和 `docs/agent-handoff-20261103-pcb-check.md`；实际测试文件是 `tests/TrackPlacementTests.cpp`、`tests/TrackPlacementControllerTests.cpp`、`tests/EditingTests.cpp`，协调者已批准对应文件范围。
+- 先读 `AGENTS.md` 和 [当时交接（已归并）](../HANDOFF.md#history)；实际测试文件是 `tests/TrackPlacementTests.cpp`、`tests/TrackPlacementControllerTests.cpp`、`tests/EditingTests.cpp`，协调者已批准对应文件范围。
 - 实际 Pi 会话为 `01a1a161-c684-75ff-8e81-5918e22bf0ce`，环境和会话前置记录均为 `deng/gpt-6.1-sol`、`high`，本会话工具成功执行；详见本机 `session.json`。
 - 对 `TrackCreationTests.cpp`、`TrackPlacementUiTests.cpp` 及 MainWindow、BoardCanvas、writer、planner、能力门的相关路径仅阅读或运行已有测试，没有修改。
 

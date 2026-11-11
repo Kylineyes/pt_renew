@@ -188,28 +188,12 @@
 - [UIA对象生命周期修复与新单次核验](uia-object-lifecycle-review.md)
 - [新单次UIA对象生命周期核验：工作者报告](uia-object-lifecycle-worker.md)
 
-## 阶段交接与历史入口
-
-先读[主题概览或接手入口](../HANDOFF.md)。本组 11 篇，以下保留原报告标题。
-
-- [PT Renew 新代理统一交接：2026-10-30 UIA阶段后](agent-handoff-20261030-uia.md)
-- [PT Renew 新代理交接：2026-10-30](agent-handoff-20261030.md)
-- [PT Renew 新代理交接：2026-10-31 编辑与另存为后](agent-handoff-20261031-save-as.md)
-- [PT Renew 新代理交接：2026-11-02 原生另存重开通过后](agent-handoff-20261102-native-roundtrip.md)
-- [PT Renew 新代理交接：2026-11-02 并行核心开发及原软件现场之后](agent-handoff-20261102-track-preflight-native.md)
-- [PT Renew 新会话交接：2026-11-03 主窗显式新增另存闭环之后](agent-handoff-20261103-created-save-roundtrip.md)
-- [PT Renew 新 agent 统一交接：严格 PCB 核验命令之后](agent-handoff-20261103-pcb-check.md)
-- [PT Renew 新 agent 统一交接：输入核验与两槽现场之后](agent-handoff-20261104-capture.md)
-- [历史根记录：PT Renew：当前进度与新 Agent 交接](history/root-handoff.md)
-- [历史根记录：PT Renew 当前进度](history/root-progress.md)
-- [历史根记录：PT Renew 当前进度与新会话交接](history/root-session-handoff.md)
-
 ## 探索队列与共识
 
-[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 148 篇专题报告。
+[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 137 篇专题报告。
 
 ## 增补与追溯规则
 
 新增专题须由对应软件主题链接，并加入本索引的相应分组。一个报告在索引中只归属一个主分组，跨主题关系由主题页链接说明。计划、离线验证、真实现场和综合交接保留原标题及适用范围，不因归组而改判。
 
-本机 .local-analysis/ 的截图、输入副本、会话、摘要和失败材料不在 Git 中。索引只列仓库报告；精确工作树、固定候选和原证据路径从报告或[技术交接](agent-handoff-20261104-capture.md)进入，不为整理索引重复复制原件。
+本机 .local-analysis/ 的截图、输入副本、会话、摘要和失败材料不在 Git 中。索引只列仓库专题报告；接手状态与本机位置从[唯一交接](../HANDOFF.md#evidence)进入，旧交接全文按[历史追溯说明](../HANDOFF.md#history)查 Git，不保留第二套交接正文，也不为整理重复复制原件。

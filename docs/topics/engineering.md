@@ -58,4 +58,4 @@ Release 使用同名 release 预设。Qt 6.12.0 MSVC x64、Visual Studio 2026、
 - [主窗真实 Qt 验收](../parallel-save-hardening-live.md)：交互、文件输出及原创建者退出证据。
 - [构建与打包](../releases/v0.11.0-alpha-build.md)、[发布冒烟验证](../releases/v0.11.0-alpha-verification.md)：发行物来源与局限。
 
-临时材料放当前工作树已忽略目录；优先复用脚本、会话、SDK 和构建。冻结现场不覆盖。分支、提交、原件保护和清理遵循[AGENTS](../../AGENTS.md)。具体现场身份和本机证据见[技术交接](../agent-handoff-20261104-capture.md)，控制工具历史按[资料索引](../reference-index.md)查阅。
+临时材料放当前工作树已忽略目录；优先复用脚本、会话、SDK 和构建。冻结现场不覆盖。分支、提交、原件保护和清理遵循[AGENTS](../../AGENTS.md)。具体现场身份和本机证据见[统一交接](../../HANDOFF.md#evidence)，控制工具历史按[资料索引](../reference-index.md)查阅。

@@ -6,7 +6,7 @@
 
 基线 `origin/dev=3fd6e5fa2b241ef8c61bf6ecd7b46c4839b34be6`，新分支 `verify/native-short-observation`。切分支前工作树干净，只提交本报告；本树 `.local-analysis/native-short-observation/` 是全新忽略证据目录。沿用 Pi 会话 `01a19f6a-a52d-7333-95f3-2972829f4e9f`，实际环境和会话 assistant 事件为 `deng/gpt-6.1-sol high`，成功工具事件已存入 `session-audit.json`；没有切模型、派生代理、合并或推送。
 
-已完整读取 `AGENTS.md`、[统一交接](agent-handoff-20261103-pcb-check.md)、[显示分离诊断](native-startup-diagnosis.md)、[上轮两槽报告](native-guest-save-sample.md)，以及旧 retry-01 driver／submit。切分支前旧树缺少两份新文档，切到指定基线后已成功读取；不将旧工作树缺失误记为材料不存在。
+已完整读取 `AGENTS.md`、[统一交接](../HANDOFF.md#history)、[显示分离诊断](native-startup-diagnosis.md)、[上轮两槽报告](native-guest-save-sample.md)，以及旧 retry-01 driver／submit。切分支前旧树缺少两份新文档，切到指定基线后已成功读取；不将旧工作树缺失误记为材料不存在。
 
 ## 本轮确认的证据边界
 
