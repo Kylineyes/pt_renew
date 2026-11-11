@@ -165,10 +165,10 @@
 
 ### EX-008 既有 FT 第七附加字段的电气与保存语义
 
-- 状态：研究中；负责人：task_d913518e29a3 / ctx_abb7c92f8325；分支：research/ex008-ft-extra；会话／证据：Pi 01a1cb42-06ef-7017-9f48-3ada4f0d4276，deng/gpt-6.1-sol high（本轮用户授权），本工作树 `.local-analysis/ex-008/`。
+- 状态：受阻；负责人：task_d913518e29a3 / ctx_abb7c92f8325；分支：research/ex008-ft-extra；会话／证据：Pi 01a1cb42-06ef-7017-9f48-3ada4f0d4276，deng/gpt-6.1-sol high（本轮用户授权），本工作树 `.local-analysis/ex-008/`；原因：读写及局部路由语义已恢复，尚缺完整电气消费者证据，见[剩余问题](ft-extra-static-semantics.md#remaining)。
 - 类型：格式语义。依赖：无，可先独立研究。
 - 原文细节：[topics/board.md：细节1](topics/board.md#explore-ex-008)；[copper-analysis.md：细节2](copper-analysis.md#explore-ex-008)。
-- 已知：六／七字段均可读取，已有字段原样保留；铜分析对含 extra 的铜走线继续保守拒绝完整覆盖，值为 0 也不例外。
+- 已知：六／七字段均可读取并保留原值；[独立静态阶段收获](ft-extra-static-semantics.md#load-save)确认固定原程序缺失→0、仅整数1→对象标志真、保存→显式0／1，并恢复[预布走线平滑消费者](ft-extra-static-semantics.md#consumers)。660A的170条自由FT均extra=1，PLACED的8条均缺失；完整电气消费者及非规范文本边界仍未知，铜分析继续保守拒绝含extra的铜走线完整覆盖。
 - 要回答：extra 的值域、缺省和存在性分别代表什么？对网络、平面、接触与编辑有什么影响，和原程序新建默认值有何关系？
 - 完成条件：用原字节、读写调用或最小原软件对照解释已观察值及缺省，明确未覆盖值的拒绝策略；不能只验证新增缺省就宣布全部语义恢复。
 

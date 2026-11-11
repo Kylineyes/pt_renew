@@ -8,11 +8,12 @@
 
 ## 板图与文件
 
-先读[主题概览或接手入口](topics/board.md)。本组 3 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/board.md)。本组 4 篇，以下保留原报告标题。
 
 - [PCB 严格只读核验命令](pcb-check.md)
 - [PCB 严格语法布局元数据](pcb-layout-analysis.md)
 - [PCB FILE 4 只读解析与显示](pcb-readonly.md)
+- [FT 第七字段：读入归一化、保存与预布走线消费者](ft-extra-static-semantics.md)
 
 ## 命令、视图与测量
 
