@@ -1,17 +1,17 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是新 agent 的唯一交接文档。能力概览见 [PROGRESS](PROGRESS.md)，软件主题见[文档导航](docs/README.md)，具体未知及领取状态见[探索待办](docs/exploration-backlog.md)。本次用户要求整理后由其自行安排新 agent；整理者不再派发接手者或启动新研究、产品、控制服务及桌面现场。
+本文件是新 agent 的唯一交接文档。能力概览见 [PROGRESS](PROGRESS.md)，软件主题见[文档导航](docs/README.md)，具体未知及领取状态见[探索待办](docs/exploration-backlog.md)。用户在完成交接整理后明确要求继续处理剩下的工作项；当前已启动 EX-001 接续，具体范围与新会话见下文。
 
 <a id="baseline"></a>
 
 ## 接手基线和最短步骤
 
-整理前已推送 `dev=c05baff6e1eae7c71a8a84ef203e000cb3e763d0`，工作区干净，包含首轮四项独立探索成果。当前整理在 `docs/single-authoritative-handoff` 独立分支进行，验证后 no-ff 合入并推送 dev；整理后的实际 HEAD 以 `git status`、`git log`、`origin/dev` 及远端为准，不能把上述整理前 SHA 当最新提交。本机最终记录为 `.local-analysis/handoff-maintenance/final-state.json`。
+唯一交接整理已合入并推送 `dev=9374e66cc3141596fd252543f3730204924e910a`，当时工作区干净，最终记录为 `.local-analysis/handoff-maintenance/final-state.json`。用户随后要求继续剩余事项，EX-001 新领取已 no-ff 合入并推送 `7fbcc47203a23ab4c97eb2367b26d17b318f5ffe`；实时 HEAD 仍以 Git 与远端查询为准。直连 GitHub DNS 和代理 SSH 22 曾失败，当前已验证经 `127.0.0.1:10808` 代理连接 `ssh.github.com:443` 可 fetch／push；仅使用进程级 SSH 参数，未修改全局配置。
 
 1. 完整阅读 [AGENTS](AGENTS.md)、本文件、[探索工作规则](docs/exploration-workflow.md)，再选相关主题及报告。旧提示词、旧 GO 和历史“下一步”不再作为接手指令。
 2. 核对 `git status --short --branch`、`git log -5 --oneline`，fetch 后核对远端 dev；从最新 dev 建独立分支。main 的合并、提交和推送由用户处理。
 3. 先消费下面四项已经沉淀的研究结论，再领取一个具体剩余问题；如接续受阻事项，更新同一事项的实际负责人、分支、会话和证据，经协调同步共享领取，不再建同义编号。
-4. 本机子 agent 和子终端已全部收尾。已结算 Dispatch 不续投；新任务使用新上下文，复用资料和工具，不重建已完成模块或复制整套现场。
+4. 旧子 agent 和子终端已全部收尾；EX-001 接续使用下述新会话。已结算 Dispatch 不续投；复用资料和工具，不重建已完成模块或复制整套现场。
 
 <a id="capabilities"></a>
 
@@ -62,6 +62,8 @@
 
 ## 下一步计划：按依赖推进
 
+当前已接续 EX-001：Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213`，Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`，实际模型及工具回执已核验为 `deng/gpt-6.1-sol / high`。复用 `explore-ex001-observer` 工作树，新分支 `research/ex001-live-observation`，证据 `.local-analysis/ex-001-continuation/`。领取 `f19a6e4` 已同步共享 dev，父已放行最小工具改动、离线验证及新冻结现场方案准备；实机查询、服务和桌面现场须先提交具体方案供父审查，当前未放行现场。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`，原 provider 会话只读。
+
 1. **优先接 EX-001 的最小现场前准备。** 读[观测候选下一阶段](docs/native-menu-click-audit.md#readonly-observer-next)及 `tools/observe_legacy_click.py`，不要重新实现通用控制框架。先确定只读查询兼容、采样耗时、同机单调锚点及与常驻驱动／文件信号的绑定；最多 3 秒仅是新采样启动上界，不能中断在途阻塞 Win32 调用。静态准备不足以清除根因事项。
 2. **一名操作者做一次明确菜单动作。** 根据当下原图和精确新身份组织新隔离槽，观测器预启动，避免聚焦后再开 shell。一次公开菜单打开动作加真实后图；失败即停止业务，不重发 Click、不盲改倍率，不预排菜单项。先核一次后验，再进入 [EX-004](docs/exploration-backlog.md#ex-004) 的两轮新 640×480 客体 PNG，逐张确认文件集合差、摘要与指定模型实际 read。
 3. **可靠观察后取得状态和单线样例。** [EX-005](docs/exploration-backlog.md#ex-005) 核有效配置、Information／Status 工作文件名和计数；[EX-007](docs/exploration-backlog.md#ex-007) 在确认空板、层／宽／端点后新建一段，以全新 8.3 文件另存并由原 AUTOTRAX 重开。字节、参数、图像、日志和前后摘要共同核定默认策略。静态保存函数、内部合成参数或某一层样例不能替代完整证据。
@@ -102,7 +104,7 @@
 
 用户已授权全权处理此前派发的本工程 agent。已盘点 91 条历史派发；本轮 3 个驻留 Pi 用 `/quit` 正常退出，EX-001 已释放；随后 7 个空闲 shell 全部关闭。最终本机本工程子 agent、活子终端及不可核验子终端均为 **0**，主协调会话保留。29 个失效旧终端引用只是历史记录，不是 29 个活进程；原退出码不补造，不重置跨项目数据库。EX-006 关闭一处孤立页曾返回 tab_not_found，后验确认 connected=false、writable=false、exitCause=operator_close、工作树终端列表为空，不盲重试。
 
-工作树卡片标记 in-review，表示阶段交付已收尾、完整事项仍受阻，不等于正在运行或研究完成。分支、会话、工作树、原软件和失败证据均保留；清理详情见 `.local-analysis/agent-cleanup/REPORT.md` 和 `authorized-final-state.json`。当前不再有可继续操作的旧子 agent 终端。
+工作树卡片的历史 in-review 标记表示阶段交付已收尾、完整事项仍受阻，不等于正在运行或研究完成。分支、会话、工作树、原软件和失败证据均保留；清理详情见 `.local-analysis/agent-cleanup/REPORT.md` 和 `authorized-final-state.json`。当前不再有可继续操作的旧子 agent 终端；新接续 EX-001 使用 `term_896ab8d5-51f6-4082-b741-6eec0625269e`，通过其新 Dispatch 协调，不向终端追加业务提示。
 
 <a id="evidence"></a>
 
