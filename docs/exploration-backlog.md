@@ -264,7 +264,7 @@
 
 ### EX-017 LIB 目录残留、未分配、别名与保留标志
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：task_b61ab7998498／ctx_897a4a52cf7d；分支：research/ex017-lib-directory；会话／证据：Pi 01a1cb42-0ab9-77f9-a99c-99f1ca944f37（deng/gpt-6.1-sol，high；本轮用户覆盖旧模型限制），本工作树 `.local-analysis/ex-017/`（身份核验 `identity.json`）。
 - 类型：格式语义。依赖：无，可先独立研究。
 - 原文细节：[library-analysis.md：细节1](library-analysis.md#explore-ex-017)。
 - 已知：四库目录与记录边界已结构核验；FFFF 槽可能残留名称，重复指针／未知标志不预览。
