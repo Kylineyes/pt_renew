@@ -1,19 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是协调agent的唯一接手入口。用户最新要求**创建新的Pi对话agent并交接本对话完整历史**。父实时核表已UTC2026-11-12 **20:42以后**，EX-003／EX-005三小时授权 **17:39:51.266444–20:39:51.266444已结束**，不得沿旧GO继续现场。第五槽进到主菜单Block→Current→Delete，第3Down已发但后图未完成读取，原Pi于17:59:13遇EPROTO；第五driver于18:47:39记分段截止、120秒后18:49:39原target／control／driver／owner均wait0，退出原因及完整图片／helper仍待离线审计，EX-003未到Information，EX-005未新开。本树当前旧协调Pi `01a1ce1a-7d18-7607-ad1d-cc38ad702860`即将交由新Pi对话接续，原worker／Task／Dispatch保留；新协调者以自身身份绑定Run，不冒用旧父，不重启操作者或新建同义worker。
+本文件是协调agent的唯一接手入口。新主对话 Pi **`01a1d184-26bc-7092-be0b-362193a84c8c`** 已接手，实际环境核实为 **`deng/gpt-6.1-sol/high`**，Orca 聊天为 `pi_126b6fef_e05d_4978_a15b_9c2f146bba59`，已用自身身份成功绑定原 Run。旧协调者已停止调度。EX-003／EX-005 三小时授权 **2026-11-12 UTC 17:39:51.266444–20:39:51.266444 已结束**；本次交接只接续离线审计，没有新增控制时间。第五槽已有 Block→Current→Delete 的原新图，第三 Down 已发但客体后验缺失；18:47:39 截止报错，120.003507 秒静默后四链原身份 wait0。目标实际关闭途径／时刻未知，helper 缺原创建者持柄 wait，均不得表述为正常 X 收尾通过。EX-003／EX-005 和原 Task 未结；EX-007 不在范围。
 
 <a id="baseline"></a>
 
 ## 接手基线和最短步骤
 
-本次离线交付包含原研究分支`b14245c`和父审后修正`955d476`，已在独立分支`fix/integrate-offline-isolation`合并并完成协调树28项复测；该分支按no-ff合入dev并普通推送，实际最新HEAD和远端以Git为准。原研究树`research/ex003-live-navigation`交付HEAD为`955d4764afa73cb3d0e853446400d68637c9d2bb`，交付时干净。协调验证及完整输出为`.local-analysis/config-path-incident-20261112/integration-review.json`和同目录`integration-*.log`；原`resume-verification.json`及前轮`handoff-refresh-20261112/final-state.json`仍保留各自历史范围。main的合并／提交／推送由用户处理。
+本次离线交付包含原研究分支`b14245c`和父审后修正`955d476`，已在独立分支`fix/integrate-offline-isolation`合并并完成协调树28项复测；该分支按no-ff合入dev并普通推送，实际最新HEAD和远端以Git为准。原研究树 `research/ex003-live-navigation` 的离线修复交付为 `955d4764afa73cb3d0e853446400d68637c9d2bb`，第四文档交付为 `73cef6d`；新协调接手时实时 HEAD 为 `46aa746b4b85d418a4756d64b6e296b40272b560`，工作区干净。后续第五离线文档提交以实时 Git 为准。协调验证及完整输出为`.local-analysis/config-path-incident-20261112/integration-review.json`和同目录`integration-*.log`；原`resume-verification.json`及前轮`handoff-refresh-20261112/final-state.json`仍保留各自历史范围。main的合并／提交／推送由用户处理。
 
 1. 完整读 [AGENTS](AGENTS.md)、本文件和[探索规则](docs/exploration-workflow.md)，核 `git status --short --branch`、`git log -5 --oneline`、远端 dev，以及活动研究树改动。未集成提交不能当共享 dev 已有。
-2. **按新三小时授权先EX-003、后EX-005。** 先核原Pi身份／模型和最新工具回执，再生成全新第五候选、父审conf／计划／隔离／冻结后签新GO；旧四槽及GO不复用，归档精简暂停。业务投递必须经原submit先validate再排他写唯一请求，禁止直接write业务inbox。
+2. **仅续作第五槽离线结算。** 先核原 Pi 身份／模型和最新工具回执，审原创建退出、静默、trace、原 JSONL 图片及 helper 持柄链，复核旧包／安装／输入集合，沉淀现有专题及待办。旧全部 GO 已失效，不发送桌面／Capture／第三 Down 重试，不创建新槽或 GO；归档精简继续暂停。以后有新的有效现场授权时，业务仍必须经原 submit 先 validate 再排他投递，禁止直接 write 业务 inbox。
 3. 沿下文原 Task／Dispatch／Pi 继续，不重复领取 EX-003、不新建同义 worker、不重启原会话。新协调者使用自己的实际身份，不能冒用原父 Pi `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`；该旧会话只作审计来源。
-4. 用户指定Pi／`deng/gpt-6.1-sol high`和单操作者覆盖持续有效；当前新三小时授权仅EX-003／EX-005，准备／审核计入总时长，每段最多60分钟且至少7分钟收尾，总最后10分钟仅收尾。不开展EX-007或编辑写入。
+4. 用户指定 Pi／`deng/gpt-6.1-sol high` 和单操作者覆盖持续有效；已到期三小时仅曾覆盖 EX-003／EX-005，不恢复旧 GO。准备／审核计时、单段最多60分钟且至少7分钟收尾、总最后10分钟只收尾的现场约束保持；本次没有 EX-007、编辑写入或新增现场授权。
 
-远端为 `git@github.com:Kylineyes/pt_renew.git`。直连 DNS 和代理 SSH22 曾失败；已验证进程级 `GIT_SSH_COMMAND` 使用 `ssh.github.com:443`、`HostKeyAlias=github.com`，经 Git 自带 `C:/Users/rikideng/scoop/apps/git/current/ucrt64/bin/connect.exe -H 127.0.0.1:10808 %h %p` 可 fetch／push。保留主机密钥检查，不改全局配置；推送中断先查远端再普通重试，不强推，不把未确认写成成功。
+远端为 `git@github.com:Kylineyes/pt_renew.git`。直连 DNS 和代理 SSH22 曾失败；已验证进程级 `GIT_SSH_COMMAND` 显式指定 `HostName=ssh.github.com`、port443 和 `HostKeyAlias=github.com`，经 Git 自带 `C:/Users/rikideng/scoop/apps/git/current/ucrt64/bin/connect.exe -H 127.0.0.1:10808 %h %p` 可 fetch／push。保留主机密钥检查，不改全局配置；推送中断先查远端再普通重试，不强推，不把未确认写成成功。
 
 <a id="capabilities"></a>
 
@@ -35,7 +35,7 @@
 
 ## 已有验证与适用范围
 
-产品 `src/`、根CMake／预设沿用已测`d2ee381161fdb444255f7db931aa1f1290aa5bd7`基线；本轮只集成诊断工具／相关Python与PowerShell离线测试及文档，不重复完整产品构建或GUI。不同候选和研究测试不能累加成当前产品整体覆盖。
+产品 `src/`、根CMake／预设沿用已测`d2ee381161fdb444255f7db931aa1f1290aa5bd7`基线；本轮仅改交接和研究文档，复用已验28项工具回归，不重做产品构建／GUI或第四协议验证。不同候选和研究测试不能累加成当前产品整体覆盖。
 
 - 固定候选 Debug／Release 配置、构建及 CTest 各24/24，正式 CLI QProcess 专项15项；核心审查82 passed含初始化／清理。见[核心边界](docs/track-core-boundary-review.md)、[综合记录](docs/native-sample-wave.md)、[离线集成](docs/native-evidence-wave.md)，不同候选数量不累加为当前整体覆盖。
 - [真实 Qt 核心现场](docs/parallel-save-hardening-live.md)：固定374b1d7，载入生命周期、失败保留、旧watcher隔离、关闭取消、主窗另存、保存点／历史／输出重开，18图及原owner wait0；未覆盖模态重入等仍按原范围。
@@ -65,31 +65,39 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ## 最高优先级：新Pi对话接手与第五槽离线审计
 
-**现时状态优先于下述历史GO和授权：** 三小时窗口已结束，当前只允许离线审计和交接，不启动新现场。原Pi在第五第3Down之后EPROTO，工具/终端最后活动停于17:59，Orca状态可能unverifiable/stale，不等于进程退出；不盲目重启。父UTC20:42只读见第五原四链wait0及runner结束，但未核清目标退出是谁触发、是否有未知外部关闭、原图片完整读取／helper退出，不把wait0称正常宿主X完成。先独立审原创建退出、quiet/trace、原JSONL及持柄链；迟到状态消息不作为实时GO。父已发`msg_50a3db956da0`明确到期停业务，原worker仅离线保全待新协调者。
+**现时状态优先于下述历史 GO 和授权：** 三小时窗口已结束，只做离线审计和交接。新主对话自身 `run-use` 成功，沿原 Dispatch 的接续消息为 `msg_4dbf399ac5c4`；原 Pi 新成功工具回执再次确认同会话／模型／high，没有重启或替换。原协调者到期消息 `msg_50a3db956da0` 保留；迟到的首 guest／导航状态是历史，不能当实时 GO。
+
+新协调者父独立审计 `.local-analysis/config-path-incident-20261112/fifth-parent-exit-audit.json` 已核：原四链身份与 wait0、120.003507 秒静默且该区间无新增请求；第五 18 张 host 和5张 guest 共23张 PNG 中，22张匹配中断前原 JSONL image 字节 SHA，仅第三 Down 宿主后图缺原操作者中断前 read，客体后验仍缺。新协调者 UTC21:02:08 已离线实际 read 该既有宿主原 PNG，可辨主菜单蓝色高亮 Edit；自身原 JSONL 第97行 image 字节 SHA 与源 `e28845172bf1465688860f43081c55b97d91e712d2b45aeb93a1f7c006e29a8d` 一致，派生回执 `fifth-offline-host-review.json` 保留。这是迟后离线观察，不补成原操作者当时逐键审核／新 guest，没有桌面或 Capture。10份原 Click observation 共1899样本逐条核 sequence／目标身份／API失败字段，均覆盖各自原 RPC 发送前至响应后至少100ms；17份 consumed 请求没有任何生命周期关闭请求，补充证据 `fifth-parent-trace-audit.json`。命中预测与成功文字不代替 DOS 消费。
+
+冻结驱动在硬截止抛错后静默120秒，收尾循环因已过截止未执行，随后原 target.wait(1)立即取得0；没有正常 X／Close 请求记录，实际关闭原因及时间未知。helper 原创建回执仅打印 PID45260，无 FILETIME／持柄 wait；20:56:21 当前 PID 查询不存在不能补造退出证明。
+
+旧事故包400项、原安装99项、五槽各99项runtime和1项input集合／大小／SHA均匹配，四历史配置一致，第四／第五24项冻结一致。前三槽23项冻结引用中有4项共享 tools 已由已集成离线修复更新，不称整个旧冻结无变化；旧四槽全部可变日志没有独立完整前后基线，不外推全槽整体不变。原日志、PNG、manifest、冻结审核、JSONL、安装及事故字节保持只读，归档精简暂停。
 
 完整父对话历史在 `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-12T04-53-24-888Z_01a1ce1a-7d18-7607-ad1d-cc38ad702860.jsonl`；原worker历史在 `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-explore-ex001-observer--/2026-11-11T17-12-37-502Z_01a1cb98-e57e-75d0-9b06-c40a941eaaf0.jsonl`。两份原件只读，不改写、不用摘要冒充完整历史。先完整读取HANDOFF、AGENTS和探索规则，再程序化流读两原JSONL，核用户原授权／工具回执／实际图片；大image.data筛字段或解码核SHA，不把base64全文打到终端。不要另建当前交接副本。
 
+两原件已由新主对话只读完整流读并逐记录计量，全部用户／assistant／工具记录均解析，无 base64 全文打印：父394条／2454911字节／SHA `4df6362a87087caff6dc18c703a6225b670d2bec8f52f0fd940bfa1a09d87147`；原 worker 截至本次边界1831条／67231606字节／SHA `9981e56a986c18affac4f6397ba6abdd2548a9c9844ee7927e902344e08bc15d`，97个图片块解码核摘要。worker 后续会追加记录，该 SHA 只对应上述精确读取边界。派生计量索引 `config-path-incident-20261112/history-stream-audit.json` 及脚本只作离线审计证据，不代替完整原历史或另建当前交接副本。
+
 ## 历史：三小时EX-003／EX-005现场窗口
 
-**当前有效授权（覆盖下述历史暂停和旧窗口）：** 用户明确“确认，这次做ex-003和ex-005，有充足的三个小时”。父首次核表UTC **2026-11-12 17:39:51.266444–20:39:51.266444**（北京时间次日01:39:51–04:39:51），**20:29:51.266444起最后10分钟只正常收尾**。原Pi已获消息`msg_cec1a6a25b76`，沿原Task／当前Dispatch生成全新`candidate-fifth` EX-003命名导航候选，先离线交父审，不写GO／创建现场进程或桌面请求。第五导航及四链退出父审后再准备EX-005独立候选／新GO；原`prepare_state`的Shift+I／Shift+S有已知IME失败，不能未经新方案审核直接重跑，优先以已证命名菜单通道获取Information／Status。必要工具扩展先离线测试和审查，不能改运行中的冻结槽。原件保护／120秒静默／每键新图／单操作者／原创建者四链wait保持。旧全部GO失效、归档精简暂停，无EX-007／编辑保存授权。
+**历史授权（现已到期）：** 用户明确“确认，这次做ex-003和ex-005，有充足的三个小时”。父首次核表UTC **2026-11-12 17:39:51.266444–20:39:51.266444**（北京时间次日01:39:51–04:39:51），**20:29:51.266444起最后10分钟只正常收尾**。原Pi已获消息`msg_cec1a6a25b76`，沿原Task／当前Dispatch生成全新`candidate-fifth` EX-003命名导航候选，先离线交父审，不写GO／创建现场进程或桌面请求。第五导航及四链退出父审后再准备EX-005独立候选／新GO；原`prepare_state`的Shift+I／Shift+S有已知IME失败，不能未经新方案审核直接重跑，优先以已证命名菜单通道获取Information／Status。必要工具扩展先离线测试和审查，不能改运行中的冻结槽。原件保护／120秒静默／每键新图／单操作者／原创建者四链wait保持。旧全部GO失效、归档精简暂停，无EX-007／编辑保存授权。
 
 离线隔离修复及父审后修正已经完成，已通过协调树**28/28**集成回归：隔离21、真实PowerShell文件／时段4、预算3，均无跳过。测试后父再次独立核旧包事故后400项、原安装99项和三份历史配置，全部与保全记录一致，见`integration-review.json`。原UTC05:05父复核、UTC14:42 worker复核也保留；历史原wait只按当时范围成立，父进程清单工具超时不外推实时无进程。**EX-003总体仍受阻，原Task未结；不启动新现场或新的接手agent，新现场与进一步归档精简暂停，第四槽没有批准或GO。**
 
-**最新授权：EX-003一小时，第四槽已GO。** 用户明确“先完成EX-003，我给你一个小时控制时间”。按父首次核表登记UTC **2026-11-12 16:49:39.443894–17:49:39.443894**（北京时间次日00:49:39–01:49:39），UTC **17:39:39.443894**起最后10分钟仅正常收尾。第四候选`candidate-fourth/slot`经父实际读conf／plan／完整driver／gate／submit及独立语义、24冻结／99runtime／1input、原事故400／安装99复核通过，已排他写新GO并用消息`msg_40b2419eda15`交原Pi启动。新GO起点 **16:59:56.003749**、硬截止 **17:46:39.443894**，使driver最后7分钟门恰与总窗口17:39:39只收尾重合，额外3分钟核外层退出链；不延长总授权。批准plan SHA `4e48be5fd4a2d2678fd81f1647730466ddc78c00836e8905be6a7385584efbe7`，driver `c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`。父审核证据`.local-analysis/config-path-incident-20261112/fourth-parent-review.json`，原Pi候选回执为活动树`fourth-candidate-review.json`。当前只有启动指令，不能称启动／兼容或导航已通过，待原Pi实际回报。只做EX-003命名Enter／Down／Up／Esc最小导航和逐图后验，不切IME、不发Shift字母、不开展EX-005／007／编辑保存。历史暂停表述受此最新具体授权覆盖；前三槽／旧GO继续失效，归档精简继续暂停。
+**历史第四槽授权：** 用户明确“先完成EX-003，我给你一个小时控制时间”。按父首次核表登记UTC **2026-11-12 16:49:39.443894–17:49:39.443894**（北京时间次日00:49:39–01:49:39），UTC **17:39:39.443894**起最后10分钟仅正常收尾。第四候选`candidate-fourth/slot`经父实际读conf／plan／完整driver／gate／submit及独立语义、24冻结／99runtime／1input、原事故400／安装99复核通过，已排他写新GO并用消息`msg_40b2419eda15`交原Pi启动。新GO起点 **16:59:56.003749**、硬截止 **17:46:39.443894**，使driver最后7分钟门恰与总窗口17:39:39只收尾重合，额外3分钟核外层退出链；不延长总授权。批准plan SHA `4e48be5fd4a2d2678fd81f1647730466ddc78c00836e8905be6a7385584efbe7`，driver `c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`。父审核证据`.local-analysis/config-path-incident-20261112/fourth-parent-review.json`，原Pi候选回执为活动树`fourth-candidate-review.json`。当前只有启动指令，不能称启动／兼容或导航已通过，待原Pi实际回报。只做EX-003命名Enter／Down／Up／Esc最小导航和逐图后验，不切IME、不发Shift字母、不开展EX-005／007／编辑保存。历史暂停表述受此最新具体授权覆盖；前三槽／旧GO继续失效，归档精简继续暂停。
 
 **第四槽已退出，暂无后续GO。** 原Pi于17:01:53实际`-File PreflightOnly`通过后唯一Detach启动；目标PID36096、FILETIME`134389766755393000`、HWND3149268，服务14104、driver46760、owner41924，兼容33样本／join通过。操作者投递未支持的`tool=FocusOwned`，实际门只接受`App`等约定工具；驱动UTC **17:08:02.153865**记录`两轮捕获禁止其它业务`。父撤销第四槽业务后，完整 **120.001374秒**零新增桌面请求；一次必要CleanupFocus并实际read新当前图，正常宿主X一次，目标原wait0于**17:11:03.818510**，服务／driver／owner分别wait0至**17:11:04.1097841**。父逐项核原创建身份一致，三宿主PNG与原Pi JSONL的image字节SHA匹配，旧事故400／原安装99不变，见`.local-analysis/config-path-incident-20261112/fourth-exit-audit.json`。这是操作者请求协议错误，不是profile／IME／导航失败；无客体Enter／Down／客体Capture，不称EX-003通过。第四槽失败／请求／GO冻结保留且永久不复用，不换接口恢复该槽。
 
 同一小时剩余时间已完成离线协议复核：第四冻结gate和原submit合成9例全部通过，正确聚焦是`App`＋`arguments.mode=switch`＋当下精确窗口标题，`FocusOwned`继续拒绝；后续必须经原submit先validate再排他投递，不直接write业务inbox、不预排。13轮最坏客体需求在14轮内，但按原逐图实耗，仅到Information仍需30–40分钟、完整35–45分钟，17:15时剩余不足25分钟。父已接受保守估计并明确**本小时不开第五槽，不生成候选／GO／进程，后续只离线结算**；不以少read／多键赶截止，不延长17:49:39总授权。原Pi文档交付`b07fcea`／`2d8fe3a`／`73cef6d895e50d22a978bbbb2230e89c9f414299`已审查集成，专题见[第四槽协议拒绝与正确投递](docs/native-menu-calibration.md#fourth-request-refusal)，证据活动树`fourth-live-audit.json`／`fourth-protocol-review.json`及父`fourth-exit-audit.json`。协议复核首轮尾部重名FileExistsError、修编号后17:15:19完整通过、追加脚本SyntaxError及父校验脚本来源／换行差异／image回执过滤修正均保留原工具回执；不把部分运行写成整体通过。原Pi有意停未结Task，不重复重启；EX-003总体受阻，原失败冻结保持，归档精简暂停。
 
-**第五槽当前批准：** `candidate-fifth/slot`回执`fifth-candidate-review.json`已实际落盘，父复核conf四路径、完整driver／gate／submit、24冻结／99runtime／1input及旧400／安装99和四份历史conf均通过，已排他写第五`go-start.json`，并通过`msg_546ea15cc193`令原Pi启动。GO起点UTC **17:47:39.413144**、业务截止 **18:40:39.413144**、硬截止 **18:47:39.413144**；总三小时截止20:39:51不变。plan SHA `fd1abcdaf4daa79bb9bad6cd0aa617c9f08d65dbabe9ccc00a667b94a9c22f57`，driver `c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`，submit `d78df2cb4da4baf160968270f069484a15c4943fd87c257e1d910df917ea2e27`。父证据`config-path-incident-20261112/fifth-parent-precheck.json`／`fifth-parent-review.json`。准备期原模型一次EPROTO TLS握手错误保留，原Pi仍live、成功工具与review已核恢复，未重启或换模型。当前只有GO及执行消息，**尚无实际启动／导航成功回报**；每步必须经原submit校验和排他投递，不直接write业务inbox。第五仅EX-003，EX-005须后续独立候选／新GO。
+**历史第五槽批准（已截止，不得复用）：** `candidate-fifth/slot`回执`fifth-candidate-review.json`已实际落盘，父复核conf四路径、完整driver／gate／submit、24冻结／99runtime／1input及旧400／安装99和四份历史conf均通过，已排他写第五`go-start.json`，并通过`msg_546ea15cc193`令原Pi启动。GO起点UTC **17:47:39.413144**、业务截止 **18:40:39.413144**、硬截止 **18:47:39.413144**；总三小时截止20:39:51不变。plan SHA `fd1abcdaf4daa79bb9bad6cd0aa617c9f08d65dbabe9ccc00a667b94a9c22f57`，driver `c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`，submit `d78df2cb4da4baf160968270f069484a15c4943fd87c257e1d910df917ea2e27`。父证据`config-path-incident-20261112/fifth-parent-precheck.json`／`fifth-parent-review.json`。准备期原模型 EPROTO TLS 握手错误保留；当时 GO 及执行消息只证明批准，不代表导航通过。后续实际启动、前三次 Down 的证据及中断／退出边界已由上方第五离线审计结算；原操作者未取得 Information。每步仍必须经原 submit 校验和排他投递，不直接 write 业务 inbox。第五仅 EX-003，EX-005 未新建现场，旧 GO 不复用。
 
 ### 有效授权和接续身份
 
-**现时执行以本节顶部新三小时授权为准**，旧七小时和上一小时仅为历史。旧七小时为UTC2026-11-12 02:00:53–09:00:53，上一小时为16:49:39–17:49:39，其第四槽失败、退出和不开第五决定均保持当时事实；用户最新三小时确认已授权新的第五候选审核与后续EX-005，不能再按旧暂停重复索权。阶段完成／受阻主动回报，完成条件仍逐项据证评估，不以目标希望替代验证。
+**现时只允许离线续审；下述授权均已到期。** 旧七小时为UTC2026-11-12 02:00:53–09:00:53，上一小时为16:49:39–17:49:39，三小时为17:39:51.266444–20:39:51.266444。各窗口当时的批准／停止／失败及不开第五决定保持原历史范围；用户最新只要求新 Pi 对话接手及离线核验，没有新控制时间。阶段完成／受阻主动回报，完成条件仍逐项据证评估，不因交接或时间结束删掉未完成事项。
 
 全部子agent继续 **Pi、`deng/gpt-6.1-sol / high`**，显式用户覆盖优先于AGENTS旧GLM默认分工，不自行换模型／重索权。启动配置不等于模型证明，核PI环境、原JSONL model/thinking/assistant及成功工具回执；同Task沿原Pi，不重启。本轮已复核原JSONL模型变更、high记录、最新assistant及成功工具回执，与原会话一致。
 
-当前协调Pi为 **`01a1ce1a-7d18-7607-ad1d-cc38ad702860`**，实际环境为 `deng/gpt-6.1-sol / high`，已通过自身身份 `run-use --id run_3efe904a98f0` 成功绑定原Run；未冒用旧父身份或重启worker。离线续作消息 `msg_5d2fa9e736ec` 已获原Pi状态确认 `msg_8e41ee3529a1`。本轮只授权继续离线实现、合成夹具／假创建测试、文档与审查，不生成现场候选或新GO；旧七小时时段不扩大本轮范围。
+当前协调 Pi 为 **`01a1d184-26bc-7092-be0b-362193a84c8c`**，实际环境为 `deng/gpt-6.1-sol / high`，已通过自身身份 `run-use --id run_3efe904a98f0` 成功绑定原 Run，Orca 聊天 `pi_126b6fef_e05d_4978_a15b_9c2f146bba59`。旧协调 Pi `01a1ce1a-7d18-7607-ad1d-cc38ad702860` 只作审计来源，已报告停止调度。原 worker／Task／Dispatch／终端沿用，不新建现场 worker；本轮仅离线审计、现有专题／待办及唯一 HANDOFF 结算。历史离线消息 `msg_5d2fa9e736ec`／确认 `msg_8e41ee3529a1` 保留其当时范围。
 
 | 项目 | 实际记录 |
 | --- | --- |
@@ -98,10 +106,10 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
 | 当前终端／旧终端 | `term_cb09ddcf-d398-4302-b953-639d97951adf`；旧`term_896ab8d5-51f6-4082-b741-6eec0625269e`已失效，不再投递 |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／检查点 | `research/ex003-live-navigation`，当前文档交付HEAD `73cef6d895e50d22a978bbbb2230e89c9f414299`，交付时干净；第四现场、失败／静默／四链退出与离线协议结论已审查集成。离线实现`b14245c`／`955d476`及28项验证保持原范围 |
+| 分支／检查点 | `research/ex003-live-navigation`，接手时 HEAD `46aa746b4b85d418a4756d64b6e296b40272b560`，干净；历史第四文档交付 `73cef6d`、离线实现 `b14245c`／`955d476`及28项验证均已集成，不重复测试已结论范围。第五离线交付另据实时提交审查 |
 | 修复验证边界 | 协调树隔离21/21、PowerShell／时段4/4、预算3/3，共28/28。跨树测试根先检查归属再初始化；耗时语义预检后、两条PowerShell正式创建边界前重核实时时段。原树双Python21/21仍按原候选范围保留，不累加为产品覆盖；新profile真实兼容、敌对TOCTOU、完整输入映射未验证 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 当前检查点 | 第四槽协议错误后已原四链wait0且父独立审计通过，原Pi完成9例合成协议复核和文档后有意停审；当前本小时不再开新现场。自动finished提醒不是崩溃，原Task及EX-003仍未结；历史offline-repair、第四candidate／audit及父审证据均保持 |
+| 当前检查点 | 第五槽已截止，第三 Down 缺原宿主 read／客体后验；原四链 wait0 已父独立核验，退出原因及 helper 原持柄 wait 仍未知。原 Pi 已沿原 Dispatch 恢复离线工具执行，不发桌面请求。第四9例协议／28项修复结论保持，EX-003／EX-005及原 Task 未结 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
@@ -154,11 +162,11 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ### 接手后的执行顺序
 
-1. **保留当前交付和未结Task。** 离线实现`b14245c`／`955d476`的父审与28项回归已完成；本次第四槽失败／退出／协议复核文档到`73cef6d`也已审查集成。接续先核实时Git／原Pi及最新消息，不重复研究或重新领取EX-003。
-2. **当前不开新现场，剩余验证明确保留。** 第四槽真实跑到启动页和兼容采样、正常退出，只支持有限profile运行事实；无客体导航／Capture／Information。正确App／submit协议已离线验证，但真实最小导航仍需约30–40分钟，不能用剩余不足25分钟窗口赶时。旧8846日志仍缺精确副本，不回滚9038日志或删错位PNG。
-3. **以后按新的有效范围和全新冻结推进。** 当前小时不再开第五槽，总17:49:39不延长，原Task／EX-003继续受阻。后续先核当时授权是否有效及充分预算，再审全新槽／GO；下一条导航只作依赖顺序，不是当前GO。原60分钟单段、至少7分钟段收尾、总最后10分钟仅收尾和每键新图不放宽。
-4. **恢复后只做EX-003最小导航。** 每键新host／guest实际read，保持Enter各1、Down最多7／Up最多1、实际Information高亮才确认、最多Esc1后验，未知即停。有限导航成功不等于IME／队列／鼠标映射全部解决，按原完整条件评估，不硬删项。
-5. **可靠导航后EX-005，再EX-007。** EX-005缺Information／Status当前文件名、计数及完整配置来源覆盖，实测值／5FT外观不替代GUI核定。EX-007须确认空板／层宽／端点、新建一段、全新8.3另存并原软件重开，核字节／图像／日志／摘要及默认FT编码。最后才考虑EX-029正式入口；NETDEF拒绝和保守产品门不变。
+1. **保留未结 Task，完成第五离线结算。** 沿原 Pi／Dispatch 审原创建、退出、quiet、trace、原 JSONL／PNG 和 helper 链；父独立审计已落盘，原 Pi 继续补现有专题及 EX-003／005 待办。第四9例和离线修复28项已有结论不重做。
+2. **明确证据缺口。** 第三 Down 不重发、不 Capture，原操作者未读后图与没有客体后验分别保留，新协调迟后离线 host 读取不补成当时验收；四链 wait0 不补成正常 X。helper 无原创建者持柄 wait，现时 PID 不存在不能追补。旧8846日志缺原字节，不回滚9038日志或删错位 PNG。
+3. **审查、验证和同步。** 原研究分支交付专题／待办，新协调独立分支维护唯一 HANDOFF；核差异及 `python tools/check_exploration_docs.py`，再 no-ff 合入 dev 普通推送。main 仅用户处理，不提交忽略现场。
+4. **当前无现场执行步骤。** 三小时已结束；不得发送桌面、第三 Down 重试、客体 Capture、新槽或 GO，不重启原 Pi／替换模型或派同义 worker。以后确有新的有效授权，仍先核预算、独立候选／冻结和新 GO；单段／总截止和每键新图门均不放宽。
+5. **保留业务依赖和未完成项。** EX-003 未到 Information，EX-005 新窗口未开展，当前状态／文件名／计数和完整配置来源仍缺。EX-007 不在本轮范围，后续正式新增门、NETDEF 拒绝和铜覆盖保守策略保持。
 
 <a id="scene"></a>
 
@@ -176,7 +184,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ## 工作树、清理和空间
 
-本工程仅3工作树：原 `D:/project/pt_renew` main、本协调 `main-2` dev、活动 `explore-ex001-observer` 的 `research/ex003-live-navigation`。只有一个子agent终端，当前仅离线修复。旧91条派发／29个失效终端引用是历史，不算活agent；不要关闭当前worker或重置跨项目数据库。
+本工程仅3工作树：原 `D:/project/pt_renew` main、本协调 `main-2`（第五审计在独立分支 `docs/fifth-offline-audit` 交付，再合回 dev）、活动 `explore-ex001-observer` 的 `research/ex003-live-navigation`。只有一个子 agent 终端，当前仅第五槽离线审计与文档结算。旧91条派发／29个失效终端引用是历史，不算活agent；不要关闭当前worker或重置跨项目数据库。
 
 用户要求清理后，14个已合入、干净且无agent／活终端／不可核验终端的工作树从Orca和Git撤下，14普通分支安全-d删除。HEAD在 `refs/archive/pt-renew-cleanup-20261112/` 和已验证bundle保留，旧会话保留；原路径为指向项目既有归档区的目录联接、无.git，不当活工作树或递归跟随清理。EX-006/008/017等完整事项仍受阻。
 
