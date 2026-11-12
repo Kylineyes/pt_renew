@@ -251,3 +251,34 @@ Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0
 离线协议复核直接载入第四槽冻结gate，并以临时合成PNG/计划/state/review调用原submit.py，App、6个命名Shortcut目的、Capture开菜单和选择客体截图共9组均validate通过、实际submit返回0且排他投递一致；旧FocusOwned及14轮已满后的Capture继续拒绝。正确App结构为 `{"name":"focus-owned","tool":"App","arguments":{"mode":"switch","name":"DOSBox-X 2026.10.01: PT - 10000 cycles/ms"}}`，实际新现场仍须从当下精确绑定原窗口取标题；外层packet为本Task/session/dispatch和当下previous/nonce。错误来自操作者跳过submit的本地协议预验，直接把意图当tool写inbox；后续流程须先完成当前host/guest真实read和审核，由原submit先validate后排他写唯一请求，不直接投递业务、不预排、不改gate放行。此合成成功不证明新现场动作消费。
 
 最坏初始客体图1＋startup Enter1＋main Enter1＋Down7＋Up1＋Information确认1＋Esc1合计13轮，在14轮预算内；每轮仍需Capture打开与选择各自的新host后验及guest实际read。原第一段35图约30分钟，完整最坏约70–80次图read/步骤，保守35–45分钟，17:15距17:39:39业务截止不足25分钟，因此父接受保守预算并决定本小时不再开第五现场，不生成新候选/GO/进程，不延长总授权，不以省略读图/多键预排赶时；当前停在未结Task的离线可审点，由父统一HANDOFF及集成，EX003/005/007均不删项。离线检查首次9组成功后，尾部合成步骤重名导致publish FileExistsError，未完成预算断言和report；修正临时编号后17:15:19完整复跑通过，原失败和文档追加脚本一次SyntaxError回执均保留。最终只读协议报告为同Task `fourth-protocol-review.json`，不改第四槽冻结与失败原件。
+
+<a id="fifth-interruption-audit"></a>
+
+## 第五槽：连接中断、截止退出与离线结算
+
+本节接续[EX-003](exploration-backlog.md#ex-003)／[EX-005](exploration-backlog.md#ex-005)，无桌面submit助手缺原创建者退出见证关联既有[EX-039](exploration-backlog.md#ex-039)，后者仍待领取。
+
+新三小时授权仅覆盖EX-003／EX-005：UTC2026-11-12 **17:39:51.266444–20:39:51.266444**，20:29:51起仅收尾。该授权覆盖上一小时不开第五槽的历史决定；第五未完成后EX-005没有新候选或GO，EX-007／编辑保存未授权。原Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`、`deng/gpt-6.1-sol high`沿Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`续作；HEAD `46aa746`时新建 `.local-analysis/ex-003-live/candidate-fifth/slot`，未刷新任何旧槽。先前模型EPROTO TLS握手失败为连接中断，不是原Pi退出或桌面拒绝；原工具回执及JSONL保留。
+
+父独立审conf／完整plan／driver／gate／submit、validate_plan_file、24冻结／99runtime／1input、四路径及profile白名单通过，才签第五新GO：**17:47:39.413144–18:47:39.413144**，18:40:39起仅收尾。plan SHA `fd1abcdaf4daa79bb9bad6cd0aa617c9f08d65dbabe9ccc00a667b94a9c22f57`；driver／gate／submit与已审第四版本相同，配置SHA `cd7bba9ceadf8f51a4705dfafaae5e84d15ed5df26668d82ba2653a328337b66`，logfile／captures／C-D挂载都归第五slot。原Pi回执 `fifth-candidate-review.json`，父审 `config-path-incident-20261112/fifth-parent-review.json`／precheck。实际PowerShell-File PreflightOnly通过后唯一Detach启动，没有沿用旧GO／PID。
+
+第五目标PID22064、FILETIME134389793814190171、HWND1576538；兼容33样本无fail并join。正确聚焦通过当下native唯一精确标题的App switch；本轮业务经原submit先validate再排他写唯一inbox，逐步审核nonce／原图回执后才下一动作。Capture每次经新host菜单明确Take screenshot、新native菜单矩形／virtual映射后点击，各次恰一张本槽新640×480 PNG。已完整逐图核定的五轮guest为：启动页、startup Enter后的板图、main Enter后Block高亮、Down1后Current、Down2后Delete。底栏P/T/S/G仍是标签，不作文件名或计数。
+
+第三Down于 **17:58:59.764946**返回Pressed文字，17:58:59.970140写complete并生成 `step-018-down-three-post-00.png`，随后17:59模型TLS连接中断；**中断前未读这张host，也没有第三Down的新guest**，不能用Pressed／complete代替及时后验或推Information到达。18张host＋5张guest共23PNG，中断前只有22张匹配当时原Pi JSONL image SHA及审核（其中17host／5guest）。本轮过期后仅离线读取已有第18host，SHA `e28845172bf1465688860f43081c55b97d91e712d2b45aeb93a1f7c006e29a8d`；新协调者也于21:02:08离线read并核其新JSONL第97行SHA，蓝条可辨Edit。迟后read不补造当时逐键审核／第三Down客体图，不恢复导航或Capture。没有第4Down、Information确认、Esc或EX-005动作。
+
+原driver在 **18:47:39.464471**记录“本执行分段现场截止”，**18:49:39.467978**结束静默，实际 **120.003507秒**，静默内71个已有RPC请求记录中新增为0，最后请求17:58:59.771701。静默后已过硬deadline，cleanup循环跳过，finally的原target.wait(timeout=1)立即返回0；本操作者未投正常X／CloseX／WaitExit／Stop。下列只证在相应记录时已退出，**目标关闭原因与确切退出时刻未知，不能写正常X收尾成功**，也不从四链推外层隐藏PowerShell退出。
+
+| 原创建链 | PID | 原wait_return | UTC记录 |
+| --- | --- | --- | --- |
+| target | 22064 | 0 | 18:49:39.471890 |
+| control | 47208 | 0 | 18:49:39.868871 |
+| driver | 47444 | 0 | 18:49:39.882993 |
+| owner | 42188 | 0 | 18:49:39.8966243 |
+
+四链原创建对象／HANDLE／FILETIME／映像与退出身份逐项一致，observer join真。聚焦前另启的无桌面submit helper PID45260仅做文件读取和runpy原submit，未开第二控制连接；但其短时Python启动器只打印PID，没有记录FILETIME／原HANDLE并持续持原Popen等待。虽然helper源码在owner-exit存在时退出、当前PID查询未找到，仍**缺原创建者wait证明**，不从源码或现时枚举补证；此缺口复用[EX-039](exploration-backlog.md#ex-039)，不另开同义事项。原助手脚本、stdout/stderr及投递结果保留，不为修结论重写源证据。
+
+worker本机 `fifth-live-audit.json`保存22图当时回执、五轮集合差及原四链退出／quiet；父独立 `fifth-parent-exit-audit.json`和 `fifth-offline-host-review.json`核定同样边界。原安装99、事故后旧包400、各槽runtime99／inputs1及四份历史conf均匹配既有基线；第四／第五24冻结均匹配。前三槽旧23冻结中的共享owner、PowerShell、prepare_capture、prepare_navigation已随离线修复集成而改变，不能称前三整组冻结全未变；旧四槽所有可变日志无独立全量前后基线，也不外推完整现场集合不变。错位PNG、9038日志、原请求／冻结／图片／JSONL不修改。
+
+父独立 `fifth-parent-trace-audit.json`还核10组观测共1899样本、sequence连续、精确PID/HWND一致、递归API failed为0，覆盖各原RPC发送前到响应后至少100ms；17个consumed为Launch1／App1／Shortcut5／Click10，生命周期请求0。该覆盖不证明DOS消费，也不补第三Down guest。
+
+新协调Pi `01a1d184-26bc-7092-be0b-362193a84c8c`已自身接Run；现时三小时及第五GO全部过期，仅离线保全与结算，无第三Down重试／新Capture／新槽／GO。前轮9例合成协议和28项离线回归仍按原范围复用，不重复产品或GUI测试。[EX-003](exploration-backlog.md#ex-003)仍缺完整输入响应／及时客体后验，Information未达；[EX-005](exploration-backlog.md#ex-005)未实际启动且配置来源／GUI文件名计数仍缺，原Task保持未结，审计完成不等于事项完成。
