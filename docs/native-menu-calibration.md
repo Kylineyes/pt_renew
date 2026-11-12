@@ -222,3 +222,28 @@ Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0
 父集成到另一工作树后真实复测发现测试根 `.local-analysis/ex-003-live` 尚不存在，21例都在setUp的TemporaryDirectory阶段报FileNotFoundError，隔离断言没有执行；原研究树通过只按原范围有效。后续小修正在setUp先对证据根及其祖先做 `confined` 校验，再 `mkdir(parents=True, exist_ok=True)`，不复制忽略证据或写父私有现场；冷目录初始化和已有根联接的零外部写入拒绝另经实际setUp前三句验证。另补正式入口的两条创建边界：语义预检返回后、Start-Process和owner Process.Start之前再核当前时段，假时钟证明预检前合法但结束已到deadline-420时两条路径均零创建，合法结束时正向保持。原owner/driver二道门和60分钟上限不取消。后续隔离21/21、PowerShell/时段4/4（新增上述1项）复测通过，无跳过；父跨树原失败及一次本地检查脚本目录层级错误的ModuleNotFoundError原回执均保留，未因修正改旧现场或生成新GO。
 
 协调者审查`b14245c`及后续`955d476`后，在`main-2`独立集成分支处理专题／待办冲突并保留共享HANDOFF，于实际缺少测试根的工作树完成**28/28**复测：隔离21、真实PowerShell文件／时段4、预算3，均无跳过；隔离组启用ResourceWarning错误检查。父测试后再独立核旧包400项、原安装99项及三历史conf，均与事故保全一致，文档及差异检查通过。父本机证据为`.local-analysis/config-path-incident-20261112/integration-review.json`及同目录`integration-*.log`，不为复测复制旧现场。此次交付只改变诊断工具、测试和文档，产品`src/`与根CMake／预设不变；原七小时控制窗口已结束，EX-003整体与新profile实机兼容等剩余条件继续受阻。
+
+<a id="fourth-request-refusal"></a>
+
+## 新一小时第四槽：协议拒绝与正常退出
+
+用户新授权UTC2026-11-12 **16:49:39.443894–17:49:39.443894**仅EX-003，17:39:39起最后10分钟只收尾；沿原Pi/同Task和当前Dispatch，FF同步共享dev `483d6e2`，未新建会话。此次授权覆盖前述历史离线暂停；归档精简仍暂停，旧三个槽与GO不复用。新建 `.local-analysis/ex-003-live/candidate-fourth/slot`，通过本树冻结校验器validate_plan_file，实际read conf的logfile/captures/C-D挂载四路径都归本新slot。父独立审核后签新GO：16:59:56.003749生效，硬截止17:46:39.443894，固有7分钟业务门恰为17:39:39.443894，不延长总窗口。
+
+| 冻结项 | SHA-256 |
+| --- | --- |
+| plan | 4e48be5fd4a2d2678fd81f1647730466ddc78c00836e8905be6a7385584efbe7 |
+| driver | c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f |
+| gate | 6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371 |
+
+17:01:53真实PowerShell-File PreflightOnly通过后，唯一Detach入口启动。新目标绑定PID36096、FILETIME134389766755393000、HWND3149268，兼容33样本无失败且join；Launch后新host真实read仍是Orca前景。**操作者误用未定义tool=FocusOwned投递聚焦，冻结gate只允许App，17:08:02.153865在创建桌面请求前以“两轮捕获禁止其它业务”拒绝。** 这是请求协议错误，不是新profile/IME/客体响应失败；没有App/业务聚焦、Capture或Enter/Down/Up/Esc。错误请求原文和rejected、stopped-error及原JSONL保留，未修改冻结驱动、绕门或重发恢复业务。
+
+严格120.001374秒静默，17:10:02.155239结束；期间零新增桌面请求。随后仅CleanupFocus精确原窗口一次并取收尾当前图，模型实际read为662×566 AUTOTRAX启动页；依据新native rect [89,100,751,666]及图内正常X定位全局[705,122]，17:10:53只发正常宿主X一次。原WaitExit和另外三层原创建者持柄记录如下，不从下层外推外层隐藏PowerShell宿主退出。
+
+| 原创建链 | PID | 原wait_return | UTC退出记录 |
+| --- | --- | --- | --- |
+| 目标 | 36096 | 0 | 17:11:03.818510 |
+| 控制服务 | 14104 | 0 | 17:11:04.090199 |
+| driver | 46760 | 0 | 17:11:04.097968 |
+| owner | 41924 | 0 | 17:11:04.1097841 |
+
+只读收尾审计 `fourth-live-audit.json`核3张host原图与原Pi JSONL image.data解码SHA回执一致，无guest/导航used标记/新Capture/NEWFT.PCB；四层退出身份均与原创建记录一致，采样线程join通过。原安装99、事故后旧包400、既有EX001/004/005与离线EX003证据、新runtime99/inputs1完整集合与大小/SHA均不变。候选预检见`fourth-candidate-review.json`，父独立审核见协调树`config-path-incident-20261112/fourth-parent-review.json`。本次只证明新profile入口可启动到启动页、兼容采样和正常收尾，不证明全部环境写隔离/客体截图/导航或Information到达；[EX-003](exploration-backlog.md#ex-003)总体仍受阻，不由此次请求错误自动生成第五候选或新GO。
