@@ -79,7 +79,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
 | 原终端 | `term_896ab8d5-51f6-4082-b741-6eec0625269e` |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／离线检查点 | `research/ex003-live-navigation`；原观察HEAD为`9a07c5c`，子agent正在提交事故专题检查点，接手核最新HEAD；未完成模块`tools/legacy_runtime_config.py`原样保留 |
+| 分支／离线检查点 | `research/ex003-live-navigation`，最新观察HEAD为`b38f1531b77d09d0d863ca297a731116b898f0ab`；跟踪文件干净，仅未跟踪`tools/legacy_runtime_config.py`，接手复核 |
 | 未完成修复边界 | 该模块尚未接入准备器、owner或driver，尚无语义回归测试通过；不能因文件存在就称隔离已修复或直接生成现场 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
 | 接手检查点请求 | 父消息 `msg_581c5088744a`：停可恢复离线检查点，回报HEAD／改动／已做未做，原Pi和未结Task保留 |
@@ -88,7 +88,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ### 未集成的活动分支提交
 
-以下尚未最终交付集成，先审差分、代码与测试，尤其不要让其旧HANDOFF增量覆盖本新版。
+以下工具／历史提交尚未作为完整交付集成，先审差分、代码与测试，尤其不要让其旧HANDOFF增量覆盖本新版。事故专题检查点`b38f153`的文档及第一段事实已单独选择集成，未带入未验工具草稿；未来整分支合并需处理已选择文档的上下文和HANDOFF差异。
 
 | 提交 | 内容 |
 | --- | --- |
@@ -97,6 +97,9 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | `e573ef3` | 预算参数及原owner／driver60分钟上限边界测试 |
 | `f7f6dca` | 任何owner创建前核GO时段，真实-File／假创建测试；保留owner／driver二道门 |
 | `9a07c5c` | 同步事故和暂停的旧HANDOFF增量；当前交接只以本文件新版为准 |
+| `b38f153` | 事故和离线暂停专题／待办状态检查点，文档已由父选择集成；修复草稿不在此提交 |
+
+未跟踪`tools/legacy_runtime_config.py`只做过AST语法检查，无语义测试、无接入，不能add/commit时混作已验工具。worker另在`.local-analysis/ex-003-live/`保存离线检查点记录（如`save_paused_checkpoint.py`及其结果）；收到检查点回报后核实际记录，保持同Task未结，等新协调者通过原Dispatch续接。
 
 ### 三个导航槽的实际结果
 
