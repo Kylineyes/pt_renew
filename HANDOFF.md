@@ -119,7 +119,9 @@ Information／Status 工作文件名和计数、完整来源覆盖仍在 EX-005�
 
 用户最新要求清理本工程无用子工作区，本次已完成：17 个工作树减为 **3 个**，保留原 `D:/project/pt_renew` 的 main、本协调 `main-2` 的 dev、活动 `explore-ex001-observer` 的 `research/ex003-live-navigation`。活动树显示名现为 **EX-003-输入导航**，仍同一 Pi／模型／终端；没有停止或重启它。其余14项清理前均干净、已合入 dev、无agent／活动或不可核验终端／进程命令行引用，已从Orca及Git工作树登记移除，对应14个普通分支用安全 `-d` 删除。当前只有一个活动子 agent，截图中灰色历史条目不代表仍有agent运行。
 
-14项完整归档为 `C:/Users/rikideng/orca/worktree-archives/pt_renew/20261112-cleanup/` 下各项 `tree`，共 **10,314 文件／2,160,940,892 字节**，全部集合／目录／大小／SHA-256核对通过，原路径以目录联接可只读访问，不含 `.git`、不是开发工作树。为满足当前研究冻结来源与历史构建的绝对路径消费者，仅保留一份可直接读取的归档树；不要递归跟随联接清理或把移动当空间释放。原HEAD保留 `refs/archive/pt-renew-cleanup-20261112/` 及已验证Git bundle；bundle新增1,915,937字节，另有核验元数据，本次没有净释放文件内容空间。清理不代表EX-006／008／017等事项完成；结论与受阻状态不变。详细用途映射、原回执和核验见 `.local-analysis/worktree-cleanup-20261112/REPORT.md`、`result.json`；原清理通知仅作历史。
+14项最初完整归档为 `C:/Users/rikideng/orca/worktree-archives/pt_renew/20261112-cleanup/` 下各项 `tree`，当时共 **10,314 文件／2,160,940,892 字节**且全部集合／大小／SHA-256核验一致。用户随后要求精简，已删除 **589 个未被引用且非冻结路径的构建缓存，共971,990,804字节**：39个ILK、432个OBJ、30个构建LIB、16个Ninja依赖缓存、17个CMakeCache、16个Ninja增量日志和39个RES。当前剩 **9,725文件／1,188,950,088字节**，保留集全量摘要严格等于原manifest减删项；原图／日志／源码／EXE／DLL／全部PDB及冻结原件不动，原捕获驱动来源399项完整不变。
+
+原路径仍以目录联接只读访问，无 `.git`，不作开发工作树；原HEAD保留 `refs/archive/pt-renew-cleanup-20261112/` 及已验证bundle。原始 `original-manifest.json` 保留精简前历史，**当前集合用各项 `current-retained-manifest.json`**，不重跑旧全量归档脚本冒称现存仍完整。没有压缩副本，真实删字节另扣新增核验材料后的净减少见 `.local-analysis/archive-trim-20261112/space-accounting.json`；移动归档本身仍不计释放。完整用途、原清理回执及后续删项分别见 `.local-analysis/worktree-cleanup-20261112/REPORT.md`、`.local-analysis/archive-trim-20261112/REPORT.md`。清理不改变EX-006／008／017受阻状态，也未动活动Pi/工作树/原软件或桌面。
 
 用户最新明确指定：**本次工作及接续的子 agent 全部使用 Pi、`deng/gpt-6.1-sol / high`**。该显式授权优先于 AGENTS 和旧报告中的纯逆向 GLM 默认分工；新 agent 不应再以旧 GLM 配额问题停止这轮已授权的模型路线。保持独立工作树／分支／证据和父级验收，不重复启动同一任务。
 
