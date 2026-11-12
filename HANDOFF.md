@@ -68,7 +68,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ### 有效授权和接续身份
 
-用户先给四小时，后明确“现在延迟到7小时控制时间”，按同轮总时长登记：UTC **2026-11-12 02:00:53–09:00:53**，北京时间 **10:00:53–17:00:53**；UTC **08:50:53** 起至少10分钟整体收尾。窗口内新协调者可自主调度必要控制，不重复索同一许可；超时后不沿用。用户要求阶段完成或受阻主动通知。**事故修复和隔离复核通过前，这一授权不自动解除暂停。**
+原七小时控制窗口为用户先给四小时、后明确“现在延迟到7小时控制时间”的同轮总时长：UTC **2026-11-12 02:00:53–09:00:53**，北京时间 **10:00:53–17:00:53**。本轮异常恢复核验已到UTC14时以后，**原窗口已经结束，现场授权不得沿用**。用户现授权恢复中断的原Pi并继续处理离线修复，没有解除新现场暂停；阶段完成或受阻仍主动通知。
 
 全部子agent继续 **Pi、`deng/gpt-6.1-sol / high`**，显式用户覆盖优先于AGENTS旧GLM默认分工，不自行换模型／重索权。启动配置不等于模型证明，核PI环境、原JSONL model/thinking/assistant及成功工具回执；同Task沿原Pi，不重启。本轮已复核原JSONL模型变更、high记录、最新assistant及成功工具回执，与原会话一致。
 
@@ -76,17 +76,25 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 | 项目 | 实际记录 |
 | --- | --- |
-| 未结 Task／Dispatch | `task_db06ca9d4229`／`ctx_e3ea7d528345` |
+| 未结 Task／当前Dispatch | `task_db06ca9d4229`／`ctx_ed7b7e9ec944`；旧`ctx_e3ea7d528345`进程异常退出，恢复登记`ctx_4796912a1ef0`就绪超时，均保留失败记录 |
 | Run | `run_3efe904a98f0`，名称仍为首轮EX-001，不代表当前任务范围 |
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
-| 原终端 | `term_896ab8d5-51f6-4082-b741-6eec0625269e` |
+| 当前终端／旧终端 | `term_cb09ddcf-d398-4302-b953-639d97951adf`；旧`term_896ab8d5-51f6-4082-b741-6eec0625269e`已失效，不再投递 |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／离线检查点 | `research/ex003-live-navigation`，最新观察HEAD为`b38f1531b77d09d0d863ca297a731116b898f0ab`；跟踪文件干净，仅未跟踪`tools/legacy_runtime_config.py`，接手复核 |
-| 未完成修复边界 | 该模块尚未接入准备器、owner或driver，尚无语义回归测试通过；不能因文件存在就称隔离已修复或直接生成现场 |
+| 分支／离线检查点 | `research/ex003-live-navigation`，恢复时HEAD仍为`b38f1531b77d09d0d863ca297a731116b898f0ab`；七个跟踪文件有修复改动，新`tools/legacy_runtime_config.py`和`tests/test_legacy_runtime_config.py`未跟踪，均已保留 |
+| 未完成修复边界 | WIP已接配置准备器／派生器／owner／生成driver并补合成测试，尚未提交或通过完整复测。原14项隔离测试有1项因未关输出流导致tearDown WinError32；owner三项通过。随后两次edit已落盘，不能据此称修复已验通过 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
 | 接续检查点 | 原worker于UTC04:30:23保存`.local-analysis/ex-003-live/paused-checkpoint.json`；本轮核验后一致并已由原Pi确认续作离线修复，原Task仍未结，不发整体worker_done。原检查点保留为历史，不覆盖成当前完成记录 |
 
-先加载实时 orchestration／orca-cli 技能。用 `orca orchestration worker-show --dispatch ctx_e3ea7d528345 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_e3ea7d528345 --subject ... --body ...` 协调，不给终端追加业务。本轮已核原Dispatch `ready/live`、原终端保留和原暂停回执，随后才发离线续作；这些是核验时状态，不是修复完成。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享该终端，不算多个活agent。
+先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
+
+### 异常中断后的原会话恢复
+
+用户报告异常中断后，已核旧Dispatch为`failed/process_exited/exited`，退出码`1073807364`；原终端句柄失效、研究树实时终端清单为空。原JSONL保留`ECONNRESET`、14项隔离测试1 error、owner三项通过，以及UTC05:27:32／05:29:02两次成功edit；不伪造后续复测。按用户恢复指令在原工作树用显式`--session`打开原Pi JSONL，指定`deng/gpt-6.1-sol/high`；新增原会话工具回执确认同Pi ID、模型、推理和新终端，成功读完最新HANDOFF。
+
+首次同Task重试`ctx_4796912a1ef0`在`agent_readiness`等待超时，但原Pi实际存活并有成功工具回执；向该失败Dispatch续发被拒，回执明确无效果。保留失败后，等原Pi真实`tui-idle`成立，再沿同Task／同终端重试得到`ctx_ed7b7e9ec944`的`ready`回执，没有重置、另建Task或另启Pi。当前业务消息为`msg_c3563f6412a7`，要求继续离线修复／复测、拆分符号链接权限跳过结算、文档及独立分支提交。恢复提示位于协调树`.local-analysis/config-path-incident-20261112/resume-original-pi.txt`，原失败及JSONL保持可追溯。
+
+后续通过`orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`及同Dispatch的`worker-read`／`send`协调，不再使用旧句柄或旧派发。原Task仍未结，EX-003总体受阻；没有修复交付完成、原软件现场恢复或新GO。
 
 ### 未集成的活动分支提交
 
@@ -101,7 +109,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | `9a07c5c` | 同步事故和暂停的旧HANDOFF增量；当前交接只以本文件新版为准 |
 | `b38f153` | 事故和离线暂停专题／待办状态检查点，文档已由父选择集成；修复草稿不在此提交 |
 
-未跟踪`tools/legacy_runtime_config.py`为9137字节、SHA `718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`，只做过AST语法检查，无语义测试、无接入，不能add/commit时混作已验工具。已读取worker的`.local-analysis/ex-003-live/paused-checkpoint.json`，其中列明生成器、派生Capture／State／Navigation、owner／driver服务启动前预检、别名／联接及零创建测试和可写白名单均未完成，未生成修复后候选／GO。状态消息`msg_7ae7d2dbb3a4`确认原Pi停在该检查点，待新协调者通过原Dispatch续接；不为干净而丢弃未跟踪草稿。
+UTC04:30暂停时，未跟踪`tools/legacy_runtime_config.py`为9137字节、SHA `718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`，当时只做过AST语法检查，无语义测试、无接入。此为原检查点摘要，恢复后的WIP已继续变化，不能用旧SHA判断当前实现。已读取worker的`.local-analysis/ex-003-live/paused-checkpoint.json`，其中列明生成器、派生Capture／State／Navigation、owner／driver服务启动前预检、别名／联接及零创建测试和可写白名单均未完成，未生成修复后候选／GO。状态消息`msg_7ae7d2dbb3a4`确认原Pi停在该检查点，待新协调者通过原Dispatch续接；不为干净而丢弃未跟踪草稿。
 
 ### 三个导航槽的实际结果
 
