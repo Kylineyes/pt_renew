@@ -6,12 +6,12 @@
 
 ## 接手基线和最短步骤
 
-本轮接续前已实时核对共享本地及远端 `dev=7c91d804029c9a78a4f2a57a0287117ca282de4e`，协调工作区干净；原研究树仍为下文 `b38f153` 检查点，只有原配置草稿未跟踪。前轮文档整理最终核验为 `.local-analysis/handoff-refresh-20261112/final-state.json`；本轮事故后集合／原安装及配置复核见 `.local-analysis/config-path-incident-20261112/resume-verification.json`。实际最新 HEAD 仍以 Git 和远端为准；本轮交接更新在独立分支 `docs/offline-repair-resume`，研究实现仍在原独立分支。main 的合并／提交／推送由用户处理。
+本轮恢复前共享 `dev=a0767f3`；协调集成在独立分支 `fix/integrate-offline-isolation`，原研究实现位于 `research/ex003-live-navigation`。原交付`b14245c`已合入该集成分支，尚待跨树测试准备与预检耗时后截止边界的后续修正和最终复测，不当共享dev已有。前轮文档整理最终核验为 `.local-analysis/handoff-refresh-20261112/final-state.json`；本轮事故后集合／原安装及配置复核见 `.local-analysis/config-path-incident-20261112/resume-verification.json`。实际最新HEAD和集成状态仍以Git及远端为准，main的合并／提交／推送由用户处理。
 
 1. 完整读 [AGENTS](AGENTS.md)、本文件和[探索规则](docs/exploration-workflow.md)，核 `git status --short --branch`、`git log -5 --oneline`、远端 dev，以及活动研究树改动。未集成提交不能当共享 dev 已有。
-2. **先接隔离事故，暂停新现场及进一步归档精简。** 所有原目标／控制服务／已知持柄链已退出；现存一个 Pi 子 agent 仅做离线保全和修复，没有获准的新候选现场或第四槽 GO。
+2. **先接隔离事故，暂停新现场及进一步归档精简。** 原目标／控制服务／已知持柄链按历史原wait证据已退出，不据此外推实时进程总表；原Pi仅续作离线保全、修复和审查，没有获准的新候选现场或第四槽GO。
 3. 沿下文原 Task／Dispatch／Pi 继续，不重复领取 EX-003、不新建同义 worker、不重启原会话。新协调者使用自己的实际身份，不能冒用原父 Pi `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`；该旧会话只作审计来源。
-4. 用户模型覆盖、七小时授权和单操作者要求继续有效。事故暂停优先；只有核完事故、修复、测试和新冻结范围，才评估剩余有效时段能否重开现场。
+4. 用户模型覆盖和单操作者要求继续有效；原七小时控制窗口已经结束。本轮继续离线修复、审查和集成，不启动新现场；后续现场须有新的明确授权、冻结范围和GO。
 
 远端为 `git@github.com:Kylineyes/pt_renew.git`。直连 DNS 和代理 SSH22 曾失败；已验证进程级 `GIT_SSH_COMMAND` 使用 `ssh.github.com:443`、`HostKeyAlias=github.com`，经 Git 自带 `C:/Users/rikideng/scoop/apps/git/current/ucrt64/bin/connect.exe -H 127.0.0.1:10808 %h %p` 可 fetch／push。保留主机密钥检查，不改全局配置；推送中断先查远端再普通重试，不强推，不把未确认写成成功。
 
@@ -35,7 +35,7 @@
 
 ## 已有验证与适用范围
 
-产品 `src/`、根 CMake／预设沿用已测 `d2ee381161fdb444255f7db931aa1f1290aa5bd7` 基线；之后 tools／tests 有研究增量，不能称全部相同。本次交接只改文档，不重复完整产品构建或 GUI。
+产品 `src/`、根CMake／预设沿用已测`d2ee381161fdb444255f7db931aa1f1290aa5bd7`基线；本轮只集成诊断工具／相关Python与PowerShell离线测试及文档，不重复完整产品构建或GUI。不同候选和研究测试不能累加成当前产品整体覆盖。
 
 - 固定候选 Debug／Release 配置、构建及 CTest 各24/24，正式 CLI QProcess 专项15项；核心审查82 passed含初始化／清理。见[核心边界](docs/track-core-boundary-review.md)、[综合记录](docs/native-sample-wave.md)、[离线集成](docs/native-evidence-wave.md)，不同候选数量不累加为当前整体覆盖。
 - [真实 Qt 核心现场](docs/parallel-save-hardening-live.md)：固定374b1d7，载入生命周期、失败保留、旧watcher隔离、关闭取消、主窗另存、保存点／历史／输出重开，18图及原owner wait0；未覆盖模态重入等仍按原范围。
@@ -64,7 +64,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ## 最高优先级：隔离事故与当前任务
 
-截至本轮独立字节复核 UTC **2026-11-12 05:05:38**（北京时间13:05:38），旧包事故后400项、原安装99项及三份配置均与保全记录完全一致，父／worker保存的400项清单也一致。前轮UTC04:19核对的原软件／控制服务／已知持柄链已退出及原wait证据仍按当时范围成立；本轮只读进程清单工具调用超时，未据此声称实时无进程。原Pi子agent已经确认续作同Task的离线修复，尚无修复交付可审。**本轮不启动新现场或新的接手agent，新现场与进一步归档精简暂停，第四槽没有批准或GO。**
+截至本轮父独立字节复核UTC **2026-11-12 05:05:38**（北京时间13:05:38），旧包事故后400项、原安装99项及三份配置均与保全记录完全一致，父／worker保存的400项清单也一致；worker最终离线验证于UTC14:42再次核得一致。前轮UTC04:19退出和原wait证据仍按当时范围成立；父只读进程清单工具调用超时，未据此声称实时无进程。原Pi已交付`b14245c`，父正在独立集成分支审查并要求补两处离线边界，尚未推送研究实现。**本轮不启动新现场或新的接手agent，新现场与进一步归档精简暂停，第四槽没有批准或GO。**
 
 ### 有效授权和接续身份
 
@@ -81,10 +81,10 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
 | 当前终端／旧终端 | `term_cb09ddcf-d398-4302-b953-639d97951adf`；旧`term_896ab8d5-51f6-4082-b741-6eec0625269e`已失效，不再投递 |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／离线检查点 | `research/ex003-live-navigation`，恢复时HEAD仍为`b38f1531b77d09d0d863ca297a731116b898f0ab`；七个跟踪文件有修复改动，新`tools/legacy_runtime_config.py`和`tests/test_legacy_runtime_config.py`未跟踪，均已保留 |
-| 未完成修复边界 | WIP已接配置准备器／派生器／owner／生成driver并补合成测试，尚未提交或通过完整复测。原14项隔离测试有1项因未关输出流导致tearDown WinError32；owner三项通过。随后两次edit已落盘，不能据此称修复已验通过 |
+| 分支／离线检查点 | `research/ex003-live-navigation`，交付HEAD `b14245ca1e6148c302924ce882f6871801d8c816`、交付时干净；父已请求同分支后续修正，复核实时HEAD及改动 |
+| 修复验证边界 | 配置语义重建／四生成器最终门／owner和driver各创建前门已实现。原树隔离21/21在两Python环境通过、PowerShell／时段3/3、预算3/3；父跨树复测发现测试根未创建导致21项setUp失败，另要求预检耗时后重核起跑截止。待两项补齐后集成复测，尚不当现场可用 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 接续检查点 | 原worker于UTC04:30:23保存`.local-analysis/ex-003-live/paused-checkpoint.json`；本轮核验后一致并已由原Pi确认续作离线修复，原Task仍未结，不发整体worker_done。原检查点保留为历史，不覆盖成当前完成记录 |
+| 接续检查点 | 原UTC04:30暂停检查点保持历史；当前初次交付证据为`.local-analysis/ex-003-live/offline-repair/review-ready.json`及`validation.json`。原Pi按约定status交付后有意停审，不发整体worker_done；自动finished提醒不表示另一次崩溃。父反馈后同Dispatch续作离线修正，EX-003总体和原Task仍未结 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
@@ -94,22 +94,20 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 首次同Task重试`ctx_4796912a1ef0`在`agent_readiness`等待超时，但原Pi实际存活并有成功工具回执；向该失败Dispatch续发被拒，回执明确无效果。保留失败后，等原Pi真实`tui-idle`成立，再沿同Task／同终端重试得到`ctx_ed7b7e9ec944`的`ready`回执，没有重置、另建Task或另启Pi。当前业务消息为`msg_c3563f6412a7`，要求继续离线修复／复测、拆分符号链接权限跳过结算、文档及独立分支提交。恢复提示位于协调树`.local-analysis/config-path-incident-20261112/resume-original-pi.txt`，原失败及JSONL保持可追溯。
 
-后续通过`orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`及同Dispatch的`worker-read`／`send`协调，不再使用旧句柄或旧派发。原Task仍未结，EX-003总体受阻；没有修复交付完成、原软件现场恢复或新GO。
+后续通过`orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`及同Dispatch的`worker-read`／`send`协调，不再使用旧句柄或旧派发。离线实现已经交付，当前由父审查集成并处理补充边界；原Task仍未结、EX-003总体受阻，没有原软件现场恢复或新GO。
 
-### 未集成的活动分支提交
+### 原研究分支的集成范围
 
-以下工具／历史提交尚未作为完整交付集成，先审差分、代码与测试，尤其不要让其旧HANDOFF增量覆盖本新版。事故专题检查点`b38f153`的文档及第一段事实已单独选择集成，未带入未验工具草稿；未来整分支合并需处理已选择文档的上下文和HANDOFF差异。
+原研究分支到`b14245c`已合入父独立集成分支`fix/integrate-offline-isolation`，尚未合推dev。父已处理专题和待办两处文档冲突，保留完整事故事实、原Pi身份和现时HANDOFF；不能用研究树旧HANDOFF覆盖本文件。
 
 | 提交 | 内容 |
 | --- | --- |
-| `321cc4e` | 逐客体审核的命名键导航准备器 |
-| `a4affb2` | 第一分段有限导航事实，未达Information |
-| `e573ef3` | 预算参数及原owner／driver60分钟上限边界测试 |
-| `f7f6dca` | 任何owner创建前核GO时段，真实-File／假创建测试；保留owner／driver二道门 |
-| `9a07c5c` | 同步事故和暂停的旧HANDOFF增量；当前交接只以本文件新版为准 |
-| `b38f153` | 事故和离线暂停专题／待办状态检查点，文档已由父选择集成；修复草稿不在此提交 |
+| `321cc4e`／`a4affb2` | 逐客体审核的命名键导航准备器与第一段到Grid的有限事实，未达Information |
+| `e573ef3`／`f7f6dca` | 六十分钟分段边界、任何owner创建前的GO时段门及离线测试 |
+| `9a07c5c`／`b38f153` | 事故暂停和专题检查点；历史HANDOFF增量不覆盖当前入口 |
+| `b14245c` | 配置语义重建、联接／硬链接拒绝、各层创建前预检、输出流异常关闭及合成回归 |
 
-UTC04:30暂停时，未跟踪`tools/legacy_runtime_config.py`为9137字节、SHA `718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`，当时只做过AST语法检查，无语义测试、无接入。此为原检查点摘要，恢复后的WIP已继续变化，不能用旧SHA判断当前实现。已读取worker的`.local-analysis/ex-003-live/paused-checkpoint.json`，其中列明生成器、派生Capture／State／Navigation、owner／driver服务启动前预检、别名／联接及零创建测试和可写白名单均未完成，未生成修复后候选／GO。状态消息`msg_7ae7d2dbb3a4`确认原Pi停在该检查点，待新协调者通过原Dispatch续接；不为干净而丢弃未跟踪草稿。
+原UTC04:30检查点的9137字节草稿（SHA`718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`）仅为历史，不能代当前实现。原未接入／未测试状态已由`b14245c`实现和原树验证推进；父审查中新增的跨树测试根初始化和预检后实时时段复核，须在后续提交、集成复测和本文件中明确结算。事故旧失败、14项1error、跨树21项setUp失败及旧JSONL均保留，不因后续通过改写。
 
 ### 三个导航槽的实际结果
 
