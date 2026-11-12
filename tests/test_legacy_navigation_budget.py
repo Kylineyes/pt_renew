@@ -1,12 +1,16 @@
 """分段预算边界回归：原owner/driver最多60分钟，无进程或桌面。"""
 import ast
 import datetime
+import hashlib
+import json
 from pathlib import Path
 import sys
+import types
 import unittest
 from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
 import prepare_legacy_navigation as candidate
+import legacy_observation_owner as owner
 
 
 class NavigationBudgetTests(unittest.TestCase):
@@ -35,14 +39,23 @@ class NavigationBudgetTests(unittest.TestCase):
                     with self.assertRaises(RuntimeError):scope['authorize'](binding,approval,start.timestamp())
 
     def test_actual_owner_budget_expression_matches_driver_limit(self):
-        source=Path(__file__).resolve().parents[1]/'tools/legacy_observation_owner.py'
-        tree=ast.parse(source.read_text(encoding='utf-8'))
-        checks=[n for n in ast.walk(tree) if isinstance(n,ast.If) and 'GO时段无效' in ast.unparse(n)]
-        node=next(n for n in checks if '420 <' in ast.unparse(n.test))
-        expression=compile(ast.Expression(node.test),'<实际owner预算表达式>','eval')
+        # 执行重构后的完整授权函数，使用内存文件和假时钟，无文件/进程创建。
+        binding={'session':'假会话','task':'假任务','dispatch':'假派发'}
+        data=b'synthetic-plan'
+        start=datetime.datetime.fromtimestamp(1000,datetime.timezone.utc)
         for seconds,rejected in ((420,True),(421,False),(3600,False),(3900,True)):
-            with self.subTest(seconds=seconds):
-                self.assertEqual(eval(expression,{'start':1000,'deadline':1000+seconds,'time':type('Clock',(),{'time':staticmethod(lambda:1000)})}),rejected)
+            approval={**binding,'approved_plan_sha256':hashlib.sha256(data).hexdigest(),
+                'start_utc':start.isoformat(),'deadline_utc':(start+datetime.timedelta(seconds=seconds)).isoformat()}
+            class MemoryRoot:
+                def __truediv__(self,name):
+                    return types.SimpleNamespace(read_bytes=lambda:data,
+                        read_text=lambda **kwargs:json.dumps(approval))
+            with self.subTest(seconds=seconds),patch.object(owner.time,'time',return_value=1000):
+                if rejected:
+                    with self.assertRaisesRegex(RuntimeError,'GO时段无效'):
+                        owner.approval_window(MemoryRoot(),binding,start_only=True)
+                else:
+                    self.assertEqual(owner.approval_window(MemoryRoot(),binding,start_only=True),1000+seconds)
 
 
 if __name__=='__main__':unittest.main(verbosity=2)
