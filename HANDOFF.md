@@ -66,7 +66,9 @@
 
 当前 EX-003 导航接续 Task `task_db06ca9d4229`／Dispatch `ctx_e3ea7d528345` 已共享领取。第一槽 UTC 02:22–03:02、02:55 停业务，实际取得主菜单 Block → Current → Delete → Edit → File → Grid 的五次逐键新客体后验；未执行剩余两 Down／Information 确认／Esc。35 张原 PNG 匹配实际读图回执，四组原创建／退出身份精确匹配且 wait0，最晚 03:00:15 退出，父另实际读 Grid 图和核原 wait。有限事实已在活动分支提交 `a4affb2`，Task 继续未结算，不视为完整 EX-003 完成。
 
-第二全新冻结槽 `explore-ex001-observer/.local-analysis/ex-003-live/candidate-second/slot` 已经父审查，plan `2fa798a92a94463446dd6af557580dbd8f088955c1b578f5f2b79ef7fbee6374`、driver／gate／submit 与第一槽同字节，23 冻结项／99 runtime／1 input 核验一致。采用已有 owner／driver 支持的 3600 秒新分段，预算校验及边界测试提交 `e573ef3`；GO 为 UTC **03:25–04:25，04:18 起仅收尾**。由新启动图重建状态，不续用旧 Grid／GO／PID／坐标，仍每键真实客体 read、实际高亮 Information 才确认，禁止 Status／编辑。总窗口仍到 09:00:53，父审核记录在 `.local-analysis/control-window-04h/ex003-second-scene-review.json`。
+第二全新冻结槽 `explore-ex001-observer/.local-analysis/ex-003-live/candidate-second/slot` 曾获批 UTC **03:25–04:25，04:18 起仅收尾**，plan `2fa798a92a94463446dd6af557580dbd8f088955c1b578f5f2b79ef7fbee6374`，driver／gate／submit 与第一槽同字节，23 冻结项／99 runtime／1 input 核验一致。实际操作者于 03:24:28 提前约32秒调用入口，原 owner 的 GO 时段门拒绝，并由原创建者记录 owner 21372 真实 wait1 于 03:24:30；driver／服务／目标未创建，桌面请求0。父已核原退出记录及 driver／runner／control／inbox 文件均不存在，**第二槽许可已撤销，不能重试或改旧GO**。
+
+同Task和Pi继续未结算，父已放行离线补启动器在任何owner／driver创建前核时段的最小检查，保留原owner／driver校验，再准备第三全新冻结槽供父审查；当前没有第三槽GO或新现场批准。新总窗口仍09:00:53截止，活动研究继续，清理闲置工作树不取消该Task。父第二槽审核与启动失败接续记录在 `.local-analysis/control-window-04h/`。
 
 本轮先复用 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／终端 `term_896ab8d5-51f6-4082-b741-6eec0625269e`／工作树 `explore-ex001-observer`，以新接续任务推进 EX-003 最小公开输入／菜单导航及真实客体后验，再补 EX-005 当前文件名和计数／配置边界；只有前置可靠后才接 EX-007 单线另存重开。先登记新实际领取并同步共享 dev，再做工具与具体新冻结方案；父审查新方案后在总窗口内另定分段 GO。原已结算 Task 不追加业务，旧成功／IME失败／原 AST 结论保持。授权与任务说明在 `.local-analysis/control-window-04h/`；没有同时启动第二桌面操作者。
 
