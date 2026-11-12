@@ -73,7 +73,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 第六唯一候选 `candidate-sixth/slot` 在共享 `c57409e` 上生成，原Pi `sixth-candidate-review.json` 于UTC23:19:18实际落盘。父实际read conf四路径及完整parse计划与worker回执逐字段一致，独立validate/policy、24冻结／99runtime／1input、owner新queue和只读原JSONL身份／模型high、旧400／安装99及五历史conf均通过。plan SHA `1307e9f301e45aa6d5a63eea649ca45cc2fcb88b4074f9402c276054b3c807c0`；conf `52f5a334fab677ca15b919016b1621a5e7b679abb49e6acab5052b513e599b3d`；owner `3dcba1999446c88a5c514459a702f7134a3a9c04b2adb59ef210427a2a59ddd1`。driver／gate／submit与已审第五同字节，owner为新46项已验版本。
 
-父已排他创建新 `go-start.json`，**UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480**，业务截止 **00:18:59.260480**；消息 `msg_49c8f306c808` 已交原Pi唯一入口启动。只做EX-003命名导航，每键新host／Capture菜单host／guest实际read及原JSONL SHA，原submit先validate后排他投递。owner自有投递线程，不启外部helper／第二连接；拒绝／未知停止、120秒静默、正常X及原四链wait／线程stop+join。Information实际高亮才确认，不选择其它子项／Status、Shift字母、IME、编辑保存或EX-007。EX-005后续独立候选／GO。父证据 `config-path-incident-20261112/sixth-parent-precheck.json`／`sixth-parent-review.json`；目前只有批准及执行消息，**尚无实际启动或新guest回报**，自动finished是此前等待GO状态，不据此重启。
+父已排他创建新 `go-start.json`，**UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480**，业务截止 **00:18:59.260480**；消息 `msg_49c8f306c808` 已交原Pi唯一入口启动。只做EX-003命名导航，每键新host／Capture菜单host／guest实际read及原JSONL SHA，原submit先validate后排他投递。owner自有投递线程，不启外部helper／第二连接；拒绝／未知停止、120秒静默、正常X及原四链wait／线程stop+join。Information实际高亮才确认，不选择其它子项／Status、Shift字母、IME、编辑保存或EX-007。EX-005后续独立候选／GO。父证据 `config-path-incident-20261112/sixth-parent-precheck.json`／`sixth-parent-review.json`；目前已收到实际启动及首guest回报，父只读核验通过：owner49876／driver24572／control43568／target32356，target FILETIME `134390002952223314`、HWND13963040，owner内线程49232已有started；33兼容样本无失败且join真。首guest `pt_000.png` 为640×480／6350字节／SHA `eeb87e89693a12bdc2008113016e6cfc8fd29d36d037b3f9a337897066bfb628`，原Pi实际read明确启动页，首轮host及guest均匹配本第六23:41:29原JSONL第2006行image字节。父证据 `sixth-first-guest-parent-audit.json`。23:42读取当前state已是startup-enter-post，后续按新客体后验推进，不重发Enter；尚未到Information，不把启动页或host黑屏外推成IME修复／完整导航通过。
 
 ### 第五槽历史离线审计（不改写为新授权下成功）
 
@@ -121,7 +121,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 分支／检查点 | `research/ex003-live-navigation`，owner线程交付 `3da62d12755765e7e30c9c89eb3b2590ba278fc7`，交付时干净；父独立集成46/46通过，允许同步新dev后仅生成新第六候选待审。历史第五 `63ee71c`、第四 `73cef6d`及离线 `b14245c`／`955d476`已集成，不重复研究 |
 | 修复验证边界 | 协调树隔离21/21、PowerShell／时段4/4、预算3/3，共28/28。跨树测试根先检查归属再初始化；耗时语义预检后、两条PowerShell正式创建边界前重核实时时段。原树双Python21/21仍按原候选范围保留，不累加为产品覆盖；新profile真实兼容、敌对TOCTOU、完整输入映射未验证 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 当前检查点 | 新第六候选父审通过、GO已签并交原Pi启动：UTC23:25:59→次日00:25:59，00:18:59仅收尾；尚无实际启动／新guest回报。原Pi／Task未结，EX-003／005未通过。旧五槽／GO继续只读无效；新owner46项离线集成不等于现场通过 |
+| 当前检查点 | 第六已实际运行，首新guest及33兼容join通过，父核新第六原JSONL回执；owner49876／driver24572／control43568／target32356和owner线程49232创建已核。23:42当前startup-enter后验待新guest，继续逐图导航，不重发。本段00:18:59起仅收尾／00:25:59硬截止，原Task／EX-003／005未结 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
