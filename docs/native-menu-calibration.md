@@ -128,3 +128,58 @@ Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0
 新增[回归测试](../tests/test_replay_legacy_shortcut.py)验证原 AST 的16项行为与提取边界，已分别在当前Python3.15及现有基础Python3.14.8执行，均16/16通过，未下载解释器；另有23个完整假回放案例。它们含 Shift 精确键序／flags／假扫描码、命名别名、大小写分流、Unicode UTF-16、SendInput 0 返回仍回成功、扫描码0、checkpoint零输入、半程异常不返回成功和输出不覆盖。测试不 import windows_mcp／COM/UIA，不加载真实 user32、不发送事件，来源四文件逐字未变。
 
 原始失败也保留：最初受限命名空间执行 future-import 及 Python3.15 ctypes结构布局时因缺导入白名单停止，之后一次缺 enumerate 的 NameError 出现在报告内，未据生成文件宣称通过；补齐已加载标准库布局和内建枚举后，第一次测试又把 `+` 的真实 TypeError误预期为ValueError，修正测试解释后通过。未改第三方源码来迎合测试，旧失败输出与原会话记录保持。EX-003仍缺完整实际输入通道→客体响应及坐标／捕获／状态对照，保留[原事项](exploration-backlog.md#ex-003)及剩余条件，本轮不删项。最终文档检查 **153 份 Markdown／1045 个本地链接／41 个开放事项／106 个来源细节／137 份索引报告，零错误**，`git diff --check`通过。仅清理可重建成功中间输出／本轮模块缓存 **134608 字节**，归档占用 **0**，净减少 **134608 字节**；清理时证据约 **155 KB**，没有新运行副本、下载或构建树。所有自有短时诊断子进程均由原 `subprocess.run` 等待返回0，没有本轮原软件／控制服务可声称的新退出证明，也未为清理查询桌面或全机进程。
+
+## 新窗口命名键导航：第一段至 Grid 的有限事实
+
+<a id="named-navigation-live"></a>
+
+本阶段接续 Task `task_db06ca9d4229`／Dispatch `ctx_e3ea7d528345`，Pi 仍为 `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`、`deng/gpt-6.1-sol high`，分支 `research/ex003-live-navigation`。用户另开四小时、后来延长为同起点七小时的控制总窗口；本段仍只用父首次审批的 **UTC 2026-11-12 02:22–03:02，02:55 起仅收尾**，没有以总授权延长运行中 GO。[EX-003](exploration-backlog.md#ex-003)仍未完整闭环；下列是成功的有限命名键响应，不改写旧 Shift+I／IME 失败或宣称已到 Information。
+
+新槽 `.local-analysis/ex-003-live/candidate/slot/`，plan SHA-256 `60e0824f4c6d7b22f15697fbe0ef3c6ea0010f74d00d65613abf99704beb40a2`，driver `193b148a6b08fc7cea90819bd89ef991c572b4dad67638f9e3a9cf516ce495c4`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`。23 冻结项／99runtime／1input预检通过，新目标 PID48992、创建FILETIME `134389238133484395`、HWND5575388 由原 Popen 绑定。兼容32样本无失败、最大单样本9.8639ms／启动间隔20.2243ms，线程真实join；没有输入法或系统设置改变。
+
+| 本轮新客体原图 | 输入前后实际观察 | 允许支持的范围 |
+| --- | --- | --- |
+| `pt_000.png` | AUTOTRAX1.57、PRESS ANY KEY TO START | 只据当前启动页发送一次命名Enter |
+| `pt_001.png` | 启动Enter后板图：矩形四边+横线 | 当次启动转换，底栏不当文件名或计数 |
+| `pt_002.png` | 主循环再一次Enter后，主菜单出现，Block蓝底高亮 | 当次命名Enter打开主菜单成立 |
+| `pt_003.png` | 第1个独立Down后Current高亮 | 与上一步相比向下一行 |
+| `pt_004.png` | 第2个独立Down后Delete高亮 | 未确认Delete，不是执行删除 |
+| `pt_005.png` | 第3个独立Down后Edit高亮 | 未确认Edit，不是进入编辑 |
+| `pt_006.png` | 第4个独立Down后File高亮 | 未进入File或文件操作 |
+| `pt_007.png` | 第5个独立Down后Grid高亮 | 未进入Grid或改变网格 |
+
+每个命名键后都逐步实际 read 宿主、当下 Capture 菜单及新640×480客体，nonce／完整图片列表／原字节SHA绑定到当前步；不是把MNU的Information第8项当运行高亮证明。共 **27张唯一宿主PNG+8张新客体PNG=35张**，原字节均匹配本Pi原UTF-8 JSONL的实际image回执，各轮全目录集合差恰一新增且旧图未改删。宿主仍黑底白线，客体却能看到板图／菜单；没有候选框或未知键响应，不将这些有限成功泛化为IME已经修复。
+
+逐步三类原图读取与模型往返实际占用了大部分40分钟分段。第5Down后已接近02:55业务截止，不足以安全完成其余两次Down、Information确认和逐图取证，因此**正常停止新业务**；未发送第6/7Down、Up、Information确认或Esc，没有进入Information子菜单。没有现场拒绝／`stopped-error`，也没有将正常预算结束伪造为需要120秒静默的失败。第一段的高亮和Grid只能描述该已退出目标，未来新槽必须从新当前图重建状态。
+
+仅生命周期取新当前图、一次正常宿主X后，目标原Popen于 **02:58:58.180712 wait0**；服务PID6244于 **03:00:15.366146 wait0**；driver PID44092于 **03:00:15.374794 wait0**；owner PID56148由原.NET Process持柄WaitForExit=0于 **03:00:15.3876233**。四组PID／创建FILETIME／映像／原HANDLE及适用Popen identity均与创建记录匹配，观测线程join。全部在03:02原分段截止前结束，无Alt+F4／强杀／第二控制连接。外层隐藏PowerShell自身无原Popen退出证明，不从下层wait0外推。
+
+本轮19项新门用例、当前driver40步纯AST假main（12张假客体）及13项停止阶段注错通过；假记录不证明实际菜单已到Information。原安装99、旧双槽包399、EX001证据584、EX004证据336、EX005证据387、前次EX003离线证据29以及本轮runtime99/input1完整集合／大小／SHA前后不变，`NEWFT.PCB`未产生。证据在 `.local-analysis/ex-003-live/live-audit.json` 及第一候选的原图／trace／请求／GO／退出原件；旧证据只读，不通过重启第一槽接续。下一段预算须在新冻结方案中明示，现有owner/driver的起止上限为3600秒，不能将65分钟直接套入旧入口；本Task保持未结，父先验收全新第二槽及新时段后才继续。
+
+### 第二槽早发拒绝、入口防护及第三槽路径隔离事故
+
+<a id="path-isolation-incident"></a>
+
+**当前暂停全部新现场与归档精简，本Task未完成，不能用旧GO恢复业务。** [EX-003](exploration-backlog.md#ex-003)保留受阻，原Task/Dispatch未结。第一槽到Grid的逐键成功与正常退出仍保留；第二槽与第三槽分别是入口时刻错误和配置隔离失败，均不属于“命名键/IME已修复”证据。父用户随后要求新协调agent接手，本worker停在离线检查点，未另建交接文档，当前权威接手状态仍由[HANDOFF](../HANDOFF.md#plan)维护。
+
+第二槽曾获批03:25–04:25，但操作者03:24:28提前约32秒调用入口。原owner21372由原.NET Process/HANDLE取得 **wait1于03:24:30.1868015**；其GO时段校验在driver／控制服务／目标创建前拒绝，零桌面请求。原GO撤销、该槽不重试。已提交 `f7f6dca` 的自有BOM入口在任何现场进程创建前增加plan摘要／身份／槽路径／实时时段校验及已启动marker拒重试，原owner/driver校验不取消；真实PowerShell `-File`／`PreflightOnly`／假创建3项和3600秒接受3900秒拒绝的3项边界测试通过。第三槽在03:45之后先PreflightOnly通过再唯一正式入口，没有再早发。
+
+第三槽plan `b7a471bab84495cf12ec52c373c72454845bffd281ffe4eabcbe884baad0f21f` 经审批于03:45–04:45运行。新目标PID28820／HWND855124、兼容33样本／join及Capture菜单读取通过，默认选择截图项一次；公开Click响应成功、183个采样无失败。**本槽captures仍空**，完整集合差在 **03:52:37.330696** 拒绝“单次捕获必须恰一张新PNG且无其它新文件”。没有发本槽启动Enter、Down、Shift字母或IME设置，也没有重发截图。完整 **120.001448秒**零新增桌面请求，quiet-ended03:54:37.332144后仅当前图正常X／原WaitExit；目标28820、服务19000、driver45320、owner41048四组原创建／退出身份匹配且wait0，最晚 **04:01:50.4556775**。正常退出只证明生命周期，不证明隔离成立。
+
+事后只读核查发现本槽日志缺失，实际 `SYN1.conf` 仍保留旧 `review-track-core-boundaries/.../final-candidate/slot-retry-01` 的 **logfile、captures及C/D双mount**；本槽conf SHA `e2931daeac67ece9c8f0b64012814ec334066c45f0b315580a3f54d7a57b9486` 恰与旧模板一致。早期stderr明确新conf文件被加载，却随后打开旧逻辑路径的日志；错位新PNG实际进入旧captures，不作为本槽捕获通过或新导航证据。
+
+精确根因为：`prepare_legacy_click_observation.py`先对只读来源 `Path.resolve()`，而旧工作树已由父核验迁入归档、原路径成为目录联接；解析结果为 `C:/Users/rikideng/orca/worktree-archives/pt_renew/20261112-cleanup/review-track-core-boundaries/tree/...`。模板文本仍是旧workspaces逻辑路径，生成器用已resolve的物理根做无命中断言的字符串 `replace`，**匹配0次**后继续冻结。第一槽和第二槽在联接迁移前已正确重绑，第三槽未重绑；事后保全的三conf中前两份各含当前槽根4次／旧根0次，第三份当前槽根0次／旧根4次。摘要和输入集合预检只确认“这些字节与计划一致”，没有校验conf内部路径，操作者和父审阅均漏查；不能归因IME、原程序导航或第三方安装。
+
+以本Task `readonly-before.json` 的旧399项基线逐项对比，父独立审计亦一致：
+
+| 差异 | 本轮事故后实际内容 | 原记录及可恢复限度 |
+| --- | --- | --- |
+| 新增 `slot-retry-01/captures/pt_000.png` | 6155字节，SHA `e473d5d1817063b927ca7493c3920f78b6282ccf4ed70f87badaf9161ad665e6` | 原基线没有该文件；保留错位文件，不删或搬回新槽追通过 |
+| 修改 `slot-retry-01/dosbox-startup.log` | 9038字节，SHA `d41cddaa69f8ab0fa24b592ded8d8c957073132dd4630684daeb6a98c08666bb` | 原8846字节，SHA `fc4680bc51d3c8c0e17672cbc5f8d3d14956c7d3f39acdab8d36058e7ab8ab34`；清单不能恢复原字节 |
+| 其余旧来源 | 无缺失，其余原文件大小／SHA一致；旧runtime/inputs未变 | 原安装99项及EX001/004/005/离线EX003清单仍一致；这不证明没有瞬时写入同字节 |
+
+旧包当前400项清单、改写日志／新增PNG的事故后字节及三conf已保全在本树 `.local-analysis/ex-003-live/path-incident-preservation.json`、`path-incident-current-bytes/`、`third-path-boundary-audit.json`；父另有 `main-2/.local-analysis/config-path-incident-20261112/` 独立保全。没有覆盖恢复旧日志、删除新增PNG、改旧manifest／冻结审核或原JSONL。此前“旧399项未变”仅适用于第三槽污染前；第一段当时的核验仍成立，**不能把其前后未变结论延续到事故后**。
+
+旧日志副本搜索限定范围：父在现有归档根／main-2忽略目录／活动树普通文件中未找到任何8846字节副本；本worker只读检查6个现有项目ZIP的8846字节条目和相关三个工作树Pi完整toolResult日志文本／换行变体，也无目标SHA精确匹配。未扫所有外部备份、任意7z或拼接部分回执；准确结论是**此范围未找到完整旧副本，恢复可行性尚未知**，Git bundle通常不含被忽略日志，不能当可恢复备份。事故后文件另存仅用于证明污染后状态。
+
+截至本接手检查点，根因／保全／精确差分／窄搜索已完成；新 `tools/legacy_runtime_config.py` 只有配置解析、语义重绑和逻辑／物理路径检查的**未完成草稿**，尚未接入生成器、owner、driver或服务启动前预检，未运行语义／联接测试，只有AST语法检查。不得拿它或三份现有冻结候选作为已修复/可运行结果。剩余工作是重绑每个logfile/captures/mount/输入输出并对零/多匹配拒绝，在生成后和创建控制服务／目标前校逻辑/resolve路径归属及联接逃逸，并补真实别名分歧／所有写入口／零服务目标创建假测试；列明允许写入与只读来源供父审，事故暂停解除前不写GO或运行新候选。本Task和原Dispatch保持，EX-003/005/007均未因此闭环。
