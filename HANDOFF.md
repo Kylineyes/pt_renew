@@ -1,12 +1,12 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是新协调 agent 的唯一接手入口。用户要求整理后由其安排新 agent；本轮不启动接手者、不开启新现场。能力概览见 [PROGRESS](PROGRESS.md)，知识入口见[文档导航](docs/README.md)，未知及领取状态见[探索待办](docs/exploration-backlog.md)。专题、冻结证据和旧会话保留历史事实，旧 GO／提示词不作现时指令。
+本文件是协调 agent 的唯一接手入口。当前协调者已完整读取本文件并沿原 Task／Dispatch／Pi 续接离线修复；用户本轮明确不启动新现场或新的接手 agent。能力概览见 [PROGRESS](PROGRESS.md)，知识入口见[文档导航](docs/README.md)，未知及领取状态见[探索待办](docs/exploration-backlog.md)。专题、冻结证据和旧会话保留历史事实，旧 GO／提示词不作现时指令。
 
 <a id="baseline"></a>
 
 ## 接手基线和最短步骤
 
-整理前共享 `dev=2e6874c31fec6f1022be8547cdce689752ae9b09`，主工作区干净。本次文档整理按独立分支、检查、no-ff 合并并推送 dev，实际最新 HEAD 以 Git 和远端为准；本机最终核验为 `.local-analysis/handoff-refresh-20261112/final-state.json`。本次不改产品、研究工具或冻结材料，main 的合并／提交／推送由用户处理。
+本轮接续前已实时核对共享本地及远端 `dev=7c91d804029c9a78a4f2a57a0287117ca282de4e`，协调工作区干净；原研究树仍为下文 `b38f153` 检查点，只有原配置草稿未跟踪。前轮文档整理最终核验为 `.local-analysis/handoff-refresh-20261112/final-state.json`；本轮事故后集合／原安装及配置复核见 `.local-analysis/config-path-incident-20261112/resume-verification.json`。实际最新 HEAD 仍以 Git 和远端为准；本轮交接更新在独立分支 `docs/offline-repair-resume`，研究实现仍在原独立分支。main 的合并／提交／推送由用户处理。
 
 1. 完整读 [AGENTS](AGENTS.md)、本文件和[探索规则](docs/exploration-workflow.md)，核 `git status --short --branch`、`git log -5 --oneline`、远端 dev，以及活动研究树改动。未集成提交不能当共享 dev 已有。
 2. **先接隔离事故，暂停新现场及进一步归档精简。** 所有原目标／控制服务／已知持柄链已退出；现存一个 Pi 子 agent 仅做离线保全和修复，没有获准的新候选现场或第四槽 GO。
@@ -64,13 +64,15 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ## 最高优先级：隔离事故与当前任务
 
-截至本次核对 UTC **2026-11-12 04:19**（北京时间12:19），没有活动原软件／控制服务／已知持柄链；有一个Pi子agent在当前Task内仅获准离线保全和修复。**新现场与进一步归档精简暂停，第四槽没有批准或GO。**
+截至本轮独立字节复核 UTC **2026-11-12 05:05:38**（北京时间13:05:38），旧包事故后400项、原安装99项及三份配置均与保全记录完全一致，父／worker保存的400项清单也一致。前轮UTC04:19核对的原软件／控制服务／已知持柄链已退出及原wait证据仍按当时范围成立；本轮只读进程清单工具调用超时，未据此声称实时无进程。原Pi子agent已经确认续作同Task的离线修复，尚无修复交付可审。**本轮不启动新现场或新的接手agent，新现场与进一步归档精简暂停，第四槽没有批准或GO。**
 
 ### 有效授权和接续身份
 
 用户先给四小时，后明确“现在延迟到7小时控制时间”，按同轮总时长登记：UTC **2026-11-12 02:00:53–09:00:53**，北京时间 **10:00:53–17:00:53**；UTC **08:50:53** 起至少10分钟整体收尾。窗口内新协调者可自主调度必要控制，不重复索同一许可；超时后不沿用。用户要求阶段完成或受阻主动通知。**事故修复和隔离复核通过前，这一授权不自动解除暂停。**
 
-全部子agent继续 **Pi、`deng/gpt-6.1-sol / high`**，显式用户覆盖优先于AGENTS旧GLM默认分工，不自行换模型／重索权。启动配置不等于模型证明，核PI环境、原JSONL model/thinking/assistant及成功工具回执；同Task沿原Pi，不重启。
+全部子agent继续 **Pi、`deng/gpt-6.1-sol / high`**，显式用户覆盖优先于AGENTS旧GLM默认分工，不自行换模型／重索权。启动配置不等于模型证明，核PI环境、原JSONL model/thinking/assistant及成功工具回执；同Task沿原Pi，不重启。本轮已复核原JSONL模型变更、high记录、最新assistant及成功工具回执，与原会话一致。
+
+当前协调Pi为 **`01a1ce1a-7d18-7607-ad1d-cc38ad702860`**，实际环境为 `deng/gpt-6.1-sol / high`，已通过自身身份 `run-use --id run_3efe904a98f0` 成功绑定原Run；未冒用旧父身份或重启worker。离线续作消息 `msg_5d2fa9e736ec` 已获原Pi状态确认 `msg_8e41ee3529a1`。本轮只授权继续离线实现、合成夹具／假创建测试、文档与审查，不生成现场候选或新GO；旧七小时时段不扩大本轮范围。
 
 | 项目 | 实际记录 |
 | --- | --- |
@@ -82,9 +84,9 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 分支／离线检查点 | `research/ex003-live-navigation`，最新观察HEAD为`b38f1531b77d09d0d863ca297a731116b898f0ab`；跟踪文件干净，仅未跟踪`tools/legacy_runtime_config.py`，接手复核 |
 | 未完成修复边界 | 该模块尚未接入准备器、owner或driver，尚无语义回归测试通过；不能因文件存在就称隔离已修复或直接生成现场 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 接手检查点 | worker已于UTC04:30:23保存`.local-analysis/ex-003-live/paused-checkpoint.json`并停下；Task状态`paused_unsettled`，不发worker_done、不伪造完成，原Pi保留待新协调者 |
+| 接续检查点 | 原worker于UTC04:30:23保存`.local-analysis/ex-003-live/paused-checkpoint.json`；本轮核验后一致并已由原Pi确认续作离线修复，原Task仍未结，不发整体worker_done。原检查点保留为历史，不覆盖成当前完成记录 |
 
-先加载实时 orchestration／orca-cli 技能。用 `orca orchestration worker-show --dispatch ctx_e3ea7d528345 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_e3ea7d528345 --subject ... --body ...` 协调，不给终端追加业务。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享该终端，不算多个活agent。
+先加载实时 orchestration／orca-cli 技能。用 `orca orchestration worker-show --dispatch ctx_e3ea7d528345 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_e3ea7d528345 --subject ... --body ...` 协调，不给终端追加业务。本轮已核原Dispatch `ready/live`、原终端保留和原暂停回执，随后才发离线续作；这些是核验时状态，不是修复完成。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享该终端，不算多个活agent。
 
 ### 未集成的活动分支提交
 
@@ -128,7 +130,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 1. **接住原worker离线检查点。** 已授权同Task修复，无需再问是否允许离线研究。收最新HEAD／未提交改动／测试和根因报告，核保全与原安装摘要；有限查原日志副本，未找到就明确损失范围，不伪造恢复。
 2. **修配置生成和启动前隔离。** 按配置节／autoexec语义重绑logfile／captures／C、D挂载／程序输入输出，匹配0次、多次或残留旧根拒绝。生成后及**创建控制服务／目标前**核逻辑和resolve物理写入目标都在新槽内，拒绝联接／符号链接逃逸、外部挂载；列可写路径和只读来源。补逻辑路径≠物理归档路径、替换0次、旧log／captures／mount、外部链接等离线拒绝测试，失败必须零服务／目标／输入。
-3. **先沉淀事故和修复，再审新候选。** 原失败保留；结论补现有专题及待办，不只存私有日志。实际读代码、当前conf及测试，不只比SHA。新协调者审查充分且仍在有效总窗口内，才可批全新槽／新GO；不能复用前三槽。现有每段上限3600秒、至少7分钟收尾，总最后10分钟只收尾。未完成或时间不足则继续离线，保持暂停。
+3. **先沉淀事故和修复，本轮停在离线可审检查点。** 原失败保留；结论补现有专题及待办，不只存私有日志。实际读代码、当前conf及测试，不只比SHA。原Pi负责在独立分支完成实现、必要回归、白名单及文档并提交，协调者审查后集成；EX-003总体仍受阻，不以离线修复冒充现场通过。用户本轮明确不启动新现场，因此下列恢复导航步骤仅为后续顺序，不在本轮执行；不生成第四槽候选／新GO、不复用前三槽。每段上限3600秒、至少7分钟收尾，总最后10分钟只收尾等原门继续保留。
 4. **恢复后只做EX-003最小导航。** 每键新host／guest实际read，保持Enter各1、Down最多7／Up最多1、实际Information高亮才确认、最多Esc1后验，未知即停。有限导航成功不等于IME／队列／鼠标映射全部解决，按原完整条件评估，不硬删项。
 5. **可靠导航后EX-005，再EX-007。** EX-005缺Information／Status当前文件名、计数及完整配置来源覆盖，实测值／5FT外观不替代GUI核定。EX-007须确认空板／层宽／端点、新建一段、全新8.3另存并原软件重开，核字节／图像／日志／摘要及默认FT编码。最后才考虑EX-029正式入口；NETDEF拒绝和保守产品门不变。
 
