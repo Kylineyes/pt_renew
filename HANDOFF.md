@@ -13,7 +13,7 @@
 3. 沿下文原 Task／Dispatch／Pi 继续，不重复领取 EX-003、不新建同义 worker、不重启原会话。新协调者使用自己的实际身份，不能冒用原父 Pi `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`；该旧会话只作审计来源。
 4. 用户指定 Pi／`deng/gpt-6.1-sol high` 和单操作者覆盖持续有效；已到期三小时仅曾覆盖 EX-003／EX-005，不恢复旧 GO。准备／审核计时、单段最多60分钟且至少7分钟收尾、总最后10分钟只收尾的现场约束保持；本次没有 EX-007、编辑写入或新增现场授权。
 
-远端为 `git@github.com:Kylineyes/pt_renew.git`。直连 DNS 和代理 SSH22 曾失败；已验证进程级 `GIT_SSH_COMMAND` 使用 `ssh.github.com:443`、`HostKeyAlias=github.com`，经 Git 自带 `C:/Users/rikideng/scoop/apps/git/current/ucrt64/bin/connect.exe -H 127.0.0.1:10808 %h %p` 可 fetch／push。保留主机密钥检查，不改全局配置；推送中断先查远端再普通重试，不强推，不把未确认写成成功。
+远端为 `git@github.com:Kylineyes/pt_renew.git`。直连 DNS 和代理 SSH22 曾失败；已验证进程级 `GIT_SSH_COMMAND` 显式指定 `HostName=ssh.github.com`、port443 和 `HostKeyAlias=github.com`，经 Git 自带 `C:/Users/rikideng/scoop/apps/git/current/ucrt64/bin/connect.exe -H 127.0.0.1:10808 %h %p` 可 fetch／push。保留主机密钥检查，不改全局配置；推送中断先查远端再普通重试，不强推，不把未确认写成成功。
 
 <a id="capabilities"></a>
 
@@ -67,7 +67,9 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 **现时状态优先于下述历史 GO 和授权：** 三小时窗口已结束，只做离线审计和交接。新主对话自身 `run-use` 成功，沿原 Dispatch 的接续消息为 `msg_4dbf399ac5c4`；原 Pi 新成功工具回执再次确认同会话／模型／high，没有重启或替换。原协调者到期消息 `msg_50a3db956da0` 保留；迟到的首 guest／导航状态是历史，不能当实时 GO。
 
-新协调者父独立审计 `.local-analysis/config-path-incident-20261112/fifth-parent-exit-audit.json` 已核：原四链身份与 wait0、120.003507 秒静默且该区间无新增请求；第五 18 张 host 和5张 guest 共23张 PNG 中，22张匹配中断前原 JSONL image 字节 SHA，仅第三 Down 宿主后图缺原操作者中断前 read，客体后验仍缺。新协调者 UTC21:02:08 已离线实际 read 该既有宿主原 PNG，可辨主菜单蓝色高亮 Edit；自身原 JSONL 第97行 image 字节 SHA 与源 `e28845172bf1465688860f43081c55b97d91e712d2b45aeb93a1f7c006e29a8d` 一致，派生回执 `fifth-offline-host-review.json` 保留。这是迟后离线观察，不补成原操作者当时逐键审核／新 guest，没有桌面或 Capture。冻结驱动在硬截止抛错后静默120秒，收尾循环因已过截止未执行，随后原 target.wait(1)立即取得0；没有正常 X／Close 请求记录，实际关闭原因及时间未知。helper 原创建回执仅打印 PID45260，无 FILETIME／持柄 wait；20:56:21 当前 PID 查询不存在不能补造退出证明。
+新协调者父独立审计 `.local-analysis/config-path-incident-20261112/fifth-parent-exit-audit.json` 已核：原四链身份与 wait0、120.003507 秒静默且该区间无新增请求；第五 18 张 host 和5张 guest 共23张 PNG 中，22张匹配中断前原 JSONL image 字节 SHA，仅第三 Down 宿主后图缺原操作者中断前 read，客体后验仍缺。新协调者 UTC21:02:08 已离线实际 read 该既有宿主原 PNG，可辨主菜单蓝色高亮 Edit；自身原 JSONL 第97行 image 字节 SHA 与源 `e28845172bf1465688860f43081c55b97d91e712d2b45aeb93a1f7c006e29a8d` 一致，派生回执 `fifth-offline-host-review.json` 保留。这是迟后离线观察，不补成原操作者当时逐键审核／新 guest，没有桌面或 Capture。10份原 Click observation 共1899样本逐条核 sequence／目标身份／API失败字段，均覆盖各自原 RPC 发送前至响应后至少100ms；17份 consumed 请求没有任何生命周期关闭请求，补充证据 `fifth-parent-trace-audit.json`。命中预测与成功文字不代替 DOS 消费。
+
+冻结驱动在硬截止抛错后静默120秒，收尾循环因已过截止未执行，随后原 target.wait(1)立即取得0；没有正常 X／Close 请求记录，实际关闭原因及时间未知。helper 原创建回执仅打印 PID45260，无 FILETIME／持柄 wait；20:56:21 当前 PID 查询不存在不能补造退出证明。
 
 旧事故包400项、原安装99项、五槽各99项runtime和1项input集合／大小／SHA均匹配，四历史配置一致，第四／第五24项冻结一致。前三槽23项冻结引用中有4项共享 tools 已由已集成离线修复更新，不称整个旧冻结无变化；旧四槽全部可变日志没有独立完整前后基线，不外推全槽整体不变。原日志、PNG、manifest、冻结审核、JSONL、安装及事故字节保持只读，归档精简暂停。
 
