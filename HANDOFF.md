@@ -62,6 +62,10 @@
 
 ## 下一步计划：按依赖推进
 
+**最新用户覆盖（本段优先于以下历史窗口）**：用户要求“继续推进，你有4小时时间控制窗口”。父于同机 UTC `2026-11-12T02:00:53.4234829Z` 起算，到 `06:00:53Z` 截止（北京时间 11 月 12 日 **10:00:53–14:00:53**），`05:50:53Z` 起至少留 10 分钟整体收尾。该新授权覆盖继续推进的必要桌面控制及父自主安排子 agent 顺序，不重复索同一许可；旧“仅离线、不再开启现场”描述只对应已结束轮次，不限制本次授权。仍统一 Pi、`deng/gpt-6.1-sol / high`，桌面同时仅一名操作者，旧 GO／槽／PID／坐标不可复用。
+
+本轮先复用 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／终端 `term_896ab8d5-51f6-4082-b741-6eec0625269e`／工作树 `explore-ex001-observer`，以新接续任务推进 EX-003 最小公开输入／菜单导航及真实客体后验，再补 EX-005 当前文件名和计数／配置边界；只有前置可靠后才接 EX-007 单线另存重开。先登记新实际领取并同步共享 dev，再做工具与具体新冻结方案；父审查新方案后在总窗口内另定分段 GO。原已结算 Task 不追加业务，旧成功／IME失败／原 AST 结论保持。授权与任务说明在 `.local-analysis/control-window-04h/`；没有同时启动第二桌面操作者。
+
 EX-001 接续 Task `task_0dbd022cdd62`／Dispatch `ctx_93fb7c0c4213` 已 succeeded，交付 `4266c5294d644893639a8c7c13fff72779b6cc6d`。同一 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0` 随后完成 EX-004 Task `task_57c256b62a70`／Dispatch `ctx_9bb156265144`，交付 `ceee461eb2dd7e20c1e290612a28833b6ebe1765`；实际模型始终 `deng/gpt-6.1-sol / high`。两轮各一张新客体 PNG，路径／动作独立、均为 640×480／6155 字节，图像同为可辨 AUTOTRAX 1.57 启动页，字节相同符合原条件。四次各 190 样本覆盖完整，十张原图匹配实际 read 回执，target／service／driver／owner 四组身份匹配且 wait0，最晚 UTC 18:58:48 退出。父另实际读两张客体原图并核集合差、单调锚点和四组原 wait；没有板名／计数或编辑通过结论。
 
 工作树 `explore-ex001-observer`、分支 `research/ex001-live-observation`／`research/ex004-continuous-capture`、证据 `.local-analysis/ex-001-continuation/`／`.local-analysis/ex-004/` 保留。父协调 Pi 为 `01a1cb92-9f30-71d5-a89b-dca34f1b90e1`。EX-005 随后以同一实际 Pi 的新 Task `task_215b58349614`／Dispatch `ctx_0c55cb76da25`、分支 `research/ex005-effective-state` 和 `.local-analysis/ex-005/` 接续，阶段提交 `082aca3`，底栏纠错 `72c620c` 已完成。该完整事项仍 failed／受阻，已结算任务不追加现场业务。
