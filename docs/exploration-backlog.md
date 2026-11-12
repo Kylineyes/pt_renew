@@ -97,9 +97,9 @@
 
 ### EX-003 宿主按键、DOS 鼠标与菜单选择的实际映射
 
-- 状态：研究中；负责人：task_db06ca9d4229／ctx_e3ea7d528345；分支：research/ex003-live-navigation；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本树.local-analysis/ex-003-live/，本次四小时新授权下接续最小命名VK/菜单导航及客体后验，先同步领取再审新冻结方案/分段GO，旧离线与IME失败原件只读。
+- 状态：受阻；负责人：task_db06ca9d4229／ctx_e3ea7d528345；分支：research/ex003-live-navigation；会话／证据：沿用Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），Orca父pi_2632e2cf_f698_483b_89ab_ad9510adbcf2／worker term_896ab8d5-51f6-4082-b741-6eec0625269e；本树.local-analysis/ex-003-live/，首段命名Enter/五Down至Grid已实际取证且正常退出；第三槽配置路径隔离事故后暂停全部现场，离线保全完成、路径修复草稿未接入未验证；Task/Dispatch保持未结，等新协调者续接，不用旧GO。
 - 类型：输入语义。依赖：无，可先独立研究。
-- 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#ime-state-boundary)；[native-menu-calibration.md：细节5](native-menu-calibration.md#shortcut-offline-semantics)。
+- 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#ime-state-boundary)；[native-menu-calibration.md：细节5](native-menu-calibration.md#shortcut-offline-semantics)；[native-menu-calibration.md：细节6](native-menu-calibration.md#path-isolation-incident)。
 - 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入；新配置场景一次Enter后客体板图可辨，但单次公开Shift+I后出现Windows输入法候选框，未有Information后验，未重发/切IME，事件接收与消费原因仍待证；[原AST及假API](native-menu-calibration.md#shortcut-offline-semantics)已证Shift+I为Shift down/I down/I up/Shift up的VK调用，普通i/I为Unicode INPUT，改变大小写不改为VK，底层返回0仍可能得到Pressed；这些不证明IME已修复或真实客体已消费。
 - 要回答：鼠标捕获、INT 33h 坐标、SDL 事件、IME、命名键／Unicode 字符和当前菜单高亮如何影响实际选择？误入 BLOCK 和 Return 差异能否解释？
 - 完成条件：对有明确问题的最小动作建立输入通道→客体响应对照，记录坐标、捕获及输入状态；不将回执或时间先后当作送达因果。
