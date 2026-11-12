@@ -162,6 +162,8 @@ def check_frozen(plan):
             raise ValueError('冻结文件变化：' + str(path))
     required = [plan['driver'], plan['base_python'], plan['target']['argv'][0], plan['control_entry'],
                 str(Path(plan['slot'])/'SYN1.conf'), str(Path(__file__))]
+    if 'file_submitter' in plan:
+        required.append(str(Path(__file__).with_name('legacy_observation_owner.py')))
     if any(str(lexical(path)) not in seen for path in required):
         raise ValueError('启动入口/隔离校验器/配置未冻结')
     lookup = {str(lexical(item['path'])): item for item in plan['frozen_files']}
@@ -231,6 +233,21 @@ def validate_runtime_plan(plan, *, runtime_root=None, driver_path=None, check_by
         raise ValueError('计划启动输入摘要不符')
     framework = ['slot/*.json', 'slot/*.jsonl', 'slot/*.png', 'slot/*.bin', 'slot/*.log', 'slot/inbox/', 'slot/service-profile/']
     writes = [slot/'dosbox-startup.log', slot/'captures', slot/'runtime', slot/'inbox', slot/'service-profile', *outputs]
+    if 'file_submitter' in plan:
+        submitter = plan['file_submitter']
+        if not isinstance(submitter, dict) or set(submitter) != {'queue', 'session_file', 'version'} or type(submitter['version']) is not int or submitter['version'] != 1:
+            raise ValueError('文件投递线程配置不符')
+        require_path(submitter['queue'], slot/'submit-queue')
+        session_file = lexical(submitter['session_file'])
+        if str(session_file) != submitter['session_file'] or session_file.is_relative_to(package):
+            raise ValueError('原Pi JSONL须为候选外的绝对只读来源')
+        reject_link(session_file)
+        with session_file.open(encoding='utf-8') as stream:
+            header = json.loads(stream.readline())
+        if header.get('type') != 'session' or header.get('id') != plan['session']:
+            raise ValueError('原Pi JSONL会话身份不符')
+        framework.append('slot/submit-queue/')
+        writes.append(slot/'submit-queue')
     for path in writes:
         confined(path, slot)
     if check_bytes:
@@ -238,7 +255,8 @@ def validate_runtime_plan(plan, *, runtime_root=None, driver_path=None, check_by
     return {'slot': str(slot), 'logical_physical_equal': True,
             'framework_writes': framework, 'dos_writes': [str(slot/'runtime'), str(slot/'captures'), str(slot/'dosbox-startup.log')],
             'probe_writes': [str(path) for path in outputs],
-            'read_only_sources': [item['path'] for item in plan['frozen_files'] if not lexical(item['path']).is_relative_to(package)],
+            'read_only_sources': [item['path'] for item in plan['frozen_files'] if not lexical(item['path']).is_relative_to(package)] +
+                ([plan['file_submitter']['session_file']] if 'file_submitter' in plan else []),
             'limits': '可写范围是本槽及独立复制runtime；拒绝整个候选内的链接/重解析点和多硬链接。不是文件系统沙箱；并发恶意换链的TOCTOU不在证明范围。'}
 
 

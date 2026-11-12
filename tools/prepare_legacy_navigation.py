@@ -6,7 +6,7 @@ from prepare_legacy_capture import prepare_capture
 from prepare_legacy_click_observation import replace,sha,REPO
 
 
-def prepare_navigation(*, budget_seconds=2400, **arguments):
+def prepare_navigation(*, budget_seconds=2400, file_submitter_session=None, **arguments):
     if not 420 < budget_seconds <= 3600:
         raise ValueError('本入口时段须超过七分钟且不超过六十分钟')
     prepare_capture(**arguments)
@@ -37,6 +37,9 @@ def prepare_navigation(*, budget_seconds=2400, **arguments):
         'acceptance':['启动客体->一次Enter->板图新guest','主循环一次Enter->主菜单新guest','逐个Down最多7/必要Up最多1且每键新guest确认高亮','仅当前高亮Information时一次Enter->Information新guest；正常X及原wait'],
         'navigation_limits':{'startup_enter':1,'main_menu_enter':1,'information_confirm':1,'navigate_down':7,'navigate_up':1,'menu_return':1},
         'exclusions':['无ShiftI/ShiftS/Unicode字母/IME修改/低层输入','不选Status或其他子项，不吞并EX005/007；Information菜单到达即收尾或单Esc验证返回']})
+    if file_submitter_session is not None:
+        plan['file_submitter'] = {'queue': str(slot/'submit-queue'),
+            'session_file': str(Path(file_submitter_session).absolute()), 'version': 1}
     for item in plan['frozen_files']:item.update({'bytes':Path(item['path']).stat().st_size,'sha256':sha(item['path'])})
     for p in (Path(__file__),Path('D:/project/pt_renew/pt/TRAXEDIT.MNU'),Path('D:/project/pt_renew/pt/TRAXEDIT.KEY')):
         plan['frozen_files'].append({'path':str(p.resolve()),'bytes':p.stat().st_size,'sha256':sha(p)})
@@ -52,6 +55,7 @@ def prepare_navigation(*, budget_seconds=2400, **arguments):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--budget-seconds',type=int,default=2400,help='完整分段时长，原owner/driver最多3600秒')
+    parser.add_argument('--file-submitter-session', help='显式启用owner文件线程，读取该原Pi JSONL核图，不创建helper进程')
     parser.add_argument('--refresh',action='store_true')
     for name in ('source','destination','installation','session','task','dispatch'):parser.add_argument('--'+name,required=True)
     prepare_navigation(**vars(parser.parse_args()))
