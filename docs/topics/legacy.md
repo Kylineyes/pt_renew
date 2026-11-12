@@ -40,6 +40,8 @@
 
 ## 下一步怎样推进
 
+当前先审[路径隔离事故后的离线修复与合成回归](../native-menu-calibration.md#isolation-offline-repair)：配置按语义重建、逻辑／物理归属、联接／硬链接及实际创建前拒绝门已纳入工具；这不恢复旧日志、不使前三槽合法，也不是EX-003运行条件闭环。本轮暂停现场与归档精简，后续步骤只作依赖顺序，不据旧GO执行。
+
 1. [两轮新客体 PNG 及真实逐图读取](../native-capture-checkpoint.md#continuous-capture-conclusion)已完成，四组原创建链正常wait0；复用此有限结论和当前图方式，不复用已退出槽、旧GO或坐标。
 2. 两轮捕获结论中的客体均为启动页；后续[EX-005新场景](../legacy-dosbox-configuration.md#effective-state-attempt)已取得关键有效配置和一次Enter后的五线板图，但Shift+I后出现IME候选框，Information／Status的工作文件名／计数仍缺。后续[原AST／假API](../native-menu-calibration.md#shortcut-offline-semantics)已核精确VK／Unicode分流和成功文字限度，但没有新队列／IME／客体消费证据；[输入通道 EX-003](../exploration-backlog.md#ex-003)及[配置状态 EX-005](../exploration-backlog.md#ex-005)仍受阻，不向单线写入跨越。
 3. 取得 Information / Status 的文件名与计数，确认空板及层、宽、端点，新建单段并保存到全新 8.3 文件。

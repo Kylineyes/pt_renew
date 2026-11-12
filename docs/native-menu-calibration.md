@@ -182,4 +182,39 @@ Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0
 
 旧日志副本搜索限定范围：父在现有归档根／main-2忽略目录／活动树普通文件中未找到任何8846字节副本；本worker只读检查6个现有项目ZIP的8846字节条目和相关三个工作树Pi完整toolResult日志文本／换行变体，也无目标SHA精确匹配。未扫所有外部备份、任意7z或拼接部分回执；准确结论是**此范围未找到完整旧副本，恢复可行性尚未知**，Git bundle通常不含被忽略日志，不能当可恢复备份。事故后文件另存仅用于证明污染后状态。
 
-截至本接手检查点，根因／保全／精确差分／窄搜索已完成；新 `tools/legacy_runtime_config.py` 只有配置解析、语义重绑和逻辑／物理路径检查的**未完成草稿**，尚未接入生成器、owner、driver或服务启动前预检，未运行语义／联接测试，只有AST语法检查。不得拿它或三份现有冻结候选作为已修复/可运行结果。剩余工作是重绑每个logfile/captures/mount/输入输出并对零/多匹配拒绝，在生成后和创建控制服务／目标前校逻辑/resolve路径归属及联接逃逸，并补真实别名分歧／所有写入口／零服务目标创建假测试；列明允许写入与只读来源供父审，事故暂停解除前不写GO或运行新候选。本Task和原Dispatch保持，EX-003/005/007均未因此闭环。
+截至UTC04:30暂停检查点，根因／保全／精确差分／窄搜索已完成；当时新 `tools/legacy_runtime_config.py` 只有配置解析、语义重绑和逻辑／物理路径检查的**未完成草稿**，尚未接入、无语义测试，仅AST语法检查。该历史状态保留；后续离线修复和验证见[下一节](#isolation-offline-repair)，不把文件存在当作修复或现场已获批。原Task保持未结，事故暂停解除前不写GO或运行新候选，EX-003/005/007均未因此闭环。
+
+### 恢复原Pi后的离线隔离修复与可审边界
+
+<a id="isolation-offline-repair"></a>
+
+本轮按最新用户和协调者的明确范围，**仅完成离线实现、合成回归和文档，不启动第四槽或新现场**。[EX-003](exploration-backlog.md#ex-003)保持受阻和原完整条件。原Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0` 在执行期异常退出，旧 Dispatch `ctx_e3ea7d528345` 的 failed／process_exited／退出码1073807364及连接ECONNRESET保留；恢复同一原Pi后核环境和原记录仍是 `deng/gpt-6.1-sol high`，由当前协调者以同Task重新绑定 `ctx_ed7b7e9ec944`／终端 `term_cb09ddcf-d398-4302-b953-639d97951adf`。没有冒用失效旧Dispatch、换模型、新建同义agent或恢复旧GO。旧七小时窗口已到期，事故与归档精简暂停继续，[EX-003](exploration-backlog.md#ex-003)整体受阻。
+
+新增 [legacy_runtime_config.py](../tools/legacy_runtime_config.py) 是针对当前已审DOSBox小配置的严格解析器和语义预检。生成器从模板计划声明的**逻辑slot**校对唯一 `[log] logfile`、`[dosbox] captures`、autoexec中的C/D两个挂载和启动输入，随后重建为新slot，不再对resolve后的源根做字符串替换。缺失、重复、额外章节／属性／命令、旧根残留、不在白名单的重定向或启动参数均拒绝。只读来源可由归档联接访问，但**可写候选在resolve之前保留原始逻辑路径**；逻辑路径与物理路径不等、联接、文件／目录符号链接、重解析点或多硬链接文件都不能进入可写树。模板校验失败发生在复制运行输入和新候选写入之前；四种准备器完成各自修改后还分别执行最终语义门，不用基类已过替代派生结果。
+
+| 执行层 | 实际接入的隔离检查顺序 | 拒绝时离线已证明的范围 |
+| --- | --- | --- |
+| BOM PowerShell外层／子层入口 | 保留原GO摘要／身份／实时时段门和已有marker拒重试；正式创建owner前以 `python -B` 执行只读语义预检；`OfflineCheck`／时段 `PreflightOnly` 保持创建前退出 | 非法路径计划不创建owner／driver或其输出；最外层保留逻辑slot，不先Resolve-Path丢别名 |
+| 原Popen owner | 逻辑slot读取计划后先完整隔离预检，再保留原GO／冻结验证，最后才打开driver日志和Popen | 无效计划零driver创建，零driver stdout/stderr文件 |
+| 生成driver模块顶层／main | ROOT由原命令行取逻辑绝对路径；桌面模块导入、DPI调用及首次runner日志前校验；main再次校验后才构造Rpc／采样器 | 无效计划零桌面导入／DLL查询、Rpc.start、自动baseline或采样 |
+| `Rpc.start(plan)` | 先检查再开控制流；创建局部profile后、服务Popen前再检查；失败关闭已开的流 | 非法计划零服务Popen；服务创建异常不泄漏stderr／raw句柄 |
+| 目标Launch | 原preflight保留并调用语义门；开目标流前及Popen前再次核路径／完整输入 | 初始错误或预检后计划变化都零目标Popen／后图；Popen／校验异常均关闭父stdout/stderr |
+
+语义门核 `slot`、实际ROOT、实际driver路径、`launch_argv` 的Python／`-B`／driver／slot、目标cwd／唯一 `-conf`／PCB输入／新输出，以及公开MCP入口的固定AST／参数。配置与driver、门、submit、目标映像、验证模块的冻结字段还须互相一致；输入完整集合／大小／SHA和去DFT策略也在启动入口重新核，摘要正确不能替代路径归属。目标和控制服务的用户／临时／缓存环境只作子进程局部映射，不修改系统持久设置。控制服务原有 `-I` 会忽略Python环境禁写字节码值，因此显式增加 **`-B`**，driver及owner同样显式禁写pyc，不能仅凭 `PYTHONDONTWRITEBYTECODE` 声称只读源码无缓存写入。
+
+| 可写类别 | 允许范围 | 只读来源与限制 |
+| --- | --- | --- |
+| 框架JSON／JSONL／PNG／BIN／LOG、inbox和原创建／退出证据 | 当前slot根及slot/inbox | 候选driver、gate、submit／SYN1.conf、仓库工具不作为框架输出目标 |
+| DOS日志和原生客体PNG | `slot/dosbox-startup.log`、`slot/captures` | 旧逻辑工作树／物理归档根均不是写入目标 |
+| DOS挂载、启动输入及允许的新板输出 | C/D都仅 `slot/runtime`；cwd `slot/runtime/pt`，输入SYN1.PCB，新输出NEWFT.PCB | 原安装、介质、用户库板图与旧冻结runtime只能作读取来源；运行文件必须独立复制且单硬链接 |
+| 已审CONFIG只读探针的重定向文件 | 固定命令分别到 `slot/runtime/CFGINFO.TXT` 等7个已知TXT名 | 不接收D盘变体、附加命令、额外文件或任意重定向 |
+| 子进程profile／临时／缓存 | `slot/service-profile`下的user／roaming／local／temp／config／uv-cache／pycache子目录 | USERPROFILE／APPDATA／LOCALAPPDATA／TEMP／TMP／XDG_CONFIG_HOME／UV_CACHE_DIR等仅子进程局部值；新环境的真实DOSBox／MCP兼容性尚未实机验证 |
+| 可执行和模块读取 | 原base Python、目标EXE、公开windows_mcp入口／相关源码、仓库验证与owner工具、旧已审自有模板 | 清单按计划冻结并单列；本轮只读取来源，不导入控制包或启动目标 |
+
+合成夹具实际建立“逻辑来源目录联接≠物理归档路径”，精确复现旧replace零次的前提，click／capture／state／navigation四种生成器均正向生成正确逻辑/物理归属的**假数据包**；没有生成第四现场槽／GO。派生阶段被注入旧/未审路径后最终门拒绝。覆盖旧logfile／captures／C/D挂载、启动输入输出、额外-conf／控制脚本参数、CONFIG额外重定向、目标目录别名、目录联接、文件symlink和5类真实硬链接共享写风险；硬链接例和symlink权限例已经分开，不能因后者权限跳过掩盖前者。本机此次文件symlink实际可建并拒绝，最终未跳过。
+
+最终隔离回归 **21/21** 在现有Python3.15和基础3.14.8各自通过，启用ResourceWarning错误检查；另保留真实PowerShell5.1文件加载／提前起跑 **3/3**、60分钟／65分钟预算边界 **3/3**。有效配置正向例包含原owner main及当前driver真实Rpc.start／Launch分支，Popen、线程、identity和后续观察全部为假对象；错误计划分别执行实际PowerShell入口、owner main、driver顶层前缀、main、Rpc.start和Launch，明确证明未越过driver／服务／目标／baseline／键鼠创建点。测试不只调用独立路径函数，也没有用“全部拒绝”冒充修复。
+
+原失败保留：中断前隔离14项中1 error，为Launch后二次门测试的流句柄未关导致tearDown WinError32，伴ResourceWarning；当时owner3项虽过，整体隔离不能写通过。修复以 `with` 管理目标父流、服务异常关闭其流，补Popen异常正反回归后不再出现句柄警告或残留句柄；恢复前最后两次edit已核落盘，连接异常和旧测试结果不覆盖。最终日志保存在本Task `.local-analysis/ex-003-live/offline-repair/`，原异常见原JSONL，本轮不改其历史内容。
+
+测试前后再次核事故后旧包 **400项**与本Task保全清单完全相同，原安装 **99项**不变，三conf仍为各自历史SHA；没有回滚9038日志、删除错位PNG、修改旧manifest／冻结审核／原JSONL，也没有重复扩大旧日志副本搜索。修复的证明范围是**当前小配置和受控合成文件／假创建边界**：不提供操作系统级文件沙箱，不保证敌对进程在检查与open/Popen间并发换链的TOCTOU消除，不验证所有DOSBox语法、未知第三方写入口或新profile真实兼容。新的语义检查不使三个旧槽合法，也不恢复旧日志字节；后续若需现场，必须另获明确范围／全新冻结和GO，本轮不执行。最终文档检查 **153 份Markdown／1057个本地链接／41个开放事项／108个来源细节／137份索引报告，零错误**，`git diff --check`通过；首次索引因同专题两个链接计为重复，已合并单入口后复跑。只清理本Task可重建失败夹具和模块缓存 **122708字节**，归档占用0、净减少122708字节；先记录夹具集合/摘要，原WinError32和中断失败回执保留。所有旧输入/PNG/日志/三槽和事故保全不清理，不以同盘移动或假Popen算真实退出/空间收益。
