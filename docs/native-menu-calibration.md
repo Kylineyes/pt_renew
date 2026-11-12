@@ -282,3 +282,21 @@ worker本机 `fifth-live-audit.json`保存22图当时回执、五轮集合差及
 父独立 `fifth-parent-trace-audit.json`还核10组观测共1899样本、sequence连续、精确PID/HWND一致、递归API failed为0，覆盖各原RPC发送前到响应后至少100ms；17个consumed为Launch1／App1／Shortcut5／Click10，生命周期请求0。该覆盖不证明DOS消费，也不补第三Down guest。
 
 新协调Pi `01a1d184-26bc-7092-be0b-362193a84c8c`已自身接Run；本节第五离线结算时，三小时及第五GO均过期，只做保全，不重试第三Down或补Capture。随后用户新授8小时，当前范围见唯一[HANDOFF](../HANDOFF.md#plan)：只允许在后续全新候选／新GO下接续，不能恢复或改写第五槽。前轮9例合成协议和28项离线回归仍按原范围复用，不重复产品或GUI测试。[EX-003](exploration-backlog.md#ex-003)仍缺完整输入响应／及时客体后验，Information未达；[EX-005](exploration-backlog.md#ex-005)未实际启动且配置来源／GUI文件名计数仍缺，原Task保持未结，审计完成不等于事项完成。
+
+<a id="owner-file-submit-thread"></a>
+
+## 新8小时内的owner投递线程修正与父集成验证
+
+用户后续新授8小时：UTC2026-11-12 **21:14:51.2986127–2026-11-13 05:14:51.2986127**，总最后10分钟05:04:51起仅收尾；这只授权后续新方案／候选／GO，不改第五到期与失败历史。沿原Pi／Task／Dispatch，先同步共享dev `96b34b2`再修正必要投递链。此节交付时没有第六候选／新GO，没有启动helper、原软件、控制连接或桌面；仍由父维护唯一HANDOFF和后续审核。
+
+新方案把文件投递做成既有 `legacy_observation_owner.py` 的非daemon自有线程，不增加任何Popen。只有新plan显式声明 `file_submitter={version:1,queue:当前slot/submit-queue,session_file:原Pi绝对JSONL路径}` 才启用；导航生成器用 `--file-submitter-session` 显式加入该字段，旧计划无字段沿用原owner。语义校验核字段集合／版本／queue固定归属、JSONL候选外只读来源及session首记录身份，同时要求owner源码冻结；白名单新增仅 `slot/submit-queue/`，packet、submitted/rejected及result均在该目录。源JSONL随会话增长，不冻结全文件字节，不作输出；owner增量解析已完成换行的记录并核图片解码SHA，未完成尾行留至下一次，截断拒绝。
+
+owner在完整隔离／冻结／GO检查后创建唯一driver，持原Popen/HANDLE；driver创建身份保存后再次完整检查才启动文件线程。每个 `packet-动作名.json` 绑定当前Task／Dispatch／session、previous／nonce与原图审核；线程先查路径、完整冻结／隔离、当前GO、driver仍存活、业务截止／120秒静默及原Pi图回执，再执行候选冻结的原submit.py，由原submit做gate.validate、唯一未消费请求、动作名禁重放及排他x写inbox。它不调用桌面／shell／额外控制连接，操作者不直接写业务inbox；只在上一图实际read后投一个packet，不预排。临时sys.argv/sys.path/review_gate导入状态在finally恢复，owner主线程此时只等待driver，不再解析参数。
+
+坏packet／过期／缺图回执等拒绝写可见result，并留下本Task stop-business信号，禁止恢复业务和新增投递至少120秒；原driver的首次错误静默也独立检查。静默结束后，只要原GO硬截止尚未过、driver仍在，保留同一原submit的CleanupSnapshot／必要CleanupFocus／当前图CloseX／WaitExit／Stop生命周期通道，错误工具不通过放宽gate恢复。队列别名／硬链接、多个packet、重放、停止信号及driver退出均不发布新业务；不安全目录或线程内部异常会记录thread-error，不以线程退出称业务成功。
+
+owner不等自身owner-exit文件。原driver.wait返回后在finally明确stop并真实join线程，保存 `submit-thread-started.json`、`submit-thread-exit.json`，晚join另记且仍等待；晚join见证写入失败也不能跳过join。identity／driver-created写入／线程start失败不遗弃已建driver；wait被中断后继续原对象wait并保留原异常。线程内部失败在四链收尾后使owner报错，不把driver wait0等同投递成功；上述线程退出只见证新方案，不能追补第五helper45260的原wait缺口，既有EX-039仍待领取。
+
+离线验证**46/46**：新增owner线程18项、原隔离21项、真实PowerShell-File／时段4项、60分钟边界3项，无跳过，启用ResourceWarning错误检查。正向实际调用冻结gate／submit及owner main，driver/Popen为假对象；覆盖错tool／nonce／缺SHA、链接／硬链接、多packet、driver退出／stop、预检耗时跨截止、坏／过期／错身份零driver及线程、线程内部错误／启动错误／identity或保存失败、原wait中断、晚join见证异常及生命周期保留。新增字段坏queue经真实PowerShell两条正式入口在owner／driver创建前拒绝。预算首跑旧表达式eval依赖重构后的now变量，3项中两子例NameError；改为内存文件／假时钟执行完整approval_window后3/3，原失败日志不覆盖。证据 `.local-analysis/ex-003-live/owner-thread-repair/validation.json`及各组stdout/stderr，先前14／16项阶段回执也保留。协调者随后完整审查交付 `3da62d12755765e7e30c9c89eb3b2590ba278fc7`，在 `main-2` 独立分支合入并完成相同四组46/46复测：新线程18、隔离21、真实PowerShell/时段4、预算3，无跳过／ResourceWarning；交付源文本与原研究树一致。测试后只读复核旧包400项、原安装99项完整集合／大小／SHA均匹配，文档检查153份／1053链／41事项／109来源／137报告零错，diff通过。父证据 `config-path-incident-20261112/owner-thread-parent-validation.json`、code-review及四组parent日志；这是离线集成通过，尚无第六候选／GO或现场兼容结论。
+
+测试不证明真实现场调度、新profile全部兼容或DOS消费，不消除检查与写入之间敌对并发换链／driver退出竞态的全部TOCTOU；后续仍须父审新冻结与新GO及逐图实机验收。
