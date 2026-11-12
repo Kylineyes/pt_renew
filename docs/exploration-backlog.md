@@ -97,7 +97,7 @@
 
 ### EX-003 宿主按键、DOS 鼠标与菜单选择的实际映射
 
-- 状态：研究中；负责人：task_db06ca9d4229／ctx_ed7b7e9ec944；分支：research/ex003-live-navigation；会话／证据：原Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），worker term_cb09ddcf-d398-4302-b953-639d97951adf，协调Pi 01a1ce1a-7d18-7607-ad1d-cc38ad702860；本树.local-analysis/ex-003-live/。新三小时授权UTC2026-11-12 17:39:51–20:39:51先EX-003后EX-005，最后10分钟只收尾；第五导航候选曾父审签GO UTC17:47:39–18:47:39；启动／正确App／首guest及Block→Current→Delete有原Pi回报，第3Down后模型EPROTO导致后验未读，driver分段截止，18:49:39原四链wait0。当前总授权20:39:51已过，原Pi和Task未结，等待新Pi协调者离线审计退出成因及原图回执；不得恢复旧GO。原[第四槽失败和正常退出](native-menu-calibration.md#fourth-request-refusal)保留，正确submit协议已离线9例核定；旧四槽／GO不复用，完整条件未达，原Task未结。
+- 状态：研究中；负责人：task_db06ca9d4229／ctx_ed7b7e9ec944；分支：research/ex003-live-navigation；会话／证据：原Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），worker term_cb09ddcf-d398-4302-b953-639d97951adf，当前协调Pi 01a1d184-26bc-7092-be0b-362193a84c8c；本树.local-analysis/ex-003-live/。用户新8小时UTC2026-11-12 21:14:51.2986127–次日05:14:51.2986127，次日05:04:51起仅收尾；先完成第五历史审计，再修正submit投递链并离线验证／父审，准备全新第六候选及新GO，当前未有新GO。第五原guest只到Block→Current→Delete，第三Down缺及时host审核及新guest，未达Information；四链wait0不证明关闭原因，helper无原持柄wait，见[第五槽中断审计](native-menu-calibration.md#fifth-interruption-audit)。原[第四槽失败和正常退出](native-menu-calibration.md#fourth-request-refusal)及9例协议／28项离线结论复用；全部旧五槽／GO只读不复用，完整条件未达，原Task未结。
 - 类型：输入语义。依赖：无，可先独立研究。
 - 原文细节：[native-menu-calibration.md：细节1](native-menu-calibration.md#explore-ex-003)；[legacy-text-screen-retry.md：细节2](legacy-text-screen-retry.md#explore-ex-003)；[native-menu-click-audit.md：细节3](native-menu-click-audit.md#normal-exit-boundary)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#ime-state-boundary)；[native-menu-calibration.md：细节5](native-menu-calibration.md#shortcut-offline-semantics)；[native-menu-calibration.md：细节6](native-menu-calibration.md#path-isolation-incident)；[native-menu-calibration.md：细节7](native-menu-calibration.md#isolation-offline-repair)。
 - 已知：File 点击已含裁剪原点；小写字符与修饰键走不同通道；主机成功文字不证明 DOS 指针或选择器收到同义事件；一次真实宿主菜单后Alt+F4返回成功但原wait超时，后来菜单已不显示，正常宿主X最终退出0，尚不能确定菜单如何消费该关闭输入；新配置场景一次Enter后客体板图可辨，但单次公开Shift+I后出现Windows输入法候选框，未有Information后验，未重发/切IME，事件接收与消费原因仍待证；[原AST及假API](native-menu-calibration.md#shortcut-offline-semantics)已证Shift+I为Shift down/I down/I up/Shift up的VK调用，普通i/I为Unicode INPUT，改变大小写不改为VK，底层返回0仍可能得到Pressed；这些不证明IME已修复或真实客体已消费。
@@ -108,7 +108,7 @@
 
 ### EX-005 启动配置继承、DFT 和实际工作文件状态
 
-- 状态：受阻；负责人：task_db06ca9d4229／ctx_ed7b7e9ec944（新授权协同续作，旧task_215b58349614／ctx_0c55cb76da25仅历史）；分支：research/ex003-live-navigation；会话／证据：原Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），worker term_cb09ddcf-d398-4302-b953-639d97951adf、协调Pi 01a1ce1a-7d18-7607-ad1d-cc38ad702860；旧证据.local-analysis/ex-005/只读，新证据待实际建立。三小时窗口已结束，EX-003未到Information，EX-005未新建现场；现仅离线核来源和命名菜单方案，新现场需新的有效授权／独立候选／GO。已知配置／Enter五线板图和Shift+I候选框失败保留，无新GUI文件名／计数或完整来源覆盖结论，不重跑未审Shift方案。
+- 状态：受阻；负责人：task_db06ca9d4229／ctx_ed7b7e9ec944（协同续作，旧task_215b58349614／ctx_0c55cb76da25仅历史）；分支：research/ex003-live-navigation；会话／证据：原Pi 01a1cb98-e57e-75d0-9b06-c40a941eaaf0（deng/gpt-6.1-sol high），worker term_cb09ddcf-d398-4302-b953-639d97951adf、当前协调Pi 01a1d184-26bc-7092-be0b-362193a84c8c；旧证据.local-analysis/ex-005/只读。用户新8小时UTC2026-11-12 21:14:51.2986127–次日05:14:51.2986127，最后10分钟只收尾；先EX-003可靠导航及原链退出父审，再独立EX-005新候选／GO，当前EX-005未新建现场。第五历史失败见[中断审计](native-menu-calibration.md#fifth-interruption-audit)，已知配置／Enter五线板图和Shift+I候选框失败保留，无新GUI文件名／计数或完整来源覆盖结论，不重跑未审Shift方案。
 - 类型：配置语义。依赖：无，可先独立研究。
 - 原文细节：[legacy-dosbox-configuration.md：细节1](legacy-dosbox-configuration.md#explore-ex-005)；[initial-assessment.md：细节2](initial-assessment.md#explore-ex-005)；[native-created-retry.md：细节3](native-created-retry.md#explore-ex-005)；[legacy-dosbox-configuration.md：细节4](legacy-dosbox-configuration.md#effective-state-attempt)。
 - 已知：旧C21／A240场景的文件名和计数不能代替新槽；本轮只读CONFIG得opengl/vgaonly/fixed10000/16/本槽captures及实际AXTYPE，早期stderr报告本显式conf，Enter后新客体与5FT输入相符。Information/Status未取得，完整来源/覆盖和历史只读挂载成因仍未核定；[阶段证据与剩余边界](legacy-dosbox-configuration.md#effective-state-attempt)已沉淀。
@@ -484,8 +484,8 @@
 
 - 状态：待领取；负责人：无；分支：无；会话／证据：无。
 - 类型：生命周期语义。依赖：无，可先独立研究。
-- 原文细节：[control-supervisor-local-live.md：细节1](control-supervisor-local-live.md#explore-ex-039)；[control-owned-close.md：细节2](control-owned-close.md#explore-ex-039)；[control-next-stage.md：细节3](control-next-stage.md#explore-ex-039)；[control-supervisor-snapshot-journal.md：细节4](control-supervisor-snapshot-journal.md#explore-ex-039)；[control-close-journal-live.md：细节5](control-close-journal-live.md#explore-ex-039)。
-- 已知：已有连续启动器和完整单组原退出链；50 ms 枚举不能排除未知短命子进程。旧退出证据缺失不可事后补造，握手权限及 runner 偶发失败未全部定位。
+- 原文细节：[control-supervisor-local-live.md：细节1](control-supervisor-local-live.md#explore-ex-039)；[control-owned-close.md：细节2](control-owned-close.md#explore-ex-039)；[control-next-stage.md：细节3](control-next-stage.md#explore-ex-039)；[control-supervisor-snapshot-journal.md：细节4](control-supervisor-snapshot-journal.md#explore-ex-039)；[control-close-journal-live.md：细节5](control-close-journal-live.md#explore-ex-039)；[native-menu-calibration.md：细节6](native-menu-calibration.md#fifth-interruption-audit)。
+- 已知：已有连续启动器和完整单组原退出链；50 ms 枚举不能排除未知短命子进程。旧退出证据缺失不可事后补造，握手权限及 runner 偶发失败未全部定位。第五槽无桌面submit helper的短时创建者只打印PID45260，无FILETIME／原HANDLE及持续原Popen wait，当前枚举未找到也不能补原退出证明；四条正式owner／driver／control／target链wait0不覆盖该助手，本轮只记录此缺口，保持本事项待领取。
 - 要回答：未来创建链如何在源头完整见证而不靠枚举补证；握手权限错误、账本写盘和 runner 间歇失败的真实条件是什么？
 - 完成条件：区分原创建对象与查询句柄的可证明范围，沉淀可重现原因和必要改进；历史无法恢复的 exit 缺口留在原报告，不声称新通过修复旧失败。
 
