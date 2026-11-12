@@ -6,7 +6,7 @@
 
 ## 接手基线和最短步骤
 
-本轮恢复前共享 `dev=a0767f3`；协调集成在独立分支 `fix/integrate-offline-isolation`，原研究实现位于 `research/ex003-live-navigation`。原交付`b14245c`已合入该集成分支，尚待跨树测试准备与预检耗时后截止边界的后续修正和最终复测，不当共享dev已有。前轮文档整理最终核验为 `.local-analysis/handoff-refresh-20261112/final-state.json`；本轮事故后集合／原安装及配置复核见 `.local-analysis/config-path-incident-20261112/resume-verification.json`。实际最新HEAD和集成状态仍以Git及远端为准，main的合并／提交／推送由用户处理。
+本次离线交付包含原研究分支`b14245c`和父审后修正`955d476`，已在独立分支`fix/integrate-offline-isolation`合并并完成协调树28项复测；该分支按no-ff合入dev并普通推送，实际最新HEAD和远端以Git为准。原研究树`research/ex003-live-navigation`交付HEAD为`955d4764afa73cb3d0e853446400d68637c9d2bb`，交付时干净。协调验证及完整输出为`.local-analysis/config-path-incident-20261112/integration-review.json`和同目录`integration-*.log`；原`resume-verification.json`及前轮`handoff-refresh-20261112/final-state.json`仍保留各自历史范围。main的合并／提交／推送由用户处理。
 
 1. 完整读 [AGENTS](AGENTS.md)、本文件和[探索规则](docs/exploration-workflow.md)，核 `git status --short --branch`、`git log -5 --oneline`、远端 dev，以及活动研究树改动。未集成提交不能当共享 dev 已有。
 2. **先接隔离事故，暂停新现场及进一步归档精简。** 原目标／控制服务／已知持柄链按历史原wait证据已退出，不据此外推实时进程总表；原Pi仅续作离线保全、修复和审查，没有获准的新候选现场或第四槽GO。
@@ -53,6 +53,7 @@
 | [一次菜单观测](docs/native-menu-click-audit.md#live-menu-conclusion)，4266c52 | 实机兼容33样本／join；一次Click的189样本完整覆盖与菜单真实后图；七组原创建退出wait0；28定向测试／13阶段注错 | 不定位旧终端前景来源，来源边界留EX-038；菜单活动Alt+F4语义留EX-003 |
 | [两轮客体捕获](docs/native-capture-checkpoint.md#continuous-capture-conclusion)，ceee461 | 同新目标两轮各一新640×480PNG，路径／动作独立，十图read回执匹配；四组wait0 | 两张同为启动页，字节可相同；不证明板名／计数、状态或编辑 |
 | [EX-003离线语义](docs/native-menu-calibration.md#shortcut-offline-semantics)，c4ddfeb | Shift+I为Shift down/VK_I down/up/Shift up；普通i/I为Unicode；假API失败仍可能Pressed；16测试两个Python／23回放 | 真实HKL／队列／IME／SDL／DOS消费和鼠标映射未证，不能靠大小写称绕IME |
+| [隔离事故离线修复](docs/native-menu-calibration.md#isolation-offline-repair)，b14245c／955d476 | 语义重绑四路径、四生成器最终门、联接／硬链接拒绝、owner／driver／服务／目标创建前校验；协调树28/28 | 原失败保留；合成／假创建范围，不是OS沙箱或新profile实机兼容通过，现场仍暂停 |
 | [EX-005配置阶段](docs/legacy-dosbox-configuration.md#effective-state-attempt)，082aca3／纠错72c620c | 有效opengl／vgaonly／fixed10000／16及本槽captures、AXTYPE；Enter后客体与合成5FT结构相符 | Shift+I后IME候选框，无Information／Status文件名和计数；完整来源覆盖仍缺 |
 | [EX-006宏调度](docs/legacy-command-dispatch-static.md)，6281f84 | 宏队列／录制／递归截断、Repeat模板、Un-Delete删除链，96静态核验 | 真实宿主键码、上下文及运行响应缺证 |
 | [EX-008 FT extra](docs/ft-extra-static-semantics.md)，bb3b540 | 缺失→0、仅整数1置真、核定保存路径输出0/1，局部预布消费者 | 完整电气／间接消费者、非规范输入缺证；保原值及存在性 |
@@ -64,7 +65,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ## 最高优先级：隔离事故与当前任务
 
-截至本轮父独立字节复核UTC **2026-11-12 05:05:38**（北京时间13:05:38），旧包事故后400项、原安装99项及三份配置均与保全记录完全一致，父／worker保存的400项清单也一致；worker最终离线验证于UTC14:42再次核得一致。前轮UTC04:19退出和原wait证据仍按当时范围成立；父只读进程清单工具调用超时，未据此声称实时无进程。原Pi已交付`b14245c`，父正在独立集成分支审查并要求补两处离线边界，尚未推送研究实现。**本轮不启动新现场或新的接手agent，新现场与进一步归档精简暂停，第四槽没有批准或GO。**
+离线隔离修复及父审后修正已经完成，已通过协调树**28/28**集成回归：隔离21、真实PowerShell文件／时段4、预算3，均无跳过。测试后父再次独立核旧包事故后400项、原安装99项和三份历史配置，全部与保全记录一致，见`integration-review.json`。原UTC05:05父复核、UTC14:42 worker复核也保留；历史原wait只按当时范围成立，父进程清单工具超时不外推实时无进程。**EX-003总体仍受阻，原Task未结；不启动新现场或新的接手agent，新现场与进一步归档精简暂停，第四槽没有批准或GO。**
 
 ### 有效授权和接续身份
 
@@ -81,10 +82,10 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
 | 当前终端／旧终端 | `term_cb09ddcf-d398-4302-b953-639d97951adf`；旧`term_896ab8d5-51f6-4082-b741-6eec0625269e`已失效，不再投递 |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／离线检查点 | `research/ex003-live-navigation`，交付HEAD `b14245ca1e6148c302924ce882f6871801d8c816`、交付时干净；父已请求同分支后续修正，复核实时HEAD及改动 |
-| 修复验证边界 | 配置语义重建／四生成器最终门／owner和driver各创建前门已实现。原树隔离21/21在两Python环境通过、PowerShell／时段3/3、预算3/3；父跨树复测发现测试根未创建导致21项setUp失败，另要求预检耗时后重核起跑截止。待两项补齐后集成复测，尚不当现场可用 |
+| 分支／离线检查点 | `research/ex003-live-navigation`，交付HEAD `955d4764afa73cb3d0e853446400d68637c9d2bb`，交付时干净；初次修复`b14245c`和后续修正均已审查并集成 |
+| 修复验证边界 | 协调树隔离21/21、PowerShell／时段4/4、预算3/3，共28/28。跨树测试根先检查归属再初始化；耗时语义预检后、两条PowerShell正式创建边界前重核实时时段。原树双Python21/21仍按原候选范围保留，不累加为产品覆盖；新profile真实兼容、敌对TOCTOU、完整输入映射未验证 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 接续检查点 | 原UTC04:30暂停检查点保持历史；当前初次交付证据为`.local-analysis/ex-003-live/offline-repair/review-ready.json`及`validation.json`。原Pi按约定status交付后有意停审，不发整体worker_done；自动finished提醒不表示另一次崩溃。父反馈后同Dispatch续作离线修正，EX-003总体和原Task仍未结 |
+| 接续检查点 | 原UTC04:30暂停检查点保持历史；worker初次交付为`offline-repair/review-ready.json`／`validation.json`，后续为`followup-checks.json`，父集成验证为协调树`config-path-incident-20261112/integration-review.json`。当前离线阶段已审查完成，原Pi保留待同Dispatch接续，不发整体worker_done；有意停审的自动finished提醒不表示崩溃。EX-003总体和原Task仍未结 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
@@ -94,11 +95,11 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 首次同Task重试`ctx_4796912a1ef0`在`agent_readiness`等待超时，但原Pi实际存活并有成功工具回执；向该失败Dispatch续发被拒，回执明确无效果。保留失败后，等原Pi真实`tui-idle`成立，再沿同Task／同终端重试得到`ctx_ed7b7e9ec944`的`ready`回执，没有重置、另建Task或另启Pi。当前业务消息为`msg_c3563f6412a7`，要求继续离线修复／复测、拆分符号链接权限跳过结算、文档及独立分支提交。恢复提示位于协调树`.local-analysis/config-path-incident-20261112/resume-original-pi.txt`，原失败及JSONL保持可追溯。
 
-后续通过`orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`及同Dispatch的`worker-read`／`send`协调，不再使用旧句柄或旧派发。离线实现已经交付，当前由父审查集成并处理补充边界；原Task仍未结、EX-003总体受阻，没有原软件现场恢复或新GO。
+后续通过`orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`及同Dispatch的`worker-read`／`send`协调，不再使用旧句柄或旧派发。离线修复及父审补充已经完成并集成；原Task仍未结、EX-003总体受阻，没有原软件现场恢复或新GO。
 
 ### 原研究分支的集成范围
 
-原研究分支到`b14245c`已合入父独立集成分支`fix/integrate-offline-isolation`，尚未合推dev。父已处理专题和待办两处文档冲突，保留完整事故事实、原Pi身份和现时HANDOFF；不能用研究树旧HANDOFF覆盖本文件。
+原研究分支到`955d476`已在父独立集成分支`fix/integrate-offline-isolation`完成审查与合并，协调树28/28通过，再按no-ff合入dev并推送。父处理专题和待办两处文档冲突，保留完整事故事实、原Pi身份和现时HANDOFF；研究树旧HANDOFF未覆盖本文件。
 
 | 提交 | 内容 |
 | --- | --- |
@@ -106,8 +107,9 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | `e573ef3`／`f7f6dca` | 六十分钟分段边界、任何owner创建前的GO时段门及离线测试 |
 | `9a07c5c`／`b38f153` | 事故暂停和专题检查点；历史HANDOFF增量不覆盖当前入口 |
 | `b14245c` | 配置语义重建、联接／硬链接拒绝、各层创建前预检、输出流异常关闭及合成回归 |
+| `955d476` | 测试根先归属校验再安全初始化；语义预检耗时后、两条正式创建边界前重新核起跑截止 |
 
-原UTC04:30检查点的9137字节草稿（SHA`718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`）仅为历史，不能代当前实现。原未接入／未测试状态已由`b14245c`实现和原树验证推进；父审查中新增的跨树测试根初始化和预检后实时时段复核，须在后续提交、集成复测和本文件中明确结算。事故旧失败、14项1error、跨树21项setUp失败及旧JSONL均保留，不因后续通过改写。
+原UTC04:30检查点的9137字节草稿（SHA`718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`）仅为历史，不能代当前实现。原未接入／未测试状态已由本次实现和集成验证推进。父首轮跨树21项全在setUp报FileNotFoundError，未执行隔离断言；安全初始化后已实测21/21，新增预检后跨截止用例使PowerShell／时段增至4项。事故旧失败、14项1error、跨树准备失败和旧JSONL均保留，不因后续通过改写。
 
 ### 三个导航槽的实际结果
 
@@ -134,9 +136,9 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ### 接手后的执行顺序
 
-1. **接住原worker离线检查点。** 已授权同Task修复，无需再问是否允许离线研究。收最新HEAD／未提交改动／测试和根因报告，核保全与原安装摘要；有限查原日志副本，未找到就明确损失范围，不伪造恢复。
-2. **修配置生成和启动前隔离。** 按配置节／autoexec语义重绑logfile／captures／C、D挂载／程序输入输出，匹配0次、多次或残留旧根拒绝。生成后及**创建控制服务／目标前**核逻辑和resolve物理写入目标都在新槽内，拒绝联接／符号链接逃逸、外部挂载；列可写路径和只读来源。补逻辑路径≠物理归档路径、替换0次、旧log／captures／mount、外部链接等离线拒绝测试，失败必须零服务／目标／输入。
-3. **先沉淀事故和修复，本轮停在离线可审检查点。** 原失败保留；结论补现有专题及待办，不只存私有日志。实际读代码、当前conf及测试，不只比SHA。原Pi负责在独立分支完成实现、必要回归、白名单及文档并提交，协调者审查后集成；EX-003总体仍受阻，不以离线修复冒充现场通过。用户本轮明确不启动新现场，因此下列恢复导航步骤仅为后续顺序，不在本轮执行；不生成第四槽候选／新GO、不复用前三槽。每段上限3600秒、至少7分钟收尾，总最后10分钟只收尾等原门继续保留。
+1. **保留当前离线交付和未结Task。** 本次`b14245c`／`955d476`实现、父审和协调树28项回归已完成；不要重新领取EX-003或重复研究已交付根因。接续先核实时Git／原Pi和新消息，已有证据不为新树重复制。
+2. **现场保持暂停，剩余验证明确保留。** 语义重绑、逻辑／物理归属、联接／硬链接拒绝、各层创建前门、测试根及预检后时段门已经过离线验证。新profile真实兼容、完整控制链实机运行和未知写入口未验证；不是OS沙箱，敌对并发换链TOCTOU不在证明范围。旧8846日志仍未找到精确副本，不回滚当前9038日志或删错位PNG。
+3. **本轮离线交付完成，后续现场需新授权。** 专题、待办和本文件已经沉淀，EX-003总体仍受阻。原七小时窗口已结束，用户本轮不启动新现场；下列步骤仅为后续依赖顺序，不生成第四槽候选／GO，不复用前三槽。每段上限3600秒、至少7分钟收尾、总最后10分钟只收尾等原门继续保留。
 4. **恢复后只做EX-003最小导航。** 每键新host／guest实际read，保持Enter各1、Down最多7／Up最多1、实际Information高亮才确认、最多Esc1后验，未知即停。有限导航成功不等于IME／队列／鼠标映射全部解决，按原完整条件评估，不硬删项。
 5. **可靠导航后EX-005，再EX-007。** EX-005缺Information／Status当前文件名、计数及完整配置来源覆盖，实测值／5FT外观不替代GUI核定。EX-007须确认空板／层宽／端点、新建一段、全新8.3另存并原软件重开，核字节／图像／日志／摘要及默认FT编码。最后才考虑EX-029正式入口；NETDEF拒绝和保守产品门不变。
 
