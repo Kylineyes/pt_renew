@@ -128,3 +128,30 @@ Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0
 新增[回归测试](../tests/test_replay_legacy_shortcut.py)验证原 AST 的16项行为与提取边界，已分别在当前Python3.15及现有基础Python3.14.8执行，均16/16通过，未下载解释器；另有23个完整假回放案例。它们含 Shift 精确键序／flags／假扫描码、命名别名、大小写分流、Unicode UTF-16、SendInput 0 返回仍回成功、扫描码0、checkpoint零输入、半程异常不返回成功和输出不覆盖。测试不 import windows_mcp／COM/UIA，不加载真实 user32、不发送事件，来源四文件逐字未变。
 
 原始失败也保留：最初受限命名空间执行 future-import 及 Python3.15 ctypes结构布局时因缺导入白名单停止，之后一次缺 enumerate 的 NameError 出现在报告内，未据生成文件宣称通过；补齐已加载标准库布局和内建枚举后，第一次测试又把 `+` 的真实 TypeError误预期为ValueError，修正测试解释后通过。未改第三方源码来迎合测试，旧失败输出与原会话记录保持。EX-003仍缺完整实际输入通道→客体响应及坐标／捕获／状态对照，保留[原事项](exploration-backlog.md#ex-003)及剩余条件，本轮不删项。最终文档检查 **153 份 Markdown／1045 个本地链接／41 个开放事项／106 个来源细节／137 份索引报告，零错误**，`git diff --check`通过。仅清理可重建成功中间输出／本轮模块缓存 **134608 字节**，归档占用 **0**，净减少 **134608 字节**；清理时证据约 **155 KB**，没有新运行副本、下载或构建树。所有自有短时诊断子进程均由原 `subprocess.run` 等待返回0，没有本轮原软件／控制服务可声称的新退出证明，也未为清理查询桌面或全机进程。
+
+## 新窗口命名键导航：第一段至 Grid 的有限事实
+
+<a id="named-navigation-live"></a>
+
+本阶段接续 Task `task_db06ca9d4229`／Dispatch `ctx_e3ea7d528345`，Pi 仍为 `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`、`deng/gpt-6.1-sol high`，分支 `research/ex003-live-navigation`。用户另开四小时、后来延长为同起点七小时的控制总窗口；本段仍只用父首次审批的 **UTC 2026-11-12 02:22–03:02，02:55 起仅收尾**，没有以总授权延长运行中 GO。[EX-003](exploration-backlog.md#ex-003)仍未完整闭环；下列是成功的有限命名键响应，不改写旧 Shift+I／IME 失败或宣称已到 Information。
+
+新槽 `.local-analysis/ex-003-live/candidate/slot/`，plan SHA-256 `60e0824f4c6d7b22f15697fbe0ef3c6ea0010f74d00d65613abf99704beb40a2`，driver `193b148a6b08fc7cea90819bd89ef991c572b4dad67638f9e3a9cf516ce495c4`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`。23 冻结项／99runtime／1input预检通过，新目标 PID48992、创建FILETIME `134389238133484395`、HWND5575388 由原 Popen 绑定。兼容32样本无失败、最大单样本9.8639ms／启动间隔20.2243ms，线程真实join；没有输入法或系统设置改变。
+
+| 本轮新客体原图 | 输入前后实际观察 | 允许支持的范围 |
+| --- | --- | --- |
+| `pt_000.png` | AUTOTRAX1.57、PRESS ANY KEY TO START | 只据当前启动页发送一次命名Enter |
+| `pt_001.png` | 启动Enter后板图：矩形四边+横线 | 当次启动转换，底栏不当文件名或计数 |
+| `pt_002.png` | 主循环再一次Enter后，主菜单出现，Block蓝底高亮 | 当次命名Enter打开主菜单成立 |
+| `pt_003.png` | 第1个独立Down后Current高亮 | 与上一步相比向下一行 |
+| `pt_004.png` | 第2个独立Down后Delete高亮 | 未确认Delete，不是执行删除 |
+| `pt_005.png` | 第3个独立Down后Edit高亮 | 未确认Edit，不是进入编辑 |
+| `pt_006.png` | 第4个独立Down后File高亮 | 未进入File或文件操作 |
+| `pt_007.png` | 第5个独立Down后Grid高亮 | 未进入Grid或改变网格 |
+
+每个命名键后都逐步实际 read 宿主、当下 Capture 菜单及新640×480客体，nonce／完整图片列表／原字节SHA绑定到当前步；不是把MNU的Information第8项当运行高亮证明。共 **27张唯一宿主PNG+8张新客体PNG=35张**，原字节均匹配本Pi原UTF-8 JSONL的实际image回执，各轮全目录集合差恰一新增且旧图未改删。宿主仍黑底白线，客体却能看到板图／菜单；没有候选框或未知键响应，不将这些有限成功泛化为IME已经修复。
+
+逐步三类原图读取与模型往返实际占用了大部分40分钟分段。第5Down后已接近02:55业务截止，不足以安全完成其余两次Down、Information确认和逐图取证，因此**正常停止新业务**；未发送第6/7Down、Up、Information确认或Esc，没有进入Information子菜单。没有现场拒绝／`stopped-error`，也没有将正常预算结束伪造为需要120秒静默的失败。第一段的高亮和Grid只能描述该已退出目标，未来新槽必须从新当前图重建状态。
+
+仅生命周期取新当前图、一次正常宿主X后，目标原Popen于 **02:58:58.180712 wait0**；服务PID6244于 **03:00:15.366146 wait0**；driver PID44092于 **03:00:15.374794 wait0**；owner PID56148由原.NET Process持柄WaitForExit=0于 **03:00:15.3876233**。四组PID／创建FILETIME／映像／原HANDLE及适用Popen identity均与创建记录匹配，观测线程join。全部在03:02原分段截止前结束，无Alt+F4／强杀／第二控制连接。外层隐藏PowerShell自身无原Popen退出证明，不从下层wait0外推。
+
+本轮19项新门用例、当前driver40步纯AST假main（12张假客体）及13项停止阶段注错通过；假记录不证明实际菜单已到Information。原安装99、旧双槽包399、EX001证据584、EX004证据336、EX005证据387、前次EX003离线证据29以及本轮runtime99/input1完整集合／大小／SHA前后不变，`NEWFT.PCB`未产生。证据在 `.local-analysis/ex-003-live/live-audit.json` 及第一候选的原图／trace／请求／GO／退出原件；旧证据只读，不通过重启第一槽接续。下一段预算须在新冻结方案中明示，现有owner/driver的起止上限为3600秒，不能将65分钟直接套入旧入口；本Task保持未结，父先验收全新第二槽及新时段后才继续。
