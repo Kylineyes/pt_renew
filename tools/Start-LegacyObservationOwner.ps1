@@ -55,6 +55,7 @@ if ($Detach) {
     $taskValidator = Join-Path (Split-Path -Parent $PSScriptRoot) 'tools/legacy_runtime_config.py'
     & $taskPlan.base_python -B $taskValidator --plan $taskPlanPath | Out-Null
     if ($LASTEXITCODE -ne 0) { throw '入口拒绝：隔离计划语义预检失败，零owner/driver创建' }
+    Assert-LegacyObservationStart -Plan $taskPlan -Approval $taskApproval -PlanSha256 $taskPlanSha -ResolvedSlot $taskSlot -NowUtc ([DateTimeOffset]::UtcNow)
     # 启动前使用隐藏宿主；聚焦之后只通过文件投递，不再启动终端。
     Start-Process -FilePath (Join-Path $PSHOME 'powershell.exe') -WindowStyle Hidden -ArgumentList @(
         '-NoProfile', '-File', ('"' + $PSCommandPath + '"'), '-Slot', ('"' + $taskSlot + '"')
@@ -77,6 +78,7 @@ $taskStart.RedirectStandardError = $true
 $taskStart.EnvironmentVariables['PYTHONUTF8'] = '1'
 $taskProcess = New-Object System.Diagnostics.Process
 $taskProcess.StartInfo = $taskStart
+Assert-LegacyObservationStart -Plan $taskPlan -Approval $taskApproval -PlanSha256 $taskPlanSha -ResolvedSlot $taskSlot -NowUtc ([DateTimeOffset]::UtcNow)
 $taskStarted = $taskProcess.Start()
 try {
     $taskHeld = @{

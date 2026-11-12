@@ -85,6 +85,8 @@ def remove_alias(alias):
 class RuntimeIsolationTests(unittest.TestCase):
     def setUp(self):
         evidence = REPO/'.local-analysis/ex-003-live'
+        isolation.confined(evidence, REPO/'.local-analysis')
+        evidence.mkdir(parents=True, exist_ok=True)
         self.temp = tempfile.TemporaryDirectory(prefix='synthetic-isolation-', dir=evidence)
         self.root = Path(self.temp.name)
         self.install = self.root/'original'; self.install.mkdir()
