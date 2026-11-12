@@ -247,3 +247,7 @@ Shift+I 四个键事件后各有名义10ms睡眠，再等0.5s，假时钟总 **0
 | owner | 41924 | 0 | 17:11:04.1097841 |
 
 只读收尾审计 `fourth-live-audit.json`核3张host原图与原Pi JSONL image.data解码SHA回执一致，无guest/导航used标记/新Capture/NEWFT.PCB；四层退出身份均与原创建记录一致，采样线程join通过。原安装99、事故后旧包400、既有EX001/004/005与离线EX003证据、新runtime99/inputs1完整集合与大小/SHA均不变。候选预检见`fourth-candidate-review.json`，父独立审核见协调树`config-path-incident-20261112/fourth-parent-review.json`。本次只证明新profile入口可启动到启动页、兼容采样和正常收尾，不证明全部环境写隔离/客体截图/导航或Information到达；[EX-003](exploration-backlog.md#ex-003)总体仍受阻，不由此次请求错误自动生成第五候选或新GO。
+
+离线协议复核直接载入第四槽冻结gate，并以临时合成PNG/计划/state/review调用原submit.py，App、6个命名Shortcut目的、Capture开菜单和选择客体截图共9组均validate通过、实际submit返回0且排他投递一致；旧FocusOwned及14轮已满后的Capture继续拒绝。正确App结构为 `{"name":"focus-owned","tool":"App","arguments":{"mode":"switch","name":"DOSBox-X 2026.10.01: PT - 10000 cycles/ms"}}`，实际新现场仍须从当下精确绑定原窗口取标题；外层packet为本Task/session/dispatch和当下previous/nonce。错误来自操作者跳过submit的本地协议预验，直接把意图当tool写inbox；后续流程须先完成当前host/guest真实read和审核，由原submit先validate后排他写唯一请求，不直接投递业务、不预排、不改gate放行。此合成成功不证明新现场动作消费。
+
+最坏初始客体图1＋startup Enter1＋main Enter1＋Down7＋Up1＋Information确认1＋Esc1合计13轮，在14轮预算内；每轮仍需Capture打开与选择各自的新host后验及guest实际read。原第一段35图约30分钟，完整最坏约70–80次图read/步骤，保守35–45分钟，17:15距17:39:39业务截止不足25分钟，因此父接受保守预算并决定本小时不再开第五现场，不生成新候选/GO/进程，不延长总授权，不以省略读图/多键预排赶时；当前停在未结Task的离线可审点，由父统一HANDOFF及集成，EX003/005/007均不删项。离线检查首次9组成功后，尾部合成步骤重名导致publish FileExistsError，未完成预算断言和report；修正临时编号后17:15:19完整复跑通过，原失败和文档追加脚本一次SyntaxError回执均保留。最终只读协议报告为同Task `fourth-protocol-review.json`，不改第四槽冻结与失败原件。
