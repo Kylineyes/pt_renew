@@ -285,7 +285,7 @@ worker本机 `fifth-live-audit.json`保存22图当时回执、五轮集合差及
 
 <a id="owner-file-submit-thread"></a>
 
-## 新8小时内的owner投递线程修正（离线待父审）
+## 新8小时内的owner投递线程修正与父集成验证
 
 用户后续新授8小时：UTC2026-11-12 **21:14:51.2986127–2026-11-13 05:14:51.2986127**，总最后10分钟05:04:51起仅收尾；这只授权后续新方案／候选／GO，不改第五到期与失败历史。沿原Pi／Task／Dispatch，先同步共享dev `96b34b2`再修正必要投递链。此节交付时没有第六候选／新GO，没有启动helper、原软件、控制连接或桌面；仍由父维护唯一HANDOFF和后续审核。
 
@@ -297,4 +297,6 @@ owner在完整隔离／冻结／GO检查后创建唯一driver，持原Popen/HAND
 
 owner不等自身owner-exit文件。原driver.wait返回后在finally明确stop并真实join线程，保存 `submit-thread-started.json`、`submit-thread-exit.json`，晚join另记且仍等待；晚join见证写入失败也不能跳过join。identity／driver-created写入／线程start失败不遗弃已建driver；wait被中断后继续原对象wait并保留原异常。线程内部失败在四链收尾后使owner报错，不把driver wait0等同投递成功；上述线程退出只见证新方案，不能追补第五helper45260的原wait缺口，既有EX-039仍待领取。
 
-离线验证**46/46**：新增owner线程18项、原隔离21项、真实PowerShell-File／时段4项、60分钟边界3项，无跳过，启用ResourceWarning错误检查。正向实际调用冻结gate／submit及owner main，driver/Popen为假对象；覆盖错tool／nonce／缺SHA、链接／硬链接、多packet、driver退出／stop、预检耗时跨截止、坏／过期／错身份零driver及线程、线程内部错误／启动错误／identity或保存失败、原wait中断、晚join见证异常及生命周期保留。新增字段坏queue经真实PowerShell两条正式入口在owner／driver创建前拒绝。预算首跑旧表达式eval依赖重构后的now变量，3项中两子例NameError；改为内存文件／假时钟执行完整approval_window后3/3，原失败日志不覆盖。证据 `.local-analysis/ex-003-live/owner-thread-repair/validation.json`及各组stdout/stderr，先前14／16项阶段回执也保留。测试不证明真实现场调度、新profile全部兼容或DOS消费，不消除检查与写入之间敌对并发换链／driver退出竞态的全部TOCTOU；后续仍须父审源码、新冻结与新GO及逐图实机验收。
+离线验证**46/46**：新增owner线程18项、原隔离21项、真实PowerShell-File／时段4项、60分钟边界3项，无跳过，启用ResourceWarning错误检查。正向实际调用冻结gate／submit及owner main，driver/Popen为假对象；覆盖错tool／nonce／缺SHA、链接／硬链接、多packet、driver退出／stop、预检耗时跨截止、坏／过期／错身份零driver及线程、线程内部错误／启动错误／identity或保存失败、原wait中断、晚join见证异常及生命周期保留。新增字段坏queue经真实PowerShell两条正式入口在owner／driver创建前拒绝。预算首跑旧表达式eval依赖重构后的now变量，3项中两子例NameError；改为内存文件／假时钟执行完整approval_window后3/3，原失败日志不覆盖。证据 `.local-analysis/ex-003-live/owner-thread-repair/validation.json`及各组stdout/stderr，先前14／16项阶段回执也保留。协调者随后完整审查交付 `3da62d12755765e7e30c9c89eb3b2590ba278fc7`，在 `main-2` 独立分支合入并完成相同四组46/46复测：新线程18、隔离21、真实PowerShell/时段4、预算3，无跳过／ResourceWarning；交付源文本与原研究树一致。测试后只读复核旧包400项、原安装99项完整集合／大小／SHA均匹配，文档检查153份／1053链／41事项／109来源／137报告零错，diff通过。父证据 `config-path-incident-20261112/owner-thread-parent-validation.json`、code-review及四组parent日志；这是离线集成通过，尚无第六候选／GO或现场兼容结论。
+
+测试不证明真实现场调度、新profile全部兼容或DOS消费，不消除检查与写入之间敌对并发换链／driver退出竞态的全部TOCTOU；后续仍须父审新冻结与新GO及逐图实机验收。
