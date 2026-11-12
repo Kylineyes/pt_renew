@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是协调agent的唯一接手入口。用户最新确认**EX-003和EX-005共三小时**，UTC2026-11-12 **17:39:51.266444–20:39:51.266444**，20:29:51起最后10分钟仅收尾。原Pi／同Task／当前Dispatch续作，先准备全新第五EX-003候选待父审新GO，再按依赖推进EX-005；当前尚无第五GO。此授权覆盖此前不开第五槽／旧窗口截止，但全部旧槽／旧GO和失败原件保持只读。能力概览见[PROGRESS](PROGRESS.md)，知识入口见[文档导航](docs/README.md)，未知及领取状态见[探索待办](docs/exploration-backlog.md)。
+本文件是协调agent的唯一接手入口。用户最新要求**创建新的Pi对话agent并交接本对话完整历史**。父实时核表已UTC2026-11-12 **20:42以后**，EX-003／EX-005三小时授权 **17:39:51.266444–20:39:51.266444已结束**，不得沿旧GO继续现场。第五槽进到主菜单Block→Current→Delete，第3Down已发但后图未完成读取，原Pi于17:59:13遇EPROTO；第五driver于18:47:39记分段截止、120秒后18:49:39原target／control／driver／owner均wait0，退出原因及完整图片／helper仍待离线审计，EX-003未到Information，EX-005未新开。本树当前旧协调Pi `01a1ce1a-7d18-7607-ad1d-cc38ad702860`即将交由新Pi对话接续，原worker／Task／Dispatch保留；新协调者以自身身份绑定Run，不冒用旧父，不重启操作者或新建同义worker。
 
 <a id="baseline"></a>
 
@@ -63,7 +63,13 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 <a id="plan"></a>
 
-## 最高优先级：新三小时EX-003／EX-005现场窗口
+## 最高优先级：新Pi对话接手与第五槽离线审计
+
+**现时状态优先于下述历史GO和授权：** 三小时窗口已结束，当前只允许离线审计和交接，不启动新现场。原Pi在第五第3Down之后EPROTO，工具/终端最后活动停于17:59，Orca状态可能unverifiable/stale，不等于进程退出；不盲目重启。父UTC20:42只读见第五原四链wait0及runner结束，但未核清目标退出是谁触发、是否有未知外部关闭、原图片完整读取／helper退出，不把wait0称正常宿主X完成。先独立审原创建退出、quiet/trace、原JSONL及持柄链；迟到状态消息不作为实时GO。父已发`msg_50a3db956da0`明确到期停业务，原worker仅离线保全待新协调者。
+
+完整父对话历史在 `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-12T04-53-24-888Z_01a1ce1a-7d18-7607-ad1d-cc38ad702860.jsonl`；原worker历史在 `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-explore-ex001-observer--/2026-11-11T17-12-37-502Z_01a1cb98-e57e-75d0-9b06-c40a941eaaf0.jsonl`。两份原件只读，不改写、不用摘要冒充完整历史。先完整读取HANDOFF、AGENTS和探索规则，再程序化流读两原JSONL，核用户原授权／工具回执／实际图片；大image.data筛字段或解码核SHA，不把base64全文打到终端。不要另建当前交接副本。
+
+## 历史：三小时EX-003／EX-005现场窗口
 
 **当前有效授权（覆盖下述历史暂停和旧窗口）：** 用户明确“确认，这次做ex-003和ex-005，有充足的三个小时”。父首次核表UTC **2026-11-12 17:39:51.266444–20:39:51.266444**（北京时间次日01:39:51–04:39:51），**20:29:51.266444起最后10分钟只正常收尾**。原Pi已获消息`msg_cec1a6a25b76`，沿原Task／当前Dispatch生成全新`candidate-fifth` EX-003命名导航候选，先离线交父审，不写GO／创建现场进程或桌面请求。第五导航及四链退出父审后再准备EX-005独立候选／新GO；原`prepare_state`的Shift+I／Shift+S有已知IME失败，不能未经新方案审核直接重跑，优先以已证命名菜单通道获取Information／Status。必要工具扩展先离线测试和审查，不能改运行中的冻结槽。原件保护／120秒静默／每键新图／单操作者／原创建者四链wait保持。旧全部GO失效、归档精简暂停，无EX-007／编辑保存授权。
 
@@ -74,6 +80,8 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 **第四槽已退出，暂无后续GO。** 原Pi于17:01:53实际`-File PreflightOnly`通过后唯一Detach启动；目标PID36096、FILETIME`134389766755393000`、HWND3149268，服务14104、driver46760、owner41924，兼容33样本／join通过。操作者投递未支持的`tool=FocusOwned`，实际门只接受`App`等约定工具；驱动UTC **17:08:02.153865**记录`两轮捕获禁止其它业务`。父撤销第四槽业务后，完整 **120.001374秒**零新增桌面请求；一次必要CleanupFocus并实际read新当前图，正常宿主X一次，目标原wait0于**17:11:03.818510**，服务／driver／owner分别wait0至**17:11:04.1097841**。父逐项核原创建身份一致，三宿主PNG与原Pi JSONL的image字节SHA匹配，旧事故400／原安装99不变，见`.local-analysis/config-path-incident-20261112/fourth-exit-audit.json`。这是操作者请求协议错误，不是profile／IME／导航失败；无客体Enter／Down／客体Capture，不称EX-003通过。第四槽失败／请求／GO冻结保留且永久不复用，不换接口恢复该槽。
 
 同一小时剩余时间已完成离线协议复核：第四冻结gate和原submit合成9例全部通过，正确聚焦是`App`＋`arguments.mode=switch`＋当下精确窗口标题，`FocusOwned`继续拒绝；后续必须经原submit先validate再排他投递，不直接write业务inbox、不预排。13轮最坏客体需求在14轮内，但按原逐图实耗，仅到Information仍需30–40分钟、完整35–45分钟，17:15时剩余不足25分钟。父已接受保守估计并明确**本小时不开第五槽，不生成候选／GO／进程，后续只离线结算**；不以少read／多键赶截止，不延长17:49:39总授权。原Pi文档交付`b07fcea`／`2d8fe3a`／`73cef6d895e50d22a978bbbb2230e89c9f414299`已审查集成，专题见[第四槽协议拒绝与正确投递](docs/native-menu-calibration.md#fourth-request-refusal)，证据活动树`fourth-live-audit.json`／`fourth-protocol-review.json`及父`fourth-exit-audit.json`。协议复核首轮尾部重名FileExistsError、修编号后17:15:19完整通过、追加脚本SyntaxError及父校验脚本来源／换行差异／image回执过滤修正均保留原工具回执；不把部分运行写成整体通过。原Pi有意停未结Task，不重复重启；EX-003总体受阻，原失败冻结保持，归档精简暂停。
+
+**第五槽当前批准：** `candidate-fifth/slot`回执`fifth-candidate-review.json`已实际落盘，父复核conf四路径、完整driver／gate／submit、24冻结／99runtime／1input及旧400／安装99和四份历史conf均通过，已排他写第五`go-start.json`，并通过`msg_546ea15cc193`令原Pi启动。GO起点UTC **17:47:39.413144**、业务截止 **18:40:39.413144**、硬截止 **18:47:39.413144**；总三小时截止20:39:51不变。plan SHA `fd1abcdaf4daa79bb9bad6cd0aa617c9f08d65dbabe9ccc00a667b94a9c22f57`，driver `c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f`，gate `6ac935bb76a13e6d88bc4b66a1e4903a1cbd542c4a0e508009838120d34e3371`，submit `d78df2cb4da4baf160968270f069484a15c4943fd87c257e1d910df917ea2e27`。父证据`config-path-incident-20261112/fifth-parent-precheck.json`／`fifth-parent-review.json`。准备期原模型一次EPROTO TLS握手错误保留，原Pi仍live、成功工具与review已核恢复，未重启或换模型。当前只有GO及执行消息，**尚无实际启动／导航成功回报**；每步必须经原submit校验和排他投递，不直接write业务inbox。第五仅EX-003，EX-005须后续独立候选／新GO。
 
 ### 有效授权和接续身份
 
