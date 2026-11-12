@@ -43,7 +43,7 @@ class OwnerFileLoadingTests(unittest.TestCase):
     def test_exact_start_guard_with_fake_creation_has_zero_calls_outside_window(self):
         script=Path(__file__).resolve().parents[1]/'tools/Start-LegacyObservationOwner.ps1'
         source=script.read_text(encoding='utf-8-sig')
-        function=source[source.index('function Assert-LegacyObservationStart {'):source.index('$taskSlot = (Resolve-Path')]
+        function=source[source.index('function Assert-LegacyObservationStart {'):source.index('$taskSlot = [IO.Path]::GetFullPath($Slot)')]
         # 只执行原guard函数；Start-Process在本离线作用域中为计数假函数。
         body=function+'''\n$script:taskFakeCreates=0
 function Start-Process { $script:taskFakeCreates += 1 }

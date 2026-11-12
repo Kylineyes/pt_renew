@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import subprocess
 import time
+from legacy_runtime_config import lexical, validate_runtime_plan
 
 
 def identity(process):
@@ -29,11 +30,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('slot', type=Path)
     args = parser.parse_args()
-    root = args.slot.resolve()
+    root = lexical(args.slot)
     def save(name, value):
         with (root / name).open('x', encoding='utf-8') as stream:
             json.dump(value, stream, ensure_ascii=False, indent=2)
     plan = json.loads((root / 'live-plan.json').read_text(encoding='utf-8'))
+    validate_runtime_plan(plan, runtime_root=root)
     go = json.loads((root / 'go-start.json').read_text(encoding='utf-8'))
     if root != Path(plan['slot']).resolve(): raise RuntimeError('槽路径不符')
     if hashlib.sha256((root/'live-plan.json').read_bytes()).hexdigest() != go['approved_plan_sha256']:
@@ -47,7 +49,7 @@ def main():
             raise RuntimeError('冻结文件变化：' + str(path))
     with (root/'driver-stdout.bin').open('xb') as stdout, (root/'driver-stderr.bin').open('xb') as stderr:
         process = subprocess.Popen(plan['launch_argv'], cwd=root, stdout=stdout, stderr=stderr,
-            env=dict(os.environ, PYTHONUTF8='1'), creationflags=subprocess.CREATE_NO_WINDOW)
+            env=dict(os.environ, PYTHONUTF8='1', PYTHONDONTWRITEBYTECODE='1'), creationflags=subprocess.CREATE_NO_WINDOW)
         held = None
         try:
             held = identity(process)

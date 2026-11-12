@@ -105,7 +105,7 @@
 - [原软件单线样例：下一次桌面控制范围](native-ft-sample-control-plan.md)
 - [原 AUTOTRAX 单线样例现场核验](native-ft-sample-verification.md)
 - [原软件单线样例尝试：客体捕获与投递修复](native-guest-save-sample.md)
-- [原 AUTOTRAX 菜单校准与 Shortcut 原 AST：VK／Unicode、回执和 IME 边界](native-menu-calibration.md#shortcut-offline-semantics)
+- [原 AUTOTRAX 菜单／输入语义与路径隔离事故后的离线预检修复](native-menu-calibration.md#isolation-offline-repair)
 - [菜单点击审计、实机短时观测与一次菜单后验](native-menu-click-audit.md#live-menu-conclusion)
 - [原软件样例取证与只读 PCB 核验命令](native-sample-wave.md)
 - [原 AUTOTRAX 短观察方案与本轮阻塞](native-short-observation.md)

@@ -40,6 +40,8 @@ def prepare_navigation(*, budget_seconds=2400, **arguments):
     for item in plan['frozen_files']:item.update({'bytes':Path(item['path']).stat().st_size,'sha256':sha(item['path'])})
     for p in (Path(__file__),Path('D:/project/pt_renew/pt/TRAXEDIT.MNU'),Path('D:/project/pt_renew/pt/TRAXEDIT.KEY')):
         plan['frozen_files'].append({'path':str(p.resolve()),'bytes':p.stat().st_size,'sha256':sha(p)})
+    from legacy_runtime_config import validate_runtime_plan
+    plan['isolation_policy'] = validate_runtime_plan(plan)
     (slot/'live-plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf-8')
     preparation=json.loads((root/'preparation.json').read_text(encoding='utf-8'))
     preparation.update({'plan_sha256':sha(slot/'live-plan.json'),'files':plan['frozen_files'],'navigation_only':True})

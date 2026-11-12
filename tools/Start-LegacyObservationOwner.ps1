@@ -37,7 +37,7 @@ function Assert-LegacyObservationStart {
     if ($NowUtc -lt $taskStartUtc) { throw '入口拒绝：尚未到 GO 开始时间，零现场进程创建' }
     if ($NowUtc -ge $taskDeadlineUtc.AddSeconds(-420)) { throw '入口拒绝：已过业务起跑截止，零现场进程创建' }
 }
-$taskSlot = (Resolve-Path -LiteralPath $Slot).Path
+$taskSlot = [IO.Path]::GetFullPath($Slot)
 $taskPlanPath = Join-Path $taskSlot 'live-plan.json'
 $taskPlan = Get-Content -LiteralPath $taskPlanPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $taskApproval = Get-Content -LiteralPath (Join-Path $taskSlot 'go-start.json') -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -51,17 +51,24 @@ if ($PreflightOnly) {
     exit 0
 }
 if ($Detach) {
+    # 两层正式入口都先做只读Python语义检查；失败不创建owner或其输出。
+    $taskValidator = Join-Path (Split-Path -Parent $PSScriptRoot) 'tools/legacy_runtime_config.py'
+    & $taskPlan.base_python -B $taskValidator --plan $taskPlanPath | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw '入口拒绝：隔离计划语义预检失败，零owner/driver创建' }
     # 启动前使用隐藏宿主；聚焦之后只通过文件投递，不再启动终端。
     Start-Process -FilePath (Join-Path $PSHOME 'powershell.exe') -WindowStyle Hidden -ArgumentList @(
         '-NoProfile', '-File', ('"' + $PSCommandPath + '"'), '-Slot', ('"' + $taskSlot + '"')
     ) | Out-Null
     return
 }
+$taskValidator = Join-Path (Split-Path -Parent $PSScriptRoot) 'tools/legacy_runtime_config.py'
+& $taskPlan.base_python -B $taskValidator --plan $taskPlanPath | Out-Null
+if ($LASTEXITCODE -ne 0) { throw '入口拒绝：隔离计划语义预检失败，零owner/driver创建' }
 $taskRepository = Split-Path -Parent $PSScriptRoot
 $taskOwner = Join-Path $taskRepository 'tools/legacy_observation_owner.py'
 $taskStart = New-Object System.Diagnostics.ProcessStartInfo
 $taskStart.FileName = $taskPlan.base_python
-$taskStart.Arguments = '"' + $taskOwner + '" "' + $taskSlot + '"'
+$taskStart.Arguments = '-B "' + $taskOwner + '" "' + $taskSlot + '"'
 $taskStart.WorkingDirectory = $taskSlot
 $taskStart.UseShellExecute = $false
 $taskStart.CreateNoWindow = $true
