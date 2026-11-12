@@ -114,6 +114,8 @@ def capture_after(root, before):
     for item in plan['frozen_files']:
         item.update({'bytes':Path(item['path']).stat().st_size,'sha256':sha(item['path'])})
     plan['frozen_files'].append({'path':str(REPO/'tools/prepare_legacy_capture.py'),'bytes':Path(__file__).stat().st_size,'sha256':sha(__file__)})
+    from legacy_runtime_config import validate_runtime_plan
+    plan['isolation_policy'] = validate_runtime_plan(plan)
     (slot/'live-plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf-8')
     preparation=json.loads((root/'preparation.json').read_text(encoding='utf-8'))
     preparation.update({'plan_sha256':sha(slot/'live-plan.json'),'files':plan['frozen_files'],'capture_rounds':2})

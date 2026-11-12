@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import shutil
+from legacy_runtime_config import check_tree, confined, lexical, rebind_config, validate_runtime_plan
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -22,13 +23,20 @@ def replace(text, old, new):
 
 
 def prepare(source, destination, installation, session, task, dispatch, refresh=False):
-    source, destination, installation = map(lambda p: Path(p).resolve(), (source, destination, installation))
+    destination = lexical(destination)
+    confined(destination, REPO / '.local-analysis')
+    source, installation = (Path(p).resolve() for p in (source, installation))
     if destination.exists():
+        check_tree(destination)
         if not refresh or not (destination/'preparation.json').is_file(): raise FileExistsError(destination)
         if any((destination/'slot'/name).exists() for name in ('go-start.json', 'runner-started.json', 'inbox')):
             raise RuntimeError('已批准或启动的候选不可更新')
     if not destination.is_relative_to(REPO / '.local-analysis'): raise RuntimeError('新候选须位于本树忽略目录')
     oldplan = json.loads((source / 'slot-retry-01/live-plan.json').read_text(encoding='utf-8'))
+    template_slot = Path(oldplan['slot'])
+    if template_slot.resolve() != (source / 'slot-retry-01').resolve():
+        raise RuntimeError('只读模板计划的逻辑槽与实际来源不符')
+    conf = rebind_config((source / 'slot-retry-01/SYN1.conf').read_text(encoding='utf-8'), template_slot, destination/'slot')
     before = manifest(installation)
     estimated = sum(v['bytes'] for v in before.values()) + 30 * 1024 * 1024
     if shutil.disk_usage(destination.parent).free < estimated * 3: raise RuntimeError('准备空间不足')
@@ -37,6 +45,30 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
         raise RuntimeError('不是已审查旧驱动')
     driver = replace(driver, "REPO = Path(r'C:/Users/rikideng/orca/workspaces/pt_renew/review-track-core-boundaries')", f'REPO = Path({str(REPO)!r})')
     driver = replace(driver, 'from inspect_legacy_desktop import inspect_desktop', 'from inspect_legacy_desktop import inspect_desktop\nfrom legacy_click_sampling import SamplingWorker, SamplingJob, require_coverage')
+    driver = replace(driver, 'ROOT = Path(sys.argv[1]).resolve()', 'ROOT = Path(os.path.abspath(sys.argv[1]))')
+    driver = replace(driver, 'from inspect_legacy_desktop import inspect_desktop', "from legacy_runtime_config import validate_runtime_plan, service_environment\nvalidate_runtime_plan(json.loads((ROOT/'live-plan.json').read_text(encoding='utf-8')), runtime_root=ROOT, driver_path=__file__)\nfrom inspect_legacy_desktop import inspect_desktop")
+    driver = replace(driver, 'def main():\n', "def main():\n    initial_plan = json.loads((ROOT/'live-plan.json').read_text(encoding='utf-8'))\n    validate_runtime_plan(initial_plan, runtime_root=ROOT, driver_path=__file__)\n")
+    driver = replace(driver, 'def preflight(plan):', 'def preflight(plan):\n    validate_runtime_plan(plan, runtime_root=ROOT, driver_path=__file__)')
+    driver = replace(driver, '    def start(self, plan):', '    def start(self, plan):\n        validate_runtime_plan(plan, runtime_root=ROOT, driver_path=__file__)')
+    driver = replace(driver, "env = dict(os.environ, PYTHONUTF8='1', DO_NOT_TRACK='1', ANONYMIZED_TELEMETRY='false', WINDOWS_MCP_SCREENSHOT_BACKEND='pillow')", 'env = service_environment(ROOT, os.environ)')
+    driver = replace(driver, "                out = (ROOT / (name + '.stdout.bin')).open('xb'); err = (ROOT / (name + '.stderr.bin')).open('xb')\n                if Path(entry['output']).exists(): raise RuntimeError('NEWFT.PCB已存在，禁止覆盖')\n                rpc.remaining()\n                target = subprocess.Popen(entry['argv'], cwd=entry['cwd'], stdout=out, stderr=err); identity = process_identity(target)", """                validate_runtime_plan(plan, runtime_root=ROOT, driver_path=__file__)
+                with (ROOT / (name + '.stdout.bin')).open('xb') as out, (ROOT / (name + '.stderr.bin')).open('xb') as err:
+                    if Path(entry['output']).exists(): raise RuntimeError('NEWFT.PCB已存在，禁止覆盖')
+                    rpc.remaining()
+                    validate_runtime_plan(plan, runtime_root=ROOT, driver_path=__file__)
+                    target = subprocess.Popen(entry['argv'], cwd=entry['cwd'], stdout=out, stderr=err, env=service_environment(ROOT, os.environ))
+                identity = process_identity(target)""")
+    driver = replace(driver, "        self.err = (ROOT / 'control-stderr.bin').open('xb'); self.raw = (ROOT / 'control-stdout.jsonl').open('xb')\n        env = service_environment(ROOT, os.environ)\n        self.p = subprocess.Popen(plan['control_argv'], cwd=ROOT, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.err, creationflags=subprocess.CREATE_NO_WINDOW)", """        self.err = None; self.raw = None
+        try:
+            self.err = (ROOT / 'control-stderr.bin').open('xb')
+            self.raw = (ROOT / 'control-stdout.jsonl').open('xb')
+            env = service_environment(ROOT, os.environ)
+            validate_runtime_plan(plan, runtime_root=ROOT, driver_path=__file__)
+            self.p = subprocess.Popen(plan['control_argv'], cwd=ROOT, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=self.err, creationflags=subprocess.CREATE_NO_WINDOW)
+        except BaseException:
+            for stream in (self.raw, self.err):
+                if stream is not None: stream.close()
+            raise""")
     driver = replace(driver, '    def __init__(self): self.p = None; self.counter = 0; self.messages = queue.Queue(); self.limit = None', '''    def __init__(self):
         self.p = None; self.counter = 0; self.messages = queue.Queue(); self.limit = None
         self.observation_job = None
@@ -147,7 +179,6 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
     for root in (destination, slot):
         (root / 'review_gate.py').write_text(gate, encoding='utf-8')
         shutil.copy2(source / 'submit.py', root / 'submit.py')
-    conf = (source / 'slot-retry-01/SYN1.conf').read_text(encoding='utf-8').replace(str(source / 'slot-retry-01'), str(slot))
     (slot / 'SYN1.conf').write_text(conf, encoding='utf-8')
     plan = {**oldplan, 'slot': str(slot), 'session': session, 'task': task, 'dispatch': dispatch,
             'driver': str(destination / 'desktop_session.py'), 'driver_sha256': sha(destination / 'desktop_session.py'),
@@ -159,19 +190,25 @@ def prepare(source, destination, installation, session, task, dispatch, refresh=
     plan['stop_rules'] = ['父审阅本候选后写新GO；唯一操作者、唯一目标及单次菜单打开', '拒绝或后验失败即停止，完整120秒零新增桌面请求', '最后七分钟仅正常收尾；原Popen/HANDLE持续持有到真实wait']
     plan['failure_cleanup'] = '静默结束后只接Close/WaitExit/Stop；Close仅可按公开门精确聚焦一次，再正常Alt+F4一次，不能绕门或重发'
     plan['executor'] = '当前Pi worker唯一现场操作者，父已审阅后另写新GO；不选择菜单项'
-    plan['launch_argv'] = [plan['base_python'], str(destination / 'desktop_session.py'), str(slot)]
+    plan['launch_argv'] = [plan['base_python'], '-B', str(destination / 'desktop_session.py'), str(slot)]
+    if oldplan['control_argv'][1:3] != ['-I', '-c']:
+        raise RuntimeError('原公开控制入口不是已审参数')
+    plan['control_argv'] = [oldplan['control_argv'][0], '-I', '-B', *oldplan['control_argv'][2:]]
     for key in ('launch_note', 'delivery_note', 'previous_slot_result', 'menu_flow'): plan.pop(key, None)
     paths = [destination / name for name in ('desktop_session.py', 'review_gate.py', 'submit.py')]
     paths += [slot / name for name in ('review_gate.py', 'submit.py', 'SYN1.conf')]
     paths += [REPO / '.gitattributes']
-    paths += [REPO / 'tools' / name for name in ('observe_legacy_click.py', 'legacy_click_sampling.py', 'legacy_observation_owner.py', 'Start-LegacyObservationOwner.ps1', 'inspect_legacy_desktop.py')]
+    paths += [REPO / 'tools' / name for name in ('legacy_runtime_config.py', 'observe_legacy_click.py', 'legacy_click_sampling.py', 'legacy_observation_owner.py', 'Start-LegacyObservationOwner.ps1', 'inspect_legacy_desktop.py')]
     # 保留原控制入口等外部冻结项；排除旧启动器及旧工作树路径。
     paths += [Path(item['path']) for item in oldplan['frozen_files'] if not Path(item['path']).is_relative_to(source) and not 'orca\\workspaces' in item['path']]
     site = Path('C:/Users/rikideng/scoop/persist/uv/tools/versions/windows-mcp/Lib/site-packages/windows_mcp')
-    paths += [site / name for name in ('desktop/service.py', 'tools/input.py', 'uia/enums.py')]
+    plan['control_entry'] = str(site/'__main__.py')
+    paths += [site / name for name in ('__main__.py', 'uia/core.py', 'desktop/service.py', 'tools/input.py', 'uia/enums.py')]
+    paths += [Path(plan['base_python']), Path(plan['target']['argv'][0])]
     plan['frozen_files'] = [{'path': str(p), 'bytes': p.stat().st_size, 'sha256': sha(p)} for p in dict.fromkeys(paths)]
     for old in (slot/'live-plan.json', destination/'preparation.json'):
         if refresh and old.exists(): old.unlink()
+    plan['isolation_policy'] = validate_runtime_plan(plan)
     dump(slot / 'live-plan.json', plan)
     if manifest(installation) != before: raise RuntimeError('原安装发生变化')
     dump(destination / 'preparation.json', {'source_package': str(source), 'installation': str(installation),

@@ -51,6 +51,8 @@ def prepare_state(**arguments):
         Path('C:/Users/rikideng/AppData/Local/DOSBox-X/dosbox-x-2026.10.01.conf')]
     for p in extra:
         plan['frozen_files'].append({'path':str(p.resolve()),'bytes':p.stat().st_size,'sha256':sha(p)})
+    from legacy_runtime_config import validate_runtime_plan
+    plan['isolation_policy'] = validate_runtime_plan(plan)
     (slot/'live-plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf-8')
     preparation=json.loads((root/'preparation.json').read_text(encoding='utf-8'))
     preparation.update({'plan_sha256':sha(slot/'live-plan.json'),'files':plan['frozen_files'],'status_only':True})
