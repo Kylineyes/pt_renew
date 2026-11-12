@@ -64,7 +64,9 @@
 
 **最新用户覆盖（本段优先于以下历史窗口）**：用户先授予四小时，随后明确“现在延迟到7小时控制时间”，按同一轮总时长由 4 小时延长至 **7 小时** 登记。起点仍为父同机 UTC `2026-11-12T02:00:53.4234829Z`，新总截止 `09:00:53Z`（北京时间 11 月 12 日 **10:00:53–17:00:53**），`08:50:53Z` 起至少留 10 分钟整体收尾。用户同时询问进度，父负责在阶段完成或受阻时通知，不必等待用户逐次催问。新授权覆盖继续推进的必要桌面控制及父自主安排子 agent 顺序，不重复索同一许可；旧“仅离线、不再开启现场”描述只对应已结束轮次，不限制本次授权。仍统一 Pi、`deng/gpt-6.1-sol / high`，桌面同时仅一名操作者，旧 GO／槽／PID／坐标不可复用；运行中分段 GO 不因总窗口加时而热改。
 
-当前 EX-003 导航接续 Task `task_db06ca9d4229`／Dispatch `ctx_e3ea7d528345` 已共享领取，候选 `321cc4e` 经父核验 23 冻结项／99 runtime／1 input 后获批，分段 UTC 02:22–03:02，02:55 起仅收尾。父于 02:46:49 只读落盘文件见 `step-021-down-four-post`，已完成六轮客体集合，尚无最终 Information／本段退出结论；不把 complete 标记替代实际读图。新的七小时授权已通知同一操作者，当前分段仍按时收尾，后续依据实际证据另定方案／时段，不为赶进度省略逐图审核。
+当前 EX-003 导航接续 Task `task_db06ca9d4229`／Dispatch `ctx_e3ea7d528345` 已共享领取。第一槽 UTC 02:22–03:02、02:55 停业务，实际取得主菜单 Block → Current → Delete → Edit → File → Grid 的五次逐键新客体后验；未执行剩余两 Down／Information 确认／Esc。35 张原 PNG 匹配实际读图回执，四组原创建／退出身份精确匹配且 wait0，最晚 03:00:15 退出，父另实际读 Grid 图和核原 wait。有限事实已在活动分支提交 `a4affb2`，Task 继续未结算，不视为完整 EX-003 完成。
+
+第二全新冻结槽 `explore-ex001-observer/.local-analysis/ex-003-live/candidate-second/slot` 已经父审查，plan `2fa798a92a94463446dd6af557580dbd8f088955c1b578f5f2b79ef7fbee6374`、driver／gate／submit 与第一槽同字节，23 冻结项／99 runtime／1 input 核验一致。采用已有 owner／driver 支持的 3600 秒新分段，预算校验及边界测试提交 `e573ef3`；GO 为 UTC **03:25–04:25，04:18 起仅收尾**。由新启动图重建状态，不续用旧 Grid／GO／PID／坐标，仍每键真实客体 read、实际高亮 Information 才确认，禁止 Status／编辑。总窗口仍到 09:00:53，父审核记录在 `.local-analysis/control-window-04h/ex003-second-scene-review.json`。
 
 本轮先复用 Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／终端 `term_896ab8d5-51f6-4082-b741-6eec0625269e`／工作树 `explore-ex001-observer`，以新接续任务推进 EX-003 最小公开输入／菜单导航及真实客体后验，再补 EX-005 当前文件名和计数／配置边界；只有前置可靠后才接 EX-007 单线另存重开。先登记新实际领取并同步共享 dev，再做工具与具体新冻结方案；父审查新方案后在总窗口内另定分段 GO。原已结算 Task 不追加业务，旧成功／IME失败／原 AST 结论保持。授权与任务说明在 `.local-analysis/control-window-04h/`；没有同时启动第二桌面操作者。
 
@@ -112,6 +114,10 @@ Information／Status 工作文件名和计数、完整来源覆盖仍在 EX-005�
 <a id="agents"></a>
 
 ## 模型、派发与历史 agent 收尾
+
+用户最新要求清理本工程无用子工作区，本次已完成：17 个工作树减为 **3 个**，保留原 `D:/project/pt_renew` 的 main、本协调 `main-2` 的 dev、活动 `explore-ex001-observer` 的 `research/ex003-live-navigation`。活动树显示名现为 **EX-003-输入导航**，仍同一 Pi／模型／终端；没有停止或重启它。其余14项清理前均干净、已合入 dev、无agent／活动或不可核验终端／进程命令行引用，已从Orca及Git工作树登记移除，对应14个普通分支用安全 `-d` 删除。当前只有一个活动子 agent，截图中灰色历史条目不代表仍有agent运行。
+
+14项完整归档为 `C:/Users/rikideng/orca/worktree-archives/pt_renew/20261112-cleanup/` 下各项 `tree`，共 **10,314 文件／2,160,940,892 字节**，全部集合／目录／大小／SHA-256核对通过，原路径以目录联接可只读访问，不含 `.git`、不是开发工作树。为满足当前研究冻结来源与历史构建的绝对路径消费者，仅保留一份可直接读取的归档树；不要递归跟随联接清理或把移动当空间释放。原HEAD保留 `refs/archive/pt-renew-cleanup-20261112/` 及已验证Git bundle；bundle新增1,915,937字节，另有核验元数据，本次没有净释放文件内容空间。清理不代表EX-006／008／017等事项完成；结论与受阻状态不变。详细用途映射、原回执和核验见 `.local-analysis/worktree-cleanup-20261112/REPORT.md`、`result.json`；原清理通知仅作历史。
 
 用户最新明确指定：**本次工作及接续的子 agent 全部使用 Pi、`deng/gpt-6.1-sol / high`**。该显式授权优先于 AGENTS 和旧报告中的纯逆向 GLM 默认分工；新 agent 不应再以旧 GLM 配额问题停止这轮已授权的模型路线。保持独立工作树／分支／证据和父级验收，不重复启动同一任务。
 
