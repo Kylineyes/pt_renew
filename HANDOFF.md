@@ -82,7 +82,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 分支／离线检查点 | `research/ex003-live-navigation`，最新观察HEAD为`b38f1531b77d09d0d863ca297a731116b898f0ab`；跟踪文件干净，仅未跟踪`tools/legacy_runtime_config.py`，接手复核 |
 | 未完成修复边界 | 该模块尚未接入准备器、owner或driver，尚无语义回归测试通过；不能因文件存在就称隔离已修复或直接生成现场 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 接手检查点请求 | 父消息 `msg_581c5088744a`：停可恢复离线检查点，回报HEAD／改动／已做未做，原Pi和未结Task保留 |
+| 接手检查点 | worker已于UTC04:30:23保存`.local-analysis/ex-003-live/paused-checkpoint.json`并停下；Task状态`paused_unsettled`，不发worker_done、不伪造完成，原Pi保留待新协调者 |
 
 先加载实时 orchestration／orca-cli 技能。用 `orca orchestration worker-show --dispatch ctx_e3ea7d528345 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_e3ea7d528345 --subject ... --body ...` 协调，不给终端追加业务。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享该终端，不算多个活agent。
 
@@ -99,7 +99,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | `9a07c5c` | 同步事故和暂停的旧HANDOFF增量；当前交接只以本文件新版为准 |
 | `b38f153` | 事故和离线暂停专题／待办状态检查点，文档已由父选择集成；修复草稿不在此提交 |
 
-未跟踪`tools/legacy_runtime_config.py`只做过AST语法检查，无语义测试、无接入，不能add/commit时混作已验工具。worker另在`.local-analysis/ex-003-live/`保存离线检查点记录（如`save_paused_checkpoint.py`及其结果）；收到检查点回报后核实际记录，保持同Task未结，等新协调者通过原Dispatch续接。
+未跟踪`tools/legacy_runtime_config.py`为9137字节、SHA `718dc94d29ac5104fa4d680227c92ea6cee74608ec4e233e1d1918313d023f63`，只做过AST语法检查，无语义测试、无接入，不能add/commit时混作已验工具。已读取worker的`.local-analysis/ex-003-live/paused-checkpoint.json`，其中列明生成器、派生Capture／State／Navigation、owner／driver服务启动前预检、别名／联接及零创建测试和可写白名单均未完成，未生成修复后候选／GO。状态消息`msg_7ae7d2dbb3a4`确认原Pi停在该检查点，待新协调者通过原Dispatch续接；不为干净而丢弃未跟踪草稿。
 
 ### 三个导航槽的实际结果
 
