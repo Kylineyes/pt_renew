@@ -4,7 +4,7 @@
 
 用户明确要求“你进行真实窗口的验收，务必全部覆盖”。本授权已覆盖上一阶段“先确认再控制电脑”的等待点，允许当前发布候选及合成资料的实际窗口／文件框／菜单／键鼠／截图和正常退出验证；**不需要就同一范围再次索权**。不扩大到原DOSBox/PT、用户板库、旧现场、身份／VM／隔离试验或main合并。当前协调仍Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`／deng／gpt-6.1-sol／high，Run沿`run_1946e80ba9fe`保留worker归属；Run旧objective“零桌面”仅为原阶段范围，本次用户明确授权优先。
 
-单一现场操作者复用ex005-source-observation的原Pi `01a1d4e9-ce67-756e-8b4e-17d0dd926e95`（上一Dispatch ctx_70ed4bb6d117），本轮新Task／Dispatch待实际送达补记。另一读取worker已完成并退出，无现场派发。操作者独立分支`verify/release-alpha12-gui`，独占新报告docs/releases/v0.12.0-alpha-verification.md及本树忽略`.local-analysis/release-alpha12-gui/`；不得修改产品、候选、旧材料或共享文档。协调不同时操作桌面，仅审图／回执及离线修复／集成；后续同任务沿原Pi，不新建多个操作者。
+单一现场操作者复用ex005-source-observation的原Pi `01a1d4e9-ce67-756e-8b4e-17d0dd926e95`（上一Dispatch ctx_70ed4bb6d117），本轮已实际follow_up／ready送达Task `task_53ab4ca7f0d1`／Dispatch `ctx_e76d36e67edb`，沿原Pi与工作树复用；status `msg_0983241b58e8`及协调只读identity.json已核本轮环境／最新model与thinking为deng／gpt-6.1-sol／high，首工具及核验脚本exit0、接手树干净。另一读取worker已完成并退出，无现场派发。操作者独立分支`verify/release-alpha12-gui`，独占新报告docs/releases/v0.12.0-alpha-verification.md及本树忽略`.local-analysis/release-alpha12-gui/`；不得修改产品、候选、旧材料或共享文档。协调不同时操作桌面，仅审图／回执及离线修复／集成；后续同任务沿原Pi，不新建多个操作者。
 
 [冻结48项清单](docs/releases/v0.12.0-alpha-gui-plan.md)覆盖所有声明用户功能及取消／失败／未保存／禁用／焦点／载入状态等边界。每项实际入口、结果、图片／文件／退出证据单列；未过保持PR草稿，不把24组offscreen测试当真实窗口。G46缺可观察时序则记受阻，不偷偷加入调试门闩。用户要求全面覆盖优先于旧10–15分钟估计，每20分钟交有证检查点，预留至少5分钟收尾；未完成不得强称全覆盖。
 
@@ -12,7 +12,7 @@
 
 检查已知本机源码缓存未找到后，从Qt官方来源下载qtbase/qtsvg对应源码约54MB，固定SHA分别a951bd…31307／e4ab395…29331，与既有packager官方固定值一致；qtbase两次45秒传输超时后断点续传完成，原回执保留，不重复全量下载。源码缓存`.local-analysis/qt-sources/`与本次发行附件各一份有明确用途，无新依赖安装。构建／部署／归档总估小于1GiB，开始C盘空闲约209GB；必要现场证据与产品保留用于验收，临时输出由创建者清理。
 
-尚未启动产品真实窗口，包核验不是GUI通过；实际送达与验收状态以新回执为准。发布PR仍#17草稿，main与tag未改。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+worker身份核验完成，正在准备冻结部署与矩阵；尚无产品启动或任何G项通过回执，包核验不是GUI通过。派发正文／送达回执保存在协调证据根spec-gui-verification.txt及receipt-gui-verification.json；本轮工作树证据见上，不轮询／另开操作者。发布PR仍#17草稿，main与tag未改。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
