@@ -54,7 +54,7 @@
 - [冻结配置文字见证工具](../legacy-config-witness-tool.md#ex005-text-witness-tool)：只读显式给定的两配置，保留最多三候选的全部原文出现及歧义；19项测试和原冻结两文件父核通过，不以值或SHA相符判断加载来源。
 - [无PT两键离线查询消费契约](../legacy-config-query-consumer.md#offline-query-consumer)：精确生成／消费一至两条查询命令，拒绝重复和shell变体；14项父树测试通过，不执行命令或放宽旧白名单，运行就绪状态恒为false。
 - [目录API返回缓冲解码](../legacy-source-api-buffers.md#result-contract)：只解释显式原快照，保留BOOL／原字节／NUL及未知，失败残留不作路径；20项父树测试通过，不采集真实API或验证隔离。
-- [联合观测记录审计v1](../legacy-source-observation-audit.md#schema-v1)：检查精确运行身份、序号、覆盖声明、线程内嵌套调用及parse内文件生命周期；35项父树测试通过，记录内部自洽不证明真实采集无遗漏。
+- [联合观测记录审计v1](../legacy-source-observation-audit.md#schema-v1)：检查精确运行身份、序号、覆盖声明、线程内嵌套调用及parse内文件生命周期；35项父树测试通过，记录内部自洽不证明真实采集无遗漏。后续[快照提取与v2字段绑定](../legacy-source-capture-binding.md#shell32-capture-binding)已固定共同格式，相关代码开发未交付，不作既有能力。
 - [配置parser、Property写值与autoexec文本](../legacy-dosbox-configuration.md#fixed-config-parser-setter)：文件登记、共同读终止返回、转换失败／回退赋值／范围截限分开；同对象追加与阶段清文本不等于最终执行，特殊输入和回调效果仍缺。
 - [autoexec初始化取样、自有复制与本地开关门](../legacy-dosbox-configuration.md#autoexec-initial-consumer)：securemode先保存、noautoexec后读取，跳过Section内容段不等于禁止全部来源；后续[BOOT调用与动态槽](../legacy-dosbox-configuration.md#autoexec-boot-upstream)已补同表安装／派发，[普通启动顺序](../legacy-dosbox-configuration.md#autoexec-main-conditional-order)又接上最终解析入口、VM事件0构造和主桥的模型内顺序；异常重入、中间配置变化及DOS实际执行仍缺。
 - [AUTOEXEC聚合与登记数据借用](../legacy-dosbox-configuration.md#autoexec-generated-vfile-data)：节点自有复制、CRLF规范化和容量门已核，登记记录借用可重建的全局缓冲；调用不保证发布成功。[打开对象](../legacy-dosbox-configuration.md#autoexec-open-object-data)已核缓存pointer／length，Read／Seek不回查record，重建后可在限定条件下出现新内容旧长度；[发布门对象与后置登记](../legacy-dosbox-configuration.md#autoexec-publication-pointer)已补直接置非空／清零及后置登记现缓冲的条件通路，首次实际门值、外层释放／并发及异常恢复仍缺。

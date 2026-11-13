@@ -90,6 +90,7 @@
 - [EX-005实际用户源继承：隔离与观测前置设计](legacy-source-observation-plan.md#known-and-missing)
 - [目录 API 返回缓冲的纯数据解码组件](legacy-source-api-buffers.md#result-contract)
 - [联合观测记录的离线完整性审计 v1](legacy-source-observation-audit.md#schema-v1)
+- [EX-005 Shell32 调用快照与审计 v2 的字段绑定](legacy-source-capture-binding.md#shell32-capture-binding)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)
