@@ -26,7 +26,9 @@ G46第二次使用62700018字节／190000FT合法padding板，严格检查wait0�
 
 743486d统一包原产品49616／134390720121929425现原Popen wait0、controller-finished joined=true及原owner对控制器wait0已父核；119文件和14既有输入前后全集一致，fixed自身哨兵b'fixed-sentinel'保持，fixed-edited严格检查wait0、底层625,100→925,100、extra42。父实际read库invalid保留6图元/ALL/焊盘选择、外部GND及内置INTERNAL失败保留等三图；父证gui-stage4-fixed-review.json。首次父核误将两个独立输出目录同名哨兵相比较而断言失败，已按fixed/verify.py正确基线复核，原工具失败保留，非产品变化。G22/G25关键图证相符，完整矩阵仍待报告，不扩大父审范围。
 
-下一步唯一worker按加载提示版候选，先校准同PID StatusBar稳定命令消息，再读Name或NamePropertyChanged并保存动作前即时状态/时序，用真实CtrlW和空板后验补G46；原实例已退出可以串行启动，不需重复用户确认。G46仍未通过，不能提前结本Task或发布。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+下一步唯一worker按加载提示版候选，先校准同PID StatusBar稳定命令消息，再读Name或NamePropertyChanged并保存动作前即时状态/时序，用真实CtrlW和空板后验补G46；原实例已退出可以串行启动，不需重复用户确认。worker已在C候选98fa1a0/09d75c1a新建原Popen34572／FILETIME134390752819519301／HWND3211430。正确StatusBar完成稳定消息校准，随后两次即时Name均为正在后台读取；status/action-008原控制器守卫后实际CtrlW，status-after-key为命令file.close，observer原Popen wait0。父实际read关闭后空白及empty两图，0图元保持，约5秒间隔的BMP摘要514df06ce6d556b42fecf85fe7b4fa8bd9cded43a0c29f8b2ada11bc2bf0478e一致；支持本次观察加载态→关闭→换空板的有限UI序列。父证gui-stage5-g46-status-review.json与反馈msg_51134c8b3818；采样与按键有有限间隔，不声称精确后台读指令时刻，截图after-old-result命名不证明内部task结束，不外推任意并发或长期保证。
+
+worker继续C受影响G04/05/07/08/40–43及编辑保存回归，整理48项报告；当前C产品尚无正常退出回执，不据阶段状态结整Task。最终各项绑定A初版／B双修／C加载提示版及实际证据，前两次G46受阻和原G22/G25失败保持，不能称C全48重新执行。待全文矩阵、所有原wait/owner和部署/输入摘要父审后再结算，不提前发布。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
