@@ -76,8 +76,11 @@
 
 ## 原软件行为与兼容研究
 
-先读[主题概览或接手入口](topics/legacy.md)。本组 36 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/legacy.md)。本组 39 篇，以下保留原报告标题。
 
+- [固定 DOSBox-X 默认配置根与启动守卫静态核验](dosbox-default-roots-static.md)
+- [原 PT 的 DFT 载入、历史路径与命令行消费](pt-dft-load-static.md)
+- [固定 DOSBox-X 的 Windows／SDL／DOS 输入静态链](legacy-input-event-static.md)
 - [历史只读挂载：菜单打开探测与固定 DOSBox-X 拒绝链](legacy-readonly-open-static.md)
 - [PT 现状调查与 Windows 迁移建议](initial-assessment.md)
 - [DOSBox-X 配置有效值、实际 autoexec、Enter后板图与状态核定受阻](legacy-dosbox-configuration.md#effective-state-attempt)
@@ -191,7 +194,7 @@
 
 ## 探索队列与共识
 
-[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 138 篇专题报告。
+[工程逻辑探索待办](exploration-backlog.md)列出仍需回答的问题，每项回到本索引报告中的具体细节；原文反向链接到事项。[领取与研究规则](exploration-workflow.md)规定自由扩展阅读、修正文档、追加未知和完成后沉淀删除的流程。两页属于维护入口，不计入上述 141 篇专题报告。
 
 ## 增补与追溯规则
 
