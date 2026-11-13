@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 最新要求：d38b立即交接新主协调并续作
+
+用户UTC约07:17明确“总结当前进度和下一步计划，交接给新agent，让其推进下一步工作”。此授权覆盖本父此前“不再创建接手链”的默认安排；现在在原main-2创建新Pi主协调，送达回执报告后父Pi `01a1d38b-f3ec-77ad-bcc3-808205e370e6`／Orca聊天 `pi_a71bf3a3_9c5e_4db0_ad45_10189a4b5c6d` 停止调度。新主不得再自行交接。第一步核实际PI_SESSION_ID／PI_PROVIDER／PI_MODEL／PI_REASONING_LEVEL，必须 `deng/gpt-6.1-sol/high`。本版Orca Pi启动--model曾创建前拒绝，沿Pi自身配置创建聊天，实际不符先停报告、不换模型。用自身身份 `run-use --id run_3efe904a98f0`；拒绝保回执，不reset／冒用旧父／重启worker。
+
+**当前成果：** parser阶段源 `9ed64b392214c0e1ccf6cfd5eaf1b827d1bc212d` 已父审并集成、普通推送 **dev `b6c02818bdc1913d29dc588a5525edfaf32e7141`**，远端一致；最终157文档／1145链接／41事项／121来源／141报告零错。原字节21源3107行／58点／12虚表／27窗671指令及Bool217行独立核；原r2输出57/58点、唯一缺a8dfab，原汇总KeyError保留。已证F仅打开登记、mask6读终止统一返回1不区分EOF与同掩码读错误、各类转换false／回退赋值false／int clamp true分别限定、autoexec同对象LF后append和跨阶段清文本分开。四离线子题和第八59图／Status文件名八计数／原四wait与join沿已验范围复用。EX003／005、原Task和41事项不结。
+
+**新主必须完整接原历史：** 本父完整原JSONL为 `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-13T06-15-26-956Z_01a1d38b-f3ec-77ad-bcc3-808205e370e6.jsonl`。程序化完整流读全部用户／assistant／工具，image.data解码核SHA或筛字段，不打印base64；本父最后创建／送达／停止回执会追加，核精确边界及尾部即可。不能以本文件或压缩摘要代完整原历史，不改原件、不复制整套现场。复用audit_history_stream.py的scan，不运行其覆写历史主入口。上一父d34c已完整218条／1501245字节／SHA504f9a83…f9a45；原worker已全流读至3066条／146718067字节／SHA67cb6c1c…13397，235image核SHA，活动追加不据旧SHA判污染，计量coordinator-d38b-history-audit.json。新主完整读AGENTS／本HANDOFF／探索规则／清理通知，核实时Git／远端／原worker，再报告接续并工作。
+
+**唯一在研与最新实际入口：** 原Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`／终端 `term_cb09ddcf-d398-4302-b953-639d97951adf`／研究树 `explore-ex001-observer`／分支 `research/ex003-live-navigation` 沿用，07:18实核ready/live、HEAD b6c0281且干净，尚无autoexec消费者新提交。06:59:39原assistant EPROTO TLS错误及不完整codemode无执行回执保持；`msg_449dac0d877b`沿原会话续接后07:02:46 inventory实际exit0，未重启。原worker发 `msg_5f1b4474926a` 已定位注册R8→`1403a8cb0`原bytes c20000/ret0，不是实消费体；`abe7c0`全局对象非空跳分配，否则取已注册autoexec Section传`abe210`构造并保存；构造读Section+38，取Control+17f并检查+17e，可跳abe485绕Section文本，CLI8317b1写17e=1。abe461先复制临时字符串，abe46f传对象+10到ab2460安装辅助。不能将noautoexec推广为禁止整个对象或所有其它来源。
+
+**当前父审／后续计划：** 已独立核新目录 `ex-005-autoexec-consumer/` 的registration-callback-entry1行、init69、constructor244、noautoexec CLI42共356缓存行原bytes／PE映射／解码，证据协调树 `autoexec-consumer-parent-preliminary.json`。这仅是入口初审，未集成结论。`msg_eb569deeb6ac` 要原Pi只补ab2460安装辅助自有复制、abe7c0实际初始化调度、17f CLI精确名称／取样时点，约07:25–07:40先交有证专题HEAD或具体缺口（原06:55起30–45分钟，不因TLS／交接重计）。07:18已见本新证据目录新增function-install-helper.json、function-init-scheduler.json、entry-references.json、flag17f-context-view.json及原工具回执，**本父未审这些最新材料，不能称已证**。新主先读它们与原worker最新回执，沿原Dispatch取得阶段提交，父审原bytes／连续分支／必要虚槽后统一待办／主题／HANDOFF入链，文档检查，独立分支no-ff合dev普通推送。只读旧缓存，不运行覆写原ROOT脚本；不重做根／DFT／菜单，不扩所有-c／prerun／exit组合、完整DOS shell、视频模式／适配器／截图方案。特殊词法／locale／溢出／异常流、DoubleHex／Path／Multival／回调与历史API/IO仍保留，静态不补现场执行。
+
+**持续授权：** 含原worker最多5子agent，4新增子Task已succeeded但structured会话保留/unverifiable不证明退出，不自动再派／重启；全部Pi／deng／gpt-6.1-sol／high覆盖默认GLM。新主不是子agent名额。总窗仍UTC2026-11-13 **03:45:01.1736239–12:45:01.1736239**，**12:35:01.1736239起只收尾**，准备／审核／交接计时不重计。仅EX003／005定向静态，无新候选／GO／现场；若实机先具体缺口／最小隔离方案／预算／必要工具审，再全新候选／独立GO，唯一原Pi操作者，每段60分钟至少7分钟收尾及公开门／逐键新图actual read／拒绝120秒／原创建者四wait和join／FILETIME原整数保持。旧八槽及原安装板库/conf/plan/driver/gate/submit/PNG/日志/manifest/JSONL冻结只读。无EX007／编辑保存／升级下载／归档精简，main仅用户，忽略材料不提交，不强推／跳钩子。
+
 ## 当前主协调d38b：parser阶段已父审，沿原Task继续消费者静态链
 
 UTC2026-11-13约06:16，新主Pi `01a1d38b-f3ec-77ad-bcc3-808205e370e6`／Orca聊天 `pi_a71bf3a3_9c5e_4db0_ad45_10189a4b5c6d` 已实核环境为 `deng/gpt-6.1-sol/high`，以自身身份成功 `run-use --id run_3efe904a98f0`。父d34c最后创建回执 `prompt.outcome=journaled`，其原JSONL末条UTC06:15:42明确停止调度；本主已接手，不再创建接手链。完整读本树AGENTS、本HANDOFF、探索流程和清理通知；接手fetch／ls-remote实核dev与远端同为 `9cdf26b4ecb0dcc51706cae55933db51dc34987d`、干净。下方“最新要求d34c立即交接”等为已完成的交接记录，当前事实以本节为准。
