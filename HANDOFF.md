@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是协调agent的唯一接手入口。新主协调Pi **`01a1d2a5-5798-745c-bb3b-fa3af5b3ac16`** 已接手，实际环境 **`deng/gpt-6.1-sol/high`**，Orca聊天 `pi_ff2086f4_5a5f_4496_88b2_84319756a5dc`，已以自身身份成功 `run-use --id run_3efe904a98f0`。父Pi `01a1d184-26bc-7092-be0b-362193a84c8c` 已报告交接送达并停止调度。沿原worker／Task／Dispatch／终端，不另开接手agent或现场worker；拒绝或不可核验不reset／冒用旧父／重启。
+本文件是协调agent的唯一接手入口。**用户最新要求创建新的Pi对话agent并交接本对话完整历史。** 当前父Pi `01a1d2a5-5798-745c-bb3b-fa3af5b3ac16`／Orca聊天 `pi_ff2086f4_5a5f_4496_88b2_84319756a5dc`，实际 `deng/gpt-6.1-sol/high`，已自身接原Run；将在同main-2创建新Pi聊天，提示送达／回执报告后停止调度。新协调第一步核PI_SESSION_ID／PI_PROVIDER／PI_MODEL／PI_REASONING_LEVEL必须沿用户覆盖 **deng/gpt-6.1-sol/high**。Orca此版Pi启动--model曾创建前拒绝，沿Pi自身配置创建聊天，实际不符先停报告、不擅换模型。新协调以自身身份 `run-use --id run_3efe904a98f0`，拒绝则保留回执，不reset／冒用旧父／重启worker。原worker／Task／Dispatch／终端保持，**不要再创建接手agent或现场worker**。UTC03:14:42核原Pi ready/live、研究HEAD4dc1984干净，协调dev4e4e6d4干净；第八已正常退出，当前仅离线审计／专题待办沉淀待交付，新协调实时再核。原8小时截止不延长。
 
 UTC2026-11-13 **03:04:33** 新协调父最终审计确认：**第八EX-005命名Status有限现场已正常完成。** 原Pi仅按本槽GO（02:27:07.913678–03:27:07.913678，03:20:07起只收尾）执行；Information首项新guest后单Up、Status末项新guest后Enter，pt012实际STATUS显示工作文件 `SYN1.PCB`，Arcs0／Components0／Fills0／Holes0／Pads0／Strings0／Tracks5／Vias0，Library `TRAXSTD.LIB`／Current Path `C:\PT`。父实际read pt010／011／012及唯一Esc后的pt013，确认返回无菜单板图。45host＋14guest共59PNG全匹配本第八原JSONL image字节SHA，59审核；47包含13命名键及额外初始化Snapshot1，正常X／WaitExit／Stop各一次，无stopped-error。target37196于03:00:20.443168、control3260于03:01:05.033490、driver32440于.043388、owner42596于.0555982分别原wait0，PID／FILETIME／映像／原HANDLE／Popen身份逐字段相符；owner投递线程五秒内join真/error null、observer join真。旧400／安装99／本runtime99／input1复核一致，NEWFT不存在；不外推外层隐藏PowerShell退出。父最终证据 `config-path-incident-20261112/eighth-parent-final-audit.json`，阶段／首图证据同目录eighth报告；原Pi仅离线沉淀专题／待办，消息 `msg_9c8e0ebb0ad7`，不新候选／GO／现场。**EX-005完整配置继承、EX-003完整IME／队列／INT33条件仍未知，整体Task不结、不删事项。** 原8小时仍至 **05:14:51.2986127Z**，**05:04:51.2986127Z起只收尾**，交接和有限成功不延时。适配交付559dcb0父25/25、显式双冻结准备器4dc1984父10/10均已集成；第八30冻结／99runtime／1input，plan `856a20de794a5d239689aee5c151d3d4038070a3741c84a7a27279c6883b730c`、conf `dffab58083b64deacfdac608fbc901e7890b5b25c0073d4dccc80f6478a97507`。旧八槽／GO不复用，原件保护和归档精简暂停保持。
 
@@ -131,6 +131,10 @@ QuickJS无timers／Node／fs，工具清单没有独立文件wait，但父实际
 
 ### 本次新Pi对话必须接收的完整历史
 
+本次即将交接父Pi的**完整原JSONL**：`C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-13T02-03-33-656Z_01a1d2a5-5798-745c-bb3b-fa3af5b3ac16.jsonl`。新协调必须程序化完整流读本父用户／assistant／工具原记录，解码图片核SHA、不全文打印base64；本父最后交接回执还会追加，核精确读取边界和尾部即可。原历史只读，不复制整个忽略现场，不用本HANDOFF／压缩摘要代替原记录。上一父原JSONL如下段，已核完整边界504条／4011166字节／SHA `2395ba2ad9817818c9c66bc186b6ce719f0dca6bf1e844b30fba609c9a64ce90`；原worker完整流读到2582条／110499587字节的SHA和原边界复核见 `new-coordinator-file-step-review.json`，本第八最终原图片边界143234003字节／SHA `72886f3185029a498339400db4d0b1b9bdfcf9d7a02892447947cc9d3f6c9308` 见 `eighth-parent-final-audit.json`，后续活动追加不据旧SHA判污染。
+
+本父已完成适配559dcb0父25/25、显式双冻结4dc1984父10/10及第八候选独立审核／GO／59图／Status文件名计数／原四wait和join最终验收；不重复测试或恢复第八。新协调最先沿原Dispatch核原Pi的新离线审计／专题／待办提交，父审差异／文档后独立分支no-ff合dev普通推送。原Pi获 `msg_9c8e0ebb0ad7` 仅离线沉淀及提出完整来源覆盖的最小离线核验方案，不运行新目标／改配置；本父交接通知 `msg_945a7b720a44` 保留此范围。当前41事项保留，不因Status有限通过删EX-005完整来源或EX-003输入条件、不worker_done；未知先复用已有事项和双向链接。原8小时至05:14:51.2986127Z，05:04:51.2986127Z只收尾，准备／审核计时，不因换主延长；已结束八槽／GO不复用。
+
 当前即将停止调度父Pi的**完整原JSONL**：`C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-12T20-47-41-244Z_01a1d184-26bc-7092-be0b-362193a84c8c.jsonl`。上一父Pi的完整历史及原worker历史仍保留下方原路径；不能用本HANDOFF或旧压缩摘要冒充完整历史。新协调先完整读本树AGENTS、本HANDOFF、`docs/exploration-workflow.md`、`.local-analysis/WORKTREE_CLEANUP_NOTICE.md`，核实时Git／远端及原worker检查点，然后程序化完整流读本父用户／assistant／工具记录。大image.data只筛字段／解码核SHA，不全文打印base64；不改写原JSONL／PNG／日志／冻结审核／安装，不复制整个忽略现场，不另建接手摘要副本。
 
 ### 有效授权和接续身份
@@ -204,7 +208,7 @@ QuickJS无timers／Node／fs，工具清单没有独立文件wait，但父实际
 
 ### 接手后的执行顺序
 
-1. **新Pi先接完整历史及原Run，续审适配器WIP。** 先核自身模型high，读指定四文件和本父完整原JSONL、实时Git/远端/原worker；自身run-use拒绝不reset或冒用。本父交接后不调度。原Pi保持WIP／待提交，沿原Dispatch核最终源码/写入前归属修正/20项及新增零写回归/真codemode无GUI烟测；通过后必要协调测试，独立分支集成推dev，再按原8小时剩余预算审全新候选/新GO。第六有限成功、旧32/46项与第七审计复用，不重做。
+1. **新Pi先接完整历史及原Run，续接第八离线沉淀交付。** 先核自身deng/gpt-6.1-sol/high，完整读指定四文件和本父原JSONL、实时Git／远端／原worker；自身run-use拒绝不reset或冒用。本父交接后不再调度。原Pi保持原Task／Dispatch和会话，已获仅离线审计／专题待办沉淀指令，最新提交以实时Git／原回执为准。先审第八59图／Status文件名八计数／正常退出的文档和剩余未知，独立分支检查文档后no-ff合dev普通推送；已验25／10项及旧32／46项复用，不重做、不启动新候选／GO。
 2. **明确证据缺口。** 第三 Down 不重发、不 Capture，原操作者未读后图与没有客体后验分别保留，新协调迟后离线 host 读取不补成当时验收；四链 wait0 不补成正常 X。helper 无原创建者持柄 wait，现时 PID 不存在不能追补。旧8846日志缺原字节，不回滚9038日志或删错位 PNG。
 3. **审查、验证和同步。** 原研究分支交付专题／待办，新协调独立分支维护唯一 HANDOFF；核差异及 `python tools/check_exploration_docs.py`，再 no-ff 合入 dev 普通推送。main 仅用户处理，不提交忽略现场。
 4. **新8小时内仅从新批准候选开展现场。** 先审submit/helper原创建者持柄wait修正及离线回归，再审新第六隔离／配置／冻结／输入和预算，签新GO后才唯一启动。每键新host、Capture菜单host、新guest实际read及原JSONL SHA；未知立即停／120秒静默／正常X／全部原链wait。每段最多60分钟、至少7分钟收尾，UTC次日05:04:51总最后10分钟只收尾，05:14:51总截止不顺延。
