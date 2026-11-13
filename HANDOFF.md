@@ -1,5 +1,17 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
+
+用户询问“部分可以合入main分支做一个新的版本tag吗”。已fetch核origin/main为`cfb6a8893aaf8d8b5778a24c00fc97813c5f083d`，dev为`987d9aebbf835b5fa9e5ebdfa5bea719c96bb944`；本地main在D:/project/pt_renew被检出且指向旧初始提交，不能用本地main比较或切换该外部工作树。现有唯一tag仍为v0.11.0-alpha，main已有部分编辑／另存代码，发布包仍只读。
+
+已从origin/main建立`release/v0.12.0-alpha`，候选HEAD `0ad5b3e`：选取dev产品源码／CMake／相关C++测试／tools/InspectPcb.cpp共29个差异文件，并更新README、PROGRESS、发布脚本及新发布说明，合计33个文件。产品源码／C++测试／InspectPcb与dev逐字节索引一致，CMake仅另升版本0.12.0；正式新增能力门仍关闭，内部显式核心及保护依赖随源码保留。近期配置／进程观测研究不并入该选择性PR。发布脚本版本、说明路径、源码链接及editing／saving元数据已改为候选事实，不再标只读；真实发布包尚未生成。
+
+复用已安装Qt6.12／MSVC，不下载。新建本树独立`build/release-alpha12`，预估产物小于1GiB，开始C盘空闲约209GB；配置与140个编译／链接步骤通过，offscreen CTest 24/24通过（42.15秒），CLI `pt-renew 0.12.0-alpha`退出0。证据`.local-analysis/release-v0.12.0-alpha/`的build-result.json、build.log、ctest.log；首次后台PS5无BOM中文脚本解析失败且未编译，补BOM后通过，原runner-stderr.log保留。自有编译／测试进程已完成，无可见窗口、原软件、真实用户文件或桌面操作；构建目录保留供新包验收复用。
+
+当前通过`chore/integrate-release-alpha12`将版本与材料同步dev；README／PROGRESS因main与dev文档重组发生冲突，保留dev完整当前能力和研究说明，仅补候选入口。准备main草稿PR供审阅，实际URL及送达以回执补记。按照AGENTS的main由用户合并流程，尚未修改／推送main，也未创建／推送新tag或发行附件。候选说明见[发布范围与验证](docs/releases/v0.12.0-alpha.md)。
+
+**下一项需要用户先确认的实际动作**：只运行本项目新候选及合成PCB，检查版本／载入、自由走线移动或删除、撤销重做、另存新目标和重开、正常关闭及原创建者退出；预计10–15分钟，单一操作者，截图验收使用指定Pi／deng／gpt-6.1-sol／high，不启动原软件、不访问用户板库、不覆盖已有文件。用户此前要求控制电脑前先说明，尚无本轮桌面确认，因此当前只完成离线准备。若仅需源代码tag仍应绑定最终main提交，不能把dev、release HEAD或旧GUI证据冒充已验收main发布。
+
 ## 当前交付：读取适配与事件组装已父审，完整离线链通过
 
 用户再次要求“继续分配子agent开发，如果有需要控制电脑跟我说先”。本轮协调Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`实核为deng／gpt-6.1-sol／high，已用自身身份绑定既有Run `run_1946e80ba9fe`，不恢复旧主provider。fetch后dev／origin/dev均为`733b977730506f80427368ba3ce6e4fed1da4a64`且干净，上一轮100项合成测试和165文档／1358链接检查复核通过。本轮登记分支`chore/ex005-backend-session-dispatch`，协调证据`.local-analysis/ex005-backend-session-49f8/`。

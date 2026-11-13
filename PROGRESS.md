@@ -2,6 +2,8 @@
 
 新 agent 接手只读 [HANDOFF.md](HANDOFF.md)：当前基线、已交付研究、剩余问题、下一步、授权和本机证据均在其中。本页只提供能力速览；软件模型与实现见[文档导航](docs/README.md)，未知问题见[探索待办](docs/exploration-backlog.md)。
 
+已准备[v0.12.0-alpha轻量编辑候选](docs/releases/v0.12.0-alpha.md)，从main选取产品差异形成独立release分支；Release构建／24组CTest及版本检查通过，真实窗口、main合并和标签待完成。当前发布包仍为v0.11.0-alpha，不能把候选准备当作已发布。
+
 | 范围 | 已有能力 | 当前边界 |
 | --- | --- | --- |
 | 已发布 v0.11.0-alpha | PCB／LIB／NET 只读查看、选择定位、测量／端点捕捉、受限铜分析 | 不包含 dev 编辑功能；部分字形／轮廓近似 |
