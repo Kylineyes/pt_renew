@@ -4,11 +4,11 @@
 
 用户最新要求“继续分配子agent开发，如果有需要控制电脑跟我说先”。当前协调Pi `01a1d501-a17d-7611-9f62-3c490fba0174`，环境仍为deng／gpt-6.1-sol／high；本轮fetch后dev／origin/dev均为`22d479eabfd41a60c516835e3e4ea266399c6121`、干净。继续自身已绑定Run `run_1946e80ba9fe`，不恢复原主provider。复核两个待复用worker为succeeded／settled／live／idle、独立工作树保留；通过其当前Dispatch派发后续新Task，不重启旧abandoned worker。
 
-本轮先两项并行：`ex005-source-observation`／原ctx_33b88db36304在`feat/ex005-observation-v2`独占现有审计工具与报告、现有v1测试和新v2测试，显式支持绑定Shell32原快照的schema v2且回归v1；`ex005-query-effects`／原ctx_abad61802e86在`feat/ex005-call-capture`独占新tools/legacy_source_call_capture.py、tests/test_legacy_source_call_capture.py、docs/legacy-source-call-capture.md，开发模拟寄存器与注入内存回调的Win64提取核心。两者共同遵循[冻结字段约定](docs/legacy-source-capture-binding.md#shell32-capture-binding)，不各自发明格式，不共写文件或证据。第三工作树本轮先不派，待两项验收后再评估离线回放集成，避免接口未定时重复开发。实际新Task／Dispatch以送达回执补登记。
+本轮先两项并行：`ex005-source-observation`／原ctx_33b88db36304在`feat/ex005-observation-v2`独占现有审计工具与报告、现有v1测试和新v2测试，显式支持绑定Shell32原快照的schema v2且回归v1；`ex005-query-effects`／原ctx_abad61802e86在`feat/ex005-call-capture`独占新tools/legacy_source_call_capture.py、tests/test_legacy_source_call_capture.py、docs/legacy-source-call-capture.md，开发模拟寄存器与注入内存回调的Win64提取核心。两者共同遵循[冻结字段约定](docs/legacy-source-capture-binding.md#shell32-capture-binding)，不各自发明格式，不共写文件或证据。第三工作树本轮先不派，待两项验收后再评估离线回放集成，避免接口未定时重复开发。已实际follow_up／ready：审计v2为Task `task_370a66937002`／Dispatch `ctx_6736dc7cbbba`；快照核心为Task `task_0e9c97afe254`／Dispatch `ctx_9a40bb02d3a6`，分别沿原两个Pi会话与工作树执行，未新建工作树。审计worker已回报本轮环境／model与thinking事件为deng／gpt-6.1-sol／high、工具exit0及干净状态；快照worker随后亦已回报原Pi `01a1d4e9-989e-71e2-b4f9-f52f961a53f7`的环境／model与thinking事件同为deng／gpt-6.1-sol／high、工具及startup.py exit0和干净工作树，证据其树`.local-analysis/ex005-call-capture/startup.json`。
 
 沿原Pi／deng／gpt-6.1-sol／high，首先复核实际身份及成功工具回执；各从最新origin/dev新建分支，旧证据只读，新证据仅本树忽略任务目录。标准库与合成fixture验证；禁止目标／GUI／控制服务／窗口查询／截图键鼠／真实进程连接／调试API／实时用户源／身份或VM及隔离试验／安装下载／现场配置和GO。**若后续需要控制电脑，必须先向用户说明并等待确认**，不得因开发授权自动执行。当前两项不需要控制电脑，缺真实后端及隔离继续明示。
 
-协调独占HANDOFF／PROGRESS／待办／主题／索引及本轮共用契约；先登记同步再开发，20–30分钟交有界结果。父审接口、拒绝规则、原失败及实际生产者→消费者合成数据链，验证后独立分支no-ff合dev普通推送。派发正文及回执保存在`.local-analysis/ex005-capture-binding-0174/`，未交付不称能力通过；EX003／005及41事项不结。下方三组件结果为上一轮已验收成果。
+协调独占HANDOFF／PROGRESS／待办／主题／索引及本轮共用契约；先登记同步再开发，20–30分钟交有界结果。父审接口、拒绝规则、原失败及实际生产者→消费者合成数据链，验证后独立分支no-ff合dev普通推送。派发正文及两个follow_up回执保存在`.local-analysis/ex005-capture-binding-0174/`，共同契约及领取登记已普通推送dev `f355d7b`，文档检查164份／1330链／41事项零错。未交付不称能力通过；EX003／005及41事项不结。下方三组件结果为上一轮已验收成果。
 
 ## 当前离线开发结果：三组件已交付并经协调验收
 
