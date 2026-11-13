@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是协调agent的唯一接手入口。用户最新明确“运行，这次有8个小时的控制时间，你可以控制电脑”。按本协调首次核表登记 **UTC2026-11-12 21:14:51.2986127–2026-11-13 05:14:51.2986127**，**05:04:51.2986127起总最后10分钟只收尾**；准备、工具修正和审核计入8小时，单段仍最多60分钟且至少7分钟正常收尾。范围接续 **先EX-003、后EX-005**，不开展EX-007／编辑保存。沿原Pi／Task／Dispatch，先完成第五离线文档与投递链修正；`3da62d1` 已由父审查、独立集成并在协调树46/46复测通过，下一步按已批准全新第六EX-003候选执行；**第六新GO已签并交原Pi：UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480，00:18:59.260480起仅收尾**。第六已实际进入INFORMATION子菜单，11轮新guest已原Pi实read；父独立read两关键原PNG且核全47张当轮图片回执。当前准备唯一Esc后验和正常四链／投递线程收尾，本段截止不变；EX-005尚未新建现场。
+本文件是协调agent的唯一接手入口。用户最新明确“运行，这次有8个小时的控制时间，你可以控制电脑”。按本协调首次核表登记 **UTC2026-11-12 21:14:51.2986127–2026-11-13 05:14:51.2986127**，**05:04:51.2986127起总最后10分钟只收尾**；准备、工具修正和审核计入8小时，单段仍最多60分钟且至少7分钟正常收尾。范围接续 **先EX-003、后EX-005**，不开展EX-007／编辑保存。沿原Pi／Task／Dispatch，先完成第五离线文档与投递链修正；`3da62d1` 已由父审查、独立集成并在协调树46/46复测通过，下一步按已批准全新第六EX-003候选执行；**第六新GO已签并交原Pi：UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480，00:18:59.260480起仅收尾**。第六已正常完成Information进入／唯一Esc返回，50图本轮回执及四原wait0／投递线程join已父独立核实，最晚UTC00:12:06结束，早于业务截止。当前接续EX-005命名Status及配置来源的离线最小方案／必要工具验证，另审全新候选／GO；第六不重启扩范围，旧全部槽／GO只读。
 
 新主对话 Pi **`01a1d184-26bc-7092-be0b-362193a84c8c`**，实际环境 **`deng/gpt-6.1-sol/high`**，Orca 聊天 `pi_126b6fef_e05d_4978_a15b_9c2f146bba59`，已自身绑定原 Run，旧协调者已停止调度。上一三小时已到期的历史不改写：第五原客体只到Block→Current→Delete；第三Down已发，迟后宿主可辨Edit但新客体缺，未到Information。120.003507秒静默后四链原wait0不证明正常X／退出原因；helper无原创建者持柄wait，后续方案必须补齐新链，不能追补旧证据。EX-003／EX-005及原Task继续未结。
 
@@ -73,7 +73,9 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 第六唯一候选 `candidate-sixth/slot` 在共享 `c57409e` 上生成，原Pi `sixth-candidate-review.json` 于UTC23:19:18实际落盘。父实际read conf四路径及完整parse计划与worker回执逐字段一致，独立validate/policy、24冻结／99runtime／1input、owner新queue和只读原JSONL身份／模型high、旧400／安装99及五历史conf均通过。plan SHA `1307e9f301e45aa6d5a63eea649ca45cc2fcb88b4074f9402c276054b3c807c0`；conf `52f5a334fab677ca15b919016b1621a5e7b679abb49e6acab5052b513e599b3d`；owner `3dcba1999446c88a5c514459a702f7134a3a9c04b2adb59ef210427a2a59ddd1`。driver／gate／submit与已审第五同字节，owner为新46项已验版本。
 
-父已排他创建新 `go-start.json`，**UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480**，业务截止 **00:18:59.260480**；消息 `msg_49c8f306c808` 已交原Pi唯一入口启动。只做EX-003命名导航，每键新host／Capture菜单host／guest实际read及原JSONL SHA，原submit先validate后排他投递。owner自有投递线程，不启外部helper／第二连接；拒绝／未知停止、120秒静默、正常X及原四链wait／线程stop+join。Information实际高亮才确认，不选择其它子项／Status、Shift字母、IME、编辑保存或EX-007。EX-005后续独立候选／GO。父证据 `config-path-incident-20261112/sixth-parent-precheck.json`／`sixth-parent-review.json`；目前已收到实际启动及首guest回报，父只读核验通过：owner49876／driver24572／control43568／target32356，target FILETIME `134390002952223314`、HWND13963040，owner内线程49232已有started；33兼容样本无失败且join真。首guest `pt_000.png` 为640×480／6350字节／SHA `eeb87e89693a12bdc2008113016e6cfc8fd29d36d037b3f9a337897066bfb628`，原Pi实际read明确启动页，首轮host及guest均匹配本第六23:41:29原JSONL第2006行image字节。父证据 `sixth-first-guest-parent-audit.json`。00:05原Pi回报按每键新guest完成Block→Current→Delete→Edit→File→Grid→Highlight→Information，pt009实际高亮Information后才一次confirm Enter，pt010实际为INFORMATION子菜单、Board Dimensions高亮。父已实际read两关键640×480原PNG，SHA分别 `21908e8bc31b2678932e0d97498bdc47bcb28a186d2dc74eff0e5f75a07ccd82`／`3292e5459c8c9aa078c59f2ee8dbd442a29938f400433938e0086ab2f00ce156`；00:08父只读核36host＋11guest共47张均有第六原JSONL图片字节回执，46份审核已存在，尚无stopped-error，证据 `sixth-parent-information-audit.json`。原Pi接续唯一Esc1新后验，再正常X／WaitExit／Stop，四原wait和owner线程stop/join待核。未选择Status或其它子项，不能由本有限命名通道支持EX-003全IME／队列／鼠标条件闭环，也未取得EX-005文件名／计数。
+父已排他创建新 `go-start.json`，**UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480**，业务截止 **00:18:59.260480**；消息 `msg_49c8f306c808` 已交原Pi唯一入口启动。只做EX-003命名导航，每键新host／Capture菜单host／guest实际read及原JSONL SHA，原submit先validate后排他投递。owner自有投递线程，不启外部helper／第二连接；拒绝／未知停止、120秒静默、正常X及原四链wait／线程stop+join。Information实际高亮才确认，不选择其它子项／Status、Shift字母、IME、编辑保存或EX-007。EX-005后续独立候选／GO。父证据 `config-path-incident-20261112/sixth-parent-precheck.json`／`sixth-parent-review.json`；目前已收到实际启动及首guest回报，父只读核验通过：owner49876／driver24572／control43568／target32356，target FILETIME `134390002952223314`、HWND13963040，owner内线程49232已有started；33兼容样本无失败且join真。首guest `pt_000.png` 为640×480／6350字节／SHA `eeb87e89693a12bdc2008113016e6cfc8fd29d36d037b3f9a337897066bfb628`，原Pi实际read明确启动页，首轮host及guest均匹配本第六23:41:29原JSONL第2006行image字节。父证据 `sixth-first-guest-parent-audit.json`。00:05原Pi回报按每键新guest完成Block→Current→Delete→Edit→File→Grid→Highlight→Information，pt009实际高亮Information后才一次confirm Enter，pt010实际为INFORMATION子菜单、Board Dimensions高亮。父已实际read两关键640×480原PNG，SHA分别 `21908e8bc31b2678932e0d97498bdc47bcb28a186d2dc74eff0e5f75a07ccd82`／`3292e5459c8c9aa078c59f2ee8dbd442a29938f400433938e0086ab2f00ce156`；00:08父只读核36host＋11guest共47张均有第六原JSONL图片字节回执，46份审核已存在，尚无stopped-error，证据 `sixth-parent-information-audit.json`。**第六已正常结束，有限通道通过。** 唯一Esc后的pt011由原Pi及父实际read确认无菜单、红框短线板图；38host＋12guest共50PNG全部匹配第六原JSONL图片回执，50审核，40packet均经owner队列原submit投递。正常X一次后target32356于UTC00:11:29.357734原wait0，control43568于00:12:06.200872、driver24572于.210752、owner49876于.2225241各原wait0；原PID／FILETIME／映像／HANDLE身份逐项匹配。owner自有线程00:12:06.209251 joined五秒内true/error null、observer join真，无stopped-error／额外helper，全部早于00:18:59业务截止。父最终证据 `config-path-incident-20261112/sixth-parent-final-audit.json` 核旧400／安装99／本runtime99／input1不变、NEWFT不存在；正常关闭和四wait只支持该次完整有限链，不外推外层隐藏PowerShell原Popen退出。
+
+原Task和EX-003完整IME／队列／INT33鼠标条件仍未结，不删项；EX-005尚缺GUI文件名／八图元计数及完整来源覆盖。已发 `msg_df287b22b67f` 要原Pi沉淀第六后立即沿原8小时准备EX-005最小命名Status方案及必要离线工具／合成验证，父审后再全新独立候选／GO，不重启本第六。
 
 ### 第五槽历史离线审计（不改写为新授权下成功）
 
@@ -121,7 +123,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 分支／检查点 | `research/ex003-live-navigation`，owner线程交付 `3da62d12755765e7e30c9c89eb3b2590ba278fc7`，交付时干净；父独立集成46/46通过，允许同步新dev后仅生成新第六候选待审。历史第五 `63ee71c`、第四 `73cef6d`及离线 `b14245c`／`955d476`已集成，不重复研究 |
 | 修复验证边界 | 协调树隔离21/21、PowerShell／时段4/4、预算3/3，共28/28。跨树测试根先检查归属再初始化；耗时语义预检后、两条PowerShell正式创建边界前重核实时时段。原树双Python21/21仍按原候选范围保留，不累加为产品覆盖；新profile真实兼容、敌对TOCTOU、完整输入映射未验证 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 当前检查点 | 第六已到INFORMATION子菜单，原Pi11轮guest逐图实read，父实read关键pt009/010且47当轮原JSONL图片SHA全匹配；正在唯一Esc后验及正常四原wait／owner线程join收尾，退出尚待原记录。00:18:59仅收尾／00:25:59硬截止，EX-003完整条件仍未达，EX-005另审候选 |
+| 当前检查点 | 第六有限Information→Esc通道和正常退出已父审：50本轮图回执、四原wait0、owner线程join及原件集合通过，最晚00:12:06结束。原Pi沉淀专题／待办后接续EX-005命名Status／配置来源离线方案和必要工具验证，当前尚无EX-005新候选／GO；原Task／EX-003完整条件仍未结 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
@@ -174,11 +176,11 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 ### 接手后的执行顺序
 
-1. **先保留未结Task并完成第五文档交付，再准备新现场。** 第五原链／图片／trace的父独立审计已落盘，原Pi完成专题及EX-003／005／039关联，不重做已核范围。按新8小时接续必要投递链修正、离线验证、第六候选父审及新GO；第四9例与已集成28项工具回归保持各自边界。
+1. **第六有限导航及退出已验，衔接EX-005。** 原Pi先沉淀Information→Esc／50图／原四wait及线程join的专题与待办；父独立审计已完成。随后沿原8小时做命名Status及配置来源最小方案／必要工具与合成回归，父审后另建独立候选／GO，不重启第六。第五缺口和第六有限成功各保留范围，已有46项修复与第四9例不重复。
 2. **明确证据缺口。** 第三 Down 不重发、不 Capture，原操作者未读后图与没有客体后验分别保留，新协调迟后离线 host 读取不补成当时验收；四链 wait0 不补成正常 X。helper 无原创建者持柄 wait，现时 PID 不存在不能追补。旧8846日志缺原字节，不回滚9038日志或删错位 PNG。
 3. **审查、验证和同步。** 原研究分支交付专题／待办，新协调独立分支维护唯一 HANDOFF；核差异及 `python tools/check_exploration_docs.py`，再 no-ff 合入 dev 普通推送。main 仅用户处理，不提交忽略现场。
 4. **新8小时内仅从新批准候选开展现场。** 先审submit/helper原创建者持柄wait修正及离线回归，再审新第六隔离／配置／冻结／输入和预算，签新GO后才唯一启动。每键新host、Capture菜单host、新guest实际read及原JSONL SHA；未知立即停／120秒静默／正常X／全部原链wait。每段最多60分钟、至少7分钟收尾，UTC次日05:04:51总最后10分钟只收尾，05:14:51总截止不顺延。
-5. **保留业务依赖和未完成项。** EX-003 未到 Information，EX-005 新窗口未开展，当前状态／文件名／计数和完整配置来源仍缺。EX-007 不在本轮范围，后续正式新增门、NETDEF 拒绝和铜覆盖保守策略保持。
+5. **保留业务依赖和未完成项。** EX-003已有第六命名Information进入／Esc返回的有限可靠通道，但完整IME／队列／鼠标映射仍缺；EX-005新状态场景、GUI文件名／计数和完整配置来源覆盖待核，按当前新方案推进。EX-007不在本轮范围，正式新增门、NETDEF拒绝和铜覆盖保守策略保持。
 
 <a id="scene"></a>
 
