@@ -8,6 +8,12 @@
 
 **新5小时允许继续必要电脑控制，但此刻尚无新现场候选／GO。** 若来源规则仍缺证而确需实机对照，原Pi先交最小隔离对照、预算及必要工具修改供父审，然后才全新候选／独立GO。每现场段仍最多60分钟、至少7分钟正常收尾；原单操作者、公开门、每键新原图实际read、拒绝后120秒静默、原创建者四wait／线程join保持。旧八槽／旧GO只读不复用；原安装／用户板库／冻结conf、plan、日志、PNG、manifest、JSONL不改。无EX-007／编辑保存／归档精简授权。原Task和41事项保留，不整体worker_done。下述“只离线沉淀／有意暂停／旧8小时截止”是当时检查点，当前执行范围以本节新授权优先。
 
+## 用户最新要求：当前阶段交付后新Pi主协调接续
+
+UTC约04:59用户明确要求：当前推进完成后总结进度和下一步，新开agent交接并继续推进。当前协调先等原Pi正在做的parser／setter／autoexec定向阶段形成有证可交付检查点，独立审阅、必要修正、检查并集成，再在本唯一HANDOFF更新最终进度和计划；随后在同main-2新建Pi聊天，交付本父完整原JSONL，送达回执确认后停止调度。不以“阶段完成”冒充EX-005全部完成，不提前创建多个主协调。原worker已收到 `msg_0abbad791b8e`，保持同Pi／Task／Dispatch／终端，阶段提交后仅离线保留等待续接，不整体worker_done、不重启或另派。
+
+本父完整原JSONL为 `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-13T03-17-26-334Z_01a1d2e8-fabe-7285-9ddd-e858ff2195de.jsonl`。新主协调必须程序化完整流读全部用户／assistant／工具记录，大image.data筛字段或解码核SHA、不全文打印base64；最后交接回执会追加，核精确边界和尾部，不以HANDOFF／压缩摘要代完整历史，不复制整套忽略现场。新主第一步核PI_SESSION_ID／PI_PROVIDER／PI_MODEL／PI_REASONING_LEVEL，必须实际 `deng/gpt-6.1-sol/high`，不符先停报告；沿Pi自身配置创建聊天（此Orca的Pi启动--model曾创建前拒绝），不擅换模型。新协调以自身身份run-use原 `run_3efe904a98f0`，拒绝保回执，不reset／冒用本父或重启worker。原5小时UTC08:35:01.1736239起只收尾、08:45:01.1736239截止，不因换主延长。此处只是已授权交接安排，实际新agent尚未创建，阶段尚在推进。
+
 ## 当前静态研究检查点
 
 原Pi阶段交付 `8af90a180a089db5bfb0078109f3a9ec66a2c600` 已在协调独立分支 `docs/integrate-config-path-static` 审阅集成。固定PE正常单-conf继续路径存在首次用户路径预读／条件序列化，以及后续显式解析／最终默认回退两个阶段；不能用最终跳默认推“显式-conf从不触用户源”。入口23点／RTTI3点及五份原指令清单逐原bytes／PE节映射核过，关键上下文另审；清Section两个文本字段不等于恢复全部Property默认。父收紧windir回退说明：固定点判断返回指针null，不擅称非null空字符串亦回退。父证据 `.local-analysis/config-path-incident-20261112/config-path-stage-parent-review.json`，专题[两阶段静态结论](docs/legacy-dosbox-configuration.md#fixed-config-path-static)。原worker继续parser／setter、有效无效覆盖、autoexec及完整默认根条件，无目标／GUI／配置变更／候选GO；EX-005／003与41事项继续未结。REA因Ghidra12.2／JDK21不符合当前后端12.1.x／JDK25门而不可用，未升级安装，继续已有r2／Capstone；后者module5.0.7与metadata5.0.9分别保留，不混称。
