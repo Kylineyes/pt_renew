@@ -12,7 +12,7 @@ import tarfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = '0.11.0-alpha'
+VERSION = '0.12.0-alpha'
 QT_VERSION = '6.12.0'
 QT_SOURCE_HASHES = {
     'qtbase': 'a951bd163c7b80fc6b8c88d7668fb56abf91c152373e13c10666763238131307',
@@ -70,7 +70,7 @@ def package(build, output, qt, sources):
         subprocess.run(command, check=True, stdout=log, stderr=subprocess.STDOUT)
     (stage / 'qt.conf').write_text('[Paths]\nPrefix=.\nPlugins=.\n', encoding='utf-8')
     shutil.copyfile(ROOT / 'LICENSE', stage / 'LICENSE.txt')
-    shutil.copyfile(ROOT / 'docs/releases/v0.11.0-alpha.md', stage / 'README.md')
+    shutil.copyfile(ROOT / f'docs/releases/v{VERSION}.md', stage / 'README.md')
     (stage / 'examples').mkdir()
     shutil.copyfile(ROOT / 'examples/preview.pcb', stage / 'examples/preview.pcb')
     licenses = stage / 'licenses'
@@ -97,9 +97,9 @@ Qt Core、Gui、Widgets、Concurrent及部署插件来自Qt {QT_VERSION}官方MS
     for module, expected in QT_SOURCE_HASHES.items():
         name = f'{module}-everywhere-src-{QT_VERSION}.tar.xz'
         notices += f'\n- {name}：`{expected}`\n  官方来源：https://download.qt.io/official_releases/qt/6.12/{QT_VERSION}/submodules/{name}\n'
-    notices += '''
+    notices += f'''
 Qt重建可使用对应源码内README/CMake构建说明及config.summary；需要MSVC x64、CMake和Ninja，使用共享库构建，再替换本包相应DLL。本包保留官方Qt DLL字节，qt.conf仅指定部署目录，不包含Qt源码补丁。
-PT Renew对应源码可在https://github.com/Kylineyes/pt_renew/releases/tag/v0.11.0-alpha下载；按README及docs/qt-development.md使用Qt 6.12与MSVC重建，CMake默认动态链接Qt。
+PT Renew对应源码可在https://github.com/Kylineyes/pt_renew/releases/tag/v{VERSION}下载；按README及docs/qt-development.md使用Qt 6.12与MSVC重建，CMake默认动态链接Qt。
 
 ## Microsoft运行库
 
@@ -112,7 +112,8 @@ windeployqt收集的vc_redist.x64.exe是Microsoft Visual C++运行库安装器�
     (stage / 'THIRD_PARTY_NOTICES.md').write_text(notices, encoding='utf-8')
     source_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip()
     metadata = dict(version=VERSION, architecture='windows-x64', source_commit=source_commit, qt_version=QT_VERSION,
-                    readonly=True, editing=False, saving=False, clean_windows_verified=False,
+                    readonly=False, editing=True, saving=True, clean_windows_verified=False,
+                    overwrite_saving=False, track_creation=False, original_autotrax_roundtrip_verified=False,
                     qt_source_sha256=QT_SOURCE_HASHES, executable_sha256=sha256(executable), license_files=counts)
     (stage / 'release-info.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding='utf-8')
     files = {p.relative_to(stage).as_posix(): sha256(p) for p in sorted(stage.rglob('*')) if p.is_file()}

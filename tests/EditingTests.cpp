@@ -18,6 +18,10 @@
 #include <QPushButton>
 #include <QSignalSpy>
 #include <QScopeGuard>
+#include <QSemaphore>
+#include <QThreadPool>
+#include <QRunnable>
+#include <QFutureWatcher>
 #include <QTemporaryDir>
 #include <QTimer>
 #include <QtTest/QTest>
@@ -35,6 +39,29 @@ bool writeInput(const QString& path, const QByteArray& bytes) {
     QFile file(path); return file.open(QIODevice::WriteOnly) && file.write(bytes)==bytes.size();
 }
 QAction* action(pt::MainWindow& window, const char* id) { return window.findChild<QAction*>(QString::fromLatin1(id)); }
+// 独占全局线程池的一条线程，用闸门固定真实读取任务与完成回调的顺序。
+class ReadQueue final {
+public:
+    struct Gate { QSemaphore entered, release; };
+    ReadQueue() : m_pool(QThreadPool::globalInstance()), m_threads(m_pool->maxThreadCount()) {
+        m_pool->waitForDone();
+        m_pool->setMaxThreadCount(1);
+    }
+    ~ReadQueue() {
+        for (const auto& gate : m_gates) gate->release.release();
+        m_pool->waitForDone();
+        m_pool->setMaxThreadCount(m_threads);
+    }
+    std::shared_ptr<Gate> block() {
+        auto gate = std::make_shared<Gate>(); m_gates.push_back(gate);
+        m_pool->start(QRunnable::create([gate] { gate->entered.release(); gate->release.acquire(); }));
+        return gate;
+    }
+private:
+    QThreadPool* m_pool;
+    int m_threads;
+    QList<std::shared_ptr<Gate>> m_gates;
+};
 void answerDiscard(bool discard) {
     auto* timer = new QTimer(qApp); timer->setInterval(1);
     QObject::connect(timer, &QTimer::timeout, qApp, [discard,timer] {
@@ -354,6 +381,174 @@ private slots:
         window.requestOpenFile(other); answerDiscard(true); action(window,"file.close")->trigger();
         QTRY_VERIFY(action(window,"file.open")->isEnabled());
         QCOMPARE(loaded.size(),1); QVERIFY(!canvas->document()); QVERIFY(!window.editSession().canUndo());
+    }
+
+    void synchronousInspectionSupersedesPendingRead_data() {
+        QTest::addColumn<bool>("valid");
+        QTest::newRow("同步成功") << true;
+        QTest::newRow("同步失败保留修改") << false;
+    }
+    void synchronousInspectionSupersedesPendingRead() {
+        QFETCH(bool, valid);
+        QTemporaryDir dir; const auto input = dir.filePath(QStringLiteral("INPUT.PCB"));
+        const auto other = dir.filePath(QStringLiteral("OTHER.PCB"));
+        QVERIFY(writeInput(input, boardBytes())); QVERIFY(writeInput(other, "PCB FILE 4\nENDPCB\n"));
+        ReadQueue queue; const auto gate = queue.block(); QVERIFY(gate->entered.tryAcquire(1, 5000));
+        pt::MainWindow window; QVERIFY(window.inspectFile(input));
+        if (!valid) {
+            QVERIFY(window.findChild<pt::BoardCanvas*>()->focusPrimitive({pt::PrimitiveKind::Track,0}));
+            QVERIFY(window.moveSelectedTrack({10,20}));
+        }
+        const auto previous = window.editSession().document();
+        QSignalSpy loaded(&window, &pt::MainWindow::boardLoadFinished);
+        window.requestOpenFile(other);
+        auto* watcher = window.findChild<QFutureWatcherBase*>(); QVERIFY(watcher);
+        QSignalSpy finished(watcher, &QObject::destroyed);
+        QCOMPARE(window.inspectFile(valid ? other : dir.filePath(QStringLiteral("MISSING.PCB"))), valid);
+        QVERIFY(action(window, "file.open")->isEnabled());
+        QVERIFY(window.saveAsFile(dir.filePath(QStringLiteral("SAVED.PCB"))));
+        const auto current = window.editSession().document();
+        if (!valid) QCOMPARE(current, previous);
+        gate->release.release(); QTRY_COMPARE(finished.size(), 1);
+        QCOMPARE(loaded.size(), 0); QCOMPARE(window.editSession().document(), current);
+        QVERIFY(action(window, "file.open")->isEnabled());
+    }
+
+    void staleCompletionCannotUnlockSuccessorRead() {
+        QTemporaryDir dir; const auto input = dir.filePath(QStringLiteral("INPUT.PCB"));
+        const auto other = dir.filePath(QStringLiteral("OTHER.PCB"));
+        QVERIFY(writeInput(input, boardBytes())); QVERIFY(writeInput(other, "PCB FILE 4\nENDPCB\n"));
+        ReadQueue queue; const auto firstGate = queue.block(); QVERIFY(firstGate->entered.tryAcquire(1, 5000));
+        pt::MainWindow window; QVERIFY(window.inspectFile(input));
+        QSignalSpy loaded(&window, &pt::MainWindow::boardLoadFinished);
+        window.requestOpenFile(input);
+        auto* watcher = window.findChild<QFutureWatcherBase*>(); QVERIFY(watcher);
+        QSignalSpy firstFinished(watcher, &QObject::destroyed);
+        const auto secondGate = queue.block();
+        action(window, "file.close")->trigger();
+        QVERIFY(!window.editSession().document());
+        // 关闭后立即可重开；旧读取排在第二道闸门前，新读取排在其后。
+        QVERIFY(action(window, "file.open")->isEnabled());
+        QVERIFY(window.inspectFile(input));
+        const auto current = window.editSession().document();
+        window.requestOpenFile(other); QVERIFY(!action(window, "file.open")->isEnabled());
+        firstGate->release.release(); QVERIFY(secondGate->entered.tryAcquire(1, 5000));
+        QTRY_COMPARE(firstFinished.size(), 1);
+        QCOMPARE(loaded.size(), 0); QCOMPARE(window.editSession().document(), current);
+        QVERIFY(!action(window, "file.open")->isEnabled());
+        QVERIFY(!action(window, "file.save_as")->isEnabled());
+        QVERIFY(!window.beginTrackPlacement(10, 1));
+        QVERIFY(!window.saveAsFile(dir.filePath(QStringLiteral("STALE.PCB"))));
+        secondGate->release.release(); QTRY_COMPARE(loaded.size(), 1);
+        QVERIFY(loaded.front().front().toBool());
+        QCOMPARE(window.editSession().original()->filePath, other);
+        QVERIFY(action(window, "file.open")->isEnabled());
+    }
+
+    void invalidationInsideDiscardDialogCannotReplaceWork_data() {
+        QTest::addColumn<QString>("operation");
+        for (const auto* operation : {"inspect-failure", "inspect-success", "file-close", "system-close", "edit"})
+            QTest::newRow(operation) << QString::fromLatin1(operation);
+    }
+    void invalidationInsideDiscardDialogCannotReplaceWork() {
+        QFETCH(QString, operation);
+        QTemporaryDir dir; const auto input = dir.filePath(QStringLiteral("INPUT.PCB"));
+        const auto other = dir.filePath(QStringLiteral("OTHER.PCB"));
+        QVERIFY(writeInput(input, boardBytes())); QVERIFY(writeInput(other, "PCB FILE 4\nENDPCB\n"));
+        pt::MainWindow window; QVERIFY(window.inspectFile(input));
+        QVERIFY(window.findChild<pt::BoardCanvas*>()->focusPrimitive({pt::PrimitiveKind::Track,0}));
+        QVERIFY(window.moveSelectedTrack({10,20}));
+        auto edited = window.editSession().document(); auto revision = window.editSession().revision();
+        QSignalSpy loaded(&window, &pt::MainWindow::boardLoadFinished);
+        bool handled = false, nested = false;
+        QTimer timer; timer.setInterval(1);
+        connect(&timer, &QTimer::timeout, &window, [&] {
+            auto* box = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
+            if (!box || handled) return;
+            handled = true; timer.stop();
+            auto guard = qScopeGuard([box] { if (box->isVisible()) box->reject(); });
+            // 旧实现会递归弹框；关闭它以便稳定报告断言失败，而不是挂起测试。
+            QTimer::singleShot(0, &window, [&, box] {
+                auto* inner = qobject_cast<QMessageBox*>(QApplication::activeModalWidget());
+                if (inner && inner != box) { nested = true; inner->reject(); }
+            });
+            if (operation == "inspect-failure") QVERIFY(!window.inspectFile(dir.filePath(QStringLiteral("MISSING.PCB"))));
+            else if (operation == "inspect-success") QVERIFY(!window.inspectFile(input));
+            else if (operation == "file-close") action(window, "file.close")->trigger();
+            else if (operation == "system-close") QVERIFY(!window.close());
+            else {
+                QVERIFY(window.findChild<pt::BoardCanvas*>()->focusPrimitive({pt::PrimitiveKind::Track,0}));
+                QVERIFY(window.moveSelectedTrack({5,6}));
+                edited = window.editSession().document(); revision = window.editSession().revision();
+            }
+            for (auto* button : box->buttons())
+                if (box->buttonRole(button) == QMessageBox::DestructiveRole) { button->click(); return; }
+        });
+        QTimer::singleShot(5000, &timer, [&] {
+            timer.stop(); if (auto* dialog = qobject_cast<QDialog*>(QApplication::activeModalWidget())) dialog->reject();
+        });
+        timer.start(); window.requestOpenFile(other);
+        auto* watcher = window.findChild<QFutureWatcherBase*>(); QVERIFY(watcher);
+        QSignalSpy finished(watcher, &QObject::destroyed);
+        QTRY_COMPARE(finished.size(), 1);
+        QVERIFY(handled); QVERIFY(!nested);
+        QCOMPARE(window.editSession().document(), edited); QCOMPARE(window.editSession().revision(), revision);
+        QVERIFY(window.editSession().dirty()); QVERIFY(window.editSession().canUndo());
+        QCOMPARE(loaded.size(), operation == "edit" ? 1 : 0);
+        if (operation == "edit") QVERIFY(!loaded.front().front().toBool());
+        QVERIFY(action(window, "file.open")->isEnabled());
+    }
+
+    void cancelledCloseReleasesPendingRead_data() {
+        QTest::addColumn<bool>("systemClose");
+        QTest::newRow("关闭板图取消") << false;
+        QTest::newRow("关闭窗口取消") << true;
+    }
+    void cancelledCloseReleasesPendingRead() {
+        QFETCH(bool, systemClose);
+        QTemporaryDir dir; const auto input = dir.filePath(QStringLiteral("INPUT.PCB"));
+        QVERIFY(writeInput(input, boardBytes()));
+        ReadQueue queue; const auto gate = queue.block(); QVERIFY(gate->entered.tryAcquire(1, 5000));
+        pt::MainWindow window; QVERIFY(window.inspectFile(input));
+        QVERIFY(window.findChild<pt::BoardCanvas*>()->focusPrimitive({pt::PrimitiveKind::Track,0}));
+        QVERIFY(window.deleteSelectedTrack()); const auto edited = window.editSession().document();
+        QSignalSpy loaded(&window, &pt::MainWindow::boardLoadFinished);
+        window.requestOpenFile(input);
+        auto* watcher = window.findChild<QFutureWatcherBase*>(); QVERIFY(watcher);
+        QSignalSpy finished(watcher, &QObject::destroyed);
+        answerDiscard(false);
+        if (systemClose) QVERIFY(!window.close()); else action(window, "file.close")->trigger();
+        QCOMPARE(window.editSession().document(), edited); QVERIFY(window.editSession().dirty());
+        QVERIFY(action(window, "file.open")->isEnabled());
+        QVERIFY(window.saveAsFile(dir.filePath(QStringLiteral("SAVED.PCB"))));
+        gate->release.release(); QTRY_COMPARE(finished.size(), 1);
+        QCOMPARE(loaded.size(), 0); QCOMPARE(window.editSession().document(), edited);
+    }
+
+    void editsAndHistoryRemainConsistentDuringBlockedRead() {
+        QTemporaryDir dir; const auto input = dir.filePath(QStringLiteral("INPUT.PCB"));
+        QVERIFY(writeInput(input, boardBytes()));
+        ReadQueue queue; const auto gate = queue.block(); QVERIFY(gate->entered.tryAcquire(1, 5000));
+        pt::MainWindow window; QVERIFY(window.inspectFile(input));
+        auto* canvas = window.findChild<pt::BoardCanvas*>();
+        QSignalSpy loaded(&window, &pt::MainWindow::boardLoadFinished);
+        window.requestOpenFile(dir.filePath(QStringLiteral("MISSING.PCB")));
+        QVERIFY(canvas->focusPrimitive({pt::PrimitiveKind::Track,0}));
+        QVERIFY(action(window, "move.track")->isEnabled()); QVERIFY(window.moveSelectedTrack({10,20}));
+        QVERIFY(canvas->focusPrimitive({pt::PrimitiveKind::Track,1}));
+        QVERIFY(action(window, "delete.track")->isEnabled()); QVERIFY(window.deleteSelectedTrack());
+        QVERIFY(action(window, "edit.undo")->isEnabled()); action(window, "edit.undo")->trigger();
+        QVERIFY(window.editSession().canRedo()); QVERIFY(action(window, "edit.redo")->isEnabled());
+        action(window, "edit.redo")->trigger(); action(window, "edit.undo")->trigger();
+        const auto edited = window.editSession().document(); const auto revision = window.editSession().revision();
+        QVERIFY(!action(window, "file.save_as")->isEnabled());
+        QVERIFY(!window.saveAsFile(dir.filePath(QStringLiteral("PENDING.PCB"))));
+        gate->release.release(); QTRY_COMPARE(loaded.size(), 1); QVERIFY(!loaded.front().front().toBool());
+        QCOMPARE(window.editSession().document(), edited); QCOMPARE(window.editSession().revision(), revision);
+        QVERIFY(window.editSession().dirty()); QVERIFY(window.editSession().canRedo());
+        QVERIFY(action(window, "file.save_as")->isEnabled());
+        action(window, "edit.undo")->trigger(); QVERIFY(!window.editSession().dirty());
+        action(window, "edit.redo")->trigger(); QVERIFY(window.editSession().dirty());
     }
 
     void newCopperConclusionFollowsDeleteAndUndo() {

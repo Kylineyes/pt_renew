@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.11.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.12.0 LANGUAGES CXX)
 set(PT_RENEW_VERSION "${PROJECT_VERSION}-alpha")
 configure_file(src/application/Version.h.in generated/application/Version.h @ONLY)
 
@@ -16,6 +16,8 @@ add_library(pt_core STATIC
     src/application/BoardEditSession.cpp
     src/application/TrackPlacementSession.h
     src/application/TrackPlacementSession.cpp
+    src/application/TrackPlacementController.h
+    src/application/TrackPlacementController.cpp
     src/application/CommandCatalog.cpp
     src/application/CommandCatalog.h
     src/application/ComponentTableModel.h
@@ -31,6 +33,10 @@ add_library(pt_core STATIC
     src/io/LegacyPcbReader.cpp
     src/io/LegacyPcbWriter.h
     src/io/LegacyPcbWriter.cpp
+    src/io/LegacyFreeTrackCodec.h
+    src/io/LegacyFreeTrackCodec.cpp
+    src/io/LegacyTrackInsertionPlanner.h
+    src/io/LegacyTrackInsertionPlanner.cpp
     src/io/DosText.h
     src/domain/Netlist.h
     src/io/LegacyNetlistReader.h
@@ -87,7 +93,11 @@ add_executable(pt-copper-check tools/InspectCopper.cpp)
 set_target_properties(pt-copper-check PROPERTIES WIN32_EXECUTABLE FALSE)
 target_link_libraries(pt-copper-check PRIVATE pt_geometry)
 
-foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check pt-netlist-check pt-copper-check)
+add_executable(pt-pcb-check tools/InspectPcb.cpp)
+set_target_properties(pt-pcb-check PROPERTIES WIN32_EXECUTABLE FALSE)
+target_link_libraries(pt-pcb-check PRIVATE pt_core)
+
+foreach(target pt_core pt_geometry pt_ui pt-renew pt-library-check pt-netlist-check pt-copper-check pt-pcb-check)
     if(MSVC)
         target_compile_options(${target} PRIVATE /utf-8 /W4 /permissive-)
     else()
@@ -110,11 +120,30 @@ if(BUILD_TESTING)
         message(STATUS "未找到 Python 3：跳过覆盖模块及文字研究工具测试，Qt 应用构建不受影响。")
     endif()
     find_package(Qt6 6.12 REQUIRED COMPONENTS Test)
-    foreach(test_name IN ITEMS pcb-layout track-placement)
+    qt_add_executable(pt-pcb-check-tests tests/PcbCheckTests.cpp)
+    set_target_properties(pt-pcb-check-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+    target_link_libraries(pt-pcb-check-tests PRIVATE Qt6::Core Qt6::Test)
+    add_dependencies(pt-pcb-check-tests pt-pcb-check)
+    if(MSVC)
+        target_compile_options(pt-pcb-check-tests PRIVATE /utf-8 /W4 /permissive-)
+    endif()
+    add_test(NAME pt-pcb-check-tests
+        COMMAND "${CMAKE_COMMAND}" -E env "PT_PCB_CHECK_EXECUTABLE=$<TARGET_FILE:pt-pcb-check>"
+            $<TARGET_FILE:pt-pcb-check-tests> -o -,txt -o pcb-check-test-results.txt,txt)
+    set_tests_properties(pt-pcb-check-tests PROPERTIES TIMEOUT 60)
+    foreach(test_name IN ITEMS pcb-layout track-placement free-track-codec track-insertion-plan track-placement-controller track-preflight-workflow)
         if(test_name STREQUAL "pcb-layout")
             set(test_source tests/PcbLayoutTests.cpp)
-        else()
+        elseif(test_name STREQUAL "track-placement")
             set(test_source tests/TrackPlacementTests.cpp)
+        elseif(test_name STREQUAL "free-track-codec")
+            set(test_source tests/FreeTrackCodecTests.cpp)
+        elseif(test_name STREQUAL "track-insertion-plan")
+            set(test_source tests/TrackInsertionPlanTests.cpp)
+        elseif(test_name STREQUAL "track-placement-controller")
+            set(test_source tests/TrackPlacementControllerTests.cpp)
+        else()
+            set(test_source tests/TrackPreflightWorkflowTests.cpp)
         endif()
         qt_add_executable(pt-${test_name}-tests ${test_source})
         set_target_properties(pt-${test_name}-tests PROPERTIES WIN32_EXECUTABLE FALSE)
@@ -125,6 +154,33 @@ if(BUILD_TESTING)
         add_test(NAME pt-${test_name}-tests COMMAND pt-${test_name}-tests -o -,txt -o ${test_name}-test-results.txt,txt)
         set_tests_properties(pt-${test_name}-tests PROPERTIES TIMEOUT 30)
     endforeach()
+    foreach(test_name IN ITEMS track-created-writing track-placement-ui track-created-workflow mainwindow-created-save)
+        if(test_name STREQUAL "track-created-writing")
+            set(test_source tests/TrackCreatedWritingTests.cpp)
+            set(test_library pt_core)
+        elseif(test_name STREQUAL "track-placement-ui")
+            set(test_source tests/TrackPlacementUiTests.cpp)
+            set(test_library pt_ui)
+        elseif(test_name STREQUAL "mainwindow-created-save")
+            set(test_source tests/MainWindowCreatedSaveTests.cpp)
+            set(test_library pt_ui)
+        else()
+            set(test_source tests/TrackCreatedWorkflowTests.cpp)
+            set(test_library pt_ui)
+        endif()
+        qt_add_executable(pt-${test_name}-tests ${test_source})
+        set_target_properties(pt-${test_name}-tests PROPERTIES WIN32_EXECUTABLE FALSE)
+        target_link_libraries(pt-${test_name}-tests PRIVATE ${test_library} Qt6::Test)
+        if(MSVC)
+            target_compile_options(pt-${test_name}-tests PRIVATE /utf-8 /W4 /permissive-)
+        endif()
+        add_test(NAME pt-${test_name}-tests COMMAND pt-${test_name}-tests -o -,txt -o ${test_name}-test-results.txt,txt)
+        set_tests_properties(pt-${test_name}-tests PROPERTIES TIMEOUT 90)
+    endforeach()
+    # 显式新增输出同时验证 200000 记录和 64 MiB 字节边界，调试构建需独立预算。
+    set_tests_properties(pt-track-created-writing-tests PROPERTIES TIMEOUT 300)
+    # 插入预检覆盖真实 200000 条语法记录的容量边界，调试构建需额外预算。
+    set_tests_properties(pt-track-insertion-plan-tests PROPERTIES TIMEOUT 180)
     qt_add_executable(pt-track-creation-tests tests/TrackCreationTests.cpp)
     set_target_properties(pt-track-creation-tests PROPERTIES WIN32_EXECUTABLE FALSE)
     target_link_libraries(pt-track-creation-tests PRIVATE pt_core Qt6::Test)

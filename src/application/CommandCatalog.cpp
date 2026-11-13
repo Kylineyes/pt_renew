@@ -17,6 +17,10 @@ CommandSpec command(const char* id, const char* text,
 
 }
 
+bool trackPlacementUserEntryAvailable() {
+    return false;
+}
+
 const QList<MenuSpec>& commandCatalog() {
     // 保留原一级菜单的字母顺序；未实现业务只展示入口，不能执行。
     static const QList<MenuSpec> menus{
@@ -34,7 +38,7 @@ const QList<MenuSpec>& commandCatalog() {
         {QStringLiteral("E"), QStringLiteral("编辑(&E)"), {
             command("edit.undo", "撤销(&U)", {"Ctrl+Z"}, true),
             command("edit.redo", "重做(&R)", {"Ctrl+Y"}, true),
-            command("selection.clear", "清除选择(&C)", {"Esc"}, true),
+            command("selection.clear", "取消当前工具 / 清除选择(&C)", {"Esc"}, true),
             command("selection.next", "切换重叠图元(&N)", {"Ctrl+Tab"}, true),
             command("edit.arc", "编辑圆弧(&A)"), command("edit.component", "编辑元件(&C)"),
             command("edit.pad", "编辑焊盘(&P)"), command("edit.track", "编辑走线(&T)"),
@@ -81,7 +85,7 @@ const QList<MenuSpec>& commandCatalog() {
         {QStringLiteral("P"), QStringLiteral("放置(&P)"), {
             command("place.arc", "放置圆弧(&A)"), command("place.component", "放置元件(&C)"),
             command("place.fill", "放置填充(&F)"), command("place.pad", "放置焊盘(&P)", {"F1"}),
-            command("place.string", "放置文字(&S)"), command("place.track", "放置走线(&T)", {"F3"}),
+            command("place.string", "放置文字(&S)"), command("place.track", "放置走线(&T)", {"F3"}, trackPlacementUserEntryAvailable()),
             command("place.via", "放置过孔(&V)")}},
         {QStringLiteral("R"), QStringLiteral("重复(&R)"), {
             command("edit.repeat", "重复上一操作(&R)")}},

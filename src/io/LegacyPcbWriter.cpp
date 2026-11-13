@@ -1,5 +1,6 @@
 #include "io/LegacyPcbWriter.h"
 #include "io/LegacyPcbReader.h"
+#include "io/LegacyTrackInsertionPlanner.h"
 #include <QCryptographicHash>
 #include <QDir>
 #include <QFileInfo>
@@ -9,35 +10,44 @@
 
 namespace pt {
 namespace {
+constexpr qsizetype maximumBytes = 64 * 1024 * 1024;
+
+// 文件模型要求精确一致；Qt 几何类型的模糊相等会放过小数篡改并静默丢弃修改。
+bool samePoint(const QPointF& a, const QPointF& b) {
+    return a.x() == b.x() && a.y() == b.y();
+}
+bool sameRectangle(const QRectF& a, const QRectF& b) {
+    return a.x() == b.x() && a.y() == b.y() && a.width() == b.width() && a.height() == b.height();
+}
 bool sameSource(const PrimitiveSource& a, const PrimitiveSource& b, bool lines) {
     return a.component == b.component && (!lines || (a.line == b.line && a.byteOffset == b.byteOffset));
 }
 bool same(const Track& a, const Track& b, bool lines) {
-    return a.start == b.start && a.end == b.end && a.width == b.width && a.layer == b.layer
+    return samePoint(a.start, b.start) && samePoint(a.end, b.end) && a.width == b.width && a.layer == b.layer
         && a.extra == b.extra && sameSource(a.source, b.source, lines) && (!lines || a.identity == b.identity);
 }
 bool same(const Pad& a, const Pad& b, bool lines) {
-    return a.center == b.center && a.width == b.width && a.height == b.height && a.shape == b.shape
+    return samePoint(a.center, b.center) && a.width == b.width && a.height == b.height && a.shape == b.shape
         && a.drill == b.drill && a.planeFlags == b.planeFlags && a.layer == b.layer && a.name == b.name
         && sameSource(a.source, b.source, lines);
 }
 bool same(const Via& a, const Via& b, bool lines) {
-    return a.center == b.center && a.diameter == b.diameter && a.drill == b.drill && sameSource(a.source, b.source, lines);
+    return samePoint(a.center, b.center) && a.diameter == b.diameter && a.drill == b.drill && sameSource(a.source, b.source, lines);
 }
 bool same(const Arc& a, const Arc& b, bool lines) {
-    return a.center == b.center && a.radius == b.radius && a.quadrants == b.quadrants && a.width == b.width
+    return samePoint(a.center, b.center) && a.radius == b.radius && a.quadrants == b.quadrants && a.width == b.width
         && a.layer == b.layer && sameSource(a.source, b.source, lines);
 }
 bool same(const Fill& a, const Fill& b, bool lines) {
-    return a.rectangle == b.rectangle && a.layer == b.layer && sameSource(a.source, b.source, lines);
+    return sameRectangle(a.rectangle, b.rectangle) && a.layer == b.layer && sameSource(a.source, b.source, lines);
 }
 bool same(const BoardText& a, const BoardText& b, bool lines) {
-    return a.position == b.position && a.height == b.height && a.direction == b.direction && a.stroke == b.stroke
+    return samePoint(a.position, b.position) && a.height == b.height && a.direction == b.direction && a.stroke == b.stroke
         && a.layer == b.layer && a.mirrored == b.mirrored && a.value == b.value && sameSource(a.source, b.source, lines);
 }
 bool same(const Component& a, const Component& b, bool) {
     return a.designator == b.designator && a.footprint == b.footprint && a.comment == b.comment
-        && a.origin == b.origin && a.placement == b.placement;
+        && samePoint(a.origin, b.origin) && a.placement == b.placement;
 }
 template<class T> bool sameList(const QList<T>& a, const QList<T>& b, bool lines) {
     if (a.size() != b.size()) return false;
@@ -77,6 +87,22 @@ QList<Line> lineSpans(const QByteArray& bytes) {
 }
 struct Replacement { qsizetype begin, end; QByteArray bytes; };
 bool coordinate(qreal value) { return std::isfinite(value) && std::trunc(value) == value && std::abs(value) <= 1000000; }
+// expectedTracks 的行来源与 Loaded 身份由替换范围或插入位置独立推导，不能从重解析结果反填。
+BoardWriteResult verifyOutput(const QByteArray& output, const BoardDocument& current,
+    const QList<Track>& expectedTracks, const QMap<QString, qsizetype>& expectedCounts) {
+    const auto fail = [](const QString& error) { return BoardWriteResult{{}, {}, {}, error}; };
+    if (output.size() > maximumBytes) return fail(QStringLiteral("写出内容超过 64 MiB 安全限制。"));
+    const auto reopened = LegacyPcbReader::parse(output, current.filePath);
+    if (!reopened.succeeded() || !sameList(reopened.document->tracks, expectedTracks, true)
+        || reopened.document->recordCounts != expectedCounts
+        || !sameOtherGeometry(*reopened.document, current, false)
+        || !sameNetlist(reopened.document->embeddedNetlist, current.embeddedNetlist, false))
+        return fail(QStringLiteral("写出内容严格重解析后的对象、重载身份或 NETDEF 与预期不一致，未创建目标文件。"));
+    return {output, {}, QString::fromLatin1(QCryptographicHash::hash(output, QCryptographicHash::Sha256).toHex()), {}};
+}
+
+BoardWriteResult publish(const QString& path, const BoardDocument& original, BoardWriteResult result);
+
 QString normalizedDestination(const QString& path) {
     const QFileInfo info(path);
     const auto parent = info.dir().canonicalPath();
@@ -138,7 +164,7 @@ BoardWriteResult LegacyPcbWriter::prepare(const BoardDocument& original, const B
             || before.extra != after->extra || !sameSource(before.source, after->source, true))
             return fail(QStringLiteral("不支持修改元件内部走线或走线宽度、图层和附加字段。"));
         const auto delta = after->start - before.start;
-        if (after->end - before.end != delta) return fail(QStringLiteral("当前仅支持走线整体平移，不支持改变走线形状。"));
+        if (!samePoint(after->end - before.end, delta)) return fail(QStringLiteral("当前仅支持走线整体平移，不支持改变走线形状。"));
         const qreal coordinates[] = {after->start.x(), after->start.y(), after->end.x(), after->end.y()};
         for (auto value : coordinates) if (!coordinate(value)) return fail(QStringLiteral("走线坐标必须是 ±1000000 mil 内的整数。"));
         // 仅替换前四个数值词；保留分隔符、换行及未解释的第七字段原字节。
@@ -155,20 +181,87 @@ BoardWriteResult LegacyPcbWriter::prepare(const BoardDocument& original, const B
     qsizetype cursor = 0;
     // 记录可能分布在元件前后，使用原字节偏移排序后一次顺序写出。
     std::sort(replacements.begin(), replacements.end(), [](const auto& a, const auto& b) { return a.begin < b.begin; });
+    qint64 outputSize = raw.size();
+    for (const auto& replacement : replacements) outputSize += replacement.bytes.size() - (replacement.end - replacement.begin);
+    if (outputSize > maximumBytes) return fail(QStringLiteral("写出内容超过 64 MiB 安全限制。"));
+    output.reserve(qsizetype(outputSize));
+    // 根据旧记录前实际删去的换行计算重载行身份；坐标替换不会引入换行。
+    QList<Track> expectedTracks;
+    qsizetype replacementIndex = 0, lineDelta = 0;
+    for (auto track : current.tracks) {
+        const auto tagOffset = spans[track.source.line - 1].begin;
+        while (replacementIndex < replacements.size() && replacements[replacementIndex].end <= tagOffset) {
+            const auto& replacement = replacements[replacementIndex++];
+            lineDelta += replacement.bytes.count('\n')
+                - std::count(raw.constData() + replacement.begin, raw.constData() + replacement.end, '\n');
+        }
+        track.source.line += lineDelta;
+        track.identity = TrackIdentity::loaded(track.source.line);
+        expectedTracks.append(track);
+    }
     for (const auto& replacement : replacements) {
         if (replacement.begin < cursor) return fail(QStringLiteral("走线替换范围重叠，已停止写出。"));
         output.append(raw.constData() + cursor, replacement.begin - cursor); output.append(replacement.bytes); cursor = replacement.end;
     }
     output.append(raw.constData() + cursor, raw.size() - cursor);
-    const auto reopened = LegacyPcbReader::parse(output, original.filePath);
-    if (!reopened.succeeded() || !sameList(reopened.document->tracks, current.tracks, false)
-        || !sameOtherGeometry(*reopened.document, current, false) || !sameNetlist(reopened.document->embeddedNetlist, current.embeddedNetlist, false))
-        return fail(QStringLiteral("写出内容重新解析后与当前工作副本不一致，未创建目标文件。"));
-    return {output, {}, QString::fromLatin1(QCryptographicHash::hash(output, QCryptographicHash::Sha256).toHex()), {}};
+    auto expectedCounts = original.recordCounts;
+    const auto removed = original.tracks.size() - current.tracks.size();
+    if (removed) {
+        expectedCounts[QStringLiteral("FT")] -= removed;
+        if (expectedCounts[QStringLiteral("FT")] == 0) expectedCounts.remove(QStringLiteral("FT"));
+    }
+    return verifyOutput(output, current, expectedTracks, expectedCounts);
+}
+
+BoardWriteResult LegacyPcbWriter::prepareWithCreated(const BoardDocument& original, const BoardDocument& current,
+    const LegacyFreeTrackCodec::Options& options) {
+    const auto fail = [](const QString& error) { return BoardWriteResult{{}, {}, {}, error}; };
+    // planner 仅调用默认 prepare 处理旧记录；默认路径不得反向调用 planner。
+    const auto plan = LegacyTrackInsertionPlanner::prepare(original, current);
+    if (!plan.succeeded()) return fail(plan.error);
+    if (plan.createdTracks.isEmpty()) return prepare(original, current);
+    const auto base = LegacyPcbReader::parse(plan.baseBytes, original.filePath);
+    if (!base.succeeded()) return fail(base.error);
+    const auto offset = plan.insertionByteOffset;
+    if (offset < 0 || offset > plan.baseBytes.size()) return fail(QStringLiteral("新增走线插入位置越界。"));
+    auto expectedTracks = base.document->tracks;
+    qsizetype nextLine = 1 + std::count(plan.baseBytes.constData(), plan.baseBytes.constData() + offset, '\n');
+    QByteArray inserted;
+    for (auto track : plan.createdTracks) {
+        const auto encoded = LegacyFreeTrackCodec::encode(track.start, track.end, track.width, track.layer, options);
+        if (!encoded.succeeded()) return fail(encoded.error);
+        if (encoded.bytes.size() > maximumBytes - plan.baseBytes.size() - inserted.size())
+            return fail(QStringLiteral("写出内容超过 64 MiB 安全限制。"));
+        // Created 序号按 planner 的严格顺序一一映射到输出标签行的 Loaded 身份。
+        // 七字段附加值来自显式编码参数，不写回会话内尚未解释的 Created 对象。
+        track.extra = options.extra;
+        track.source = {nextLine, -1};
+        track.identity = TrackIdentity::loaded(nextLine);
+        expectedTracks.append(track);
+        nextLine += encoded.bytes.count('\n');
+        inserted.append(encoded.bytes);
+    }
+    QByteArray output;
+    output.reserve(plan.baseBytes.size() + inserted.size());
+    output.append(plan.baseBytes.constData(), offset);
+    output.append(inserted);
+    output.append(plan.baseBytes.constData() + offset, plan.baseBytes.size() - offset);
+    auto expectedCounts = base.document->recordCounts;
+    expectedCounts[QStringLiteral("FT")] += plan.createdTracks.size();
+    return verifyOutput(output, current, expectedTracks, expectedCounts);
 }
 
 BoardWriteResult LegacyPcbWriter::saveAs(const QString& path, const BoardDocument& original, const BoardDocument& current) {
-    auto result = prepare(original, current);
+    return publish(path, original, prepare(original, current));
+}
+
+BoardWriteResult LegacyPcbWriter::saveAsWithCreated(const QString& path, const BoardDocument& original, const BoardDocument& current,
+    const LegacyFreeTrackCodec::Options& options) {
+    return publish(path, original, prepareWithCreated(original, current, options));
+}
+
+namespace {
+BoardWriteResult publish(const QString& path, const BoardDocument& original, BoardWriteResult result) {
     if (!result.succeeded()) return result;
     auto fail = [&](const QString& error) { result.error = error; return result; };
     if (path.trimmed().isEmpty()) return fail(QStringLiteral("另存为路径不能为空。"));
@@ -197,5 +290,6 @@ BoardWriteResult LegacyPcbWriter::saveAs(const QString& path, const BoardDocumen
     staging.setAutoRemove(false);
     result.filePath = target.absoluteFilePath();
     return result;
+}
 }
 }
