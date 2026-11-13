@@ -112,6 +112,6 @@ assert bytes.fromhex(result['raw_hex']) == b'X:\\synthetic\0tail'
 
 当前没有测试失败，首轮原成功回执保留。`python -B tools/check_exploration_docs.py` 实际退出 1，检查 165 份 Markdown／1335 个本地链接／41 个事项／137 处来源／149 份报告，唯一错误是本新报告尚未在完整资料索引中恰好出现一次，原回执 `docs-first.json` 保留，由协调统一入链，没有修改共享文件。`git diff --check` 退出 0；提交前另以 `git diff --cached --check` 检查三份新增文件实际暂存内容，回执随交付保存。
 
-协调已完整审阅131行工具、299行测试、本文和原delivery.json，核对14字段、进入参数独立保存、返回RIP／RSP检查先于缓冲读取、BOOL低32有符号及R8D／R9D规则；在独立集成分支运行20项父树测试全部通过，未修改实现。父验收记录为协调树`.local-analysis/ex005-capture-binding-0174/call-capture-parent-review.json`，子代理未索引的原exit1保留，协调另补双向链接及索引。审计v2的实际接收及跨模块合成验证仍待后续交付，不把这20项测试算作已完成互通。
+协调已完整审阅131行工具、299行测试、本文和原delivery.json，核对14字段、进入参数独立保存、返回RIP／RSP检查先于缓冲读取、BOOL低32有符号及R8D／R9D规则；在独立集成分支运行20项父树测试全部通过，未修改实现。父验收记录为协调树`.local-analysis/ex005-capture-binding-0174/call-capture-parent-review.json`，子代理未索引的原exit1保留，协调另补双向链接及索引。这20项仅验证提取核心；后续协调已另用本实现的实际输出完成[6项跨模块互通测试](legacy-source-observation-audit.md#capture-v2-integration)，完整集成回归100项通过。它们仍是模拟寄存器／内存回调数据，不是实际进程采集。
 
 本轮不启动目标、接进程、调试、调用 Windows API、查询窗口、控制桌面或读取实时用户源，不制作配置／plan／GO；用户若需后续控制电脑须先说明并确认。本次完成的是纯提取核心的有界开发，实际采集、ABI 现场验证、隔离与阶段 Host I/O、Property／查询输出及原创建者退出见证仍缺，不结 EX-003／EX-005，也不追认历史运行。
