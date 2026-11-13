@@ -32,7 +32,11 @@ worker继续C受影响G04/05/07/08/40–43及编辑保存回归，整理48项报
 
 worker随后回报并经父读原回执：C产品34572／134390752819519301及干净重开2596／134390761514519226均原wait0，status/controller-finished含两实例对应退出及joined=true，controller-parent-exit含52072原wait0。C受影响回归图和最终输入／部署摘要仍在整理；48项报告未提交初稿已落其独占docs/releases/v0.12.0-alpha-verification.md，父读时顶部／表仍主要A/B文字，worker正在补C，不据未完草稿判通过。
 
-新增明确历史证据缺口：A控制器21728由短时PowerShell Start-Process创建，父创建对象wait未保存，不能事后补；A产品原wait0和controller-finished joined不等该控制器OS退出。原缺口永久保留。为满足用户当前发布候选全部覆盖，父发`msg_874fd390e809`要求沿本Task／同Pi补齐最新C候选48项仍未执行的子条件，已有同SHA的C实测直接复用，不无变化重做；A/B-only的视图／层／重叠／检索测量／LIB-NET铜／禁用焦点等补C，各项候选明确，G14两入口、G30非数字等子条件单列。最终分当前C完整矩阵及A/B历史失败／修正／退出缺口，不能把A缺口改写通过，也不以跨版本截图冒称C全覆盖。父证gui-stage6-matrix-review.json，等待新C组原owner／产品／观察器退出与before/after全集；当前不结Task、不改PRready或tag。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+新增明确历史证据缺口：A控制器21728由短时PowerShell Start-Process创建，父创建对象wait未保存，不能事后补；A产品原wait0和controller-finished joined不等该控制器OS退出。原缺口永久保留。为满足用户当前发布候选全部覆盖，父发`msg_874fd390e809`要求沿本Task／同Pi补齐最新C候选48项仍未执行的子条件，已有同SHA的C实测直接复用，不无变化重做；A/B-only的视图／层／重叠／检索测量／LIB-NET铜／禁用焦点等补C，各项候选明确，G14两入口、G30非数字等子条件单列。最终分当前C完整矩阵及A/B历史失败／修正／退出缺口，不能把A缺口改写通过，也不以跨版本截图冒称C全覆盖。父证gui-stage6-matrix-review.json，等待新C组原owner／产品／观察器退出与before/after全集；当前不结Task、不改PRready或tag。
+
+worker已完成C缺项补测并串行收尾，current原产品27576／134390766290187644及20116／134390767980101913均原Popen wait0，owner持控制器51892原wait0；父读原controller-finished/parent-exit并独立复核119部署／14公共输入／2extra输入／3prior输出全集before=after、current自身C-current-sentinel未变，两新输出严格检查原wait0。父实际read四图：重复点击2/2宽10、abc整数拒绝、C库非法后ALL/6图元/P1保留、NET非法后GND/节点/诊断保留。父证gui-stage7-current-close-review.json；只读父审中PowerShell管道中文呈问号已修派生说明，实际原回执／图证不变。
+
+当前没有要求追加现场启动，worker正在逐张read并重写完整C48矩阵及证据索引，尚未worker_done/提交报告；父反馈msg_f259d5b01ef6要求保持已收尾、不要无变化重跑，最终交精确HEAD/干净树/原wait和集合摘要及截图读图清单。下一步收独占报告全文及矩阵，逐子条件核实际证据与边界，补共享入口及PR说明；全部审过之前不宣称48项通过，不解除PR草稿，不打tag。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
