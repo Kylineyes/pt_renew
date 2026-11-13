@@ -264,4 +264,28 @@ owner提交线程01:30:25.393135记录joined、五秒内完成、error null；ob
 
 本树 `.local-analysis/ex-003-live/seventh-live-audit.json`、`seventh-latency-audit.json`保留逐图原会话记录、原链身份、集合摘要及阶段时序；父独立证据在 `main-2/.local-analysis/config-path-incident-20261112/seventh-parent-final-audit.json`、`seventh-parent-latency-audit.json`。时序脚本首次终端汇总因初始只读步骤没有对应send、空值参加min而TypeError，完整报告已先排他写出；修汇总过滤后只读原报告复核，原失败回执保留，未覆盖报告或重做现场。一次rg命令引号错误也只影响离线搜索。
 
-协调方要求先只读核“已看图审核＋唯一packet投递＋有界等原动作完成＋新图read”能否合为一次codemode，减少模型往返；**仍须每键三个显式观察决策，看到Capture菜单后才点，不能自动视觉替代或预排下一键**。当前codemode文档说明QuickJS没有timers／Node／文件系统，已暴露工具无独立纯文件wait；等待能力边界另行离线验证，不借桌面工具等待或擅开helper。父审下一方案前不生成候选／GO，不复用第七；GUI Up环绕、Status文件名和八计数、完整配置继承仍未知。
+协调方要求先只读核“已看图审核＋唯一packet投递＋有界等原动作完成＋新图read”能否合为一次codemode，减少模型往返；**仍须每键三个显式观察决策，看到Capture菜单后才点，不能自动视觉替代或预排下一键**。当时codemode文档说明QuickJS没有timers／Node／文件系统，已暴露工具无独立纯文件wait；后续沿本机隐藏PowerShell执行层的最小离线验证见[单动作文件等待适配](#single-step-file-wait)。父审下一方案前不生成候选／GO，不复用第七；GUI Up环绕、Status文件名和八计数、完整配置继承仍未知。
+
+<a id="single-step-file-wait"></a>
+
+## 单动作文件等待适配：25项与真实codemode无GUI烟测
+
+原协调Pi沿原Task／Dispatch授权此最小离线实现，随后用户要求主Pi新对话交接；原worker会话、指定 `deng/gpt-6.1-sol / high` 和8小时总截止保持，**新协调审阅前没有新候选／GO／现场**。本节只验证当前图审核、单包队列、短时文件等待和新图读回能否在同一次codemode完成；不是Up／Status实际验收。
+
+QuickJS自身没有定时器，不能假设 `setTimeout` 或无工具Promise会等待。实际本机 `C:/Users/rikideng/scoop/apps/pi-coding-agent/1.5.2/pi.exe` 为129055232字节，SHA `40a062bedd75767e2c3c889265de7c83d64a0ba55c74b60243c2453d97cffd85`，与父证据相同。本树又从原二进制精确偏移读取2802／456字节，逐SHA及UTF-8全文核父提取片段：`createLocalShellOperations`在126367285，显式 `detached:false / stdio:pipe / windowsHide:true`，持原child并 `await waitForChildProcess(child)`；`createLocalPowerShellOperations`在126487036，直接委托该执行层。**这是该安装实现和本次纯文件烟测的证据，不保证全机绝无其它前景干扰**。没有修改／安装Pi、换模型、另开worker或控制连接。
+
+[legacy_file_step.js](../tools/legacy_file_step.js)提供 `createLegacyFileStep({tools,text,image})`，返回单次 `sendAndRead(options)`；[Wait-LegacyFileStep.ps1](../tools/Wait-LegacyFileStep.ps1)只通过本机内置 `tools.powershell` 被调用，命令不含窗口／桌面／进程API，也不启动额外子进程。其Stopwatch默认10000ms、上限15000ms，轮询间短sleep默认250ms，外工具timeout20秒；没有常驻helper、无限忙轮询或借桌面工具延迟。
+
+在任何审核或packet写入前，JS先用纯read核：slot是等待脚本所在repo的 `.local-analysis` 后代，脚本只能是同树 `tools/Wait-LegacyFileStep.ps1`，拒绝点路径穿越；`live-plan.json.slot`、Task／Dispatch／session与当前state一致；该PS与同树 `tools/legacy_file_step.js`都在 `plan.frozen_files` 中唯一列出有效大小／SHA。**原包续等也先过此归属门**。新包再比当前state与原observation、要求模型提供已实际看过每种当前原图的观察，才写原格式review与唯一packet；不直接写inbox，owner／原submit的真实摘要、图片回执、隔离、GO、禁重放及排他x门保持。
+
+等待端只核这个包的 `.json/.submitted/.rejected`、owner结果、预期序号和动作名的complete、精确新state及原observation；新nonce必须不同。读取包使用共享ReadWrite／Delete句柄，允许owner原rename，不能用读取锁阻塞提交线程。它遇现有停止／拒绝文件立即refused，完成后仍旧state／nonce或身份错则error。上限结束为pending；下次只核同一原包继续等，**不重写审核、不重发、不读取旧图**。同名不同包或多个仍存在的版本拒绝覆盖。
+
+ready后JS再核未变化的新state与submitted结果，读该步原native文件必要字段及每张新host／guest PNG，并真正调用原 `image()`返回本Pi；这里只输出本目标PID的窗口摘要，不做桌面查询。**调用到此结束，不为新图生成审核或决定下一包**。模型必须先实际看本次返回图，下一次调用才给Capture打开／截图项／命名键之一。这样预期把每键六次分离往返减为三次，保持每键新host、Capture菜单新host、guest实际read的顺序；不能由25项合成测试推断实际场景耗时或成功率，仍按实际时刻和原截止停止。
+
+真实PowerShell文件测试10项与JavaScript合成IO测试15项共**25/25**通过，无skip：ready且只读、延迟完成、300ms超时pending、拒绝、旧state、包／新state错误身份、旧nonce、同名重复、已停止；另覆盖新图不预排、续等不重发、无实际观察零写、等待工具错误、超限、树外slot／计划不符／未冻／错树脚本及续等归属门的零写。测试分别为 `python -B -m unittest discover -s tests -p test_legacy_file_step.py -v`、`node tests/test_legacy_file_step.js`；Node使用本机已有nodejs-lts，不安装依赖，未重复无关32／46项或Qt构建。
+
+首次真实PS10项在解析源码前失败，原因是新文件没按仓库 `.editorconfig` 保存为UTF-8 BOM／CRLF；`validation-first.json`完整保留，JS当次10项通过。规范编码并为两个未来冻结适配器加 `.gitattributes -text` 后，PS10通过；补父指出的写前归属门及rename读取细节后，PS10＋JS15再次通过。原失败不覆盖，未把解析失败写成文件等待成功。
+
+最后在**当前真实codemode／内置tools.powershell**中，用明确无GUI合成计划（含两个真实源码摘要）续等一个已经归档的假包：原工具return0／0.4秒，脚本 `ready / elapsed_ms=150`，新step／nonce通过后，原read和image实际返回71字节2×2 PNG，source SHA `77a06fb952117f359052f30f2c53d2f5f1a272ecd9e872db603158404e265399`；`packetWritten=false`，没有新packet、原程序、owner、GO或桌面控制进程。它验证真实适配工具可等待并读图，**不是原owner投递或真实按键消费证明**；初次补归属门前的独立烟测也保留。
+
+本树证据 `.local-analysis/ex-003-live/file-step-adapter/`：`validation-first.json`、`validation-ps-bom.json`、`validation-plan-gate.json`、`source-review.json`、`codemode-smoke-result.json`、`codemode-plan-smoke-result.json`，以及唯一合成文件夹具；原Pi JSONL保留命令／exit／ready与实际2×2 image。当前PS源码6298字节／SHA `5d862ad11253dfd994abceefec3baa036eddf906b60aad6b89da3426fd1705cf`，JS10315字节／SHA `7c9fcc578e8f7dabf5ab8be9be8d98e1fd79f925235b49ae0fe339459fe67124`。下一真实候选还须把两个适配器列入真实冻结集合，沿原生成／隔离和新协调父审GO流程；本实现没有修改旧七槽、旧GO或完成条件。
