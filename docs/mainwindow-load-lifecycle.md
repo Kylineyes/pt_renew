@@ -34,6 +34,16 @@
 
 已评估并保留读取期间的既有移动／删除／Undo／Redo 策略：这些操作仍可编辑当前副本，另存和新增放置等待有效读取结束。闸门测试实际进行移动、删除、Undo、Redo，再让失败读取结束，验证文档指针、修订、dirty、redo 分支及后续保存动作不变；既有测试同时覆盖读取后拒绝放弃时保留历史。
 
+<a id="loading-status-accessibility"></a>
+
+## 发布候选补充：保留真实加载提示及状态栏可访问性
+
+v0.12.0-alpha的G46两次真实窗口取证未捕获加载状态，原尝试保持受阻。父审发现观察器仅枚举UIA Text节点，而本次已核Qt6.12源码中QStatusBar由QAccessibleDisplay提供StatusBar角色，Name为currentMessage；Windows映射UIA_StatusBarControlTypeId，状态消息更新会发NameChanged。官方源码片段保存在协调证据qt-status-accessibility-source.txt及qt-status-uia-source.txt，并未操作现场。
+
+另发现产品executeCommand在requestOpenFile发出加载提示后无条件覆盖为“命令：file.open”，即使后台仍读取也看不到加载消息。838992c修复为m_loading期间保留原消息，读取完成／作废后恢复正常命令提示；不改读取算法、不插延迟／调试门闩，也不将其作为采集开关。
+
+新增回归复用既有独立测试ReadQueue，验证普通视图命令不会覆盖加载消息，状态栏可访问性角色／Name与可见消息相同，完成后正常恢复提示。Release编辑组35项通过（含初始化／清理）。测试内部线程池闸门不进入产品构建；G46仍需同一现场操作者在新候选上按正确StatusBar取样、实际取消及后验图证，不能用此自动回归代替真实时序。
+
 ## 构建与证据
 
 环境：Pi 实际原记录为 `deng/gpt-6.1-sol`、`high`，会话 `01a19f99-6515-720c-9e03-ee00ab05152e`，已确认成功工具回执；Qt 6.12.0、MSVC x64，使用 `scripts/Enter-QtEnv.ps1`。本树隔离构建目录为 `build/debug`，全部自动化设置 `QT_QPA_PLATFORM=offscreen`。
