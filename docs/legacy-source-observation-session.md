@@ -111,4 +111,22 @@ git diff --check
 
 完整文档检查实际exit1：166份Markdown／1365链接／41开放事项／139来源细节／150索引报告，唯一错误为本文尚未在完整资料索引中恰好出现一次，原document-check.json保留，由协调统一入链；没有修改共享索引或忽略其它错误。差异检查与精确提交状态在本轮交付回执中保留。
 
-真实进程读取后端、权限与ABI／模块／编码来源、用户根隔离、实际丢失检测、Property、windir、完整Host IO、GET输出及原创建者退出见证仍缺。另一个worker的读取适配未在本树调用或修改，协调将以其真实组件输出进行后续**合成**互通验收。本轮没有任何真实Windows API、进程枚举／连接／调试／启动、用户配置、窗口或桌面动作；如后续需要控制电脑，先说明并等待用户确认，不以组件测试作现场批准，也不结EX-003／005。
+真实进程读取后端、权限与ABI／模块／编码来源、用户根隔离、实际丢失检测、Property、windir、完整Host IO、GET输出及原创建者退出见证仍缺。子代理交付时未在本树调用或修改另一个worker的读取适配；协调随后已完成下述实际组件的合成互通验收。本轮没有任何真实Windows API、进程枚举／连接／调试／启动、用户配置、窗口或桌面动作；如后续需要控制电脑，先说明并等待用户确认，不以组件测试作现场批准，也不结EX-003／005。
+
+<a id="reader-session-integration"></a>
+
+## 协调验收：有界读取到事件组装的离线互通
+
+本节接续[EX-005](exploration-backlog.md#ex-005)。协调完整读196行工具、435行测试、本文及24项成功、文档示例、原索引失败和交付状态回执；原网络失败与同Task恢复历史保持，父树没有修改子代理实现或测试。受控追加、同线程栈顶、显式独立时点、失败前缀与中断封存符合约定。session串行使用且逐前缀复用审计器，不能据此宣称真实线程调度、吞吐或采集覆盖通过。
+
+协调新增[7项读取与组装互通测试](../tests/test_legacy_source_reader_session_integration.py)，用模拟RPM写本地缓冲，通过[实际读取适配](legacy-source-memory-reader.md#parent-review)接ObservationSession，再实际调用begin／finish和v2审计。未手造capture或替换已有算法：
+
+- 两线程交错及同线程嵌套、同返回地址和两调用站点均保持独立ID，原260字节及尾部不变，signed BOOL与精确FILETIME保留。
+- RPM失败部分读取及成功短读均保留实际前缀，v2拒绝快照，session不补返回；栈部分读取仅留下进入和未完成调用。
+- native异常清除旧读取诊断并封存session；跨线程、非栈顶或RIP错配均在native缓冲读取前拒绝，失败后不能补成成功。
+- Shell32 BOOL为0而RPM成功时保留失败残留、不发布路径；parse范围内同路径多次打开分别关联，非零丢失结束声明仍拒绝。
+- 摘要针对完整组装事件的canonical_jsonl，不能当作外部采集文件或真实覆盖证据。
+
+父树命令`python -B -m unittest discover -s tests -p test_legacy_source_*.py -v`实际151项全过：缓冲解码20、提取20、v1审计35、v2审计19、旧提取互通6、读取适配20、session24及本次互通7。父证`.local-analysis/ex005-backend-session-49f8/observation-session-parent-review.json`。这是一次当前集成回归，不把历史重复测试累加成新增能力。
+
+本轮两个子Task均完成有界父验收，读取→提取→session→v2审计的离线链已接通；真实工厂未调用，真实进程／ABI／身份／权限／模块／编码、隔离、Property／windir／完整Host IO、GET及退出链仍缺。所有身份、时点、覆盖和丢失值都是合成输入，source_attribution恒null，execution_ready恒false，EX-003／005保持未结。

@@ -123,4 +123,4 @@ assert reader.last_receipt['raw_bool'] == -1
 
 测试直接以reader调用既有begin／finish并送v2审计，保留RPM和Shell32两个BOOL、完整原尾部；部分缓冲读取由v2以incomplete_snapshot拒绝，栈短读由begin拒绝。父证为协调树`.local-analysis/ex005-backend-session-49f8/memory-reader-parent-review.json`。协调统一补主题、索引和待办链接，子代理原未索引exit1及测试导入exit1保持。
 
-此验收仅接受有界读取适配代码及模拟native互通；Windows工厂从未调用，真实ABI／句柄／权限／内存／身份／隔离与退出未实测。状态化事件组装器仍待交付，reader→组装器→v2的完整跨模块合成验收尚未进行，不把本次20项当作该联合结果。
+此验收仅接受有界读取适配代码及模拟native互通；Windows工厂从未调用，真实ABI／句柄／权限／内存／身份／隔离与退出未实测。这20项只核读取适配；后续协调已用实际读取适配与组装器补7项跨模块合成测试，完整回归151项通过，见[读取到组装的父验收](legacy-source-observation-session.md#reader-session-integration)。真实Windows工厂未调用，当前结论仍限离线链路。
