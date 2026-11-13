@@ -93,6 +93,7 @@
 - [EX-005 Shell32 调用快照与审计 v2 的字段绑定](legacy-source-capture-binding.md#shell32-capture-binding)
 - [Shell32 调用快照的纯提取核心](legacy-source-call-capture.md#interfaces)
 - [v0.12.0-alpha轻量编辑发布候选](releases/v0.12.0-alpha.md)
+- [v0.12.0-alpha真实窗口验收清单](releases/v0.12.0-alpha-gui-plan.md)
 - [Win64 有界只读内存适配器](legacy-source-memory-reader.md#parent-review)
 - [Shell32 事件组装、失败封存及读取互通](legacy-source-observation-session.md#reader-session-integration)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)

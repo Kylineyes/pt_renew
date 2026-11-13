@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前授权与验收：v0.12.0-alpha独占真实窗口，48项待验
+
+用户明确要求“你进行真实窗口的验收，务必全部覆盖”。本授权已覆盖上一阶段“先确认再控制电脑”的等待点，允许当前发布候选及合成资料的实际窗口／文件框／菜单／键鼠／截图和正常退出验证；**不需要就同一范围再次索权**。不扩大到原DOSBox/PT、用户板库、旧现场、身份／VM／隔离试验或main合并。当前协调仍Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`／deng／gpt-6.1-sol／high，Run沿`run_1946e80ba9fe`保留worker归属；Run旧objective“零桌面”仅为原阶段范围，本次用户明确授权优先。
+
+单一现场操作者复用ex005-source-observation的原Pi `01a1d4e9-ce67-756e-8b4e-17d0dd926e95`（上一Dispatch ctx_70ed4bb6d117），本轮新Task／Dispatch待实际送达补记。另一读取worker已完成并退出，无现场派发。操作者独立分支`verify/release-alpha12-gui`，独占新报告docs/releases/v0.12.0-alpha-verification.md及本树忽略`.local-analysis/release-alpha12-gui/`；不得修改产品、候选、旧材料或共享文档。协调不同时操作桌面，仅审图／回执及离线修复／集成；后续同任务沿原Pi，不新建多个操作者。
+
+[冻结48项清单](docs/releases/v0.12.0-alpha-gui-plan.md)覆盖所有声明用户功能及取消／失败／未保存／禁用／焦点／载入状态等边界。每项实际入口、结果、图片／文件／退出证据单列；未过保持PR草稿，不把24组offscreen测试当真实窗口。G46缺可观察时序则记受阻，不偷偷加入调试门闩。用户要求全面覆盖优先于旧10–15分钟估计，每20分钟交有证检查点，预留至少5分钟收尾；未完成不得强称全覆盖。
+
+协调已从release提交0ad5b3e运行既有打包脚本，生成119文件独立部署和ZIP，EXE SHA `96d7275c8c599e4013da0d06a432c0d58b3d4ed3b314e5aeb8ab99073d982f0a`，ZIP SHA `897b64e95597632f219633fcd39318fad97fcae9697fcc5ccc20dd714bfc637f`。包位于协调树`.local-analysis/release-v0.12.0-alpha/artifacts/pt-renew-v0.12.0-alpha-windows-x64/`，作为只读来源直接复用，不再完整复制；worker输入与输出都在自己任务目录，进程cwd／env隔离于合成资料。部署FILES／119文件／ZIP逐项摘要一致，Qt DLL与SDK原字节一致，父证同目录上一层deployment-before.json及verify_deployment.py。
+
+检查已知本机源码缓存未找到后，从Qt官方来源下载qtbase/qtsvg对应源码约54MB，固定SHA分别a951bd…31307／e4ab395…29331，与既有packager官方固定值一致；qtbase两次45秒传输超时后断点续传完成，原回执保留，不重复全量下载。源码缓存`.local-analysis/qt-sources/`与本次发行附件各一份有明确用途，无新依赖安装。构建／部署／归档总估小于1GiB，开始C盘空闲约209GB；必要现场证据与产品保留用于验收，临时输出由创建者清理。
+
+尚未启动产品真实窗口，包核验不是GUI通过；实际送达与验收状态以新回执为准。发布PR仍#17草稿，main与tag未改。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
 用户询问“部分可以合入main分支做一个新的版本tag吗”。已fetch核origin/main为`cfb6a8893aaf8d8b5778a24c00fc97813c5f083d`，dev为`987d9aebbf835b5fa9e5ebdfa5bea719c96bb944`；本地main在D:/project/pt_renew被检出且指向旧初始提交，不能用本地main比较或切换该外部工作树。现有唯一tag仍为v0.11.0-alpha，main已有部分编辑／另存代码，发布包仍只读。
