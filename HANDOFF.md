@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前离线开发：最小查询入口与观测组件
+## 当前离线开发结果：三组件已交付并经协调验收
 
 用户再次要求“分派工作给子agent，保证不引起冲突或者一并控制电脑的情况下进行推进开发，你负责验收”。当前协调Pi `01a1d501-a17d-7611-9f62-3c490fba0174`，环境实核`deng/gpt-6.1-sol/high`；接手与本次fetch后dev／origin/dev均为`4c0cfe81a246ee7f3063619269e7b40a6d3fbbde`、干净。最初新建空Run `run_fb0c4af1fdc9`，向既有Dispatch发送时因`dispatch_run_mismatch`拒绝，未派发该次请求；当前协调以自身身份成功`run-use run_1946e80ba9fe`继续协作，不恢复或修改原主provider会话。三个已成功交付且live／retained的子Pi和各自工作树均通过原Dispatch收到后续子Task，实际新Task／Dispatch见下表；空Run未启动任何worker。
 
@@ -16,7 +16,11 @@
 
 **本轮首项验收：** 查询消费子Task `task_d54c08773bce`／`ctx_e43302751054`已交`5ca315688172290be619139cfee62dafb5088a66`，子树干净，仅新增指定三文件。协调完整读工具104行／测试219行／报告及validation，独立集成分支`feat/integrate-ex005-query-consumer`运行14项测试全过；整串匹配、保序去重拒绝、输出排他新建、SetEnv影响和execution_ready=false均符合范围，无执行分支，不改旧白名单。父证`.local-analysis/ex005-offline-0174/query-consumer-parent-review.json`；原索引缺口exit1保留，协调统一入链。查询消费工具已普通推送dev `eeb18d12629e49fa62cfa1bd727f5e925a6c3cdd`，本次入链检查161份／1286链／41事项零错。
 
-**本轮第二项验收：** API缓冲子Task `task_9bcee0356bab`／`ctx_abad61802e86`交`12d7fc4d185d72a1a5ba8e971676917a9b8dfb36`，子树干净且仅新增指定三文件。协调完整读119行工具／237行测试／报告及delivery，在独立分支`feat/integrate-ex005-api-buffers`运行20项父树测试全过；失败BOOL残留不发布路径，成功空串、windir null／非null空串、严格编码和260字节边界符合范围。原实现不改，父证`.local-analysis/ex005-offline-0174/api-buffers-parent-review.json`，原未索引exit1保留并统一入链。序列审计子Task尚未交付，继续独占范围，无目标／桌面动作；真实API采集／隔离及EX003／005仍未闭环。最终合并推送以实际Git为准。
+**本轮第二项验收：** API缓冲子Task `task_9bcee0356bab`／`ctx_abad61802e86`交`12d7fc4d185d72a1a5ba8e971676917a9b8dfb36`，子树干净且仅新增指定三文件。协调完整读119行工具／237行测试／报告及delivery，在独立分支`feat/integrate-ex005-api-buffers`运行20项父树测试全过；失败BOOL残留不发布路径，成功空串、windir null／非null空串、严格编码和260字节边界符合范围。原实现不改，父证`.local-analysis/ex005-offline-0174/api-buffers-parent-review.json`，原未索引exit1保留并统一入链。API缓冲组件已普通推送dev `e321a293a2383f60445fda9c95bccc669135abfa`，入链检查162份／1300链／41事项零错。
+
+**本轮第三项验收与结算：** 序列审计子Task `task_a3d54c493dd5`／`ctx_33b88db36304`交`a3e695a0ac12c540eb33dd32534a83880c2abaf3`，子树干净且仅新增指定三文件。协调完整读323行工具／455行测试／报告及原首轮失败、最终成功和delivery-state回执，在独立分支`feat/integrate-ex005-observation-audit`运行35项父树测试全过；首轮旧时点夹具失败保持原记录，代码无须改动。精确FILETIME／时间、连续seq／覆盖声明、每线程嵌套调用、parse内独立open_id的读关关联及丢失／截断拒绝符合有界契约，source_attribution恒null、execution_ready恒false。父证`.local-analysis/ex005-offline-0174/observation-audit-parent-review.json`；原未索引exit1保留并统一入链。
+
+本轮三个子Task均worker_done成功且完成开发父验收，父树分别14／20／35项、共69项合成测试通过，无桌面／目标或真实API操作。更新能力概览、主专题、前置设计、主题、索引和EX005双向链接。三个离线接口尚未接成运行器；审计v1不含API原缓冲／Property／全部Host IO，不能直接承载解码结果。下一步须实现并验证采集端及明确版本化字段绑定，同时补实际隔离、输出捕获、终止与原创建者退出见证；当前不签现场GO。原EX003／005及41事项仍未闭环，不重启原abandoned worker，不把子Task结算当OS退出；最终合并推送以实际Git为准。
 
 ## 上轮并行结果：三项子任务已交付并经协调验收
 

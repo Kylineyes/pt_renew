@@ -8,6 +8,8 @@
 
 ## 单运行schema v1
 
+本节继续[EX-005](exploration-backlog.md#ex-005)，限定已提供事件的结构与配对。
+
 一份输入只允许一个运行、一个进程身份；每个物理行是一个JSON对象。UTF-8严格解码，接受LF／CRLF及末行无换行；拒绝BOM、空行、重复JSON键（包括嵌套对象）、非有限数和任何浮点／指数数值。已知字段集合必须完全相符，不忽略扩展字段或未知kind。未来新增事件需先扩schema和消费者，不能把v1未检查的扩展内容装进现有字段冒称通过。
 
 | 所有事件的必填顶层字段 | 类型与规则 |
@@ -48,6 +50,8 @@
 v1明确只支持文件事件在**打开线程及所属parse仍活动时**发生。文件read的parse_call_id必须与open相同；close由open_id继承关联。parse返回前必须成功关闭它打开的所有文件；跨线程共享句柄、异步IO、返回后延迟关闭均属于本版不支持的记录形态，会拒绝而不是猜配。文件path与parse path可不同，本版不推相对路径或归属，也不把open／Read或AL=1等同于属性写入。
 
 phase和name仅为必须保留的有界文字，v1不检查phase是否覆盖[既有全部解析阶段](legacy-source-observation-plan.md#observation-contract)，也不验证RVA、实际模块基址、目录返回、输入文件身份、F表、Property或GET副作用。当前[查询契约](legacy-config-query-contract.md#minimal-contract)区分属性值、输出送达和CONFIG环境更新；这些语义并未被本审计器实现，不能用call_return替代其验收。
+
+另外两个已验收的离线接口分别提供[两键命令数据](legacy-config-query-consumer.md#offline-query-consumer)和[目录API原缓冲解释](legacy-source-api-buffers.md#result-contract)。前者不执行查询；后者的bytes、BOOL和解码结果不在本版事件字段集合中，不能直接追加到data或塞进name／phase绕过校验。未来采集器接入时须先扩展并验证事件契约，再把原缓冲与调用ID、线程及来源回执绑定；当前没有将三个组件接成运行器或完成联合运行验证。
 
 <a id="usage-and-results"></a>
 
@@ -93,3 +97,5 @@ git diff --check
 首轮30项测试中29通过、1失败：重复call_id夹具复制了旧单调时间，先触发clock_reversed，未到预期duplicate_call检查；修正夹具新事件的时点后通过。原 `tests-first.json`保留exit1，第二轮 `tests-second.json`为33项全过；其后增加内存非法值／输入不变和直接未返回API用例，最终35项全部通过、exit0，回执 `tests-final.json`。另一次精确文本编辑因缩进不匹配被工具拒绝，未改文件，原工具回执保留。
 
 新证据仅在本树 `.local-analysis/ex005-observation-audit/`，含身份、测试和最终文档／diff回执；未读取旧现场补新运行回执，未运行目标、GUI、控制服务、调试API、目录隔离或身份／VM试验，未制作现场配置、plan、候选或GO。文档检查实际exit1：161份Markdown／1279链接／41开放事项／133来源细节／145索引报告，唯一错误为本文尚未在完整资料索引中恰好出现一次，原回执 `document-check.json`交协调统一入链；未将其它错误视为预期。`git diff --check`实际exit0，暂存新增文件另核。EX-003／005及旧Task均不因该组件通过而结算。
+
+协调已完整审阅323行工具、455行测试、本文及原tests-first／tests-final／delivery-state回执，在独立集成分支运行35项父树测试全部通过。首轮失败确为重复ID夹具用了旧单调时间，现有修正使其到达预期拒绝分支，原exit1保留；原实现未由协调修改。已核精确整数、单运行身份、线程栈／调用唯一性、独立open_id及失败关闭保留活动状态，父验收见协调树`.local-analysis/ex005-offline-0174/observation-audit-parent-review.json`。协调补齐主题／索引／EX-005双向链接及与另两组件的接口限制；验收仅接受离线审计能力。

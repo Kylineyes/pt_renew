@@ -85,7 +85,7 @@
 
 ## 观测手段与最小待审实现步骤
 
-当前指定材料只有静态映射和历史日志，没有上述完整观测的执行回执。文件事件追踪可以提供Host打开／读写／失败及路径，但单独不能给Shell32缓冲、解析AL、F和Property取样；调试观察也不能只记入口而漏掉返回或其它线程。工具名称、Windows自带某接口、已装Capstone均不等于观测能力可用。
+当前已有静态映射、历史日志及后续三项离线组件，仍没有上述完整观测的执行回执。[两键查询消费契约](legacy-config-query-consumer.md#offline-query-consumer)仅提供精确命令数据，[API缓冲解码](legacy-source-api-buffers.md#result-contract)仅解释显式快照，[序列审计v1](legacy-source-observation-audit.md#schema-v1)仅查已提供事件的结构和配对；三项均已父审及合成测试，但尚无联合采集器或运行器，v1也不包含原缓冲、Property或全部Host IO字段。文件事件追踪可以提供Host打开／读写／失败及路径，但单独不能给Shell32缓冲、解析AL、F和Property取样；调试观察也不能只记入口而漏掉返回或其它线程。工具名称、Windows自带某接口、已装Capstone均不等于观测能力可用。
 
 后续可以审查“文件I/O事件采集＋目标启动时的只读调试观察”这一组合：文件侧需选定可用ETW等提供者并证明字段／权限／丢失计数；内存侧可评估硬件执行断点和调试事件接口，按 `WaitForDebugEvent/ContinueDebugEvent`、线程上下文读取、`ReadProcessMemory`取得参数及返回数据。**本轮不调用这些接口。** 软件INT3断点、IAT hook、注入DLL和修改目标内存不属于只读方案，不可作为缺能力时的自动降级；硬件调试寄存器和暂停／单步仍会影响执行，亦须另行审核授权和影响范围。
 
