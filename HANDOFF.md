@@ -1,5 +1,13 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前有效授权：新5小时继续EX-003／EX-005
+
+用户最新明确“继续推进事项，你可以控制电脑5个小时”。按主协调首次核表登记 **UTC2026-11-13 03:45:01.1736239–08:45:01.1736239**，**08:35:01.1736239起总最后10分钟只收尾**；准备、审核和工具修正计入，不叠加或恢复此前8小时／旧GO。当前协调仍为Pi `01a1d2e8-fabe-7285-9ddd-e858ff2195de`／`deng/gpt-6.1-sol/high`。首次核协调与远端dev `f0cfb307acdbc2a034739c3ebfb052f0eb624bc9`、研究HEAD `3acc5ede7d9750351ef2d8f060da20d625ac2db3`均干净，原Dispatch ready/live。
+
+消息 `msg_7cccae18bf31` 已沿原Task／Dispatch送原Pi，恢复同会话研究，不创建／重启agent。**第一段推进已有[剩余配置来源方案](docs/legacy-dosbox-configuration.md#remaining-configuration-plan)：** 先复用本机同版本材料／分析库，定向核固定DOSBox-X b6abbd5的单-conf入口、默认／用户／程序／cwd来源选择和实际目录API、解析顺序／同键覆盖／autoexec追加或替换。先报告可复用材料及精确缺口，再有据继续离线；同commit源码也须保持源码／固定二进制／实机证据范围区别，不以帮助或隔离环境变量替代实际实现。阶段结论写现有专题和EX-005／003待办，不重复已验菜单／59图或25／10项，不新建同义事项。
+
+**新5小时允许继续必要电脑控制，但此刻尚无新现场候选／GO。** 若来源规则仍缺证而确需实机对照，原Pi先交最小隔离对照、预算及必要工具修改供父审，然后才全新候选／独立GO。每现场段仍最多60分钟、至少7分钟正常收尾；原单操作者、公开门、每键新原图实际read、拒绝后120秒静默、原创建者四wait／线程join保持。旧八槽／旧GO只读不复用；原安装／用户板库／冻结conf、plan、日志、PNG、manifest、JSONL不改。无EX-007／编辑保存／归档精简授权。原Task和41事项保留，不整体worker_done。下述“只离线沉淀／有意暂停／旧8小时截止”是当时检查点，当前执行范围以本节新授权优先。
+
 本文件是协调agent的唯一接手入口。**用户要求的新Pi聊天已创建、完整原始历史已交接，父Pi已停止调度。** 当前主协调Pi `01a1d2e8-fabe-7285-9ddd-e858ff2195de`／Orca聊天 `pi_f1825819_80dc_4d71_8ea7_f11cf8c6b27a`，实际环境 **deng/gpt-6.1-sol/high**，UTC2026-11-13约03:18以自身身份 `run-use --id run_3efe904a98f0` 成功。交接父Pi `01a1d2a5-5798-745c-bb3b-fa3af5b3ac16`／聊天 `pi_ff2086f4_5a5f_4496_88b2_84319756a5dc` 已报告提示journaled并停止调度，仅作只读审计来源。Orca此版Pi启动--model曾创建前拒绝，本次沿Pi自身配置创建聊天，接手实际模型符合用户覆盖。完整读AGENTS／本文件／探索规则／清理通知，fetch与ls-remote确认协调dev和origin/dev均为 `09bc769476d3e7549d54f34f97ec32a3083a4c62`、接手时干净。原worker同Task／Dispatch／终端为ready/live，研究HEAD `4dc19845e997f4e2241204aa72fda4a386bd4fc6`、接手时干净；未集成交付不当dev已有。**不创建接手agent或现场worker，不重启原Pi、不恢复旧槽。** 当前只续第八离线审计／专题待办沉淀和完整配置来源剩余最小离线核验方案；消息 `msg_9b723a8d4cd7` 已送原Dispatch，不新候选／GO／现场。原8小时05:04:51.2986127Z起只收尾、05:14:51.2986127Z截止不延长。
 
 新协调只读完整流读父原JSONL至181条／1500385字节，SHA `62b0a33a1b6b41614df8125226625506e1062059bc0bfcaeed715e5730b31fd4`，含父最后送达回执与停止调度正文；5个image块均解码核SHA。原worker完整流读至2834条／143551990字节，SHA `87d0dc5db87f4cffeab9b450e604fd92d88e76595a3655618a25ee512fcad565`，235个image块解码核SHA；第八原143234003字节前缀SHA仍为 `72886f3185029a498339400db4d0b1b9bdfcf9d7a02892447947cc9d3f6c9308`，后续追加不据旧全文件SHA判污染。上一父4011166字节／SHA2395ba2a…ce90也复核一致。逐记录计量仅作派生审计，见 `.local-analysis/config-path-incident-20261112/coordinator-d2e8-history-audit.json`，不代完整原历史、不复制整套忽略现场。已验59图／Status／原四wait和join及25／10项离线测试复用；先审原Pi最新专题／待办精确提交，再独立分支检查、no-ff合dev普通推送；EX-003／005整体未结。
