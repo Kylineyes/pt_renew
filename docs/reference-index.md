@@ -83,7 +83,7 @@
 - [固定 DOSBox-X 的 Windows／SDL／DOS 输入静态链](legacy-input-event-static.md)
 - [历史只读挂载：菜单打开探测与固定 DOSBox-X 拒绝链](legacy-readonly-open-static.md)
 - [PT 现状调查与 Windows 迁移建议](initial-assessment.md)
-- [DOSBox-X 配置状态、parser／setter、autoexec消费者与BOOT上游](legacy-dosbox-configuration.md#autoexec-boot-upstream)
+- [DOSBox-X 配置状态、autoexec消费者与普通启动条件顺序](legacy-dosbox-configuration.md#autoexec-main-conditional-order)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)
