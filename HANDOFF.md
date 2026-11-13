@@ -1,5 +1,13 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前协调6951：按用户续作，定向核见证键绑定
+
+用户在本会话要求“继续推进工作，今日和昨日总计推进了哪些事项”。2026-11-13本机约20:01（UTC12:01），当前Pi `01a1d4c6-823f-7671-ba29-0f0a96cc6951`实际为`deng/gpt-6.1-sol/high`；接手核dev／远端均`dcc87a9cb7b7e1fd78aeb0fc3d5d5e6b30030fe8`且干净，既有文档检查157／1231／41／129／141零错。保存聊天快照只读，原主会话不恢复。
+
+本次具体接续EX-005：协调在独立分支`research/ex005-witness-key-binding`直接只读核固定PE的`fulldouble`／`waitonerror`注册名称、构造类型、默认／合法值及CONFIG查询静态入口，限定已有两候选，不找第四键；复用既有PE映射、字符串及setter证据，只在本树`.local-analysis/config-path-incident-20261112/`新增本阶段证据。用户本轮继续授权覆盖此前矩阵停准备的离线停点，不扩大到目标运行／隔离试验／配置制作／候选GO／升级下载；总窗仍UTC12:35起只收尾、12:45截止。
+
+当前Orca `worker-show ctx_ed7b7e9ec944`实际返回`state=abandoned, stage=terminal_missing, liveness=unverifiable`，lastError为原分配终端不再live；这是当前调度记录，不据此推断OS进程已退出。四已完成离线子Task为succeeded/exited。保留原Task／Dispatch及证据，不重启、不新派，不冒称原worker仍在执行；当前增量由本协调直接完成。下方d3c8及更早“当前”均为历史阶段。
+
 ## 当前主协调d3c8：见证矩阵已父审，停在准备边界
 
 UTC2026-11-13约07:22，用户指定的新主Pi `01a1d3c8-be1a-7776-9011-d5d96f9065ce`／Orca聊天 `pi_a1a94051_b0b2_4973_abe5_9ce2e0796885` 已实际核环境为 `deng/gpt-6.1-sol/high`，以自身身份成功 `run-use --id run_3efe904a98f0`。父d38b原历史尾部已见新聊天创建、`prompt.outcome=journaled`及07:22:07停止调度声明。本主不再创建接手链。已完整读AGENTS、本文件、探索规则和清理通知；实时fetch／ls-remote确认接手dev与远端均为 `e43860617405a093668c056abf919c83c3ac581f`、干净。下方d38b与更早的“当前／最新”均按各自历史检查点理解，不覆盖本节。
