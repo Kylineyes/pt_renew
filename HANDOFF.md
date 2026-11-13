@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前进度：读取适配已父审，事件组装继续开发
+## 当前交付：读取适配与事件组装已父审，完整离线链通过
 
 用户再次要求“继续分配子agent开发，如果有需要控制电脑跟我说先”。本轮协调Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`实核为deng／gpt-6.1-sol／high，已用自身身份绑定既有Run `run_1946e80ba9fe`，不恢复旧主provider。fetch后dev／origin/dev均为`733b977730506f80427368ba3ce6e4fed1da4a64`且干净，上一轮100项合成测试和165文档／1358链接检查复核通过。本轮登记分支`chore/ex005-backend-session-dispatch`，协调证据`.local-analysis/ex005-backend-session-49f8/`。
 
@@ -15,9 +15,15 @@
 
 本轮只运行注入原生函数／寄存器／内存回调的合成测试，禁止调用真实Windows API、连接或读取真实进程、枚举进程／窗口、启动目标／控制服务／GUI、截图键鼠／桌面、身份／VM／隔离试验、实时用户配置、下载安装及现场conf／plan／GO。**需要控制电脑时先说明具体动作并等待用户确认**；当前两项不需要控制电脑。允许编写未来显式调用的WinDLL适配工厂，但导入和测试不加载真实DLL，不把未实测的代码说成Windows能力回执。
 
-协调审阅有界读取、错误码取样、失败诊断、线程栈及错误后不可凑成功等拒绝边界，针对缺口做父树和实际reader→提取→组装→v2离线互通验证，再统一入链、独立分支no-ff合dev普通推送。真实后端运行、权限／模块／编码／ABI来源、隔离、Property／windir／完整Host IO、GET与退出见证继续缺；EX003／005及原完成条件保持。读取Task已交`c5c296be3acef1b650a6094bacba3e3f073eb737`，子树干净，仅新增指定三文件；协调完整读107行工具／322行测试／报告和delivery原失败，在独立分支`feat/integrate-ex005-memory-reader`运行20项父树测试全部通过，未改实现。已核固定ABI宽度、一次RPM、仅传输前缀、即时失败错误码、独立last_receipt及旧状态清理，并实际reader→begin／finish→v2核完整尾部与partial拒绝；真实工厂未调用。父证`.local-analysis/ex005-backend-session-49f8/memory-reader-parent-review.json`，统一入链，原导入exit1与未索引exit1保留；实际合并推送以Git为准。
+协调审阅有界读取、错误码取样、失败诊断、线程栈及错误后不可凑成功等拒绝边界，针对缺口做父树和实际reader→提取→组装→v2离线互通验证，再统一入链、独立分支no-ff合dev普通推送。真实后端运行、权限／模块／编码／ABI来源、隔离、Property／windir／完整Host IO、GET与退出见证继续缺；EX003／005及原完成条件保持。读取Task已交`c5c296be3acef1b650a6094bacba3e3f073eb737`，子树干净，仅新增指定三文件；协调完整读107行工具／322行测试／报告和delivery原失败，在独立分支`feat/integrate-ex005-memory-reader`运行20项父树测试全部通过，未改实现。已核固定ABI宽度、一次RPM、仅传输前缀、即时失败错误码、独立last_receipt及旧状态清理，并实际reader→begin／finish→v2核完整尾部与partial拒绝；真实工厂未调用。父证`.local-analysis/ex005-backend-session-49f8/memory-reader-parent-review.json`，统一入链，原导入exit1与未索引exit1保留；读取适配已普通推送dev `532ee93b2d3b91dc3a5973401011317e95cc3874`，当次166文档／1371链零错。
 
-事件组装Task遭providerRejected／ECONNRESET，调度仍ready／in_progress／live，协调沿原Dispatch发`msg_32eab1a02a49`续作，未新建／重启／换模型。worker以`msg_1d2f99d6cd67`回报只读Git工具exit0、HEAD98d8f0d且干净，已恢复原Task续作，尚无交付。网络失败及恢复记录保存在本证据目录session-connection-recovery.json，原失败不覆盖；reader→组装→v2完整联合验收仍待，不重计原派发预算。下方各“本轮”为此前已验收阶段。
+事件组装Task遭providerRejected／ECONNRESET，调度仍ready／in_progress／live，协调沿原Dispatch发`msg_32eab1a02a49`续作，未新建／重启／换模型。worker以`msg_1d2f99d6cd67`回报只读Git工具exit0、HEAD98d8f0d且干净，恢复后沿原Task交`66b40dbc48acf0ead58ffe3c826ece2553f7cb01`，仅新增指定三文件且子树干净。网络失败及恢复记录保存在本证据目录session-connection-recovery.json，原失败不覆盖，不重计原派发预算。
+
+协调在独立分支`feat/integrate-ex005-observation-session`完整审196行工具／435行测试／报告及tests-interrupt-final、example-check、document-check和delivery-state回执，未改子代理实现／测试。session串行维护各线程栈，使用实际begin／finish／audit检查完整候选前缀，保留显式独立时点、parse/file受控追加、读取异常与KeyboardInterrupt封存、二次结束或错误后不得再补成功；报告顶层状态须检查，内层audit通过不代顶层通过。
+
+父新增`tests/test_legacy_source_reader_session_integration.py`的7项实际读取适配→提取→session→v2测试，模拟RPM仅写本地缓冲；覆盖双线程／嵌套／同返回地址／两站点、signed BOOL和原260字节尾部、失败部分／成功短读／栈短读、native异常旧诊断清理、错配先于native读取、Shell32失败残留、重复文件生命周期及丢失声明拒绝。完整命令`python -B -m unittest discover -s tests -p test_legacy_source_*.py -v`实际151项通过（解码20／提取20／v1 35／v2 19／旧互通6／读取20／session24／新互通7）。父证`.local-analysis/ex005-backend-session-49f8/observation-session-parent-review.json`。
+
+本轮两个子Task均worker_done成功且已完成有界父验收，完整离线链已接通。真实WinDLL工厂从未调用，无真实API／进程／目标／桌面操作，所有身份／时点／覆盖／零丢失均为合成声明；真实ABI、句柄／权限／身份／模块／编码、隔离、Property／windir／完整Host IO、GET与原创建者退出仍缺，EX003／005及41事项不结。若需控制电脑仍先说明并等待用户确认；下一步针对上述真实调度／身份及未绑定字段缺口开展有界实现与验证，不能将离线通过作现场能力回执。共享文档已统一，原网络／导入／索引失败保持；最终合并推送以实际Git为准。下方各“本轮”为此前已验收阶段。
 
 ## 当前交付：提取核心与审计v2已父审，离线数据链通过
 

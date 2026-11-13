@@ -59,6 +59,6 @@ finish_shell_folder_call(entry, registers, *, read_memory)
 
 协调验收两个独立提交的代码、拒绝边界和有意义的合成测试，统一补主题与索引，再用提取核心实际输出构造 v2 事件送入审计器，核对原字节和解码结果的对应关系。跨模块验证属于离线集成，不能写成目标运行或联合采集通过。
 
-纯提取核心已交付并经协调审源及20项父树测试，见[接口与失败边界](legacy-source-call-capture.md#interfaces)；实际实现按本协议输出14字段，不读取真实进程。后续审计v2已交付并经父审，协调以提取核心实际输出增加6项跨模块测试，完整集成回归100项全过，见[离线互通验收](legacy-source-observation-audit.md#capture-v2-integration)。本协议和合成测试不替代真实采集回执。
+纯提取核心已交付并经协调审源及20项父树测试，见[接口与失败边界](legacy-source-call-capture.md#interfaces)；实际实现按本协议输出14字段，不读取真实进程。后续审计v2已交付并经父审，协调以提取核心实际输出增加6项跨模块测试，完整集成回归100项全过，见[离线互通验收](legacy-source-observation-audit.md#capture-v2-integration)。本协议和合成测试不替代真实采集回执。后续[有界读取到session组装](legacy-source-observation-session.md#reader-session-integration)已通过7项实际组件合成互通，完整回归151项通过；真实工厂、身份／隔离及运行观测仍未实测。
 
 用户最新要求“如果有需要控制电脑跟我说先”。需要桌面控制时必须先说明具体操作并等待用户确认，本轮不进行这些动作；真实目标启动、调试连接和隔离试验亦不在本轮执行范围。EX-003／EX-005 与原完成条件继续保留。

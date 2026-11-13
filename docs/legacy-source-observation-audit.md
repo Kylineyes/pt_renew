@@ -162,4 +162,4 @@ git diff --check
 
 父树命令 `python -B -m unittest discover -s tests -p 'test_legacy_source_*.py' -v` 实际100项全过：解码20、提取20、v1回归35、v2共19及跨模块6。父证 `.local-analysis/ex005-capture-binding-0174/observation-v2-parent-review.json`；这是当前集成树一次合成回归的数量，不与历史重复测试累加作新增能力。
 
-因此，Shell32有界快照的**纯提取→v2绑定→既有解码**离线数据链已通过；真实内存读取、模块／编码来源、ABI现场、丢失检测真实性、用户根隔离、Property、windir、完整Host IO、GET输出及退出链仍缺。这6项测试的覆盖声明是夹具输入，不能当从首次目标指令到退出的采集证据。用户要求控制电脑前先说明，本轮未操作电脑。
+因此，Shell32有界快照的**纯提取→v2绑定→既有解码**离线数据链已通过；真实内存读取、模块／编码来源、ABI现场、丢失检测真实性、用户根隔离、Property、windir、完整Host IO、GET输出及退出链仍缺。这6项测试的覆盖声明是夹具输入，不能当从首次目标指令到退出的采集证据。后续[有界读取到事件组装](legacy-source-observation-session.md#reader-session-integration)另通过7项实际组件互通，完整回归151项全过；仍为模拟native、合成身份与时点，真实采集缺口保持。用户要求控制电脑前先说明，本轮未操作电脑。
