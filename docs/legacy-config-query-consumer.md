@@ -2,7 +2,9 @@
 
 [文档导航](README.md) · [EX-005](exploration-backlog.md#ex-005) · [查询语法与影响](legacy-config-query-contract.md#minimal-contract) · [隔离与观测前置设计](legacy-source-observation-plan.md#capability-gates)
 
-`tools/legacy_config_query_consumer.py` 为未来已审运行器提供受限命令数据和精确校验入口。它只接受调用者明确指定的一至两个键，或显式 JSON 文件中的一至两条外部命令；保留顺序，拒绝重复和未知输入，输出 JSON 契约。工具不启动进程、不提供执行开关、不生成磁盘 conf 或现场计划，`execution_ready` 恒为 `false`。
+<a id="offline-query-consumer"></a>
+
+本节继续[EX-005](exploration-backlog.md#ex-005)。`tools/legacy_config_query_consumer.py` 为未来已审运行器提供受限命令数据和精确校验入口。它只接受调用者明确指定的一至两个键，或显式 JSON 文件中的一至两条外部命令；保留顺序，拒绝重复和未知输入，输出 JSON 契约。工具不启动进程、不提供执行开关、不生成磁盘 conf 或现场计划，`execution_ready` 恒为 `false`。
 
 本交付实现离线消费者，供协调审查后复用；它不证明实际 shell 能执行候选语法、查询输出已送达或实际来源已经归因，不结算 EX-005／EX-003，也不替代隔离和观测前置。旧 `legacy_runtime_config.py` 的 PT 启动白名单、七查询及既有测试均不调整；本工具也不接入该准备器或运行器。
 
@@ -88,4 +90,6 @@ git diff --cached --check
 
 实际命令、退出码、失败记录及交付 HEAD 见本树 `.local-analysis/ex005-query-consumer/validation.json`。首次 Orca 帮助命令的 Windows 路径因 JavaScript 反斜杠转义损坏而退出 1，改为同一二进制的正斜杠路径后成功；没有切换模型或执行器。新增报告尚未加入共享资料索引造成的文档检查失败由协调统一入链，不能把其它错误当预期；未修改共享文档或旧工具。
 
-本子题只交工具、测试和本文，证据留本树忽略目录；不合 dev、不推送，不生成现场配置或计划。尚缺的实际查询、隔离、观测和原创建者退出见证不由这些合成测试补齐，后续执行范围与授权由协调按具体场景审查。
+协调已完整审阅104行工具、219行测试、本文及原validation.json，在独立集成分支运行14项父树测试全部通过；核对整串接受规则、SetEnv说明、执行状态恒false和输出排他创建，无须修改子代理实现。父验收记录见协调树`.local-analysis/ex005-offline-0174/query-consumer-parent-review.json`；原文档检查因未入索引的exit1保持，随后由协调统一入链。此验收仅接受离线工具，不提供实际运行能力回执。
+
+本子题只交工具、测试和本文，证据留本树忽略目录；子代理未合 dev、未推送，不生成现场配置或计划。尚缺的实际查询、隔离、观测和原创建者退出见证不由这些合成测试补齐，后续执行范围与授权由协调按具体场景审查。
