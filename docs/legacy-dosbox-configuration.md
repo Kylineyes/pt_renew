@@ -178,7 +178,7 @@ F 第 912–915 行确实描述 `page flip debug line` 和 `vertical retrace pol
 
 <a id="named-status-plan"></a>
 
-## 新8小时：基于Up首行环绕的命名Status方案（离线待审）
+## 新8小时：基于Up首行环绕的命名Status方案与父集成验证
 
 本节接续[EX-005](exploration-backlog.md#ex-005)与[EX-003](exploration-backlog.md#ex-003)。第六[Information／Esc有限导航](native-menu-calibration.md#sixth-navigation-conclusion)已实机取得，但本节**没有新Status现场／候选／GO**。用户8小时总窗UTC2026-11-12 21:14:51.2986127至次日05:14:51.2986127，最后10分钟仅收尾；每段仍最多60分钟、至少7分钟正常收尾。沿原Pi／Task／当前Dispatch及指定模型high，新实现先交父代码审，不能沿用第六冻结或旧GO。
 
@@ -203,4 +203,6 @@ F 第 912–915 行确实描述 `page flip debug line` 和 `vertical retrace pol
 
 七CONFIG输出只在新槽runtime根，目标argv仍唯一显式-conf、输入及原安装不写；配置／源列表新增冻结state工具、安装配置／用户配置／英文帮助，真实候选预计28项（合成目标与Python同路径去重为27）。`config`只帮助文本、单次stderr只见本conf的原有边界保持，**完整潜在配置来源枚举／任意多conf覆盖仍未知**。Status文件名显示为去目录名称／扩展名且最多24字符，八计数按原静态路径为当前内存模型统计，不单凭5FT文本或底栏标签代GUI。
 
-新命名状态8项、原隔离21项、预算3项共**32/32**通过，无skip／ResourceWarning：完整序列由原gate／原submit和真实driver Shortcut分支配假窗口／工具执行，覆盖上下文／重放／Shift与EndHome拒绝、七Down及新guest／review、16轮边界、七探针输出／旧路径／额外命令拒绝、派生最终门、无源／非法预算零准备以及公开Up原AST。它们都是合成／假创建，不是Status已验。首次6项setUp因合成JSONL被写成多行而JSONDecodeError，伴隐式清理ResourceWarning；修单行和addCleanup后，另一次仅1项冻结数量断言28!=27失败，修合成范围后8项通过，原JSONL回执不覆盖。只读核六个本轮失败临时目录已不存在，额外删除／归档／净释放均0。证据位于 `.local-analysis/ex-003-live/ex005-status-offline/validation.json`、`validation-tool-result.json`及回放／静态报告。EX-005完成条件未降低，待父审工具与方案后才另建独立候选并签新GO。
+新命名状态8项、原隔离21项、预算3项共**32/32**通过，无skip／ResourceWarning：完整序列由原gate／原submit和真实driver Shortcut分支配假窗口／工具执行，覆盖上下文／重放／Shift与EndHome拒绝、七Down及新guest／review、16轮边界、七探针输出／旧路径／额外命令拒绝、派生最终门、无源／非法预算零准备以及公开Up原AST。它们都是合成／假创建，不是Status已验。首次6项setUp因合成JSONL被写成多行而JSONDecodeError，伴隐式清理ResourceWarning；修单行和addCleanup后，另一次仅1项冻结数量断言28!=27失败，修合成范围后8项通过，原JSONL回执不覆盖。只读核六个本轮失败临时目录已不存在，额外删除／归档／净释放均0。证据位于 `.local-analysis/ex-003-live/ex005-status-offline/validation.json`、`validation-tool-result.json`及回放／静态报告。协调者完整审查 `768dd07cdf73422007296b8dd22591f1ce42d802` 的工具／上下文门和测试，在 `main-2` 独立分支合入并完成相同32/32复测：新命名状态8、隔离21、预算3，无skip／ResourceWarning；交付源文本一致，测试后旧事故包400项和原安装99项完整集合／大小／SHA匹配。文档153／1061链／41事项／111来源／137报告零错，diff通过；父证据 `config-path-incident-20261112/named-status-parent-validation.json` 与三组parent日志。此为离线集成通过，下一步全新候选仍须父独立核配置／冻结／输入／原件后签新GO，不代表真实Up定位、Status文件名计数或完整来源已经验证。
+
+EX-005完成条件未降低；旧六槽不重启或改写，真实现场另建独立候选。
