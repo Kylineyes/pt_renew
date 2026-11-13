@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前并行安排：三项离线子任务，协调负责验收
+
+用户最新明确“分派工作给子agent，保证不引起冲突或者一并控制电脑的情况下进行推进开发，你负责验收”。本轮建立独立Run `run_1946e80ba9fe`，从已推送dev `19f59ef1bf6e4ad47f831342591af0bf7e5cddb2`继续EX-005。新授权允许下面三项离线开发／研究及协调验收，覆盖上轮不另派的安排；不延长旧桌面控制窗口，不签现场GO，不恢复原主会话或原中断worker，不重启或复活旧Dispatch。全部使用Pi，要求实际`deng/gpt-6.1-sol/high`，启动首先核模型／会话和成功工具回执；现版Orca Pi不支持--model参数，沿Pi自身已核配置并强制核实际身份，不符停止报告，不换模型。
+
+| 子任务／指定分支 | 独占修改文件 | Task／Dispatch／实际会话 |
+| --- | --- | --- |
+| 冻结配置文字见证工具；`feat/ex005-config-witness` | `tools/inspect_legacy_config_witness.py`、`tests/test_legacy_config_witness.py`、`docs/legacy-config-witness-tool.md` | 尚未建立，派发回执后补 |
+| GET查询影响与最小契约；`research/ex005-query-effects` | `docs/legacy-config-query-contract.md`及本树忽略证据 | 尚未建立，派发回执后补 |
+| 实际来源隔离／观测前置；`research/ex005-source-observation` | `docs/legacy-source-observation-plan.md`及本树忽略证据 | 尚未建立，派发回执后补 |
+
+每项新建独立Orca子工作树，各自只读父树／旧研究树证据，新增证据只写自己的`.local-analysis/ex005-任务名/`，不共写构建目录、不复制整套现场。三项禁止运行DOSBox／PT／Qt GUI／控制服务、窗口查询、截图键鼠、调试注入、实际目录隔离实验、实时用户配置访问、依赖安装／下载和候选GO；工具仅标准库及合成fixture验证。共享`HANDOFF`／待办／专题／索引／能力门由协调独占，不让子agent合dev／push。
+
+子agent先20–30分钟交有界可审结果；缺材料写准确缺口。交付须有实际模型身份、精确HEAD、文件清单、验证和限制，以本子Task为单位worker_done，不能结算原EX003／005整体。协调审源／原bytes／有意义测试与失败回执后统一入链、no-ff合dev普通推送；不将子报告或离线测试自动当现场通过。未验收内容不称完成。
+
 ## 当前协调6951：两键类型已核，实际查询与隔离前置仍缺
 
 用户在本会话要求“继续推进工作，今日和昨日总计推进了哪些事项”。2026-11-13本机约20:01（UTC12:01），当前Pi `01a1d4c6-823f-7671-ba29-0f0a96cc6951`实际为`deng/gpt-6.1-sol/high`；接手核dev／远端均`dcc87a9cb7b7e1fd78aeb0fc3d5d5e6b30030fe8`且干净，既有文档检查157／1231／41／129／141零错。保存聊天快照只读，原主会话不恢复。
