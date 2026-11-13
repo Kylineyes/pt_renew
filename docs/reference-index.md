@@ -92,6 +92,7 @@
 - [联合观测记录审计 v1／v2及离线互通](legacy-source-observation-audit.md#capture-v2-integration)
 - [EX-005 Shell32 调用快照与审计 v2 的字段绑定](legacy-source-capture-binding.md#shell32-capture-binding)
 - [Shell32 调用快照的纯提取核心](legacy-source-call-capture.md#interfaces)
+- [Win64 有界只读内存适配器](legacy-source-memory-reader.md#parent-review)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)

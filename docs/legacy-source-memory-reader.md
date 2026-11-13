@@ -114,3 +114,13 @@ assert reader.last_receipt['raw_bool'] == -1
 `python -B tools/check_exploration_docs.py` 实际退出 1，检查 166 份 Markdown／1363 个本地链接／41 个事项／139 处来源／150 份报告，唯一错误为本文尚未在完整资料索引中恰好出现一次，原 `docs-first.json` 保留，由协调统一入链，没有修改共享索引。`git diff --check` 退出 0，提交前另以 `git diff --cached --check` 核对三份新增文件实际暂存内容，回执随交付保存。
 
 真实后端运行、ABI 实机、权限／句柄生命周期和进程身份、模块／编码来源、隔离、完整阶段 Host I/O、Property／windir、GET 及原创建者退出见证仍缺；不签现场 GO、不结 EX-003／EX-005。用户如需后续控制电脑，应先说明具体操作并等待确认，不能据本轮开发授权直接执行。
+
+<a id="parent-review"></a>
+
+## 协调验收：注入读取与已有提取／审计互通
+
+本节接续[EX-005](exploration-backlog.md#ex-005)。协调完整审阅107行工具、322行测试、本文及原delivery中的首轮导入失败、两轮成功与索引失败回执；在独立集成分支运行20项父树测试全部通过，原实现未修改。固定BOOL／SIZE_T、立即取失败错误码、单次读取、仅发布transferred前缀及旧诊断清理符合接口；导入和注入构造不加载DLL。
+
+测试直接以reader调用既有begin／finish并送v2审计，保留RPM和Shell32两个BOOL、完整原尾部；部分缓冲读取由v2以incomplete_snapshot拒绝，栈短读由begin拒绝。父证为协调树`.local-analysis/ex005-backend-session-49f8/memory-reader-parent-review.json`。协调统一补主题、索引和待办链接，子代理原未索引exit1及测试导入exit1保持。
+
+此验收仅接受有界读取适配代码及模拟native互通；Windows工厂从未调用，真实ABI／句柄／权限／内存／身份／隔离与退出未实测。状态化事件组装器仍待交付，reader→组装器→v2的完整跨模块合成验收尚未进行，不把本次20项当作该联合结果。

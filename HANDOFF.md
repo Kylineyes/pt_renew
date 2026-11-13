@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前派发：有界内存读取适配与观测事件组装
+## 当前进度：读取适配已父审，事件组装继续开发
 
 用户再次要求“继续分配子agent开发，如果有需要控制电脑跟我说先”。本轮协调Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`实核为deng／gpt-6.1-sol／high，已用自身身份绑定既有Run `run_1946e80ba9fe`，不恢复旧主provider。fetch后dev／origin/dev均为`733b977730506f80427368ba3ce6e4fed1da4a64`且干净，上一轮100项合成测试和165文档／1358链接检查复核通过。本轮登记分支`chore/ex005-backend-session-dispatch`，协调证据`.local-analysis/ex005-backend-session-49f8/`。
 
@@ -11,11 +11,13 @@
 | ex005-query-effects／ctx_9a40bb02d3a6 | feat/ex005-memory-reader；tools/legacy_source_memory_reader.py、tests/test_legacy_source_memory_reader.py、docs/legacy-source-memory-reader.md | 借用显式HANDLE的有界ReadProcessMemory适配；注入函数验证BOOL／SIZE_T／部分读取，接已有二字段内存回调；真实API工厂只编写不调用 |
 | ex005-source-observation／ctx_6736dc7cbbba | feat/ex005-observation-session；tools/legacy_source_observation_session.py、tests/test_legacy_source_observation_session.py、docs/legacy-source-observation-session.md | 实际复用begin／finish和v2审计，按线程组装事件、失败封存；身份／时点／覆盖与丢失计数必须外部显式提供 |
 
-指定仍为Pi／deng／gpt-6.1-sol／high，各先核本轮环境／会话model与thinking事件、干净Git及工具成功，按新Dispatch回报。各从含本登记的最新origin/dev建独立分支，20–30分钟先交有界代码、合成测试、中文报告及原失败回执；只写独占文件和本树忽略任务证据。协调独占共享文档、待办、索引和集成，不共写源码、构建或证据；两项已实际follow_up／ready送达原Pi：读取适配为Task `task_242e214782a0`／Dispatch `ctx_e34da225b675`，事件组装为Task `task_22cc9edd4046`／Dispatch `ctx_70ed4bb6d117`；本轮模型身份回报仍待worker核验，不把旧身份当本轮已核。完整派发正文在本证据目录spec-memory-reader.txt与spec-event-session.txt。
+指定仍为Pi／deng／gpt-6.1-sol／high，各先核本轮环境／会话model与thinking事件、干净Git及工具成功，按新Dispatch回报。各从含本登记的最新origin/dev建独立分支，20–30分钟先交有界代码、合成测试、中文报告及原失败回执；只写独占文件和本树忽略任务证据。协调独占共享文档、待办、索引和集成，不共写源码、构建或证据；两项已实际follow_up／ready送达原Pi：读取适配为Task `task_242e214782a0`／Dispatch `ctx_e34da225b675`，事件组装为Task `task_22cc9edd4046`／Dispatch `ctx_70ed4bb6d117`；两worker本轮身份均已独立读取startup／identity回执，实际为deng／gpt-6.1-sol／high，各已从98d8f0d建立指定分支。完整派发正文在本证据目录spec-memory-reader.txt与spec-event-session.txt。
 
 本轮只运行注入原生函数／寄存器／内存回调的合成测试，禁止调用真实Windows API、连接或读取真实进程、枚举进程／窗口、启动目标／控制服务／GUI、截图键鼠／桌面、身份／VM／隔离试验、实时用户配置、下载安装及现场conf／plan／GO。**需要控制电脑时先说明具体动作并等待用户确认**；当前两项不需要控制电脑。允许编写未来显式调用的WinDLL适配工厂，但导入和测试不加载真实DLL，不把未实测的代码说成Windows能力回执。
 
-协调审阅有界读取、错误码取样、失败诊断、线程栈及错误后不可凑成功等拒绝边界，针对缺口做父树和实际reader→提取→组装→v2离线互通验证，再统一入链、独立分支no-ff合dev普通推送。真实后端运行、权限／模块／编码／ABI来源、隔离、Property／windir／完整Host IO、GET与退出见证继续缺；EX003／005及原完成条件保持。下方各“本轮”为此前已验收阶段。
+协调审阅有界读取、错误码取样、失败诊断、线程栈及错误后不可凑成功等拒绝边界，针对缺口做父树和实际reader→提取→组装→v2离线互通验证，再统一入链、独立分支no-ff合dev普通推送。真实后端运行、权限／模块／编码／ABI来源、隔离、Property／windir／完整Host IO、GET与退出见证继续缺；EX003／005及原完成条件保持。读取Task已交`c5c296be3acef1b650a6094bacba3e3f073eb737`，子树干净，仅新增指定三文件；协调完整读107行工具／322行测试／报告和delivery原失败，在独立分支`feat/integrate-ex005-memory-reader`运行20项父树测试全部通过，未改实现。已核固定ABI宽度、一次RPM、仅传输前缀、即时失败错误码、独立last_receipt及旧状态清理，并实际reader→begin／finish→v2核完整尾部与partial拒绝；真实工厂未调用。父证`.local-analysis/ex005-backend-session-49f8/memory-reader-parent-review.json`，统一入链，原导入exit1与未索引exit1保留；实际合并推送以Git为准。
+
+事件组装Task遭providerRejected／ECONNRESET，调度仍ready／in_progress／live，协调沿原Dispatch发`msg_32eab1a02a49`续作，未新建／重启／换模型。worker以`msg_1d2f99d6cd67`回报只读Git工具exit0、HEAD98d8f0d且干净，已恢复原Task续作，尚无交付。网络失败及恢复记录保存在本证据目录session-connection-recovery.json，原失败不覆盖；reader→组装→v2完整联合验收仍待，不重计原派发预算。下方各“本轮”为此前已验收阶段。
 
 ## 当前交付：提取核心与审计v2已父审，离线数据链通过
 

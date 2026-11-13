@@ -100,7 +100,7 @@ assert result['raw_bool'] == -1
 assert bytes.fromhex(result['raw_hex']) == b'X:\\synthetic\0tail'
 ```
 
-这只演示提取顺序，不能把 requests 当真实内存读取回执。未来后端必须另行证明寄存器取样、返回配对、模块和编码来源、时间／进程身份及读取完整性；本轮没有实现或调用该后端。
+后续[Win64有界读取适配](legacy-source-memory-reader.md#parent-review)已用模拟native实现该回调并通过20项父树验证，部分读取仍由v2拒绝；真实工厂未调用。这只演示提取顺序，不能把 requests 当真实内存读取回执。未来后端必须另行证明寄存器取样、返回配对、模块和编码来源、时间／进程身份及读取完整性；本轮没有实现或调用该后端。
 
 <a id="validation"></a>
 
