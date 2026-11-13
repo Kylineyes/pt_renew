@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前离线开发：最小查询入口与观测组件
+
+用户再次要求“分派工作给子agent，保证不引起冲突或者一并控制电脑的情况下进行推进开发，你负责验收”。当前协调Pi `01a1d501-a17d-7611-9f62-3c490fba0174`，环境实核`deng/gpt-6.1-sol/high`；接手与本次fetch后dev／origin/dev均为`4c0cfe81a246ee7f3063619269e7b40a6d3fbbde`、干净。新建Run `run_fb0c4af1fdc9`，不恢复或修改原主provider会话；沿用三个已成功交付且live／retained的子Pi和各自工作树，通过原Dispatch发送新子Task，实际新Task／Dispatch以送达回执登记。
+
+| 复用工作树／原Dispatch | 本轮分支与独占交付 | 验收目标 |
+| --- | --- | --- |
+| ex005-config-witness／ctx_b56fa2735e32 | feat/ex005-query-consumer；tools/legacy_config_query_consumer.py、tests/test_legacy_config_query_consumer.py、docs/legacy-config-query-consumer.md | 无PT两键最小查询命令数据及精确拒绝边界，不放宽旧七查询白名单 |
+| ex005-query-effects／ctx_5e2d356468b7 | feat/ex005-api-buffer-decoder；tools/legacy_source_api_buffers.py、tests/test_legacy_source_api_buffers.py、docs/legacy-source-api-buffers.md | 目录API原缓冲、BOOL、NUL／截断及windir的null／空串保守解码 |
+| ex005-source-observation／ctx_755c0c2b2a20 | feat/ex005-observation-audit；tools/audit_legacy_source_observation.py、tests/test_legacy_source_observation_audit.py、docs/legacy-source-observation-audit.md | 单运行事件顺序、精确身份、调用配对及丢失／截断的离线完整性审计 |
+
+三者继续指定Pi／deng／gpt-6.1-sol／high，先回报实际模型身份及成功工具回执；各自从最新origin/dev新建分支，新增证据只写本树任务忽略目录。不共写源码、构建或证据；HANDOFF／待办／主专题／索引由协调独占。所有验证限标准库和合成fixture；禁止目标／GUI／控制服务／桌面／窗口查询／截图键鼠／真实API采集或调试／实时用户源／身份隔离试验／安装下载／现场配置及候选GO。当前开发授权覆盖上轮任务结束后的离线停点，不延长旧桌面窗口，不重启原abandoned worker。
+
+先20–30分钟交有界结果，按本次新子Task结算。协调审代码、拒绝边界和失败回执，针对缺口运行必要验证，统一入链、独立分支no-ff合dev普通推送。未交付不称完成；这些组件及合成测试不等于真实采集、隔离能力或EX003／005闭环。派发完整正文在`.local-analysis/ex005-offline-0174/spec-*.txt`；下方“三项子任务已交付”指上一轮。
+
 ## 当前并行结果：三项子任务已交付并经协调验收
 
 用户最新明确“分派工作给子agent，保证不引起冲突或者一并控制电脑的情况下进行推进开发，你负责验收”。本轮建立独立Run `run_1946e80ba9fe`，从已推送dev `19f59ef1bf6e4ad47f831342591af0bf7e5cddb2`继续EX-005。新授权允许下面三项离线开发／研究及协调验收，覆盖上轮不另派的安排；不延长旧桌面控制窗口，不签现场GO，不恢复原主会话或原中断worker，不重启或复活旧Dispatch。全部使用Pi，要求实际`deng/gpt-6.1-sol/high`，启动首先核模型／会话和成功工具回执；现版Orca Pi不支持--model参数，沿Pi自身已核配置并强制核实际身份，不符停止报告，不换模型。
