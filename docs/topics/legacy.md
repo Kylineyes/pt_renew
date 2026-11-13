@@ -49,6 +49,8 @@
 
 ## 按需深入
 
+[EX-005证据链与完成条件对照](../legacy-dosbox-configuration.md#ex005-evidence-gap-matrix)区分静态机制、第八固定状态与实际来源归因缺口；下一步先只读见证键矩阵和能力前置，不把A/B设想当新现场批准。
+
 - [配置parser、Property写值与autoexec文本](../legacy-dosbox-configuration.md#fixed-config-parser-setter)：文件登记、共同读终止返回、转换失败／回退赋值／范围截限分开；同对象追加与阶段清文本不等于最终执行，特殊输入和回调效果仍缺。
 - [autoexec初始化取样、自有复制与本地开关门](../legacy-dosbox-configuration.md#autoexec-initial-consumer)：securemode先保存、noautoexec后读取，跳过Section内容段不等于禁止全部来源；后续[BOOT调用与动态槽](../legacy-dosbox-configuration.md#autoexec-boot-upstream)已补同表安装／派发，[普通启动顺序](../legacy-dosbox-configuration.md#autoexec-main-conditional-order)又接上最终解析入口、VM事件0构造和主桥的模型内顺序；异常重入、中间配置变化及DOS实际执行仍缺。
 - [AUTOEXEC聚合与登记数据借用](../legacy-dosbox-configuration.md#autoexec-generated-vfile-data)：节点自有复制、CRLF规范化和容量门已核，登记记录借用可重建的全局缓冲；调用不保证发布成功。[打开对象](../legacy-dosbox-configuration.md#autoexec-open-object-data)已核缓存pointer／length，Read／Seek不回查record，重建后可在限定条件下出现新内容旧长度；[发布门对象与后置登记](../legacy-dosbox-configuration.md#autoexec-publication-pointer)已补直接置非空／清零及后置登记现缓冲的条件通路，首次实际门值、外层释放／并发及异常恢复仍缺。
