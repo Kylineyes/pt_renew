@@ -180,7 +180,7 @@ F 第 912–915 行确实描述 `page flip debug line` 和 `vertical retrace pol
 
 ## 新8小时：基于Up首行环绕的命名Status方案与父集成验证
 
-本节接续[EX-005](exploration-backlog.md#ex-005)与[EX-003](exploration-backlog.md#ex-003)。第六[Information／Esc有限导航](native-menu-calibration.md#sixth-navigation-conclusion)已实机取得，但本节**没有新Status现场／候选／GO**。用户8小时总窗UTC2026-11-12 21:14:51.2986127至次日05:14:51.2986127，最后10分钟仅收尾；每段仍最多60分钟、至少7分钟正常收尾。沿原Pi／Task／当前Dispatch及指定模型high，新实现先交父代码审，不能沿用第六冻结或旧GO。
+本节接续[EX-005](exploration-backlog.md#ex-005)与[EX-003](exploration-backlog.md#ex-003)。方案形成时，第六[Information／Esc有限导航](native-menu-calibration.md#sixth-navigation-conclusion)已实机取得，**当时尚无新Status现场／候选／GO**；后续第七实际结果见[预算停止记录](#seventh-status-budget-stop)。用户8小时总窗UTC2026-11-12 21:14:51.2986127至次日05:14:51.2986127，最后10分钟仅收尾；每段仍最多60分钟、至少7分钟正常收尾。沿原Pi／Task／当前Dispatch及指定模型high，新实现先交父代码审，不能沿用第六冻结或旧GO。
 
 原逐Down方案约19–20轮，以第六实耗保守需57–65分钟，超出53分钟业务预算，已经排除；不省略read或延长单段。本次只沿既有常驻选择器定向检查，原 `PT.EXE` SHA `abc56e2e8467e608c68a0ddf0b0705e8270c5c60f83f193fa991f10293ece968`，MZ头 `0x3de0`，分析段324e对应原段224e，磁盘偏移为 `0x3de0 + 0x224e0 + 段内偏移`。只读Capstone5.0.7与已核MZ重定位、MNU／KEY交叉，没有加载／执行目标或新建反编译数据库。
 
@@ -206,3 +206,62 @@ F 第 912–915 行确实描述 `page flip debug line` 和 `vertical retrace pol
 新命名状态8项、原隔离21项、预算3项共**32/32**通过，无skip／ResourceWarning：完整序列由原gate／原submit和真实driver Shortcut分支配假窗口／工具执行，覆盖上下文／重放／Shift与EndHome拒绝、七Down及新guest／review、16轮边界、七探针输出／旧路径／额外命令拒绝、派生最终门、无源／非法预算零准备以及公开Up原AST。它们都是合成／假创建，不是Status已验。首次6项setUp因合成JSONL被写成多行而JSONDecodeError，伴隐式清理ResourceWarning；修单行和addCleanup后，另一次仅1项冻结数量断言28!=27失败，修合成范围后8项通过，原JSONL回执不覆盖。只读核六个本轮失败临时目录已不存在，额外删除／归档／净释放均0。证据位于 `.local-analysis/ex-003-live/ex005-status-offline/validation.json`、`validation-tool-result.json`及回放／静态报告。协调者完整审查 `768dd07cdf73422007296b8dd22591f1ce42d802` 的工具／上下文门和测试，在 `main-2` 独立分支合入并完成相同32/32复测：新命名状态8、隔离21、预算3，无skip／ResourceWarning；交付源文本一致，测试后旧事故包400项和原安装99项完整集合／大小／SHA匹配。文档153／1061链／41事项／111来源／137报告零错，diff通过；父证据 `config-path-incident-20261112/named-status-parent-validation.json` 与三组parent日志。此为离线集成通过，下一步全新候选仍须父独立核配置／冻结／输入／原件后签新GO，不代表真实Up定位、Status文件名计数或完整来源已经验证。
 
 EX-005完成条件未降低；旧六槽不重启或改写，真实现场另建独立候选。
+
+<a id="seventh-status-budget-stop"></a>
+
+## 第七实际场景：六轮到Edit，预算不足正常退出
+
+2026-11-13，同一原Pi／模型high、Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`，当前协调Pi `01a1d184-26bc-7092-be0b-362193a84c8c` 独立审查全新 `.local-analysis/ex-003-live/candidate-seventh-status/slot/` 后签本段GO：UTC **00:57:45.743166–01:57:45.743166，01:50:45.743166起仅收尾**。用户8小时总窗仍有效，但不能延长本段。plan SHA `40802469c4736bc14f6e94cc7dc936108db60215106c71b057b6cdf56d0e5ce2`，conf `02fa3a28cfd6b4ec0314c4f71b561a779f75fa5d94d15a697dff99520e1cd40f`，driver `c3fa2e1c16bb4ce489d77d5bf5b8466a3e528233fa384b1b59236f662be93f8f`，28冻结／99 runtime／1 input核验通过后唯一启动。
+
+**本段结果为预算不足：六轮新客体图只到Edit高亮；未发Down4、Information确认、Up或Status输入，GUI工作文件名／八计数未取得。** 没有菜单失败、门拒绝或未知按键重发；协调者接受停止，只正常X一次、原WaitExit／Stop。不存在需要补造的120秒失败静默。[EX-005](exploration-backlog.md#ex-005)与[EX-003](exploration-backlog.md#ex-003)均保留，不能用第六的Information图填补本槽。
+
+### 同次配置与逐键后验
+
+七个CONFIG输出均已实际读取：`config`仅帮助，AXTYPE列本第七挂载／七查询／目录／PT命令，属性仍为 `opengl / vgaonly / fixed 10000 / 16 / 本第七captures绝对路径`。同次early stderr明确本第七 `SYN1.conf`、本第七cwd与 `DOSBox-X 2026.10.01 Commit b6abbd5`；独立日志记录七次config执行和PT／SYN1访问。这证明该次显式配置加载与几个有效值，**不枚举全部潜在来源，也不解决多conf覆盖规则**。Windows layout `0x0804` 与host／mapper `us`只是实际日志，不能宣称绕过IME；主机仍黑底白横线，客体Capture清晰，没有换后端或解释根因。
+
+唯一目标PID2020、原HANDLE668、FILETIME `134390052357426303`、HWND1314662；33兼容样本无失败且原线程join。每键之后先读新host，再显式打开Capture并读新菜单host，看到Take screenshot才单击，再实际读新host和guest；不存在批量导航。六个640×480新PNG如下；底栏 `P:ROUND62 / T:12 / S:60 / G:25`只作标签。
+
+| 客体文件 | 实际观察 | SHA-256 |
+| --- | --- | --- |
+| pt_000.png | AUTOTRAX 1.57启动页／PRESS ANY KEY TO START | `eeb87e89693a12bdc2008113016e6cfc8fd29d36d037b3f9a337897066bfb628` |
+| pt_001.png | 唯一startup Enter后的红框／横线板图 | `d35bb9242f15c58478c39ac21e252bb613c9a45e1e8fc5ab7420ca1db8a24cf5` |
+| pt_002.png | 唯一main Enter后的Block高亮 | `653a11a51c127f1534a5963c5ba4af5820d1f5946b0cf876e56fd20196ba5299` |
+| pt_003.png | Down1后Current高亮 | `a7ab943f9db558b0bf8f7c0fc2597bc54666c044a5c020da5fad7b2e4317082a` |
+| pt_004.png | Down2后Delete高亮 | `0704fdb2a1414db750c21c91efdbdf0071dbb8024465ff60c3c30698e69c02fb` |
+| pt_005.png | Down3后Edit高亮 | `7024ef338770923e559d648fc3368ccf0e0e84e7471255be217353eb98fc51ac` |
+
+20张唯一host＋6张guest共26张，都与本第七原Pi JSONL解码image的SHA匹配，当前nonce／模型／审核一致。owner自有队列22包均submitted：Launch1、App1、Shortcut5、Capture Click12、CloseX1、WaitExit1、Stop1；没有外部提交helper或第二控制连接。
+
+### 实际轮耗：落盘时间与指定模型读图时间分开
+
+原会话中每轮把 `send` 和 `readStep`分别作为codemode调用，形成每轮六次模型往返。下表UTC均为2026-11-13；落盘列来自原 `guest-after.json`，实际读回列来自原JSONL对应toolResult。落盘早于实际读图，不能把前者写成模型已验收。
+
+| 客体 | guest-after记录 | 模型实际image回执 | 距前次实际读图／秒 | 六次文件工具合计／秒 |
+| --- | --- | --- | --- | --- |
+| 启动页 | 01:04:14.272826 | 01:04:43.414 | 首轮 | 启动准备不同，不作六次比较 |
+| 板图 | 01:08:56.885496 | 01:09:34.348 | 290.934 | 1.208 |
+| Block | 01:12:45.751825 | 01:13:16.876 | 222.528 | 1.206 |
+| Current | 01:16:42.610169 | 01:17:16.301 | 239.425 | 1.215 |
+| Delete | 01:20:51.304939 | 01:21:30.977 | 254.676 | 1.193 |
+| Edit | 01:27:47.061235 | 01:27:53.577 | 382.600 | 1.203 |
+
+正常三轮Block／Current／Delete对应可观测assistant生成区间合计221.115／237.995／253.261秒；每次readStep本身约0.25–0.33秒，两调用间经常约37–55秒。文件审核＋packet写回到owner提交0.016–0.108秒，提交到原driver complete 0.858–8.943秒，complete到实际图像回执6.510–51.713秒；这些阶段存在重叠，不能简单加和。可观测生成区间包含提供方、传输和调度，不能据时间戳拆成内部token计算。
+
+原JSONL第2400行／记录 `ee89ba4d` 在 **01:23:15.022** 保留 `deng API error (413): Request payload is too large`；第2402行／`23be93bb`在 **01:26:55.785** 为compaction，二者相隔220.763秒。Down3后host在此前已实际读，本轮Capture打开在恢复后才发，没有重发Down3。此额外间隔解释Edit轮显著变长的一部分，**不是原程序消费慢或菜单失效的证据**。01:27完成第六轮后，按本槽实际耗时，余下至少八轮不能可靠在本段业务截止前做完，原Pi主动停止；原45–50分钟只是第六估计，不构成保证。
+
+### 正常退出、保全与下一步边界
+
+当前host已实际确认正常X坐标，原driver在发前再次核精确目标，唯一X在01:29:22.920187 complete。以下创建身份的PID／原HANDLE／FILETIME／映像以及适用的Popen identity逐项匹配，原等待均返回0：
+
+| 原等待对象 | PID | UTC退出回执 |
+| --- | --- | --- |
+| 目标／driver原Popen | 2020 | 01:30:04.028500 |
+| 控制服务／driver原Popen | 51344 | 01:30:25.384532 |
+| driver／owner原Popen | 46828 | 01:30:25.394738 |
+| owner／原.NET Process持柄WaitForExit | 43356 | 01:30:25.4071037 |
+
+owner提交线程01:30:25.393135记录joined、五秒内完成、error null；observer join为真，无stopped-error。外层隐藏PowerShell自身不由这四个wait外推。原事故包400、原安装99、本槽runtime/pt99与input1、既有EX-001／004／005／003离线证据基线和六旧conf摘要均不变；无NEWFT.PCB、编辑、报告或保存输出。不宣称所有旧槽可变日志拥有完整前后基线，也不改旧事故或第五wait缺口。
+
+本树 `.local-analysis/ex-003-live/seventh-live-audit.json`、`seventh-latency-audit.json`保留逐图原会话记录、原链身份、集合摘要及阶段时序；父独立证据在 `main-2/.local-analysis/config-path-incident-20261112/seventh-parent-final-audit.json`、`seventh-parent-latency-audit.json`。时序脚本首次终端汇总因初始只读步骤没有对应send、空值参加min而TypeError，完整报告已先排他写出；修汇总过滤后只读原报告复核，原失败回执保留，未覆盖报告或重做现场。一次rg命令引号错误也只影响离线搜索。
+
+协调方要求先只读核“已看图审核＋唯一packet投递＋有界等原动作完成＋新图read”能否合为一次codemode，减少模型往返；**仍须每键三个显式观察决策，看到Capture菜单后才点，不能自动视觉替代或预排下一键**。当前codemode文档说明QuickJS没有timers／Node／文件系统，已暴露工具无独立纯文件wait；等待能力边界随后由父独立核本机Pi1.5.2安装二进制（SHA `40a062bedd75767e2c3c889265de7c83d64a0ba55c74b60243c2453d97cffd85`）内嵌共同工具执行层：明确 `windowsHide:true`／`detached:false`／stdio pipes，工具创建的原child由 `await waitForChildProcess(child)`等待；PowerShell适配直接委托该执行层。父完成同进程100ms纯等待／JSON输出烟测，无额外子进程或桌面API。证据 `main-2/.local-analysis/config-path-incident-20261112/pi-hidden-shell-implementation-audit.json`。据此只批准后续离线验证短时隐藏PowerShell只读等待适配，限制10–15秒／工具timeout不超过20秒，仅读本新槽精确packet结果／新step完成和nonce；pending不重发，不GUI／原目标调用／常驻helper／新连接，也不据隐藏标志宣称全机前景绝无其它干扰。父审下一方案前不生成候选／GO，不复用第七；GUI Up环绕、Status文件名和八计数、完整配置继承仍未知。
