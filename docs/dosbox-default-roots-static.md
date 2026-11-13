@@ -222,6 +222,6 @@ B6 的接口消费可改变最终相对来源。`resolve config path` 文本匹�
 
 1. 隔离 `USERPROFILE/APPDATA/LOCALAPPDATA` 只是子进程环境变更。固定调用确实走 Shell32 的 CSIDL API；本次没有读取该次 API 返回值、用户令牌／系统目录注册状态，不能保证它跟随环境变量重定向，也不能保证一定仍返回真实用户 U 路径。windir 仅是两个 API 失败／空结果后的后备环境来源。
 2. 第八迟后版本配置与 U 同 SHA、文件时间接近启动，只证明观察时字节／时间；不能补造创建者、最早读写、覆盖次序或瞬时 IO。本文给出可达路径，不宣布历史每条分支实际执行，也不因日志只报一个显式文件推全部其它来源从未访问。
-3. F、AL、清文本分别控制不同边；Property 值是否跨预解析保留、同键有效／无效覆盖、autoexec 内容追加／替换仍由原 Pi 子题提供证据。没有用“清文本”替代该证明。
+3. F、AL、清文本分别控制不同边；后续[parser／setter阶段](legacy-dosbox-configuration.md#fixed-config-parser-setter)已核未直接恢复Property默认、有效／无效写值及同对象Line追加，[消费者阶段](legacy-dosbox-configuration.md#autoexec-initial-consumer)进一步核初始化取样、自有复制与本地开关门。组合这些结论仍须逐路径判断，特殊输入／回调、完整调度和DOS执行仍缺，不能用“清文本”替代相应证明。
 4. 此固定 SHA 的 Windows 正常启动线及列明特殊支路不能外推其它 DOSBox 版本、Unix 根目录或全部异常路径。失败 API、过长字符串、非 ASCII 转换及用户选择的实际结果仍需独立运行证据；静态表保留这些守卫，不宣称已现场验证。
 5. PT 的 DFT 载入与历史只读挂载失败属于其它协作子题；本报告不作其结论。EX-003、EX-005 和原 Task 均不因本子题静态完成而删除或整体结算。
