@@ -43,12 +43,15 @@
 当前[路径隔离事故后的离线修复与合成回归](../native-menu-calibration.md#isolation-offline-repair)已审查集成并在协调树28项复测通过：配置按语义重建、逻辑／物理归属、联接／硬链接及实际创建前拒绝门已纳入工具；这不恢复旧日志、不使前三槽合法，也不是EX-003运行条件闭环。本轮暂停现场与归档精简，后续步骤只作依赖顺序，不据旧GO执行。
 
 1. [两轮新客体 PNG 及真实逐图读取](../native-capture-checkpoint.md#continuous-capture-conclusion)已完成，四组原创建链正常wait0；复用此有限结论和当前图方式，不复用已退出槽、旧GO或坐标。
-2. 两轮捕获结论中的客体均为启动页；后续[EX-005新场景](../legacy-dosbox-configuration.md#effective-state-attempt)已取得关键有效配置和一次Enter后的五线板图，但Shift+I后出现IME候选框，Information／Status的工作文件名／计数仍缺。后续[原AST／假API](../native-menu-calibration.md#shortcut-offline-semantics)已核精确VK／Unicode分流和成功文字限度，但没有新队列／IME／客体消费证据；[输入通道 EX-003](../exploration-backlog.md#ex-003)及[配置状态 EX-005](../exploration-backlog.md#ex-005)仍受阻，不向单线写入跨越。
-3. 取得 Information / Status 的文件名与计数，确认空板及层、宽、端点，新建单段并保存到全新 8.3 文件。
+2. 两轮捕获结论中的客体均为启动页；后续[第八固定场景](../legacy-dosbox-configuration.md#eighth-status-conclusion)已逐新图直接取得SYN1.PCB／Tracks5／其余七类0、Information首行Up→Status与唯一Esc，原四wait及join正常。旧Shift+I后IME候选与失败仍保留；[输入静态链](../legacy-input-event-static.md#remaining-unknowns)只定位通道和守卫，不恢复当时消息／IME状态或INT33。EX-003／005整体仍未结。
+3. 固定GUI状态不等空板或默认FT字段已证；后续自建单线、保存全新8.3文件须另获明确范围并审新候选／GO，本轮没有EX-007授权。
 4. 原 AUTOTRAX 重开、图像、字节、日志及摘要共同核定字段，再交[编辑主题](editing.md)接通正式产品。
 
 ## 按需深入
 
+- [默认配置根、三阶段守卫与八候选](../dosbox-default-roots-static.md#final-explicit-and-eight)：已打开登记不等所有属性有效，cwd与特殊开关按阶段核。
+- [DFT工作名恢复与命令行优先关系](../pt-dft-load-static.md#working-name-and-cli)：WD1EL为Block Read记忆名，POWER3恢复有守卫；原DFT内容不补为第八生效值。
+- [Windows／SDL／DOS输入链及剩余边界](../legacy-input-event-static.md#remaining-unknowns)：有条件ImmDisableIME及返回未查、扫描码与文本双通道已定位，旧消息／实际绑定／完整IRQ-PT与INT33仍缺。
 - [历史只读挂载的条件性打开／拒绝链](../legacy-readonly-open-static.md#conclusion-and-limits)：Reset模式映像初值2与DOSBox-X只读拒绝已静态核定，历史实际调用状态仍未知，不能宣布唯一根因。
 - [首次软件调查](../initial-assessment.md)、[覆盖模块](../legacy-overlays.md)。
 - [文字静态路径](../legacy-text.md)、[机器码核验](../legacy-text-machine-verification.md)、[无遮挡现场](../legacy-text-screen-next.md)。
