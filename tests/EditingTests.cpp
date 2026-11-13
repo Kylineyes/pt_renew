@@ -3,6 +3,7 @@
 #include "ui/BoardCanvas.h"
 #include "ui/MainWindow.h"
 #include "ui/NetlistBrowser.h"
+#include <QAccessible>
 #include <QAction>
 #include <QApplication>
 #include <QCryptographicHash>
@@ -22,6 +23,7 @@
 #include <QThreadPool>
 #include <QRunnable>
 #include <QFutureWatcher>
+#include <QStatusBar>
 #include <QTemporaryDir>
 #include <QTimer>
 #include <QtTest/QTest>
@@ -381,6 +383,32 @@ private slots:
         window.requestOpenFile(other); answerDiscard(true); action(window,"file.close")->trigger();
         QTRY_VERIFY(action(window,"file.open")->isEnabled());
         QCOMPARE(loaded.size(),1); QVERIFY(!canvas->document()); QVERIFY(!window.editSession().canUndo());
+    }
+
+    void loadingStatusSurvivesCommandsAndIsAccessibleAsStatusBar() {
+        QTemporaryDir dir; const auto input=dir.filePath(QStringLiteral("INPUT.PCB"));
+        QVERIFY(writeInput(input,boardBytes()));
+        ReadQueue queue; const auto gate=queue.block(); QVERIFY(gate->entered.tryAcquire(1,5000));
+        pt::MainWindow window; QVERIFY(window.inspectFile(input));
+        QSignalSpy loaded(&window,&pt::MainWindow::boardLoadFinished);
+        window.requestOpenFile(input);
+        const auto loading=window.statusBar()->currentMessage();
+        QVERIFY(loading.contains(QStringLiteral("正在后台读取")));
+        auto* accessible=QAccessible::queryAccessibleInterface(window.statusBar());
+        QVERIFY(accessible); QCOMPARE(accessible->role(),QAccessible::StatusBar);
+        QCOMPARE(accessible->text(QAccessible::Name),loading);
+        for (const auto* command : {"view.redraw","view.zoom_in","view.grid"}) {
+            action(window,command)->trigger();
+            QCOMPARE(window.statusBar()->currentMessage(),loading);
+            QCOMPARE(accessible->text(QAccessible::Name),loading);
+        }
+        QVERIFY(!action(window,"file.open")->isEnabled());
+        QVERIFY(action(window,"file.close")->isEnabled());
+        gate->release.release(); QTRY_COMPARE(loaded.size(),1);
+        QVERIFY(loaded.front().front().toBool());
+        QVERIFY(window.statusBar()->currentMessage().contains(QStringLiteral("已载入")));
+        action(window,"view.redraw")->trigger();
+        QCOMPARE(window.statusBar()->currentMessage(),QStringLiteral("命令：view.redraw"));
     }
 
     void synchronousInspectionSupersedesPendingRead_data() {
