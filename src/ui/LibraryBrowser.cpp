@@ -77,7 +77,7 @@ void LibraryBrowser::chooseFile() {
 
 void LibraryBrowser::requestLibrary(const QString& path) {
     if (m_loading) return;
-    clearLibrary();
+    // 先验证候选，失败时保留当前库、筛选、选择和预览。
     m_loading=true; const auto generation=++m_generation;
     m_open->setEnabled(false); m_close->setEnabled(true); m_status->setText(QStringLiteral("正在后台验证目录及解码封装；关闭当前库可放弃结果。"));
     auto* watcher=new QFutureWatcher<LibraryReadResult>(this);
@@ -97,10 +97,12 @@ bool LibraryBrowser::loadLibrary(const QString& path) {
 }
 
 bool LibraryBrowser::applyLibrary(const LibraryReadResult& result) {
-    clearLibrary();
     if (!result.succeeded()) {
-        m_status->setText(QStringLiteral("库载入失败：%1").arg(result.error)); emit libraryLoaded(false); return false;
+        m_status->setText(QStringLiteral("库载入失败：%1%2").arg(result.error,
+            m_library ? QStringLiteral("；当前库、筛选与预览已保留。") : QString()));
+        emit libraryLoaded(false); return false;
     }
+    clearLibrary();
     m_library=result.library;
     {
         QSignalBlocker block(m_list);
