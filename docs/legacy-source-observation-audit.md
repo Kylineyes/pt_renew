@@ -1,8 +1,8 @@
-# 联合观测记录的离线完整性审计 v1
+# 联合观测记录的离线完整性审计 v1／v2
 
 [EX-005](exploration-backlog.md#ex-005)的[隔离与观测设计](legacy-source-observation-plan.md#observation-contract)需要将同一运行的进入、返回和文件访问分开绑定。[审计工具](../tools/audit_legacy_source_observation.py)现在只检查调用者显式提供的JSONL或内存事件：身份不变、序号与单调时点、覆盖声明、按线程的调用配对，以及解析范围内的文件生命周期。它不实现采集器、ETW、调试器或隔离器，不读取其它现场材料，不判断来源归因。
 
-即使 `integrity_passed=true`，输出也始终包含 `source_attribution=null`、`execution_ready=false`。连续seq、零丢失声明、完整配对都只是输入内部自洽，不能证明真实采集没有漏报，也不能构成现场GO或EX-005闭环。
+即使 `integrity_passed=true`，输出也始终包含 `source_attribution=null`、`execution_ready=false`。连续seq、零丢失声明、完整配对都只是输入内部自洽，不能证明真实采集没有漏报，也不能构成现场GO或EX-005闭环。后续新增的[v2 Shell32快照绑定](#schema-v2-shell32-binding)按[冻结共同字段契约](legacy-source-capture-binding.md#shell32-capture-binding)显式分流，下面v1章节保留其独立边界。
 
 <a id="schema-v1"></a>
 
@@ -51,7 +51,7 @@ v1明确只支持文件事件在**打开线程及所属parse仍活动时**发生
 
 phase和name仅为必须保留的有界文字，v1不检查phase是否覆盖[既有全部解析阶段](legacy-source-observation-plan.md#observation-contract)，也不验证RVA、实际模块基址、目录返回、输入文件身份、F表、Property或GET副作用。当前[查询契约](legacy-config-query-contract.md#minimal-contract)区分属性值、输出送达和CONFIG环境更新；这些语义并未被本审计器实现，不能用call_return替代其验收。
 
-另外两个已验收的离线接口分别提供[两键命令数据](legacy-config-query-consumer.md#offline-query-consumer)和[目录API原缓冲解释](legacy-source-api-buffers.md#result-contract)。前者不执行查询；后者的bytes、BOOL和解码结果不在本版事件字段集合中，不能直接追加到data或塞进name／phase绕过校验。未来采集器接入时须先扩展并验证事件契约，再把原缓冲与调用ID、线程及来源回执绑定；当前没有将三个组件接成运行器或完成联合运行验证。
+另外两个已验收的离线接口分别提供[两键命令数据](legacy-config-query-consumer.md#offline-query-consumer)和[目录API原缓冲解释](legacy-source-api-buffers.md#result-contract)。前者不执行查询；后者的bytes、BOOL和解码结果不在v1事件字段集合中，不能直接追加到data或塞进name／phase绕过校验。下方v2已增加显式快照绑定，v1仍拒绝这些新字段；本轮仅用手造快照验证消费端，实际生产者输出的离线互通由协调后续验收，尚未接成运行器或完成联合运行验证。
 
 <a id="usage-and-results"></a>
 
@@ -68,7 +68,7 @@ python -B tools/audit_legacy_source_observation.py .local-analysis/ex005-observa
 
 | 退出码／接口 | 行为 |
 | --- | --- |
-| CLI 0 | 所提供记录在v1检查范围内通过，仍无归因／GO |
+| CLI 0 | 所提供记录在选定的v1／v2检查范围内通过，仍无归因／GO |
 | CLI 1 | 形成失败审计JSON，包括畸形JSON／精度拒绝、配对／生命周期错误、缺少结束、丢失／截断或范围不足 |
 | CLI 2 | 参数、输入读取或输出写入错误；不将OS错误伪装为通过的完整性报告 |
 | `audit_jsonl(path)` | 返回报告；输入读取失败抛OSError。JSONL结构错误保存在issues，保留输入摘要 |
@@ -99,3 +99,50 @@ git diff --check
 新证据仅在本树 `.local-analysis/ex005-observation-audit/`，含身份、测试和最终文档／diff回执；未读取旧现场补新运行回执，未运行目标、GUI、控制服务、调试API、目录隔离或身份／VM试验，未制作现场配置、plan、候选或GO。文档检查实际exit1：161份Markdown／1279链接／41开放事项／133来源细节／145索引报告，唯一错误为本文尚未在完整资料索引中恰好出现一次，原回执 `document-check.json`交协调统一入链；未将其它错误视为预期。`git diff --check`实际exit0，暂存新增文件另核。EX-003／005及旧Task均不因该组件通过而结算。
 
 协调已完整审阅323行工具、455行测试、本文及原tests-first／tests-final／delivery-state回执，在独立集成分支运行35项父树测试全部通过。首轮失败确为重复ID夹具用了旧单调时间，现有修正使其到达预期拒绝分支，原exit1保留；原实现未由协调修改。已核精确整数、单运行身份、线程栈／调用唯一性、独立open_id及失败关闭保留活动状态，父验收见协调树`.local-analysis/ex005-offline-0174/observation-audit-parent-review.json`。协调补齐主题／索引／EX-005双向链接及与另两组件的接口限制；验收仅接受离线审计能力。
+
+<a id="schema-v2-shell32-binding"></a>
+
+## v2结论：Shell32原快照、调用配对与原输入摘要
+
+本节接续[EX-005](exploration-backlog.md#ex-005)，实现[冻结Shell32绑定契约](legacy-source-capture-binding.md#shell32-capture-binding)的消费端。本轮不修改该共用协议，不复制解码器，不实现真实采集。原v1测试文件保持不变，其35项接受／拒绝回归继续通过；v1仍拒绝api_snapshot，且仍接受原有不带快照的通用api记录。
+
+输入首个可检查事件选择精确整数schema_version 1或2，后续每条必须相同；单输入混用版本拒绝，不尝试拆分、丢弃快照、重排事件或按v1重新摘要。v2沿用原公共字段、身份／顺序／时点／覆盖声明、线程调用栈及parse文件生命周期，仅增加api_snapshot，并限制operation=api的name精确为SHGetSpecialFolderPathA。parse不要求也不接受API快照。
+
+api_snapshot的data必须恰含call_id和capture。该call_id必须已进入、未返回，位于同一TID栈顶且operation为api，每次调用恰好出现一次；孤立／跨线程／非栈顶／重复／返回后快照均拒绝。call_return须在快照后出现，原result必须逐值等于capture.raw_bool；不能把-1等非零BOOL先规范为1再比较。未返回调用、API返回前缺快照、原配对错误均不通过。
+
+capture完整字段集合为：api、module_base、caller_rva、entry_rsp、return_address、hwnd、buffer_address、csidl、f_create、raw_bool、raw_hex、read_limit、read_complete、encoding；缺项或扩展字段都拒绝。具体类型和来源以冻结契约为准，消费端核验如下：
+
+| 约束 | 实现范围 |
+| --- | --- |
+| 站点／CSIDL | caller_rva仅0xa56bbe／0xa56bec，分别对应0x1c／0x1a；api精确匹配，hwnd／f_create均为整数0 |
+| 地址 | module_base、entry_rsp、return_address、buffer_address均为非零无符号64位精确整数；module_base加RVA、entry_rsp加8、buffer_address加read_limit不得溢出；不凭返回地址猜调用指令长度，也不证明内存实际可读 |
+| BOOL／字节 | raw_bool保留有符号32位原值；raw_hex为最长520字符、偶数长度的小写十六进制，无空格／前缀，字节数不超read_limit；read_limit为1..260精确整数，数值字段拒绝布尔／浮点／数值字符串 |
+| 有界读取 | read_complete为严格bool。false即拒绝，即使已有NUL或BOOL为0；true仅表示提供者的读取声明，不证明真实采集完整，也不要求填满read_limit |
+| 解码 | 实际调用legacy_source_api_buffers.decode_shell_folder，传原BOOL、bytes、读取上限／声明及原编码名；支持编码由原组件验证，不猜本机ACP，不复制编码白名单 |
+| 未知／失败 | 非零BOOL且解码status=unknown时拒绝；BOOL=0且read_complete=true时，允许保留无NUL、不可解码或空残留缓冲的api_failed结果，path_text仍为null，不消费为路径；两个站点的先后因果、是否应触发第二次调用仍不由本组件推断。 |
+
+v2报告的schema_version为2，并增加api_snapshots对象，以call_id为键；每项含line（从1起的输入物理行号）、原seq、tid、完整capture、decoded和accepted。已解码但因读取不完整／成功缓冲unknown而拒绝的快照也保留decoded和位置，accepted=false；字段或类型在解码前就无效时不伪造解码结果。accepted仅表示该条快照的局部字段与解码门通过，后续返回值错配等仍使整个integrity_passed=false。
+
+解码器返回的raw_bytes及非null tail_bytes用明确的无损对象输出，例如：
+
+```json
+{"encoding": "hex", "hex": "ff0061"}
+```
+
+原capture.raw_hex仍按输入保留；不修剪NUL之后字节，也不替换解码失败字符。JSON输出可直接序列化，CLI在Python -I隔离模式下只显式加入工具自身固定目录以加载已存在的同级解码组件。内存输入仍按完整事件列表确定性序列化；文件输入的SHA对应读到的完整原JSONL（含快照、空白、CRLF和尾部字节），不对应过滤后的派生事件。原4MiB／64KiB／10000事件边界及超限read_prefix标记保持。
+
+新Task task_370a66937002／Dispatch ctx_6736dc7cbbba沿Pi会话01a1d4e9-ce67-756e-8b4e-17d0dd926e95、deng/gpt-6.1-sol/high续作；环境和最新model／thinking事件、干净Git及工具exit0已核，status回执msg_532f0cf3f873。fetch后确认origin/dev含22d479e及字段契约登记，基f355d7ba180db69128e91d4e7234e56fe2e842b3新建feat/ex005-observation-v2。仅改本工具、本文并新增[手造v2测试](../tests/test_legacy_source_observation_v2.py)，不修改原v1测试、共用契约或前置设计。
+
+本轮验证命令：
+
+```powershell
+python -B -m unittest discover -s tests -p 'test_legacy_source_observation*.py' -v
+python tools/check_exploration_docs.py
+git diff --check
+```
+
+首轮54项中51通过、3个CLI用例失败：新增同级导入在Python -I模式下发生ModuleNotFoundError，未触及v1字段或配对规则；修正为CLI显式使用工具自身固定目录后，第二轮54项全过（原v1 35项、新v2 19项）。原exit1保留于本树.local-analysis/ex005-observation-v2/tests-first.json，成功回执为tests-second.json；所有文件夹具在本任务忽略目录内创建并清理，原材料只读。新测试覆盖两个合法站点、signed BOOL及原返回一致、失败残留、unknown／截断、地址／数量边界、精确字段、跨线程／重复／孤立／非栈顶／缺快照、混版本拒绝、实际解码器调用、JSON字节表示、完整原输入摘要及排他输出。
+
+文档检查实际exit0：164份Markdown／1335链接／41开放事项／137来源细节／148索引报告零错。首次git diff --check因本文EOF多一空行exit1，原diff-check.json保留，修正后另存最终差异回执；v1测试文件差异检查exit0且无改动。
+
+**仍未覆盖：** 真实采集后端及ABI现场验证、实际用户根隔离、模块／编码来源真实性、Property、windir、GET输出及CONFIG环境、完整Host IO与原创建者退出见证。共同协议的生产者仍由另一独立worker开发，当前仅手造有限fixture；协调收到两者后再以实际提取输出完成离线互通验收。本轮无真实API／进程内存／目标或桌面调用，没有现场配置、plan或GO；通过仍恒source_attribution=null、execution_ready=false，EX-003／005不结。

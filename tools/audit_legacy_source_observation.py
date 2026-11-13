@@ -9,6 +9,11 @@ from pathlib import Path
 import re
 import sys
 
+# -I模式不自动加入脚本目录；只显式加载本工具固定同级依赖，不搜索工作目录。
+if __name__ == '__main__':
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+import legacy_source_api_buffers as api_buffers
+
 MAX_BYTES = 4 * 1024 * 1024
 MAX_LINE_BYTES = 64 * 1024
 MAX_EVENTS = 10000
@@ -17,6 +22,12 @@ COMMON = {'schema_version', 'run_id', 'seq', 'pid', 'creation_filetime', 'tid',
           'image_sha256', 'kind', 'utc_ns', 'monotonic_ns', 'data'}
 KINDS = {'run_start', 'run_end', 'call_enter', 'call_return',
          'file_open', 'file_read', 'file_close'}
+KINDS_V2 = KINDS | {'api_snapshot'}
+SHELL_FOLDER_API = 'SHGetSpecialFolderPathA'
+SHELL_FOLDER_SITES = {0xa56bbe: 0x1c, 0xa56bec: 0x1a}
+CAPTURE_FIELDS = {'api', 'module_base', 'caller_rva', 'entry_rsp', 'return_address',
+                  'hwnd', 'buffer_address', 'csidl', 'f_create', 'raw_bool',
+                  'raw_hex', 'read_limit', 'read_complete', 'encoding'}
 DOMAINS = {'directory_api', 'parse', 'file_io'}
 LIMITATIONS = [
     '仅校验已提供事件及覆盖声明；seq连续或计数为零不能证明真实采集无遗漏',
@@ -89,6 +100,52 @@ def _base(source):
             'limitations': list(LIMITATIONS)}
 
 
+def _json_bytes(value):
+    """解码器的bytes字段显式转为无损十六进制对象，不改原输入。"""
+    if type(value) is bytes:
+        return {'encoding': 'hex', 'hex': value.hex()}
+    if type(value) is dict:
+        return {key: _json_bytes(item) for key, item in value.items()}
+    if type(value) is list:
+        return [_json_bytes(item) for item in value]
+    return value
+
+
+def _decode_capture(capture):
+    """仅核冻结capture字段并调用已有解码器，不补采集事实。"""
+    fields(capture, CAPTURE_FIELDS)
+    require(capture['api'] == SHELL_FOLDER_API, 'invalid_capture_api', 'capture的API名不符')
+    base = integer(capture['module_base'], 'module_base', 1)
+    caller = integer(capture['caller_rva'], 'caller_rva')
+    require(caller in SHELL_FOLDER_SITES, 'invalid_call_site', '不支持该调用站点RVA')
+    require(base + caller <= UINT64_MAX, 'address_overflow', 'module_base加RVA溢出')
+    rsp = integer(capture['entry_rsp'], 'entry_rsp', 1)
+    require(rsp + 8 <= UINT64_MAX, 'address_overflow', 'entry_rsp加8溢出')
+    integer(capture['return_address'], 'return_address', 1)
+    integer(capture['hwnd'], 'hwnd', 0, 0)
+    buffer_address = integer(capture['buffer_address'], 'buffer_address', 1)
+    csidl = integer(capture['csidl'], 'csidl', 0, (1 << 32) - 1)
+    require(csidl == SHELL_FOLDER_SITES[caller], 'site_csidl_mismatch', '调用站点与CSIDL不对应')
+    integer(capture['f_create'], 'f_create', 0, 0)
+    integer(capture['raw_bool'], 'raw_bool', -(1 << 31), (1 << 31) - 1)
+    limit = integer(capture['read_limit'], 'read_limit', 1, 0x104)
+    require(buffer_address + limit <= UINT64_MAX, 'address_overflow', '缓冲地址加读取上限溢出')
+    raw_hex = capture['raw_hex']
+    require(type(raw_hex) is str and len(raw_hex) <= 520 and len(raw_hex) % 2 == 0
+            and re.fullmatch(r'[0-9a-f]*', raw_hex) is not None,
+            'invalid_raw_hex', 'raw_hex须为有界、偶数长度的小写十六进制原字节')
+    raw = bytes.fromhex(raw_hex)
+    require(len(raw) <= limit, 'capture_overread', '原字节长度超过声明读取上限')
+    require(type(capture['read_complete']) is bool, 'invalid_read_complete', 'read_complete须为严格bool')
+    try:
+        decoded = api_buffers.decode_shell_folder(
+            raw_bool=capture['raw_bool'], raw_bytes=raw, read_limit=limit,
+            read_complete=capture['read_complete'], encoding=capture['encoding'])
+    except ValueError as error:
+        raise AuditError('invalid_capture_buffer', str(error)) from error
+    return decoded
+
+
 def _issue(report, code, detail, line=None):
     report['issues'].append({'line': line, 'code': code, 'detail': detail})
 
@@ -101,11 +158,20 @@ def _validate(events, source):
     start_coverage = None
     ended = False
     last_mono = None
+    version = None
     for index, event in enumerate(events):
         try:
             require(not ended, 'after_end', '结束摘要后仍有事件')
             fields(event, COMMON)
-            integer(event['schema_version'], 'schema_version', 1, 1)
+            event_version = integer(event['schema_version'], 'schema_version', 1, 2)
+            if version is None:
+                version = event_version
+                if version == 2:
+                    report['schema_version'] = 2
+                    report['api_snapshots'] = {}
+                    report['limitations'][1] = (
+                        'v2仅核提供的Shell32有界快照与调用绑定；不证实际采集、Property、windir、全部Host IO或隔离')
+            require(event_version == version, 'mixed_schema_versions', '同一输入不能混用schema版本')
             integer(event['seq'], 'seq')
             require(event['seq'] == index, 'sequence_gap', 'seq必须从0开始连续，不能跳号、重复或重排')
             pid = integer(event['pid'], 'pid', 1, (1 << 32) - 1)
@@ -126,7 +192,8 @@ def _validate(events, source):
             require(last_mono is None or mono >= last_mono, 'clock_reversed', '单调时点倒退')
             last_mono = mono
             kind = event['kind']
-            require(type(kind) is str and kind in KINDS, 'unknown_kind', '不支持的事件kind')
+            allowed_kinds = KINDS_V2 if version == 2 else KINDS
+            require(type(kind) is str and kind in allowed_kinds, 'unknown_kind', '不支持的事件kind')
             data = event['data']
             require(type(data) is dict, 'invalid_fields', 'data须为对象')
             require(index != 0 or kind == 'run_start', 'missing_start', '首条须为启动摘要')
@@ -161,8 +228,28 @@ def _validate(events, source):
                     text(data['path'], 'path')
                 else:
                     require(data['path'] is None, 'invalid_path', 'api调用的path字段须为null，本版不解码缓冲')
-                calls[call_id] = {'tid': tid, 'data': data, 'returned': False}
+                    if version == 2:
+                        require(data['name'] == SHELL_FOLDER_API, 'unsupported_v2_api', 'v2仅支持约定的Shell32 API调用')
+                calls[call_id] = {'tid': tid, 'data': data, 'returned': False, 'snapshot': None}
                 stack.append(call_id)
+            elif kind == 'api_snapshot':
+                fields(data, {'call_id', 'capture'})
+                call_id = text(data['call_id'], 'call_id')
+                require(call_id in calls, 'orphan_snapshot', '快照没有对应的进入事件')
+                call = calls[call_id]
+                require(not call['returned'] and call['tid'] == tid and stack and stack[-1] == call_id
+                        and call['data']['operation'] == 'api',
+                        'snapshot_mismatch', '快照须绑定同TID栈顶且尚未返回的API调用')
+                require(call['snapshot'] is None, 'duplicate_snapshot', '同一API调用只能有一条快照')
+                decoded = _decode_capture(data['capture'])
+                bound = {'line': index + 1, 'seq': event['seq'], 'tid': tid,
+                         'capture': data['capture'], 'decoded': _json_bytes(decoded), 'accepted': False}
+                report['api_snapshots'][call_id] = bound
+                require(data['capture']['read_complete'], 'incomplete_snapshot', '快照读取不完整，即使已有NUL也不能通过')
+                require(data['capture']['raw_bool'] == 0 or decoded['status'] != 'unknown',
+                        'unknown_snapshot', 'API成功但缓冲解释未知，不能通过快照检查')
+                call['snapshot'] = data['capture']
+                bound['accepted'] = True
             elif kind == 'call_return':
                 fields(data, {'call_id', 'result'})
                 call_id = text(data['call_id'], 'call_id')
@@ -176,6 +263,10 @@ def _validate(events, source):
                     require(data['result'] in (0, 1), 'invalid_parse_result', 'parse返回须为原始AL的0或1')
                     require(not any(x['parse_call_id'] == call_id for x in opens.values()),
                             'parse_has_open_file', 'parse返回前仍有未成功关闭的文件')
+                elif version == 2:
+                    require(call['snapshot'] is not None, 'missing_snapshot', 'v2 API返回前缺少唯一原快照')
+                    require(data['result'] == call['snapshot']['raw_bool'],
+                            'snapshot_return_mismatch', '原返回result与快照raw_bool不一致')
                 stack.pop()
                 call['returned'] = True
             else:
