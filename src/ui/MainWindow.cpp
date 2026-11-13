@@ -471,7 +471,8 @@ void MainWindow::executeCommand(const QString& id) {
                            "文字与部分轮廓为近似显示；不支持新增图元、布线和生产输出。")
                 .arg(QString::fromLatin1(ApplicationVersion)));
     }
-    statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
+    // 后台读取期间保留用户可见且可访问的加载状态，不能被通用命令提示立即覆盖。
+    if (!m_loading) statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
 }
 
 void MainWindow::openNetlist(const QString& path) {
