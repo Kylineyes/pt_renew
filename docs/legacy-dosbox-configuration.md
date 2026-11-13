@@ -1,5 +1,7 @@
 # DOSBox-X 本机日志与配置加载证据
 
+最新有限实机结论见[第八Status与正常退出](#eighth-status-conclusion)：同一新槽已实际核 `SYN1.PCB` 与八项计数，Up／Esc路径及四原等待通过；完整配置来源／继承仍按[剩余离线核验方案](#remaining-configuration-plan)保留，不把旧Shift失败或第七预算停止改写为成功。
+
 本次离线复核确认：DOSBox-X 的文件日志选项为 **`[log]` 下的 `logfile`**；类别日志开关也在 `[log]`，DOS 控制台输出开关则为 **`[dos]` 下的 `log console`**。现有 verification-33 证据不能证明安装配置或用户配置是否被额外加载，也不能把黑底白横线归因为 OpenGL、vsync 或原程序。下一轮应先保存启动日志和配置来源，再决定是否需要输出后端对照。
 
 本次基线为 `origin/dev=a5c2bde201bec8f7b405553a8bc0c5f0d2abe35f`，独立分支为 `Kylineyes/research-dosbox-config-evidence`。只新增本文；未启动 DOSBox、GUI 或 Windows-MCP，未进行键鼠/窗口控制，未安装、下载依赖，也未改动共享场景或用户配置。未合并或推送 `dev`、`main`。
@@ -291,3 +293,89 @@ ready后JS再核未变化的新state与submitted结果，读该步原native文�
 本树证据 `.local-analysis/ex-003-live/file-step-adapter/`：`validation-first.json`、`validation-ps-bom.json`、`validation-plan-gate.json`、`source-review.json`、`codemode-smoke-result.json`、`codemode-plan-smoke-result.json`，以及唯一合成文件夹具；原Pi JSONL保留命令／exit／ready与实际2×2 image。当前PS源码6298字节／SHA `5d862ad11253dfd994abceefec3baa036eddf906b60aad6b89da3426fd1705cf`，JS10315字节／SHA `7c9fcc578e8f7dabf5ab8be9be8d98e1fd79f925235b49ae0fe339459fe67124`。下一真实候选还须把两个适配器列入真实冻结集合，沿原生成／隔离和新协调父审GO流程；本实现没有修改旧七槽、旧GO或完成条件。
 
 新协调审阅25项后，授权准备全新第八候选。准备器新增显式 `--named-status --file-step-adapter`：仅此组合将同树JS／PS两项只读来源加入新计划；未选命名方案而打开适配器在生成前拒绝，默认方案不加入二者。新命名状态测试由8项扩为10项并全部通过，无skip；新增用例核两来源唯一列入、真实大小／SHA、原driver／gate／submit字节与未启用方案一致及最终语义门。真实冻结预计由28增至30项，合成目标与Python同路径去重为29项；实际以候选核验为准。此次只改准备器和测试，不修改已审控制工具、两个适配器或旧槽目录；旧计划引用的共享准备器源码会随新提交更新，不能声称旧完整冻结集合摘要仍全相同。准备器修正先独立交付，再由新协调核第八完整计划／原件和零现场状态，GO前不启动。
+
+<a id="eighth-status-conclusion"></a>
+
+## 第八有限实机结论：SYN1.PCB、八项计数与正常退出
+
+2026-11-13，原Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high`，Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`，在准备器修正 `4dc19845e997f4e2241204aa72fda4a386bd4fc6` 上只生成一次 `candidate-eighth-status/slot`。审阅Pi `01a1d2a5-5798-745c-bb3b-fa3af5b3ac16`独立核完整plan／配置／30冻结／99runtime／1input／原件及七旧场景后，排他签GO **02:27:07.913678–03:27:07.913678，03:20:07.913678起仅收尾**。实际02:28:13核原会话、模型high和当前时刻，真实 `-File -Detach -PreflightOnly` 返回allowed后，从唯一入口Detach启动；没有refresh、第二目标、常驻helper或第二控制连接。
+
+plan SHA `856a20de794a5d239689aee5c151d3d4038070a3741c84a7a27279c6883b730c`，conf SHA `dffab58083b64deacfdac608fbc901e7890b5b25c0073d4dccc80f6478a97507`。两个适配器及原owner／driver／gate／submit都在实际冻结集合，后者沿已审原字节。**本次完成固定新场景的GUI工作文件名／八计数、Information首行Up后的Status高亮、Status Esc返回及正常四链退出；不等于[EX-005](exploration-backlog.md#ex-005)完整配置继承或[EX-003](exploration-backlog.md#ex-003)的IME／队列／INT33条件闭环，两个事项与原Task保留。**
+
+### 同槽日志、查询与真实GUI状态
+
+七CONFIG实际输出仍为：`config`仅帮助，AXTYPE逐字列本第八C／D挂载和七查询／目录／PT命令，属性为 `opengl / vgaonly / fixed 10000 / 16 / 本第八captures绝对路径`。同次early stderr明确加载本第八SYN1.conf、cwd为本第八runtime/pt以及 `DOSBox-X 2026.10.01 Commit b6abbd5`。独立日志记录七次config执行，再PT、GRAPH／MNU／KEY／PAD与启动Enter后的 `file open command 2/0 file SYN1.PCB`。日志中的打开请求不能单独代替GUI验收；本次再由Status原图交叉确认。
+
+隔离runtime没有TRAXEDIT.DFT，原安装DFT及输入保持不变。日志仍保留 `C:\PT\TRAXEDIT.DFT` 及后续拼接路径的打开尝试；没有据“尝试”宣称文件成功加载，底栏参数也不解释为默认FT编码。合成SYN1输入180字节、SHA `dc2ed984c9af4d7c3e0bed26a6c9721565e5dfaa874ba495523370e69ee2c228`；五条FT只作输入结构对照，下面计数是原Pi直接读新Status PNG的独立记录。
+
+| Status字段 | 本第八GUI实际值 |
+| --- | --- |
+| Work File Name | `SYN1.PCB` |
+| Arcs | 0 |
+| Components | 0 |
+| Fills | 0 |
+| Holes | 0 |
+| Pads | 0 |
+| Strings | 0 |
+| Tracks | 5 |
+| Vias | 0 |
+| Library File／Current Path | `TRAXSTD.LIB`／`C:\PT` |
+
+### 逐键观察、单Up和Esc边界
+
+Launch的新host最初仍是DOSBOX-X初始化标题；文件等待返回ready只表示本次动作证据发布，**不能当作PT初始化完成**。原Pi没有猜后续标题，而经原owner队列／原submit额外Snapshot一次，实际读新host／native明确 `DOSBox-X 2026.10.01: PT - 10000 cycles/ms`、PID37196／HWND526400后，App按当下完整唯一标题聚焦。App曾10秒pending；下一调用仅续等同一已submitted包，`packetWritten=false`，没有重写审核或再次投递。该Snapshot不在合一助手接受的业务动作内，沿原队列单独审核、投递、读回，未修改冻结工具。
+
+33兼容样本无失败、原线程join真。首guest是640×480／6155字节／SHA `e473d5d1817063b927ca7493c3920f78b6282ccf4ed70f87badaf9161ad665e6`，实际可辨AUTOTRAX 1.57及LOADED GRAPHICS DRIVER VGA640x480，本帧确无PRESS ANY KEY字样；不补造提示或解释差异原因。唯一startup Enter后，新guest明确红框／短线板图；唯一main Enter后Block高亮，再七次独立Down，每次都实际读新host→新Capture菜单host→新guest，逐图为Current、Delete、Edit、File、Grid、Highlight、Information。
+
+| 本第八关键guest | 原Pi实际image回执UTC | 观察与SHA-256 |
+| --- | --- | --- |
+| pt_009.png | 02:49:30.484 | 主菜单Information高亮；`21908e8bc31b2678932e0d97498bdc47bcb28a186d2dc74eff0e5f75a07ccd82` |
+| pt_010.png | 02:51:21.479 | 确认Enter后INFORMATION／Board Dimensions首行高亮；`3292e5459c8c9aa078c59f2ee8dbd442a29938f400433938e0086ab2f00ce156` |
+| pt_011.png | 02:53:18.419 | 唯一status_position Up后，末项Status明确高亮；`82a458eebe83ce57cdbe9d7fc2ecceb0ece37ac34639b829db27f94d1955cda8` |
+| pt_012.png | 02:55:07.360 | 唯一确认Enter后STATUS，文件名／八计数如上；5397字节，`2292911137aa442cbc8daf623c43af7ac2f3d3204768cfbdf7e0c10ae03fbe8a` |
+| pt_013.png | 02:58:37.496 | 唯一status_return Esc后无菜单板图；`d35bb9242f15c58478c39ac21e252bb613c9a45e1e8fc5ab7420ca1db8a24cf5` |
+
+Status页没有再按Enter，没有报告或SAVE FILE NAME，返回图明确无菜单，所以没用可选menu_return Esc。主机guest区仍黑底白横线，而上述客体Capture清晰；不归因后端或宣称IME修复。共14轮、13个命名键、28个Capture业务Click；每次Capture完整集合差恰一张新640×480PNG，既有PNG不改删。28份采样共**5329样本**，序号连续、精确目标身份一致、API失败0，覆盖各自原RPC发送前至响应后至少100ms；这些观测不等于任意输入／鼠标语义恢复。
+
+### 原始等待链、保全与证据
+
+实际读当前最终host确认正常X坐标，原driver发前再次核精确目标，唯一X于 **02:59:43.313336** complete。以下原创建PID／FILETIME／映像／原HANDLE及适用Popen identity逐字段一致，FILETIME由原文件与Python整数核对，不用JavaScript Number作身份比较：
+
+| 原等待对象 | PID | 原HANDLE | wait0 UTC |
+| --- | --- | --- | --- |
+| 目标／driver原Popen | 37196 | 672 | 03:00:20.443168 |
+| 控制服务／driver原Popen | 3260 | 168 | 03:01:05.033490 |
+| driver／owner原Popen | 32440 | 520 | 03:01:05.043388 |
+| owner／原.NET Process持柄WaitForExit | 42596 | 2412 | 03:01:05.0555982 |
+
+目标FILETIME为 `134390106270047430`。owner文件提交线程03:01:05.041885记录joined、五秒内完成、error null；observer于03:01:04.818403记录join真。没有stopped-error或门拒绝，不造120秒失败静默；外层隐藏PowerShell自身退出仍不由四个下层wait外推。全部现场链早于03:20:07业务截止结束，后续只离线审计和文档。
+
+**45张唯一host＋14张guest共59PNG**，逐张匹配本第八原Pi JSONL相应步骤的解码image SHA／实际回执，59审核的绑定／nonce一致；重复内容的启动或板图也按本轮具体步骤核，不拿旧同SHA回执代新read。owner队列47包均submitted且只经原submit：Launch1、Snapshot1、App1、Shortcut13、Capture Click28、CloseX1、WaitExit1、Stop1。30冻结来源全部大小／SHA保持；runtime99／input1、原安装99、旧事故包400和七份历史conf保持。生成前后至本次退出，再核旧七个场景包分别739／113／253／206／534／1080／643项完整集合、大小和SHA无变化。此前共享准备器的授权更新只按[显式冻结修正](#single-step-file-wait)记录，不外推旧全部冻结引用从未改变。无NEWFT.PCB／编辑／保存／EX-007。
+
+本树 `.local-analysis/ex-003-live/eighth-status-candidate-review.json`、`eighth-old-slots-before.json`、`eighth-live-audit.json`、`eighth-support-audit.json`及两份audit工具回执保留完整计划、源清单、原图／审核／队列、采样、原等待及GUI转录。既有第七审计工具只参数化扩展到第八，没有覆写第七报告。父独立 `main-2/.local-analysis/config-path-incident-20261112/eighth-parent-final-audit.json`另核全部59图／47包／四wait／线程与原件，父也实际read关键四张客体图；原PNG、日志、JSONL及历史失败均不提交或改写。
+
+### 本次实际耗时与可推广范围
+
+本第八七个Down轮从前一张客体实际image回执到后一张的间隔为 **65.533／84.149／90.880／81.238／89.089／95.112／109.397秒**，中位89.089秒；每轮三个合一业务调用的文件等待／读图合计约6.310–6.607秒。其余区间包含模型生成、调度、说明和消息处理；Status读取后转录／回报再Esc的返回轮为210.136秒，不归为DOS消费慢。本轮原会话没有该段提供方error记录，不改写第七已发生的413／压缩异常。
+
+客体集合落盘与模型实际读图仍分开：Status的guest-after为 **02:55:07.068388**，原Piimage回执为 **02:55:07.360**；返回板图分别为 **02:58:37.222260／02:58:37.496**。全部14轮落盘到实际读图约0.243–0.358秒，体现本次合并调用避免再等一个模型回合的效果；文件ready／单次测得时延都不能推成未来性能或原程序就绪保证。完整双时标和调用区间在 `eighth-support-audit.json`，彼此重叠的原driver／模型／工具时间不简单加和。
+
+<a id="remaining-configuration-plan"></a>
+
+## EX-005剩余配置来源覆盖：最小离线核验方案
+
+本段是第八退出后的**方案与已知来源清单**，没有新运行、配置改写、候选或GO；继续[EX-005](exploration-backlog.md#ex-005)，不另开同义事项。GUI文件名／八计数的缺口已由上节固定场景填补，仍须解释当前固定DOSBox版本的来源选择、默认搜索与多conf覆盖；原Shift+I／IME失败、历史只读挂载成因和DFT默认策略不因这次有限成功消失。
+
+| 已知来源或上下文 | 本次能核定的范围 | 仍不能宣称 |
+| --- | --- | --- |
+| 固定DOSBox-X EXE／Commit b6abbd5 | argv中的真实映像，SHA `a82adcfa7af2784566cfeff74c077cefed08505396db2948b7e6aa7d4cee0832` | 版本字符串或几个导入／字符串不能代完整启动实现 |
+| 本第八显式SYN1.conf／唯一-conf | 原argv、四路径、early loaded日志、AXTYPE和属性查询一致 | 日志只见一项不等于完整枚举所有来源 |
+| 新cwd runtime/pt及隔离profile | 冻结清单及原Popen参数可复核 | cwd内容不能单独推出程序目录／用户目录搜索顺序 |
+| 安装配置I、用户配置U、随包英文帮助L | 路径见本文来源表，三者列入本第八冻结且前后SHA不变；I首行2026.08.31、U／L按各原记录 | 冻结为只读输入不等于此次实际加载；参考值不等于有效值 |
+| 完整／简版参考F／R | 已有12输入摘要与本机文档定义，复用原报告 | 参考文件本身不是本次加载来源，也不能视作出厂或生效默认 |
+| 七CONFIG结果、early stderr和独立日志 | 当前几个有效值、autoexec及已观察的显式加载来源 | `config`只是帮助；`-l`说明为列参数，不能据帮助臆造来源枚举能力 |
+| 无DFT隔离PT输入／真实Status | 当前合成板、文件名／计数与日志对应 | DFT尝试不证明成功，底栏不证明原新建FT默认值 |
+
+源代码还显示，本第八原target Popen与控制服务都使用 [service_environment](../tools/legacy_runtime_config.py) 传入新槽 `service-profile` 下的USERPROFILE／APPDATA／LOCALAPPDATA／XDG_CONFIG_HOME及缓存／临时目录。该函数只改变子进程环境，未改系统持久配置。**不能直接把真实用户U路径当成本次目标读取路径；也不能仅凭环境变量断定Windows已知目录API一定使用重定向路径**。实际配置解析用了哪类路径API仍是待核条件，这也是不能把“U已冻结”写成“U已加载／未加载”的原因。
+
+下一步只需复用既有30项冻结和来源表，形成同版本的定向调用证据：先核命令行单-conf分支，沿其默认／用户／程序／cwd路径选择及实际目录API，接到每次解析调用；再核同键覆盖顺序与autoexec追加／替换。若已有本地同commit实现或分析库可用，只读精确分支并保存偏移／摘要与适用条件，不重新扫描已确认PT菜单、不下载新依赖或把别版文档推为实现。若本地证据不足，就把具体缺失的分支／来源列清；今后需要新来源材料或隔离对照时另由协调审阅，不在本次退出场景运行新命令、改conf或动用户文件。完成条件仍是来源／覆盖规则与固定GUI状态共同可核验，未达则保留事项。
