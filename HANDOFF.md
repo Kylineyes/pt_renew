@@ -1,8 +1,8 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是协调agent的唯一接手入口。**用户最新要求创建新的Pi主对话并交接本对话完整历史。** 当前父Pi `01a1d184-26bc-7092-be0b-362193a84c8c` 将在同 `main-2` 创建新Pi聊天，提示送达／回执报告后停止调度。新协调者先核实际 `PI_SESSION_ID/PI_PROVIDER/PI_MODEL/PI_REASONING_LEVEL` 必须沿用户覆盖 **`deng/gpt-6.1-sol/high`**；Orca此版对Pi启动`--model`曾在创建前拒绝，沿Pi自身配置启动，实际不符先停报告，不替换模型执行。新主对话以自己身份 `run-use --id run_3efe904a98f0`，拒绝则保留回执不reset／冒用旧父。原worker／Task／Dispatch／终端及研究WIP保持，不另开现场worker。
+本文件是协调agent的唯一接手入口。新主协调Pi **`01a1d2a5-5798-745c-bb3b-fa3af5b3ac16`** 已接手，实际环境 **`deng/gpt-6.1-sol/high`**，Orca聊天 `pi_ff2086f4_5a5f_4496_88b2_84319756a5dc`，已以自身身份成功 `run-use --id run_3efe904a98f0`。父Pi `01a1d184-26bc-7092-be0b-362193a84c8c` 已报告交接送达并停止调度。沿原worker／Task／Dispatch／终端，不另开接手agent或现场worker；拒绝或不可核验不reset／冒用旧父／重启。
 
-UTC2026-11-13 **01:59:40** 核第七已退出，原Pi仍ready/live，研究树HEAD `741d7aa0a6f29d4857947f72a80a636b40d5815e`，WIP为修改`.gitattributes`和4个未跟踪新适配器／测试文件；详情见下文。原8小时仍有效至 **05:14:51.2986127**，**05:04:51.2986127起只收尾**，本次交接不延长、不新增范围；当前仅离线适配器修正／测试待审，没有新候选／GO，不复用已结束第七。父通知原worker `msg_117b4bc6234f` 沿原Pi继续离线可审交付，待新协调接Run。
+UTC2026-11-13 **02:12:56** 新协调核原Pi仍ready/live，研究树交付 **`559dcb06532d76d47cc3fad8ec41d46642e184f1`**、工作区干净。合一适配器写前同树slot／plan身份／双工具冻结门已补，父完整审查并在协调独立分支复测 **JS15＋真实PowerShell10＝25/25**；实际原codemode隐藏wait烟测及2×2合成PNG的原JSONL第2562行SHA已核，只证离线文件链、不证明owner真实投递或菜单消费。两个源码跨树字节一致，旧400／安装99再核不变；专题冲突保留旧等待实现证据和新增结论。当前没有新候选／GO，不复用第七。原8小时仍至 **05:14:51.2986127**，**05:04:51.2986127起只收尾**，交接不延时。父证据 `config-path-incident-20261112/new-coordinator-file-step-review.json`。
 
 用户此前明确“运行，这次有8个小时的控制时间，你可以控制电脑”。按本协调首次核表登记 **UTC2026-11-12 21:14:51.2986127–2026-11-13 05:14:51.2986127**，**05:04:51.2986127起总最后10分钟只收尾**；准备、工具修正和审核计入8小时，单段仍最多60分钟且至少7分钟正常收尾。范围接续 **先EX-003、后EX-005**，不开展EX-007／编辑保存。沿原Pi／Task／Dispatch，先完成第五离线文档与投递链修正；`3da62d1` 已由父审查、独立集成并在协调树46/46复测通过，下一步按已批准全新第六EX-003候选执行；**第六新GO已签并交原Pi：UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480，00:18:59.260480起仅收尾**。第六已正常完成Information进入／唯一Esc返回，50图本轮回执及四原wait0／投递线程join已父独立核实，最晚UTC00:12:06结束，早于业务截止。本次第六有限成功的专题／待办交付 `daa481334c950bf247b72b098ffa5a7fbccb989c` 已由父审查集成，结论见[第六有限导航](docs/native-menu-calibration.md#sixth-navigation-conclusion)。EX-005原逐Down路径约19–20轮、保守57–65分钟超53分钟；现已定向证明固定菜单首项Up会环绕至末项Status，公开命名up假回放为VK_UP，父独立核原451行字节／菜单7项支持14–15轮最小方案，真实消费仍需新guest。原Pi交付的显式named-status／七CONFIG探针／上下文门及假driver修正 `768dd07cdf73422007296b8dd22591f1ce42d802` 已父审并在协调树32/32通过，源文本及旧400／安装99一致；第七EX-005独立候选已父审，**新GO UTC2026-11-13 00:57:45.743166–01:57:45.743166，01:50:45.743166起仅收尾**，消息 `msg_73e37898d2a6` 已交原Pi唯一入口启动；第七因实际每轮约4–7分钟，仅逐图到Edit后判断预算不足，已提前正常X／四原wait0／投递线程join，父最终核26图及原件通过；未发Down4／Information／Up／Status，EX-005 GUI文件名与计数仍未取得。父已补核客体落盘与实际模型read双时标，并从本机Pi1.5.2二进制确认内置PowerShell执行层 `windowsHide:true`／原child wait；已授权原Pi先离线实现隐藏、同进程、只读、有界文件等待的最小适配与合成测试，不新增常驻helper／控制连接。原Pi已完成合一适配器WIP：`tools/legacy_file_step.js`／`tools/Wait-LegacyFileStep.ps1`，20项离线JS／真实隐藏PS测试通过，真实codemode无GUI烟测待补。父初审发现JS在任何写入前缺同树plan／冻结适配器归属门，已发 `msg_e8c176688f2a` 要先读plan核slot／身份和两适配器冻结，再写当前实际观察审核／唯一packet；补错路径、错身份、未冻结零写测试。当前修正未最终提交／父复测，无新候选／GO，不复用第七。
 
@@ -139,7 +139,7 @@ QuickJS无timers／Node／fs，工具清单没有独立文件wait，但父实际
 
 全部子agent继续 **Pi、`deng/gpt-6.1-sol / high`**，显式用户覆盖优先于AGENTS旧GLM默认分工，不自行换模型／重索权。启动配置不等于模型证明，核PI环境、原JSONL model/thinking/assistant及成功工具回执；同Task沿原Pi，不重启。本轮已复核原JSONL模型变更、high记录、最新assistant及成功工具回执，与原会话一致。
 
-当前即将交接父协调Pi为 **`01a1d184-26bc-7092-be0b-362193a84c8c`**，实际环境为 `deng/gpt-6.1-sol / high`，自身绑定原Run的Orca聊天为 `pi_126b6fef_e05d_4978_a15b_9c2f146bba59`；新主对话交接送达后该父停止调度、只作审计来源。新协调必须核自己实际身份再绑定Run，不冒用本父或更早Pi。旧协调 Pi `01a1ce1a-7d18-7607-ad1d-cc38ad702860` 只作审计来源，已报告停止调度。原 worker／Task／Dispatch／终端沿用，不新建现场 worker；本轮接续新8小时的EX-003／EX-005，先结第五离线文档与必要投递链修正，再父审全新候选／GO；父统一唯一HANDOFF，原worker保持原会话，不新派同义worker。历史离线消息 `msg_5d2fa9e736ec`／确认 `msg_8e41ee3529a1` 保留其当时范围。
+当前新主协调Pi为 **`01a1d2a5-5798-745c-bb3b-fa3af5b3ac16`**，实际环境 `deng/gpt-6.1-sol / high`，已以自身Orca聊天 `pi_ff2086f4_5a5f_4496_88b2_84319756a5dc` 成功绑定原Run。交接父Pi `01a1d184-26bc-7092-be0b-362193a84c8c`／聊天 `pi_126b6fef_e05d_4978_a15b_9c2f146bba59` 已停止调度，仅作审计来源；更早Pi亦不冒用。旧协调 Pi `01a1ce1a-7d18-7607-ad1d-cc38ad702860` 只作审计来源，已报告停止调度。原 worker／Task／Dispatch／终端沿用，不新建现场 worker；本轮接续新8小时的EX-003／EX-005，先结第五离线文档与必要投递链修正，再父审全新候选／GO；父统一唯一HANDOFF，原worker保持原会话，不新派同义worker。历史离线消息 `msg_5d2fa9e736ec`／确认 `msg_8e41ee3529a1` 保留其当时范围。
 
 | 项目 | 实际记录 |
 | --- | --- |
@@ -148,10 +148,10 @@ QuickJS无timers／Node／fs，工具清单没有独立文件wait，但父实际
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
 | 当前终端／旧终端 | `term_cb09ddcf-d398-4302-b953-639d97951adf`；旧`term_896ab8d5-51f6-4082-b741-6eec0625269e`已失效，不再投递 |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／检查点 | `research/ex003-live-navigation`，最近交付HEAD `741d7aa0a6f29d4857947f72a80a636b40d5815e`，第七真实预算／26图／双时标及413文档已父审集成。UTC01:59实际WIP：`.gitattributes`修改，未跟踪`tools/legacy_file_step.js`、`tools/Wait-LegacyFileStep.ps1`、`tests/test_legacy_file_step.js`、`tests/test_legacy_file_step.py`，保留勿清理。原Pi补写入前plan/身份/双适配器冻结门、合成回归及真codemode无GUI烟测；后续实际提交以Git及原Pi新回执为准 |
+| 分支／检查点 | `research/ex003-live-navigation`，适配器交付HEAD `559dcb06532d76d47cc3fad8ec41d46642e184f1`，工作区干净；协调独立分支 `fix/integrate-legacy-file-step` 已审查和25/25复测，真实codemode合成图SHA核过。下一步安全同步集成dev后只生成全新EX-005候选供父审，双适配器和全部工具冻结，新GO前零现场 |
 | 修复验证边界 | 协调树隔离21/21、PowerShell／时段4/4、预算3/3，共28/28。跨树测试根先检查归属再初始化；耗时语义预检后、两条PowerShell正式创建边界前重核实时时段。原树双Python21/21仍按原候选范围保留，不累加为产品覆盖；新profile真实兼容、敌对TOCTOU、完整输入映射未验证 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 当前检查点 | 用户要求新主Pi聊天接手；本父即将停止调度，原Pi/Task/Dispatch不变。合一适配器WIP初20项通过、真codemode无GUI烟测及写入前同树plan/身份/双冻结门修正待最终提交／父复测；无新候选GO，StatusGUI未取，原8小时05:14:51截止不变。父通知`msg_117b4bc6234f`仅续离线待新协调 |
+| 当前检查点 | 新主Pi已接原Run并核完整父504条／4011166字节／SHA `2395ba2ad9817818c9c66bc186b6ce719f0dca6bf1e844b30fba609c9a64ce90`，尾部包含原父交接回执及停止调度；原worker全流读到2582条／110499587字节，旧已读边界SHA仍一致。适配器交付已父复测25/25，原件复核通过；无新候选GO，StatusGUI未取，原8小时05:14:51截止不变 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
