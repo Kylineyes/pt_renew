@@ -50,7 +50,7 @@
 ## 按需深入
 
 - [配置parser、Property写值与autoexec文本](../legacy-dosbox-configuration.md#fixed-config-parser-setter)：文件登记、共同读终止返回、转换失败／回退赋值／范围截限分开；同对象追加与阶段清文本不等于最终执行，特殊输入和回调效果仍缺。
-- [autoexec初始化取样、自有复制与本地开关门](../legacy-dosbox-configuration.md#autoexec-initial-consumer)：securemode先保存、noautoexec后读取，跳过Section内容段不等于禁止全部来源；完整调度上游与DOS执行仍缺。
+- [autoexec初始化取样、自有复制与本地开关门](../legacy-dosbox-configuration.md#autoexec-initial-consumer)：securemode先保存、noautoexec后读取，跳过Section内容段不等于禁止全部来源；后续[BOOT调用与动态槽](../legacy-dosbox-configuration.md#autoexec-boot-upstream)已补同表安装／派发，最终解析到消费的连续时序与DOS执行仍缺。
 - [默认配置根、三阶段守卫与八候选](../dosbox-default-roots-static.md#final-explicit-and-eight)：已打开登记不等所有属性有效，cwd与特殊开关按阶段核。
 - [DFT工作名恢复与命令行优先关系](../pt-dft-load-static.md#working-name-and-cli)：WD1EL为Block Read记忆名，POWER3恢复有守卫；原DFT内容不补为第八生效值。
 - [Windows／SDL／DOS输入链及剩余边界](../legacy-input-event-static.md#remaining-unknowns)：有条件ImmDisableIME及返回未查、扫描码与文本双通道已定位，旧消息／实际绑定／完整IRQ-PT与INT33仍缺。
