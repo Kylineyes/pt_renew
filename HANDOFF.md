@@ -22,7 +22,11 @@ G22实测失败：非法LIB打开会清空原库预览（主板保留），worke
 
 G46初版实测150000线大板时，PrintWindow延迟使观察已在载入后，关闭／新空板稳定不能证明载入中关闭，保持受阻不计通过。父发msg_049f0c3d4a97允许新包在合法<64MiB／<200000记录内增加有界约60MiB空白padding合成板，并优化“先建立只读可访问性状态／事件观察，文件接受后立即关闭，再截图”顺序，禁止产品内部调用／注入／调试门闩；若仍无实际时序，保留受阻且不给全覆盖发布结论。统一新候选串行复验沿同Task／原Pi继续，不因初版已退出自动结Task，不另开操作者。worker随后回报743486d/0ff694b0新包G22/G25保留复验及编辑保存／关于已有实际read图证，父尚待全文/全部原始回执验收。新包原实例PID49616／FILETIME134390720121929425／HWND2493092，当前按通知正常收尾；不得推未回报实例已退出。
 
-G46第二次使用62700018字节／190000FT合法padding板，严格检查wait0，但35秒UIA Text子树轮询未捕获加载字样，保持受阻。父核官方Qt源码精确定位：QStatusBar的可访问性是StatusBar、Name=currentMessage、NameChanged通知，原Text过滤遗漏；同时产品executeCommand末尾通用提示立即覆盖加载提示。协调在fix/ui-preserve-loading-status以`838992c`修复真实用户可见消息覆盖，m_loading期间保留状态，不加延时／产品门闩；Release编辑组35项通过，新增可访问性与命令消息回归。详见[加载提示与可访问性](docs/mainwindow-load-lifecycle.md#loading-status-accessibility)。父已发msg_d918f434b529通知唯一worker先正常收尾／原wait，停止同样Text轮询，下一候选需先校准StatusBar稳定命令消息，再观察真实加载及立即CtrlW、空板后验；原48项标准不降。当前准备含三项修复的新候选，G46仍未通过，不能提前结本Task或发布。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+G46第二次使用62700018字节／190000FT合法padding板，严格检查wait0，但35秒UIA Text子树轮询未捕获加载字样，保持受阻。父核官方Qt源码精确定位：QStatusBar的可访问性是StatusBar、Name=currentMessage、NameChanged通知，原Text过滤遗漏；同时产品executeCommand末尾通用提示立即覆盖加载提示。协调在fix/ui-preserve-loading-status以`838992c`修复真实用户可见消息覆盖，m_loading期间保留状态，不加延时／产品门闩；Release编辑组35项通过，新增可访问性与命令消息回归。详见[加载提示与可访问性](docs/mainwindow-load-lifecycle.md#loading-status-accessibility)。父已发msg_d918f434b529通知唯一worker先正常收尾／原wait，停止同样Text轮询，下一候选需先校准StatusBar稳定命令消息，再观察真实加载及立即CtrlW、空板后验；原48项标准不降。三项修复已选择进release提交`98fa1a087bfcd6e309f4be22fc43db9a1d5cc127`。后台g46-status启动未留完成回执，父只读核自有进程已不在，日志空，保持此未完成记录，不称测试通过；之后前台完整构建及CTest24/24通过（31.15秒），独立日志g46-status-foreground-build/ctest.json与.log。新119文件包在artifacts-g46-status，EXE SHA`09d75c1aa648c71f331534ecc30dd41e086de1cac0b3afa604cf4185705da316`，ZIP SHA`27ed0626411d61cd4811b41d048f01db7d72f41f709a07c8545a1bb469c292a7`，g46-status-deployment-before.json核FILES/ZIP/Qt DLL通过。
+
+743486d统一包原产品49616／134390720121929425现原Popen wait0、controller-finished joined=true及原owner对控制器wait0已父核；119文件和14既有输入前后全集一致，fixed自身哨兵b'fixed-sentinel'保持，fixed-edited严格检查wait0、底层625,100→925,100、extra42。父实际read库invalid保留6图元/ALL/焊盘选择、外部GND及内置INTERNAL失败保留等三图；父证gui-stage4-fixed-review.json。首次父核误将两个独立输出目录同名哨兵相比较而断言失败，已按fixed/verify.py正确基线复核，原工具失败保留，非产品变化。G22/G25关键图证相符，完整矩阵仍待报告，不扩大父审范围。
+
+下一步唯一worker按加载提示版候选，先校准同PID StatusBar稳定命令消息，再读Name或NamePropertyChanged并保存动作前即时状态/时序，用真实CtrlW和空板后验补G46；原实例已退出可以串行启动，不需重复用户确认。G46仍未通过，不能提前结本Task或发布。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
