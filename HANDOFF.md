@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前授权与验收：v0.12.0-alpha独占真实窗口，G22已发现并修复待复验
+## 当前授权与验收：v0.12.0-alpha独占真实窗口，G22／G25修复待统一复验
 
 用户明确要求“你进行真实窗口的验收，务必全部覆盖”。本授权已覆盖上一阶段“先确认再控制电脑”的等待点，允许当前发布候选及合成资料的实际窗口／文件框／菜单／键鼠／截图和正常退出验证；**不需要就同一范围再次索权**。不扩大到原DOSBox/PT、用户板库、旧现场、身份／VM／隔离试验或main合并。当前协调仍Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`／deng／gpt-6.1-sol／high，Run沿`run_1946e80ba9fe`保留worker归属；Run旧objective“零桌面”仅为原阶段范围，本次用户明确授权优先。
 
@@ -16,7 +16,9 @@ worker身份核验完成，正在准备冻结部署与矩阵；尚无产品启�
 
 G22实测失败：非法LIB打开会清空原库预览（主板保留），worker原g22两图已由协调实际read确认。协调在fix/library-load-preserve-preview修复成功验证后再替换，同步／异步失败保留原库／筛选／选择／预览，明确关闭仍清空并使旧代无效；提交`dd615f9`只改LibraryBrowser.cpp和LibraryTests.cpp。Release目标库测试29项通过，原有缺文件清空的测试断言已据新用户流程改为保留；新增非法／不存在／成功恢复和关闭竞争回归。不得称G22通过，仍需更新候选并同Pi真实复验。worker可沿原固定SHA继续其它独立场景，未退出前不启动新版本。
 
-修复与证据专题见[LIB失败保留](docs/library-analysis.md#failed-replacement-preserves-preview)；旧初版部署只读，修正版另建新输出目录，禁止覆盖旧119文件。修复已合dev `1a6caea`并选择进入release提交`ed7386ba4138f726fcc3b563d7b889e554bb81f2`，普通推送均成功。复用build/release-alpha12完整Release24/24回归通过，库组29项通过，证据g22-build-result.json、g22-ctest-all.log；实际新构建不改运行中旧部署。修正版另包artifacts-g22，119文件与ZIP／Qt DLL已核，EXE SHA`21037c6263d8f4518be2382f55afaf9838344651f6d79a910aab39c7807a5aa9`，ZIP SHA`cad7326e9e73c3857cb966219df30d850220c82b72189560abf7d9d250632c38`，g22-deployment-before.json保留。真实G20–22及主板编辑／保存必要回归待原实例正常wait后串行执行；worker继续原候选其余项，G25相似源码疑点已通知按实际操作留证，不凭静态判断产品结论。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+修复与证据专题见[LIB失败保留](docs/library-analysis.md#failed-replacement-preserves-preview)；旧初版部署只读，修正版另建新输出目录，禁止覆盖旧119文件。修复已合dev `1a6caea`并选择进入release提交`ed7386ba4138f726fcc3b563d7b889e554bb81f2`，普通推送均成功。复用build/release-alpha12完整Release24/24回归通过，库组29项通过，证据g22-build-result.json、g22-ctest-all.log；实际新构建不改运行中旧部署。修正版另包artifacts-g22，119文件与ZIP／Qt DLL已核，EXE SHA`21037c6263d8f4518be2382f55afaf9838344651f6d79a910aab39c7807a5aa9`，ZIP SHA`cad7326e9e73c3857cb966219df30d850220c82b72189560abf7d9d250632c38`，g22-deployment-before.json保留。真实G20–22及主板编辑／保存必要回归待原实例正常wait后串行执行；worker继续原候选其余项，G25随后已真实复现，worker g25-net-cancel/invalid两图由父实际read确认：非法NET清空已有外部GND来源及两节点映射，主板7图元保留。协调在fix/netlist-load-preserve-mapping以2829646修复开始读取与失败返回的清空，失败仅刷新错误与按钮，保留原内置／外部来源及另一来源、筛选／选择／映射／高亮和已有铜结果；成功才替换，明确移除与换板仍清除。Release网表组34项通过，含同步／异步×当前内置／外部四组合及后续恢复。G25原失败不改写，真实复验仍待。
+
+已通知worker `msg_29a2addb91d6`不要启动artifacts-g22单修包，等待含G22/G25的统一新版；原实例继续其它独立项并正常收尾，收到原wait后才串行切换，唯一操作者与用户完整验收授权保持。G25专题见[网表失败保留](docs/netlist-compatibility.md#failed-replacement-preserves-mapping)。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
