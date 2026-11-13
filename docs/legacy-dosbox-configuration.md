@@ -84,7 +84,7 @@ log console=true
 
 <a id="explore-ex-005"></a>
 
-**本段形成时尚未证实的加载规则**，已有后续有界结论：[默认根与三阶段守卫](dosbox-default-roots-static.md#final-explicit-and-eight)现列明显式 `-conf`、cwd、程序／用户目录和默认候选的条件；[parser／setter与autoexec](#fixed-config-parser-setter)核定文件登记、属性写入和同一对象的行文本追加。未指定键不能简单认为继承 I 或 U，F/R 参考值也不直接等于本次有效值；特殊词法、类型／回调效果和历史实际来源仍按 [EX-005](exploration-backlog.md#ex-005) 保留。
+**本段形成时尚未证实的加载规则**，已有后续有界结论：[默认根与三阶段守卫](dosbox-default-roots-static.md#final-explicit-and-eight)现列明显式 `-conf`、cwd、程序／用户目录和默认候选的条件；[parser／setter与autoexec](#fixed-config-parser-setter)核定文件登记、属性写入和同一对象的行文本追加；[初始化消费者](#autoexec-initial-consumer)进一步核定当前文本取样、自有复制与开关门，完整调度和执行仍缺。未指定键不能简单认为继承 I 或 U，F/R 参考值也不直接等于本次有效值；特殊词法、类型／回调效果和历史实际来源仍按 [EX-005](exploration-backlog.md#ex-005) 保留。
 
 [探索 EX-005](exploration-backlog.md#ex-005)。
 
@@ -378,7 +378,7 @@ Status页没有再按Enter，没有报告或SAVE FILE NAME，返回图明确无�
 
 源代码还显示，本第八原target Popen与控制服务都使用 [service_environment](../tools/legacy_runtime_config.py) 传入新槽 `service-profile` 下的USERPROFILE／APPDATA／LOCALAPPDATA／XDG_CONFIG_HOME及缓存／临时目录。该函数只改变子进程环境，未改系统持久配置。**不能直接把真实用户U路径当成本次目标读取路径；也不能仅凭环境变量断定Windows已知目录API一定使用重定向路径**。**后续静态进展：** 已定位固定PE的Shell32目录API和回退分支，见[路径静态结论](#fixed-config-path-static)；当次API的实际返回及瞬时I/O仍缺，这也是不能把“U已冻结”写成“U已加载／未加载”的原因。
 
-上述离线方案现已有[三阶段默认根](dosbox-default-roots-static.md#final-explicit-and-eight)及[parser／setter／autoexec](#fixed-config-parser-setter)的有界静态结果，复用这些结论，不重做菜单或遍历同一批根。余下先定向核autoexec文本到初始化消费者的调用、`-noautoexec`守卫及取样时点；仅给已有静态入口，不补作旧现场的实际执行证明。特殊词法／类型／回调效果和历史实际来源仍保留，不下载新依赖、不运行目标或改conf。确需新材料或实机时先列具体缺口与最小方案，再按现行授权审核；完成条件不因阶段交付降低。
+上述离线方案现已有[三阶段默认根](dosbox-default-roots-static.md#final-explicit-and-eight)及[parser／setter／autoexec](#fixed-config-parser-setter)的有界静态结果，复用这些结论，不重做菜单或遍历同一批根。余下autoexec的[初始化消费者](#autoexec-initial-consumer)已核当前文本取样、条目自有复制及`-noautoexec`／`-securemode`本地门；构造入口的上游调度与后续DOS执行仍未闭合，下一步只选一个具体上游续核。仅给已有静态入口，不补作旧现场的实际执行证明。特殊词法／类型／回调效果和历史实际来源仍保留，不下载新依赖、不运行目标或改conf。确需新材料或实机时先列具体缺口与最小方案，再按现行授权审核；完成条件不因阶段交付降低。
 
 <a id="fixed-config-path-static"></a>
 
@@ -499,7 +499,7 @@ Bool局部转换比较中可见 `0/disabled/false/off`与 `1/enabled/true/on`分
 
 协调d38b独立重算PE节映射，复核上述21源／3107缓存行、58关键点、12组虚槽和27连续窗671条指令，另核Bool辅助217行及字符串原bytes、外引号和空白处理上下文。父只读解析原r2输出的27个数组，共671个地址，覆盖58点中的57点，唯一未覆盖为 `0x140a8dfab`；这与原KeyError相符，不把原汇总改成通过，也未重新执行r2。父证据为协调树 `.local-analysis/config-path-incident-20261112/parser-setter-d38b-parent-review.json` 和 `parser-setter-d38b-delivery-review.json`，原失败不覆盖。
 
-本段有界交付完成，不结[EX-005](exploration-backlog.md#ex-005)或[EX-003](exploration-backlog.md#ex-003)。剩余为实际Shell32返回／历史瞬时I/O来源、全部回调效果和上述特殊词法／类型边界；没有补录运行或设计新现场。下一步先由协调合并各已核报告，按需要选择具体剩余键／回调及已有解码输出覆盖继续核验，避免重做已证根和DFT；需要新材料或实机时另由协调界定方案与授权。
+本段有界交付完成，不结[EX-005](exploration-backlog.md#ex-005)或[EX-003](exploration-backlog.md#ex-003)。后续[初始化消费者阶段](#autoexec-initial-consumer)已补当前文本取样、自有复制及本地开关门；其上游调度／DOS执行、实际Shell32返回／历史瞬时I/O来源、全部回调效果和上述特殊词法／类型边界仍保留。需要新材料或实机时另由协调界定方案与授权。
 
 <a id="autoexec-initial-consumer"></a>
 
@@ -558,5 +558,7 @@ flowchart LR
 新目录 `consumer-proof.json`于 **07:35:15**逐原PE字节／映射核 **10份输入、912缓存行、35关键点**，13个直接相对call／条件跳转另从原bytes算目标一致，工具返回0；每点保留VA／RVA／原文件偏移、原bytes及unwind／CHAININFO范围。新目录只写本段派生材料，旧缓存只读。候选中与编辑器相关的范围没有作为初始化执行证据，也未深入GUI。
 
 06:59原会话EPROTO TLS握手失败保留；其不完整codemode没有工具执行回执，不能算盘点已运行。实际盘点在07:02:46返回0；预算仍从原06:55检查点计，不因网络错误或换主重计。缓存注释出现空格裁切、反斜杠转义或UTF16显示差异时以原bytes为准，本段未据注释扩展shell命令语义。固定映像未改，未安装／下载／升级依赖。
+
+协调d3c8独立父审复用先前9来源906行／252引用核验，并补核注册片段6行，合计10输入912缓存行、35关键点及13直接相对目标，原PE节映射／bytes／解码一致；另从PE异常目录核10个运行时函数范围，短字符串赋值辅助`14c090`的首范围原指令只作局部补核，不称全部扩容／异常路径已证。父证据为协调树 `.local-analysis/config-path-incident-20261112/autoexec-consumer-d3c8-parent-review.json`及`autoexec-consumer-d3c8-delivery-review.json`。父首轮字符串校验对缓存显示作了过强假设，先后在反斜杠、UTF16、`set `尾空格和转义LF处失败，核原bytes后修正派生校验，原失败和缓存均保留。前父检查点简称“ret0”仅指反汇编立即数，不代表已证明返回值为0。
 
 本段按有证范围交付，继续保留[EX-005](exploration-backlog.md#ex-005)、[EX-003](exploration-backlog.md#ex-003)和原Task。下一步只需由协调在这两个构造入口的具体上游／既有调度表中选择一个最小缺口续核；当前不扩全DOS shell、视频模式、控制适配器、截图或新现场方案。
