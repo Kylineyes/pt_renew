@@ -86,6 +86,32 @@ class NamedStatusTests(unittest.TestCase):
         # 合成目标EXE与base Python是同一路径，冻结去重，比真实候选少1项。
         self.assertEqual(len(self.plan['frozen_files']),27)
 
+    def test_explicit_file_step_adapter_freezes_both_sources_without_control_change(self):
+        package,plan=self.fixture.generated(lambda **args:fixtures.state.prepare_state(
+            named_status=True,file_step_adapter=True,budget_seconds=3600,
+            file_submitter_session=str(self.session),**args))
+        expected=[fixtures.REPO/'tools/legacy_file_step.js',fixtures.REPO/'tools/Wait-LegacyFileStep.ps1']
+        before={item['path'] for item in self.plan['frozen_files']}
+        for path in expected:
+            matches=[item for item in plan['frozen_files'] if Path(item['path'])==path]
+            self.assertEqual(len(matches),1)
+            self.assertEqual(matches[0]['sha256'],fixtures.digest(path))
+            self.assertEqual(matches[0]['bytes'],path.stat().st_size)
+            self.assertNotIn(str(path),before)
+        self.assertEqual(len(plan['frozen_files']),len(self.plan['frozen_files'])+2)
+        for name in ('desktop_session.py','review_gate.py','submit.py'):
+            self.assertEqual((package/name).read_bytes(),(self.package/name).read_bytes())
+        fixtures.isolation.validate_runtime_plan(plan,runtime_root=package/'slot')
+        preparation=json.loads((package/'preparation.json').read_text(encoding='utf-8'))
+        self.assertTrue(preparation['file_step_adapter'])
+        self.assertFalse(json.loads((self.package/'preparation.json').read_text(encoding='utf-8'))['file_step_adapter'])
+
+    def test_file_step_adapter_requires_explicit_named_status_before_generation(self):
+        with patch.object(fixtures.state,'prepare_capture') as prepare:
+            with self.assertRaisesRegex(ValueError,'显式新命名Status'):
+                fixtures.state.prepare_state(file_step_adapter=True)
+            prepare.assert_not_called()
+
     def test_context_budgets_shift_end_home_and_status_enter_rejected(self):
         for purpose,key in [('status_position','up'),('status_confirm','enter'),('status_return','esc'),
                             ('information','shift+i'),('status','shift+s'),('navigate_up','up'),
