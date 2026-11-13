@@ -8,9 +8,12 @@ from prepare_legacy_click_observation import replace,sha,REPO
 from prepare_legacy_navigation import prepare_navigation
 
 
-def prepare_state(*, named_status=False, budget_seconds=2400, file_submitter_session=None, **arguments):
+def prepare_state(*, named_status=False, file_step_adapter=False, budget_seconds=2400, file_submitter_session=None, **arguments):
+    if file_step_adapter and not named_status:
+        raise ValueError('文件等待读图适配器仅允许显式新命名Status方案')
     if named_status:
-        return prepare_named_state(budget_seconds=budget_seconds, file_submitter_session=file_submitter_session, **arguments)
+        return prepare_named_state(budget_seconds=budget_seconds, file_submitter_session=file_submitter_session,
+            file_step_adapter=file_step_adapter, **arguments)
     prepare_capture(**arguments)
     root=Path(arguments['destination']).resolve();slot=root/'slot'
     driver=(root/'desktop_session.py').read_text(encoding='utf-8')
@@ -37,7 +40,7 @@ def prepare_state(*, named_status=False, budget_seconds=2400, file_submitter_ses
     finish_state(root)
 
 
-def prepare_named_state(*, budget_seconds=3600, file_submitter_session=None, **arguments):
+def prepare_named_state(*, budget_seconds=3600, file_submitter_session=None, file_step_adapter=False, **arguments):
     """仅以已证命名导航及Information首行一次Up进入Status，不使用Shift字母。"""
     if file_submitter_session is None:
         raise ValueError('新命名Status方案必须显式绑定owner投递线程的原Pi JSONL')
@@ -63,10 +66,10 @@ def prepare_named_state(*, budget_seconds=3600, file_submitter_session=None, **a
     gate=replace(gate,"state.get('rounds_completed', 0) >= 14","state.get('rounds_completed', 0) >= 16")
     gate=replace(gate,'十四次逐步客体证据预算已满，只允许正常收尾','十六次状态客体证据预算已满，只允许正常收尾')
     for folder in (root,slot):(folder/'review_gate.py').write_text(gate,encoding='utf-8')
-    finish_state(root, named_status=True)
+    finish_state(root, named_status=True, file_step_adapter=file_step_adapter)
 
 
-def finish_state(root, *, named_status=False):
+def finish_state(root, *, named_status=False, file_step_adapter=False):
     slot=root/'slot'
     # 只读CONFIG查询在同一已隔离autoexec中先于PT，输出只写本槽runtime根，不碰安装或输入pt目录。
     probes=['config > C:\\CFGINFO.TXT','config -axtype > C:\\AUTOEXEC.TXT',
@@ -102,6 +105,9 @@ def finish_state(root, *, named_status=False):
     extra=[Path(__file__),Path('C:/Users/rikideng/scoop/apps/dosbox-x/2026.10.01/languages/en_US.lng'),
         Path('C:/Users/rikideng/scoop/apps/dosbox-x/2026.10.01/dosbox-x.conf'),
         Path('C:/Users/rikideng/AppData/Local/DOSBox-X/dosbox-x-2026.10.01.conf')]
+    if file_step_adapter:
+        # 仅新候选显式加入两个只读来源；原控制driver/gate/submit及旧计划不改写。
+        extra.extend([Path(__file__).with_name('legacy_file_step.js'),Path(__file__).with_name('Wait-LegacyFileStep.ps1')])
     for p in extra:
         plan['frozen_files'].append({'path':str(p.resolve()),'bytes':p.stat().st_size,'sha256':sha(p)})
     from legacy_runtime_config import validate_runtime_plan
@@ -109,7 +115,7 @@ def finish_state(root, *, named_status=False):
     (slot/'live-plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2),encoding='utf-8')
     preparation=json.loads((root/'preparation.json').read_text(encoding='utf-8'))
     preparation.update({'plan_sha256':sha(slot/'live-plan.json'),'files':plan['frozen_files'],'status_only':True,
-        'named_status':named_status})
+        'named_status':named_status,'file_step_adapter':file_step_adapter})
     (root/'preparation.json').write_text(json.dumps(preparation,ensure_ascii=False,indent=2),encoding='utf-8')
     print(json.dumps({'final_plan_sha256':sha(slot/'live-plan.json'),'driver_sha256':plan['driver_sha256'],'gate_sha256':plan['review_gate_sha256'],'frozen_files':len(plan['frozen_files']),'slot':str(slot)},ensure_ascii=False,indent=2))
 
@@ -117,6 +123,7 @@ def finish_state(root, *, named_status=False):
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--named-status',action='store_true',help='新方案：命名菜单/首行Up到Status，不使用历史Shift方案')
+    parser.add_argument('--file-step-adapter',action='store_true',help='新命名方案显式冻结同树JS/PS单动作文件等待适配器')
     parser.add_argument('--budget-seconds',type=int,default=2400,help='新命名方案分段时长，最多3600秒')
     parser.add_argument('--file-submitter-session',help='新命名方案owner文件线程的原Pi JSONL绝对路径')
     parser.add_argument('--refresh',action='store_true')
