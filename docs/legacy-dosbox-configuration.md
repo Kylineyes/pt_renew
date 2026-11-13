@@ -175,3 +175,32 @@ F 第 912–915 行确实描述 `page flip debug line` 和 `vertical retrace pol
 共 **10 张唯一宿主 PNG + 2 张新客体 PNG**，十二张原字节 SHA 均逐一匹配本 Pi 原 UTF-8 JSONL 的实际 image 回执。原安装99项、旧双槽包399项、EX-001证据584项、EX-004证据336项、本次runtime99／input1的完整集合／大小／SHA前后未变；安装／用户／参考配置及帮助原字节也不变。新增配置探针文件只在本槽runtime根；`NEWFT.PCB`不存在，PCB输入未写入。
 
 新增工具 [prepare_legacy_state.py](../tools/prepare_legacy_state.py) 只最小扩展已验Capture／停止／正常X链。离线状态门 **15 项**、当前 driver **19 步**假状态流程、当前真实 AST **13 项**停止注错、24 项冻结 preflight 均通过，均不冒称真实状态验收；未重复无变化产品构建或采样模块测试。证据在本树 `.local-analysis/ex-005/` 的 `readonly-before.json`、配置探针、同次早期stderr／日志、`live-audit.json`、新原图／逐步审核／trace、原创建退出及停止原件，原软件、会话和截图均不提交。后续必须先在公开门和新审阅范围内解决输入通道及缺失的 Information／Status 证据；EX-007 仅有准备建议，本轮未启动。最终文档检查 **153 份 Markdown／1030 个本地链接／41 个开放事项／105 个来源细节／137 份索引报告，零错误**，`git diff --check` 通过。清理可重建假 fixture／本轮模块缓存 **196955 字节**，归档 **0**，净减少 **196955 字节**；保留现场证据约 **24.53 MB**，不删改输入、原图或停止失败记录。
+
+<a id="named-status-plan"></a>
+
+## 新8小时：基于Up首行环绕的命名Status方案（离线待审）
+
+本节接续[EX-005](exploration-backlog.md#ex-005)与[EX-003](exploration-backlog.md#ex-003)。第六[Information／Esc有限导航](native-menu-calibration.md#sixth-navigation-conclusion)已实机取得，但本节**没有新Status现场／候选／GO**。用户8小时总窗UTC2026-11-12 21:14:51.2986127至次日05:14:51.2986127，最后10分钟仅收尾；每段仍最多60分钟、至少7分钟正常收尾。沿原Pi／Task／当前Dispatch及指定模型high，新实现先交父代码审，不能沿用第六冻结或旧GO。
+
+原逐Down方案约19–20轮，以第六实耗保守需57–65分钟，超出53分钟业务预算，已经排除；不省略read或延长单段。本次只沿既有常驻选择器定向检查，原 `PT.EXE` SHA `abc56e2e8467e608c68a0ddf0b0705e8270c5c60f83f193fa991f10293ece968`，MZ头 `0x3de0`，分析段324e对应原段224e，磁盘偏移为 `0x3de0 + 0x224e0 + 段内偏移`。只读Capstone5.0.7与已核MZ重定位、MNU／KEY交叉，没有加载／执行目标或新建反编译数据库。
+
+| 原指令位置／原文件偏移 | 定向结论 |
+| --- | --- |
+| 324e:0650，尤其0670–0689 | 底层读取AL为0时，把AH扩展扫描码加0x80并返回低字节；Up扫描码0x48对应菜单码0xC8。真实宿主到DOS是否按此送达仍待新guest |
+| 324e:16c9–16e2／17b0（0x27a70） | 从当前菜单表取结构指针到BP-1c，初始化当前行为1 |
+| 324e:19a1（0x27c61） | 比较当前输入是否0xC8；不是就进入后续分支 |
+| 324e:19ba／19be／19c2（0x27c7a／7e／82） | 当前行dec，比较0，非零跳19cd；不能按常见UI猜饱和或环绕 |
+| 324e:19c4／19c7／19ca（0x27c84／87／8a） | 减至0时取BP-1c菜单结构首字总项数，赋回当前行，再19cd–19da重绘；早期排队路径17bd–17d6同样处理 |
+| CS:169b的32字节字符集合／选择器至1a48返回 | End码0xCF／Home码0xC7不在首字符集合，选择器也没有它们的首末项分支；本方案不用End／Home。KEY的REDRAW／RECENTRE含END／HOME不能替代此菜单逻辑 |
+
+原MNU的INFORMATION恰有7项，首Board Dimensions、末Status，与第六pt010实图吻合。因此静态支持**只在Information首行确认后，单独Up一次指向末项Status**；并非已经运行成功。远调用191f的段字1922在MZ重定位表中，不能把磁盘远调用段常数直接当运行段。父已逐字独立核同451行定向报告并落 `ex005-status-parent-static-review.json`。本树证据 `ex005-status-offline/selector-disassembly.json`、`positioning-static-review.json`保存原偏移／字节／断言；没有宽扫或重做已知菜单编号。
+
+公开Shortcut的安装原AST＋假API回放8例（Up／End／Home及既有故障例）未导入windows_mcp／COM／UIA或加载user32，输入源码摘要不变。`up`转换为 `{up}`、VK_UP=0x26，假MapVirtualKey结果0x48，keybd_event按下／释放flags分别1／3；End=0x23、Home=0x24也走VK，但回放默认扫描fixture未定义二者，返回0不能拿来宣称真实扫描码。该报告只证包装传参，不证实际IME／Windows／SDL／DOS消费。
+
+`prepare_legacy_state.py --named-status --budget-seconds 3600 --file-submitter-session <原Pi JSONL>`显式选择新方案，复用navigation／原driver／owner自有队列以及同七条CONFIG只读探针；未用此参数时历史Shift分支的配置／driver／gate逻辑沿用，已知失败不据此重跑。新门将主菜单Down7与Information专属 `status_position=up`各一次分开：startup Enter1→main Enter1→主菜单Down7逐图→Information确认Enter1→首Board Dimensions新guest→Up1→新guest必须Status高亮→status_confirm Enter1→Status新guest读文件名／八计数→status_return Esc1及新guest。只在返回后实际仍有菜单才允许menu_return Esc1，否则直接正常收尾。按静态Status输出门，**Status页禁止Enter或任何SAVE FILE NAME／报告输出**，未看清或Up未知即停120秒，不重发、不改为六Down、不切IME。
+
+每个命名目的有发前used标记，门检查前置上下文、已结束阶段禁回放、预算上限和当前nonce／host／guest审核；driver原Shortcut分支消费标记并只调用公开工具。全部仍经原submit.validate／唯一未消费请求／排他x写，owner队列及原Pi JSONL身份、图片SHA、隔离／冻结／GO／生命周期／stop-join保持。必需14轮、含必要返回15轮，Capture硬上限16；按第六实耗估计45–50分钟业务、剩余至少7分钟段收尾，现场若耗时超预算仍须及时停，不能从估计推保证。
+
+七CONFIG输出只在新槽runtime根，目标argv仍唯一显式-conf、输入及原安装不写；配置／源列表新增冻结state工具、安装配置／用户配置／英文帮助，真实候选预计28项（合成目标与Python同路径去重为27）。`config`只帮助文本、单次stderr只见本conf的原有边界保持，**完整潜在配置来源枚举／任意多conf覆盖仍未知**。Status文件名显示为去目录名称／扩展名且最多24字符，八计数按原静态路径为当前内存模型统计，不单凭5FT文本或底栏标签代GUI。
+
+新命名状态8项、原隔离21项、预算3项共**32/32**通过，无skip／ResourceWarning：完整序列由原gate／原submit和真实driver Shortcut分支配假窗口／工具执行，覆盖上下文／重放／Shift与EndHome拒绝、七Down及新guest／review、16轮边界、七探针输出／旧路径／额外命令拒绝、派生最终门、无源／非法预算零准备以及公开Up原AST。它们都是合成／假创建，不是Status已验。首次6项setUp因合成JSONL被写成多行而JSONDecodeError，伴隐式清理ResourceWarning；修单行和addCleanup后，另一次仅1项冻结数量断言28!=27失败，修合成范围后8项通过，原JSONL回执不覆盖。只读核六个本轮失败临时目录已不存在，额外删除／归档／净释放均0。证据位于 `.local-analysis/ex-003-live/ex005-status-offline/validation.json`、`validation-tool-result.json`及回放／静态报告。EX-005完成条件未降低，待父审工具与方案后才另建独立候选并签新GO。
