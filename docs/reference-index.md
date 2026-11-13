@@ -86,6 +86,7 @@
 - [DOSBox-X 配置与AUTOEXEC证据链、见证键类型及能力前置](legacy-dosbox-configuration.md#ex005-witness-key-binding)
 - [冻结配置文字见证工具](legacy-config-witness-tool.md#ex005-text-witness-tool)
 - [CONFIG 两参数 GET 的影响与最小查询契约](legacy-config-query-contract.md#query-effects)
+- [无 PT 的 CONFIG 两键离线查询消费契约](legacy-config-query-consumer.md#offline-query-consumer)
 - [EX-005实际用户源继承：隔离与观测前置设计](legacy-source-observation-plan.md#known-and-missing)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)

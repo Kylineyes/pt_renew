@@ -12,9 +12,11 @@
 
 三者继续指定Pi／deng／gpt-6.1-sol／high，先回报实际模型身份及成功工具回执；各自从最新origin/dev新建分支，新增证据只写本树任务忽略目录。不共写源码、构建或证据；HANDOFF／待办／主专题／索引由协调独占。所有验证限标准库和合成fixture；禁止目标／GUI／控制服务／桌面／窗口查询／截图键鼠／真实API采集或调试／实时用户源／身份隔离试验／安装下载／现场配置及候选GO。当前开发授权覆盖上轮任务结束后的离线停点，不延长旧桌面窗口，不重启原abandoned worker。
 
-先20–30分钟交有界结果，按本次新子Task结算。协调审代码、拒绝边界和失败回执，针对缺口运行必要验证，统一入链、独立分支no-ff合dev普通推送。未交付不称完成；这些组件及合成测试不等于真实采集、隔离能力或EX003／005闭环。派发完整正文及三个follow_up／ready回执在`.local-analysis/ex005-offline-0174/`。本轮已收到查询入口与API解码两worker的身份status，均复核原Pi会话的实际环境／模型事件为deng／gpt-6.1-sol／high、初始Git干净及成功工具回执；协调另已读API解码的startup.json相符。观测审计worker的新身份回执尚待送达，不冒称已核。领取登记已普通推送dev `ff7f23e`；下方“三项子任务已交付”指上一轮。
+先20–30分钟交有界结果，按本次新子Task结算。协调审代码、拒绝边界和失败回执，针对缺口运行必要验证，统一入链、独立分支no-ff合dev普通推送。未交付不称完成；这些组件及合成测试不等于真实采集、隔离能力或EX003／005闭环。派发完整正文及三个follow_up／ready回执在`.local-analysis/ex005-offline-0174/`。本轮已收到查询入口与API解码两worker的身份status，均复核原Pi会话的实际环境／模型事件为deng／gpt-6.1-sol／high、初始Git干净及成功工具回执；协调另已读API解码的startup.json相符。观测审计worker后续已回报实际原Pi会话01a1d4e9-ce67-756e-8b4e-17d0dd926e95的环境／模型事件同为deng／gpt-6.1-sol／high、工具exit0及干净工作树，证据其树`.local-analysis/ex005-observation-audit/identity.json`。领取登记已普通推送dev `ff7f23e`；下方“三项子任务已交付”指上一轮。
 
-## 当前并行结果：三项子任务已交付并经协调验收
+**本轮首项验收：** 查询消费子Task `task_d54c08773bce`／`ctx_e43302751054`已交`5ca315688172290be619139cfee62dafb5088a66`，子树干净，仅新增指定三文件。协调完整读工具104行／测试219行／报告及validation，独立集成分支`feat/integrate-ex005-query-consumer`运行14项测试全过；整串匹配、保序去重拒绝、输出排他新建、SetEnv影响和execution_ready=false均符合范围，无执行分支，不改旧白名单。父证`.local-analysis/ex005-offline-0174/query-consumer-parent-review.json`；原索引缺口exit1保留，协调统一入链。API缓冲与序列审计两子Task尚未交付，继续独占范围，无目标／桌面动作。最终合并推送以实际Git为准。
+
+## 上轮并行结果：三项子任务已交付并经协调验收
 
 用户最新明确“分派工作给子agent，保证不引起冲突或者一并控制电脑的情况下进行推进开发，你负责验收”。本轮建立独立Run `run_1946e80ba9fe`，从已推送dev `19f59ef1bf6e4ad47f831342591af0bf7e5cddb2`继续EX-005。新授权允许下面三项离线开发／研究及协调验收，覆盖上轮不另派的安排；不延长旧桌面控制窗口，不签现场GO，不恢复原主会话或原中断worker，不重启或复活旧Dispatch。全部使用Pi，要求实际`deng/gpt-6.1-sol/high`，启动首先核模型／会话和成功工具回执；现版Orca Pi不支持--model参数，沿Pi自身已核配置并强制核实际身份，不符停止报告，不换模型。
 
