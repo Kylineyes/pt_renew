@@ -2,7 +2,7 @@
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。支持旧 PCB／LIB／NET 查看、选择定位、测量和受限铜分析；当前发布候选提供已载入自由走线的移动、删除、撤销重做及另存新 PCB。
 
-**新版候选：v0.12.0-alpha**，范围及验证状态见[发布说明](docs/releases/v0.12.0-alpha.md)。候选尚未打标签或发布附件；已有 [v0.11.0-alpha 下载包](https://github.com/Kylineyes/pt_renew/releases/tag/v0.11.0-alpha)仍为只读版本。
+**新版候选：v0.12.0-alpha**，范围及验证状态见[发布说明](docs/releases/v0.12.0-alpha.md)。当前固定候选已通过独立Release构建、24/24组CTest及[48项本机合成GUI验收](docs/releases/v0.12.0-alpha-verification.md#gui-matrix)。候选尚未打标签或发布附件；已有 [v0.11.0-alpha 下载包](https://github.com/Kylineyes/pt_renew/releases/tag/v0.11.0-alpha)仍为只读版本。
 
 ## 可用范围
 
