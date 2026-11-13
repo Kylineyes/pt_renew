@@ -1,5 +1,20 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 最新要求：d34c立即交接新主Pi并开始续作
+
+用户UTC约06:12明确“总结当前进度和下一步计划，开一个新agent接手，让他开始工作”。现在在原main-2创建新Pi主协调，不等待parser阶段提交；提示送达并报告回执后，本父Pi `01a1d34c-bdc5-716a-b72c-af116dd07d3a`／Orca聊天 `pi_9a242725_a53a_489d_b1e9_a1d9943b42ad` 停止调度。新主第一步核自身实际PI_SESSION_ID／PI_PROVIDER／PI_MODEL／PI_REASONING_LEVEL，必须 `deng/gpt-6.1-sol/high`；本版Orca Pi模型参数曾创建前拒绝，沿Pi自身已核配置创建聊天，不符先停报告、不换模型。使用自身身份 `run-use --id run_3efe904a98f0`，拒绝保回执，不reset／冒用旧父／重启worker。不继续创建接手链。
+
+**现时授权保持：** 含原worker最多5个子agent，只允许互不冲突离线并行，桌面单操作者；4个新增子Task已经各自有界完成并保留structured会话，unverifiable不证明退出，不自动再派或重启。原Pi继续唯一现场操作者资格但当前无GO。总窗仍UTC2026-11-13 **03:45:01.1736239–12:45:01.1736239**，**12:35:01.1736239起只收尾**，准备／审核／交接计时，不因换主延长。范围EX003／005，无EX007／编辑保存／升级下载／归档精简；旧八槽及原安装板库、原conf／plan／日志／PNG／manifest／JSONL只读不复用。若缺证需实机，先最小隔离方案／预算／必要工具审核，再全新候选／独立GO，延时和增员不自动签GO。
+
+**实时检查点UTC06:12：** 协调dev／远端及原研究树均 `9769936334ad4ec3fad1b2ab78ecf0de2ba82dbd`、干净，原Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`／Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／终端 `term_cb09ddcf-d398-4302-b953-639d97951adf` 为ready/live；研究树 `explore-ex001-observer`／分支 `research/ex003-live-navigation`。原Pi06:08产 `parser-setter-proofs.json`：21源／3107缓存行／58关键点／12表，尚无专题新提交，不称dev已有。`msg_f316d819cc2c` 已要求先有界提交，`msg_c20df77c23fa` 通知即将交接，不等待父继续调度。此交接更新另独立分支no-ff合dev普通推送，精确新HEAD以Git为准。
+
+**已完成并集成：** 四离线子题全部父读全文、关键连续上下文及独立原字节审核，最终157文档／1126链接／41事项／120来源／141报告零错，dev9769936已普通推送。只读打开0da9003→父集成781d6fe，默认根4018735／DFT4becf74／输入链3117186→父集成9769936。结论见现有四专题：默认根三阶段／8候选及F打开登记，DFT启动目录与Block Read记忆名／工作名守卫／命令行后置，PT Reset模式初值与-ro拒绝的条件机制，Windows／IME／SDL／mapper／扫描码／文本BIOS双通道及未知。具体Task／Pi／Dispatch与独占报告见下表，不重复已交四题。第八GUI SYN1.PCB／Tracks5其余七0／59图／四原wait和join及适配25／准备器10项复用，不重做。
+
+**下一步立即做：** 沿原Dispatch取得parser／setter／autoexec有证专题提交和精确HEAD；先读 `explore-ex001-observer/.local-analysis/ex-005-config-source/parser-setter-proofs.json` 与原材料，不运行覆写原报告入口，再按原bytes／映射／虚表／连续分支审核。当前关键接口：文件打开通过后先登记Control+50再逐行，行handler false不传成文件false；读循环mask6终止统一到收尾返回1，尚未区分正常EOF与同掩码读错误，不能写成只有正常EOF成功。清文本只清Section_prop.extra+48和Section_line+38，不清Property当前Value+40；转换失败保留旧值，allowed拒绝可能复制回退+70，int范围clamp、Path／Multival／回调各自限定；autoexec行同对象先LF再append及阶段间清理分开。仍缺完整词法/locale/溢出/尾字符、异常流、Double/Hex、Path全部规范化、Multival子状态和回调效果，按已证阶段收敛，不为穷尽拖延提交。新主独立分支补专题/待办/唯一HANDOFF，文档检查后no-ff合dev普通推送；不整体结原Task或删EX003／005。
+
+**完整历史必须接：** 本父原JSONL `C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-13T05-06-24-325Z_01a1d34c-bdc5-716a-b72c-af116dd07d3a.jsonl`。新主程序化完整流读全部用户／assistant／工具，image.data只解码核SHA或筛字段、不全文打印base64；本父最后送达回执会追加，核精确边界和尾部即可，不用本HANDOFF／摘要代完整原历史。不改原件、不复制整套现场。既有 `audit_history_stream.py` 可复用scan函数，不能运行其历史覆写入口。本父完整读上一父147条／1178079字节／SHA dc572e16…5b8d9含其停止声明；原worker读至2996条／145458174字节／SHA82a2d661…250fa及235image，活动追加不据旧SHA判污染，详 `coordinator-d34c-history-audit.json`。本父三项独立审证据 `parallel-three-parent-byte-review.json`，只读题 `readonly-open-parent-review.json`；初PowerShell派生scope中文问号已修、原失败留回执，父补链首轮缺回链失败后修正全检通过，均不抹历史。新主先完整读AGENTS／本文件／探索规则／清理通知并核Git、远端、原worker，再报告身份、接Run、完整历史边界及当前真实下一步并续作。
+
+
 ## 最新覆盖：允许最多5个互不冲突的子agent并行
 
 用户在d34c会话最新明确“你可以起多个不冲突修改，不同时控制电脑的子agent加快进度，上限为5个”。该授权覆盖此前“不要另建worker”的限制，**最多5个子agent包含原worker**，不再创建主协调接手链；模型仍沿用户既有覆盖 `Pi / deng/gpt-6.1-sol / high`，不恢复AGENTS默认GLM分工。原Pi／Task／Dispatch继续，不重启。当前安排原worker负责parser／Property setter／autoexec；新增至多四个独立分支分别核完整默认根条件、PT的DFT载入消费、历史只读挂载打开模式、EX-003输入事件静态链。各自只改分配的独立专题报告和本树忽略证据，不共写HANDOFF／待办／索引／原配置专题；共享入口由协调统一更新和集成。实际已启动四个新增Pi structured worker，Orca回执均ready；原JSONL会话／model／thinking事件已核全部为 `deng/gpt-6.1-sol/high`，各worker仍须交实际环境及成功工具回执后继续。领取已在 `dev 6c18d3e` 同步，各树先从此点建立，Orca初始分支为Kylineyes/<树名>，规格要求在本树干净时切到下表独立研究分支，不在dev/main开发。
