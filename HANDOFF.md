@@ -28,7 +28,11 @@ G46第二次使用62700018字节／190000FT合法padding板，严格检查wait0�
 
 下一步唯一worker按加载提示版候选，先校准同PID StatusBar稳定命令消息，再读Name或NamePropertyChanged并保存动作前即时状态/时序，用真实CtrlW和空板后验补G46；原实例已退出可以串行启动，不需重复用户确认。worker已在C候选98fa1a0/09d75c1a新建原Popen34572／FILETIME134390752819519301／HWND3211430。正确StatusBar完成稳定消息校准，随后两次即时Name均为正在后台读取；status/action-008原控制器守卫后实际CtrlW，status-after-key为命令file.close，observer原Popen wait0。父实际read关闭后空白及empty两图，0图元保持，约5秒间隔的BMP摘要514df06ce6d556b42fecf85fe7b4fa8bd9cded43a0c29f8b2ada11bc2bf0478e一致；支持本次观察加载态→关闭→换空板的有限UI序列。父证gui-stage5-g46-status-review.json与反馈msg_51134c8b3818；采样与按键有有限间隔，不声称精确后台读指令时刻，截图after-old-result命名不证明内部task结束，不外推任意并发或长期保证。
 
-worker继续C受影响G04/05/07/08/40–43及编辑保存回归，整理48项报告；当前C产品尚无正常退出回执，不据阶段状态结整Task。最终各项绑定A初版／B双修／C加载提示版及实际证据，前两次G46受阻和原G22/G25失败保持，不能称C全48重新执行。待全文矩阵、所有原wait/owner和部署/输入摘要父审后再结算，不提前发布。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+worker继续C受影响G04/05/07/08/40–43及编辑保存回归，整理48项报告；当前C产品尚无正常退出回执，不据阶段状态结整Task。最终各项绑定A初版／B双修／C加载提示版及实际证据，前两次G46受阻和原G22/G25失败保持，不能称C全48重新执行。待全文矩阵、所有原wait/owner和部署/输入摘要父审后再结算，不提前发布。
+
+worker随后回报并经父读原回执：C产品34572／134390752819519301及干净重开2596／134390761514519226均原wait0，status/controller-finished含两实例对应退出及joined=true，controller-parent-exit含52072原wait0。C受影响回归图和最终输入／部署摘要仍在整理；48项报告未提交初稿已落其独占docs/releases/v0.12.0-alpha-verification.md，父读时顶部／表仍主要A/B文字，worker正在补C，不据未完草稿判通过。
+
+新增明确历史证据缺口：A控制器21728由短时PowerShell Start-Process创建，父创建对象wait未保存，不能事后补；A产品原wait0和controller-finished joined不等该控制器OS退出。原缺口永久保留。为满足用户当前发布候选全部覆盖，父发`msg_874fd390e809`要求沿本Task／同Pi补齐最新C候选48项仍未执行的子条件，已有同SHA的C实测直接复用，不无变化重做；A/B-only的视图／层／重叠／检索测量／LIB-NET铜／禁用焦点等补C，各项候选明确，G14两入口、G30非数字等子条件单列。最终分当前C完整矩阵及A/B历史失败／修正／退出缺口，不能把A缺口改写通过，也不以跨版本截图冒称C全覆盖。父证gui-stage6-matrix-review.json，等待新C组原owner／产品／观察器退出与before/after全集；当前不结Task、不改PRready或tag。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
