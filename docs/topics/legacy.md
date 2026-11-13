@@ -49,7 +49,7 @@
 
 ## 按需深入
 
-[EX-005证据链与完成条件对照](../legacy-dosbox-configuration.md#ex005-evidence-gap-matrix)区分静态机制、第八固定状态与实际来源归因缺口；下一步先只读见证键矩阵和能力前置，不把A/B设想当新现场批准。
+[EX-005证据链与完成条件对照](../legacy-dosbox-configuration.md#ex005-evidence-gap-matrix)区分静态机制、第八固定状态与实际来源归因缺口；[三候选见证矩阵](../legacy-dosbox-configuration.md#ex005-witness-matrix)当前无合格键和已验证隔离／API-IO观测回执，已停准备；不把A/B设想当新现场批准，也不把缺证当全机无工具。
 
 - [配置parser、Property写值与autoexec文本](../legacy-dosbox-configuration.md#fixed-config-parser-setter)：文件登记、共同读终止返回、转换失败／回退赋值／范围截限分开；同对象追加与阶段清文本不等于最终执行，特殊输入和回调效果仍缺。
 - [autoexec初始化取样、自有复制与本地开关门](../legacy-dosbox-configuration.md#autoexec-initial-consumer)：securemode先保存、noautoexec后读取，跳过Section内容段不等于禁止全部来源；后续[BOOT调用与动态槽](../legacy-dosbox-configuration.md#autoexec-boot-upstream)已补同表安装／派发，[普通启动顺序](../legacy-dosbox-configuration.md#autoexec-main-conditional-order)又接上最终解析入口、VM事件0构造和主桥的模型内顺序；异常重入、中间配置变化及DOS实际执行仍缺。
