@@ -10,6 +10,8 @@
 
 协调独占HANDOFF／PROGRESS／待办／主题／索引及本轮共用契约；先登记同步再开发，20–30分钟交有界结果。父审接口、拒绝规则、原失败及实际生产者→消费者合成数据链，验证后独立分支no-ff合dev普通推送。派发正文及两个follow_up回执保存在`.local-analysis/ex005-capture-binding-0174/`，共同契约及领取登记已普通推送dev `f355d7b`，文档检查164份／1330链／41事项零错。未交付不称能力通过；EX003／005及41事项不结。下方三组件结果为上一轮已验收成果。
 
+**本轮提取核心父验收：** Task `task_0e9c97afe254`／Dispatch `ctx_9a40bb02d3a6`交`e230f25711eb94906e0b65318ef9f9e6c2248968`，从f355d7b建立分支，子树干净且仅新增指定三文件。协调完整读131行工具／299行测试／报告及原delivery，独立分支`feat/integrate-ex005-call-capture`运行20项父树测试全过，原实现不改。核进入参数不可变标量、返回RIP／RSP先于保存RDX的缓冲读取、低32有符号BOOL、R8D／R9D及14字段符合共用契约，失败／短读原声明保留，不连接目标或桌面。父证`.local-analysis/ex005-capture-binding-0174/call-capture-parent-review.json`；原未索引exit1保留，协调统一入链并纠正协议中RDX易失寄存器措辞。审计v2尚未交付，跨模块合成互通仍待；不把提取核心测试当联合采集验证。实际合并推送以Git为准。
+
 ## 当前离线开发结果：三组件已交付并经协调验收
 
 用户再次要求“分派工作给子agent，保证不引起冲突或者一并控制电脑的情况下进行推进开发，你负责验收”。当前协调Pi `01a1d501-a17d-7611-9f62-3c490fba0174`，环境实核`deng/gpt-6.1-sol/high`；接手与本次fetch后dev／origin/dev均为`4c0cfe81a246ee7f3063619269e7b40a6d3fbbde`、干净。最初新建空Run `run_fb0c4af1fdc9`，向既有Dispatch发送时因`dispatch_run_mismatch`拒绝，未派发该次请求；当前协调以自身身份成功`run-use run_1946e80ba9fe`继续协作，不恢复或修改原主provider会话。三个已成功交付且live／retained的子Pi和各自工作树均通过原Dispatch收到后续子Task，实际新Task／Dispatch见下表；空Run未启动任何worker。
