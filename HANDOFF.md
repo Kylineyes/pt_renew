@@ -14,7 +14,9 @@
 
 先20–30分钟交有界结果，按本次新子Task结算。协调审代码、拒绝边界和失败回执，针对缺口运行必要验证，统一入链、独立分支no-ff合dev普通推送。未交付不称完成；这些组件及合成测试不等于真实采集、隔离能力或EX003／005闭环。派发完整正文及三个follow_up／ready回执在`.local-analysis/ex005-offline-0174/`。本轮已收到查询入口与API解码两worker的身份status，均复核原Pi会话的实际环境／模型事件为deng／gpt-6.1-sol／high、初始Git干净及成功工具回执；协调另已读API解码的startup.json相符。观测审计worker后续已回报实际原Pi会话01a1d4e9-ce67-756e-8b4e-17d0dd926e95的环境／模型事件同为deng／gpt-6.1-sol／high、工具exit0及干净工作树，证据其树`.local-analysis/ex005-observation-audit/identity.json`。领取登记已普通推送dev `ff7f23e`；下方“三项子任务已交付”指上一轮。
 
-**本轮首项验收：** 查询消费子Task `task_d54c08773bce`／`ctx_e43302751054`已交`5ca315688172290be619139cfee62dafb5088a66`，子树干净，仅新增指定三文件。协调完整读工具104行／测试219行／报告及validation，独立集成分支`feat/integrate-ex005-query-consumer`运行14项测试全过；整串匹配、保序去重拒绝、输出排他新建、SetEnv影响和execution_ready=false均符合范围，无执行分支，不改旧白名单。父证`.local-analysis/ex005-offline-0174/query-consumer-parent-review.json`；原索引缺口exit1保留，协调统一入链。API缓冲与序列审计两子Task尚未交付，继续独占范围，无目标／桌面动作。最终合并推送以实际Git为准。
+**本轮首项验收：** 查询消费子Task `task_d54c08773bce`／`ctx_e43302751054`已交`5ca315688172290be619139cfee62dafb5088a66`，子树干净，仅新增指定三文件。协调完整读工具104行／测试219行／报告及validation，独立集成分支`feat/integrate-ex005-query-consumer`运行14项测试全过；整串匹配、保序去重拒绝、输出排他新建、SetEnv影响和execution_ready=false均符合范围，无执行分支，不改旧白名单。父证`.local-analysis/ex005-offline-0174/query-consumer-parent-review.json`；原索引缺口exit1保留，协调统一入链。查询消费工具已普通推送dev `eeb18d12629e49fa62cfa1bd727f5e925a6c3cdd`，本次入链检查161份／1286链／41事项零错。
+
+**本轮第二项验收：** API缓冲子Task `task_9bcee0356bab`／`ctx_abad61802e86`交`12d7fc4d185d72a1a5ba8e971676917a9b8dfb36`，子树干净且仅新增指定三文件。协调完整读119行工具／237行测试／报告及delivery，在独立分支`feat/integrate-ex005-api-buffers`运行20项父树测试全过；失败BOOL残留不发布路径，成功空串、windir null／非null空串、严格编码和260字节边界符合范围。原实现不改，父证`.local-analysis/ex005-offline-0174/api-buffers-parent-review.json`，原未索引exit1保留并统一入链。序列审计子Task尚未交付，继续独占范围，无目标／桌面动作；真实API采集／隔离及EX003／005仍未闭环。最终合并推送以实际Git为准。
 
 ## 上轮并行结果：三项子任务已交付并经协调验收
 

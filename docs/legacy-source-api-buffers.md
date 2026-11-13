@@ -26,6 +26,8 @@
 
 ## 结果与拒绝含义
 
+本节继续[EX-005](exploration-backlog.md#ex-005)，仅说明原快照的数据消费规则。
+
 返回字典保留 `raw_bytes`、原 BOOL／指针门、读取声明、原／规范编码，以及：
 
 - `first_nul`：原字节中首个 `00` 的从 0 计位置；不存在则为 `None`。
@@ -94,5 +96,7 @@ assert empty['literal_fallback_required'] is False
 开发分支 `feat/ex005-api-buffer-decoder` 从最新 `origin/dev` 的 `ff7f23e267172f46e326e360c03b0b0f0a9fae4c` 建立；唯一版本文件为本组件、[测试](../tests/test_legacy_source_api_buffers.py)和本文。实际 Pi `01a1d4e9-989e-71e2-b4f9-f52f961a53f7`，环境及会话模型事件均为 `deng/gpt-6.1-sol/high`，成功核验回执 `startup.json` 已发协调。本轮原测试失败如有须原样保留；当前首轮 20 项全过，未产生测试失败。
 
 文档检查 `python -B tools/check_exploration_docs.py` 实际退出 1，检查 161 份 Markdown、1281 个本地链接、41 个事项、133 处来源及 145 份报告，唯一错误为本文尚未在完整资料索引中恰好出现一次；原回执 `docs-first.json` 保留，由协调统一入链，不修改共享索引。`git diff --check` 退出 0，提交前另以 `git diff --cached --check` 检查新增三文件的实际暂存内容，回执随交付保存。
+
+协调已完整审阅119行工具、237行测试、本文和原delivery.json，在独立集成分支运行20项父树测试全部通过。已核失败BOOL不会将残留text发布为path_text、成功空串与失败分开、windir非null空串不选字面后备、260字节及严格编码／截断规则；实现未作修改。父验收记录为协调树`.local-analysis/ex005-offline-0174/api-buffers-parent-review.json`；子代理未索引的原exit1保留，协调另行统一入链。该验收只接受纯数据组件。
 
 实际 API 参数／返回采集、原 BOOL 的 ABI 绑定、编码证据、读取完整性、调用配对、隔离能力及来源／阶段 I/O 仍缺实现和真实回执；上述设计继续受[观测能力前置](legacy-source-observation-plan.md#capability-gates)约束。组件完成不结 EX-003／EX-005，也不追认任何历史运行。
