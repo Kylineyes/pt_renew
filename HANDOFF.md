@@ -2,7 +2,17 @@
 
 ## 最新覆盖：允许最多5个互不冲突的子agent并行
 
-用户在d34c会话最新明确“你可以起多个不冲突修改，不同时控制电脑的子agent加快进度，上限为5个”。该授权覆盖此前“不要另建worker”的限制，**最多5个子agent包含原worker**，不再创建主协调接手链；模型仍沿用户既有覆盖 `Pi / deng/gpt-6.1-sol / high`，不恢复AGENTS默认GLM分工。原Pi／Task／Dispatch继续，不重启。当前安排原worker负责parser／Property setter／autoexec；新增至多四个独立分支分别核完整默认根条件、PT的DFT载入消费、历史只读挂载打开模式、EX-003输入事件静态链。各自只改分配的独立专题报告和本树忽略证据，不共写HANDOFF／待办／索引／原配置专题；共享入口由协调统一更新和集成。实际Task／分支／会话随回执登记，未启动不冒称已运行。
+用户在d34c会话最新明确“你可以起多个不冲突修改，不同时控制电脑的子agent加快进度，上限为5个”。该授权覆盖此前“不要另建worker”的限制，**最多5个子agent包含原worker**，不再创建主协调接手链；模型仍沿用户既有覆盖 `Pi / deng/gpt-6.1-sol / high`，不恢复AGENTS默认GLM分工。原Pi／Task／Dispatch继续，不重启。当前安排原worker负责parser／Property setter／autoexec；新增至多四个独立分支分别核完整默认根条件、PT的DFT载入消费、历史只读挂载打开模式、EX-003输入事件静态链。各自只改分配的独立专题报告和本树忽略证据，不共写HANDOFF／待办／索引／原配置专题；共享入口由协调统一更新和集成。实际已启动四个新增Pi structured worker，Orca回执均ready；原JSONL会话／model／thinking事件已核全部为 `deng/gpt-6.1-sol/high`，各worker仍须交实际环境及成功工具回执后继续。领取已在 `dev 6c18d3e` 同步，各树先从此点建立，Orca初始分支为Kylineyes/<树名>，规格要求在本树干净时切到下表独立研究分支，不在dev/main开发。
+
+| 离线范围／独占报告 | Task／Dispatch | 实际Pi／工作树／指定分支 |
+| --- | --- | --- |
+| 完整默认根条件；`docs/dosbox-default-roots-static.md` | `task_d8c060c808df`／`ctx_e08f46de0e5a` | `01a1d35d-7fa7-7540-b046-e4d1e8799c78`；`config-roots`；`research/config-default-roots` |
+| PT DFT载入；`docs/pt-dft-load-static.md` | `task_9f8241ada682`／`ctx_2d6ca669a604` | `01a1d35d-802b-7329-9a9e-48f992257f5f`；`pt-dft`；`research/pt-dft-load-static` |
+| 历史只读打开模式；`docs/legacy-readonly-open-static.md` | `task_187604f25201`／`ctx_da3215a4b70e` | `01a1d35d-7ff3-72e4-ae8d-4e46727d2e84`；`readonly-open`；`research/readonly-open-static` |
+| 输入事件链；`docs/legacy-input-event-static.md` | `task_e42e49c40a7d`／`ctx_91b6f0840e5a` | `01a1d35d-8022-7429-a399-06a4a1892e2e`；`input-chain`；`research/input-event-static` |
+
+四树均在 `C:/Users/rikideng/orca/workspaces/pt_renew/` 下，证据各自 `.local-analysis/config-roots/`、`pt-dft/`、`readonly-open/`、`input-chain/`；不改共享入口，各有界子Task结束才独立结算，不能整体结原Task。原Pi消息 `msg_45c7fb10e10c` 确认没有待办未提交改动且只写配置专题，完整默认根移交只读缓存。当前总计5子agent，已达上限；新增4个均无桌面控制资格，唯一原操作者也没有新GO。
+
 
 **全部新增任务仅离线只读分析原件，不能启动目标、GUI、控制服务或桌面请求，不自行派子agent／下载升级。** 桌面仍仅原操作者且须全新候选／独立GO；允许并行不等于同时控制电脑，不改变原件保护。总窗口仍UTC2026-11-13 03:45:01.1736239–12:45:01.1736239，12:35:01起只收尾，不因增员延长。Orca当前Pi启动不支持模型参数，沿已经核实的Pi自身配置启动并在任务第一步强制核四PI字段与原JSONL；不符即停报告，不擅换模型或重复失败启动。文档检查后独立分支no-ff合dev普通推送，main仅用户处理。
 
