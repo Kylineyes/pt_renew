@@ -378,7 +378,7 @@ Status页没有再按Enter，没有报告或SAVE FILE NAME，返回图明确无�
 
 源代码还显示，本第八原target Popen与控制服务都使用 [service_environment](../tools/legacy_runtime_config.py) 传入新槽 `service-profile` 下的USERPROFILE／APPDATA／LOCALAPPDATA／XDG_CONFIG_HOME及缓存／临时目录。该函数只改变子进程环境，未改系统持久配置。**不能直接把真实用户U路径当成本次目标读取路径；也不能仅凭环境变量断定Windows已知目录API一定使用重定向路径**。**后续静态进展：** 已定位固定PE的Shell32目录API和回退分支，见[路径静态结论](#fixed-config-path-static)；当次API的实际返回及瞬时I/O仍缺，这也是不能把“U已冻结”写成“U已加载／未加载”的原因。
 
-上述离线方案现已有[三阶段默认根](dosbox-default-roots-static.md#final-explicit-and-eight)及[parser／setter／autoexec](#fixed-config-parser-setter)的有界静态结果，复用这些结论，不重做菜单或遍历同一批根。余下autoexec的[初始化消费者](#autoexec-initial-consumer)已核当前文本取样、条目自有复制及`-noautoexec`／`-securemode`本地门；构造入口的上游调度与后续DOS执行仍未闭合，下一步只选一个具体上游续核。仅给已有静态入口，不补作旧现场的实际执行证明。特殊词法／类型／回调效果和历史实际来源仍保留，不下载新依赖、不运行目标或改conf。确需新材料或实机时先列具体缺口与最小方案，再按现行授权审核；完成条件不因阶段交付降低。
+上述离线方案现已有[三阶段默认根](dosbox-default-roots-static.md#final-explicit-and-eight)及[parser／setter／autoexec](#fixed-config-parser-setter)的有界静态结果，复用这些结论，不重做菜单或遍历同一批根。余下autoexec的[初始化消费者](#autoexec-initial-consumer)已核当前文本取样、条目自有复制及`-noautoexec`／`-securemode`本地门；构造入口的[普通启动条件顺序](#autoexec-main-conditional-order)及[聚合／登记边界](#autoexec-generated-vfile-data)已有后续结论；完整生命周期、后续打开对象和DOS实际执行仍缺。下一步先核已打开虚拟文件对象的数据／长度是否另复制或缓存，不展开完整shell。仅给已有静态入口，不补作旧现场的实际执行证明。特殊词法／类型／回调效果和历史实际来源仍保留，不下载新依赖、不运行目标或改conf。确需新材料或实机时先列具体缺口与最小方案，再按现行授权审核；完成条件不因阶段交付降低。
 
 <a id="fixed-config-path-static"></a>
 
@@ -499,7 +499,7 @@ Bool局部转换比较中可见 `0/disabled/false/off`与 `1/enabled/true/on`分
 
 协调d38b独立重算PE节映射，复核上述21源／3107缓存行、58关键点、12组虚槽和27连续窗671条指令，另核Bool辅助217行及字符串原bytes、外引号和空白处理上下文。父只读解析原r2输出的27个数组，共671个地址，覆盖58点中的57点，唯一未覆盖为 `0x140a8dfab`；这与原KeyError相符，不把原汇总改成通过，也未重新执行r2。父证据为协调树 `.local-analysis/config-path-incident-20261112/parser-setter-d38b-parent-review.json` 和 `parser-setter-d38b-delivery-review.json`，原失败不覆盖。
 
-本段有界交付完成，不结[EX-005](exploration-backlog.md#ex-005)或[EX-003](exploration-backlog.md#ex-003)。后续[初始化消费者阶段](#autoexec-initial-consumer)已补当前文本取样、自有复制及本地开关门；其上游调度／DOS执行、实际Shell32返回／历史瞬时I/O来源、全部回调效果和上述特殊词法／类型边界仍保留。需要新材料或实机时另由协调界定方案与授权。
+本段有界交付完成，不结[EX-005](exploration-backlog.md#ex-005)或[EX-003](exploration-backlog.md#ex-003)。后续[初始化消费者阶段](#autoexec-initial-consumer)已补当前文本取样、自有复制及本地开关门；其[普通启动条件顺序](#autoexec-main-conditional-order)和[聚合登记边界](#autoexec-generated-vfile-data)已有后续结论；完整生命周期／DOS执行、实际Shell32返回／历史瞬时I/O来源、全部回调效果和上述特殊词法／类型边界仍保留。需要新材料或实机时另由协调界定方案与授权。
 
 <a id="autoexec-initial-consumer"></a>
 
@@ -661,7 +661,7 @@ flowchart LR
 
 ## AUTOEXEC聚合与虚拟文件登记的数据边界
 
-本段从约09:16检查点沿原Pi／Task继续，只核 `ab2620`及紧邻字符串／数据登记接口。**条目和聚合层确有复制；发布的虚拟文件记录却直接借用全局聚合缓冲指针，不另持一份不可变数据快照。** 这里没有运行DOSBox／PT或合成实验，也未进入DOS shell读取／执行。
+本段从约09:16检查点沿原Pi／Task继续，继续[EX-005](exploration-backlog.md#ex-005)，只核 `ab2620`及紧邻字符串／数据登记接口。**条目和聚合层确有复制；发布的虚拟文件记录却直接借用全局聚合缓冲指针，不另持一份不可变数据快照。** 这里没有运行DOSBox／PT或合成实验，也未进入DOS shell读取／执行。
 
 ### 条目顺序与分隔
 
@@ -697,5 +697,7 @@ flowchart LR
 `539630`匹配并摘除记录后，只把记录本身以大小 `0x30`传给释放辅助；本范围没有把记录 `+0x10`的数据指针作为释放实参。这支持登记层的数据借用判断，不等于所有虚拟文件对象的生命周期均已恢复。全局缓冲地址被反复复用，内容会重建；已打开对象是否另外缓存指针／长度或复制数据，以及并发情况未追。
 
 `5379c0`还存在全局计数不小于500、名称／目录指针等提前返回路径，本文只核到达数据发布尾部的字段关系。调用方不检查记录是否实际发布，所以不能把生成器正常返回当登记成功。移除接口内也未见显式回退该计数，不将摘除记录概括成恢复全部容量；其它重置、异常与目录分支未穷举。
+
+协调d3c8完整审阅45增2删及两次门的补充说明，独立父审八来源2021行／296直接或RIP引用、44关键点／15相对目标、5组原字面，并从PE异常目录另核16个范围。两次门各控制一个接口，登记`+0x10`原指针／`+0x18`低32位长度及正常返回后清标志均按原字段保持。父证据为协调树 `.local-analysis/config-path-incident-20261112/autoexec-aggregate-d3c8-preliminary.json`及`autoexec-aggregate-d3c8-delivery-review.json`。补充读取命令一次因shell引号导致Python SyntaxError，改用独立脚本文本后完成只读核验，原失败保留；未改原proof及门更正说明。
 
 本段 `aggregate-proof.json`于 **09:41:32**核八个新定向范围 **2021缓存行**、3个复用安装点、**44关键点／15直接相对目标**及5组字面原bytes，工具返回0。原 `aggregate-literals.json`另保留LF／CRLF／格式／目录／文件名的VA、RVA、偏移与bytes；所有 `aggregate-*`证据独立新建，旧交付只读。修改专题前已干净快进共享 `ab50467`，只更新本专题相关断点，不改共享待办／HANDOFF／索引；原Task及[EX-005](exploration-backlog.md#ex-005)仍保留历史实际、特殊输入及后续读取边界。全段无目标／GUI／窗口查询／配置写／候选GO或依赖变更。
