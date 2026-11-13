@@ -157,7 +157,7 @@ cycles=fixed 3000
 
 <a id="explore-ex-005"></a>
 
-只读挂载错误符合旧 Pascal 程序以读写方式打开资源文件时失败的表现，但尚未跟踪其 DOS 文件打开模式，**具体原因仍是推测**。成功探测同时改变了驱动模拟、输出后端、CPU 速度、配置和启动参数，**没有隔离出前一次异常的唯一原因**。
+只读挂载错误在首次调查时只符合旧 Pascal 读写打开失败的猜测，未跟踪模式，原限制保留。后续[菜单打开探测与只读拒绝静态链](legacy-readonly-open-static.md#conclusion-and-limits)已逐原字节核定：PT菜单查找调用Reset并取全局模式，其映像初值2；固定DOSBox-X普通目录只读字段会在access=1/2时提前拒绝，而PT把探测失败统一提示Not Found。**这是条件性机制，不是历史那次实际AL／驱动字段／CF／AX的运行见证。** 成功探测同时改变了驱动模拟、输出后端、CPU速度、配置和启动参数，仍没有隔离出前一次异常的唯一原因。
 
 [探索 EX-005](exploration-backlog.md#ex-005)。后续[新冻结场景的有效值／AXTYPE、Enter后板图及状态受阻证据](legacy-dosbox-configuration.md#effective-state-attempt)已补充；仍没有独立证明本节历史只读挂载失败的唯一原因。
 

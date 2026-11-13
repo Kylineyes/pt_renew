@@ -49,6 +49,7 @@
 
 ## 按需深入
 
+- [历史只读挂载的条件性打开／拒绝链](../legacy-readonly-open-static.md#conclusion-and-limits)：Reset模式映像初值2与DOSBox-X只读拒绝已静态核定，历史实际调用状态仍未知，不能宣布唯一根因。
 - [首次软件调查](../initial-assessment.md)、[覆盖模块](../legacy-overlays.md)。
 - [文字静态路径](../legacy-text.md)、[机器码核验](../legacy-text-machine-verification.md)、[无遮挡现场](../legacy-text-screen-next.md)。
 - [两槽与输入语义](../native-capture-checkpoint.md)、[驱动审查](../native-capture-driver-review.md)、[最新点击审计](../native-menu-click-audit.md)。

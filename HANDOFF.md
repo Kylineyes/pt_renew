@@ -11,7 +11,9 @@
 | 历史只读打开模式；`docs/legacy-readonly-open-static.md` | `task_187604f25201`／`ctx_da3215a4b70e` | `01a1d35d-7ff3-72e4-ae8d-4e46727d2e84`；`readonly-open`；`research/readonly-open-static` |
 | 输入事件链；`docs/legacy-input-event-static.md` | `task_e42e49c40a7d`／`ctx_91b6f0840e5a` | `01a1d35d-8022-7429-a399-06a4a1892e2e`；`input-chain`；`research/input-event-static` |
 
-四树均在 `C:/Users/rikideng/orca/workspaces/pt_renew/` 下，证据各自 `.local-analysis/config-roots/`、`pt-dft/`、`readonly-open/`、`input-chain/`；不改共享入口，各有界子Task结束才独立结算，不能整体结原Task。原Pi消息 `msg_45c7fb10e10c` 确认没有待办未提交改动且只写配置专题，完整默认根移交只读缓存。当前总计5子agent，已达上限；新增4个均无桌面控制资格，唯一原操作者也没有新GO。
+四树均在 `C:/Users/rikideng/orca/workspaces/pt_renew/` 下，证据各自 `.local-analysis/config-roots/`、`pt-dft/`、`readonly-open/`、`input-chain/`；不改共享入口，各有界子Task结束才独立结算，不能整体结原Task。原Pi消息 `msg_45c7fb10e10c` 确认没有待办未提交改动且只写配置专题，完整默认根移交只读缓存。新Pi子题交付陆续形成：历史只读打开 `0da9003341f78ed5c6ac07877a37a5c49481e51b` 已父读全文并独立核22报告13029行原字节／PE-MZ映射、7输入摘要及原worker原图回执；正在本集成分支补索引／主题／EX005回链，合dev后以实际Git为准。条件机制为PT菜单探测Reset取全局模式、初值2与固定DOSBox-X普通目录只读拒绝access1/2相容；历史实际AL／驱动字段／CF／AX仍缺，不称唯一根因，原EX005不结。父证据 `config-path-incident-20261112/readonly-open-parent-review.json`，原worker标准文档检查仅因未入索引失败，父补齐后重新全检，不抹原失败。DFT `4becf741b540a167ab84e2d14aeeab2e7ccfccb7`、输入链 `3117186c626a4391ca931d62541436149a3b256f` 已提交但尚未父审集成；完整根仍待提交，原parser／setter继续。四新增Task仅各自有界子题可结，主Task／EX003／005保留。
+
+当前最多5子agent覆盖保持；已完成子题的保留structured会话不代表已物理退出，不自行重启或再派超上限。新增4个均无桌面控制资格，唯一原操作者也没有新GO。
 
 
 **全部新增任务仅离线只读分析原件，不能启动目标、GUI、控制服务或桌面请求，不自行派子agent／下载升级。** 桌面仍仅原操作者且须全新候选／独立GO；允许并行不等于同时控制电脑，不改变原件保护。总窗口仍UTC2026-11-13 03:45:01.1736239–12:45:01.1736239，12:35:01起只收尾，不因增员延长。Orca当前Pi启动不支持模型参数，沿已经核实的Pi自身配置启动并在任务第一步强制核四PI字段与原JSONL；不符即停报告，不擅换模型或重复失败启动。文档检查后独立分支no-ff合dev普通推送，main仅用户处理。
