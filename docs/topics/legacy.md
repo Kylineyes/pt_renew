@@ -49,7 +49,7 @@
 
 ## 按需深入
 
-[EX-005证据链与完成条件对照](../legacy-dosbox-configuration.md#ex005-evidence-gap-matrix)区分静态机制、第八固定状态与实际来源归因缺口；[三候选见证矩阵](../legacy-dosbox-configuration.md#ex005-witness-matrix)当时无合格键，后续已核[fulldouble／waitonerror具体Bool类型、构造初值与-get两参数局部路径](../legacy-dosbox-configuration.md#ex005-witness-key-binding)。两键公开查询实测、真实用户根隔离及API／阶段IO观测仍缺，当前没有运行候选；U*文字与构造初值相同不能证明用户源加载，不把A/B设想当现场批准。
+[EX-005证据链与完成条件对照](../legacy-dosbox-configuration.md#ex005-evidence-gap-matrix)区分静态机制、第八固定状态与实际来源归因缺口；[三候选见证矩阵](../legacy-dosbox-configuration.md#ex005-witness-matrix)当时无合格键，后续已核[fulldouble／waitonerror具体Bool类型、构造初值与-get两参数局部路径](../legacy-dosbox-configuration.md#ex005-witness-key-binding)。后续[GET影响与最小契约](../legacy-config-query-contract.md#query-effects)已核读取后尝试改shell的CONFIG环境，输出及SetEnv结果均未查；[隔离与观测设计](../legacy-source-observation-plan.md#known-and-missing)已列单键A/B、实际根／阶段IO及环境取样字段，能力回执仍缺。两键查询实测、真实用户根隔离及API／阶段IO观测仍缺，当前没有运行候选；U*文字与构造初值相同不能证明用户源加载，不把A/B设想当现场批准。
 
 - [冻结配置文字见证工具](../legacy-config-witness-tool.md#ex005-text-witness-tool)：只读显式给定的两配置，保留最多三候选的全部原文出现及歧义；19项测试和原冻结两文件父核通过，不以值或SHA相符判断加载来源。
 - [配置parser、Property写值与autoexec文本](../legacy-dosbox-configuration.md#fixed-config-parser-setter)：文件登记、共同读终止返回、转换失败／回退赋值／范围截限分开；同对象追加与阶段清文本不等于最终执行，特殊输入和回调效果仍缺。
