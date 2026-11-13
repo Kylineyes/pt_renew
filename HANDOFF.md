@@ -10,7 +10,9 @@
 
 **结论边界：** 当前C冻结48项本机合成场景通过。G46只支持采样到加载态后实际CtrlW与约5秒空板后验，不证后台Read指令精确界线／所有并发。144DPI小窗裁切／省略保持；干净Windows、安装器、原AUTOTRAX完整往返未验。A控制器／B旧观察器原父wait缺口、A夹具249→247及首次成功载入前未另冻摘要、A的G22/G25失败与两次G46受阻均永久保留，不能追补或改成历史通过。EX003／005整体不结。现场全部已正常收尾，不再启动无变化GUI。验收工作树证据约2.03GB（以实际delivery为准），必要冻结图/输入/失败保留，无未收尾产品或观察器。
 
-**发布下一步：** 产品与选择性release分支仍经[PR #17](https://github.com/Kylineyes/pt_renew/pull/17)进入main，已验收后准备改为可审阅；main由用户执行的项目约定保持，本轮不合／提交／推main、不打tag、不上传发行附件。报告／清单／发布说明可选择进入release而不并入研究工具，文档变化不改变C产品字节。实际PR状态、release/dev最终HEAD看Git与gh回执；tag只能指向最终main。若之后改产品源码，必须重新评估受影响测试与GUI，不以本报告自动覆盖。下方全部“待验／未执行”为历史阶段，不覆盖本节。
+**发布下一步：** 选择性release最终HEAD为`79310db604609931f19b3973c80ce6d0b083aa51`，在98fa1a0已验产品之上只增加报告／计划／发布说明及README/PROGRESS说明，产品源码/CMake/C++测试/InspectPcb与已验内容精确相同。已普通推送dev和release；一次SSH recv10054/Broken pipe后只读ls-remote确认两分支已到最终HEAD，再普通push返回Everything up-to-date，原错误保持。完整dev文档检查170份／1411链／41事项零错；release选取5份新改文档12本地链接核验通过，未引入研究工具。README/PROGRESS合并因分支用途不同冲突，保留dev完整能力导航，release维持产品范围说明，未改已验代码。
+
+[PR #17](https://github.com/Kylineyes/pt_renew/pull/17)已更新最终范围并实际gh ready，回执核OPEN／isDraft=false、head=release/v0.12.0-alpha／79310db、base=main，共40文件。main仍为`cfb6a8893aaf8d8b5778a24c00fc97813c5f083d`，未合／提交／推main，未创建／推v0.12.0-alpha标签，未上传发行附件。下一步按项目约定由用户合main，新tag只能绑定最终main，再核最终附件／摘要与已验C产品对应；本轮真实GUI验收已完成，无需再派现场或重复无变化测试。若之后改产品源码，必须重新评估受影响验证，不能自动沿用本报告。下方全部“待验／未执行”为历史阶段，不覆盖本节。
 
 ## 当前授权与验收：v0.12.0-alpha独占真实窗口，G22／G25修复待统一复验
 
