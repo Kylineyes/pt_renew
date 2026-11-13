@@ -2,7 +2,9 @@
 
 [文档导航](README.md) · [配置来源与见证矩阵](legacy-dosbox-configuration.md#ex005-witness-matrix) · [两键具体绑定的证据边界](legacy-dosbox-configuration.md#ex005-witness-key-binding)
 
-`tools/inspect_legacy_config_witness.py` 是标准库离线工具：只读调用者明确指定的两个文件，对一至三个 `SECTION/KEY` 候选列出文字出现情况、原文字值及可区分性。它用于把既有显式 conf／U 等价副本文字矩阵变成可复核输出，不要求输入符合现场小配置白名单，也不调用或放宽 `legacy_runtime_config.parse_config`。
+<a id="ex005-text-witness-tool"></a>
+
+本工具接续[EX-005](exploration-backlog.md#ex-005)。`tools/inspect_legacy_config_witness.py` 是标准库离线工具：只读调用者明确指定的两个文件，对一至三个 `SECTION/KEY` 候选列出文字出现情况、原文字值及可区分性。它用于把既有显式 conf／U 等价副本文字矩阵变成可复核输出，不要求输入符合现场小配置白名单，也不调用或放宽 `legacy_runtime_config.parse_config`。
 
 相同文字或相同文件 SHA-256 都不能证明加载来源；不同文字也不证明目标读取或采用了该值。工具始终将类型、合法值、实际有效值及实际加载来源留为未知，不自动选择合格见证键，不生成配置、候选或 GO。本工具交付不结算 EX-005，不改变其原完成条件。
 
@@ -79,6 +81,8 @@ git diff --check
 
 测试仅在当前树忽略目录 `.local-analysis/ex005-config-witness/fixture-*` 建立并清理临时合成输入，复用仓库 `unittest` 与 `tools` 导入惯例；不读取真实用户配置、不写测试镜像、不运行目标或 GUI。测试覆盖显式／未覆盖、同值无法归因、完整原值与行号、重复节／键、命令区、畸形归属、编码、控制字符及 CLI 只读／输出排他创建。
 
-本次限定三个文件交付；共享主题、完整资料索引和交接由协调者统一维护。本报告尚未加入完整资料索引所产生的文档检查失败须保留，不能当成检查通过或为通过检查修改共享入口。实际测试和检查回执见本树 `.local-analysis/ex005-config-witness/validation.json`；首轮检索中的缺目录／PowerShell 正则转义失败只影响工具惯例查询，没有运行历史脚本或访问现场配置。
+子代理本次限定三个文件交付；共享主题、完整资料索引和交接由协调者统一维护。子代理交付时本报告未入完整资料索引，因此文档检查仅此一项失败；原失败保留，随后由协调补齐入链再检查，不能把子代理原回执改成通过。实际测试和检查回执见本树 `.local-analysis/ex005-config-witness/validation.json`；首轮检索中的缺目录／PowerShell 正则转义失败只影响工具惯例查询，没有运行历史脚本或访问现场配置。
+
+协调已完整审源并在父树独立复测19项，全部通过；另用第八既有两份冻结配置核三个候选的原行号／文字值与历史矩阵一致，CLI输出与库接口一致，输入大小／SHA前后未变，见协调树`.local-analysis/ex005-parallel-6951/witness-parent-review.json`。完整参考副本有53行超出本工具的保守扫描规则，因此相应候选带歧义、唯一值比较为null；这是扫描器支持范围，不证明原配置非法，也不作为配置来源验证通过。
 
 后续仍需由协调者核对具体候选的目标类型、合法域、查询语法与副作用、真实用户根隔离和实际阶段 I/O。冻结文字工具只提供离线文字矩阵，不能补这些 EX-005 现场前置，也不能追认旧运行的加载来源。
