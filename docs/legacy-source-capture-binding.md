@@ -49,7 +49,7 @@ begin_shell_folder_call(registers, *, module_base, caller_rva, encoding,
 finish_shell_folder_call(entry, registers, *, read_memory)
 ```
 
-进入寄存器映射须恰含 `rcx`、`rdx`、`r8`、`r9`、`rsp`；返回映射须恰含 `rax`、`rip`、`rsp`。所有值是无符号 64 位精确整数。begin 只通过回调读取 entry_rsp 处 8 字节返回地址，保留调用状态；finish 验证 RIP 等于保存的 return_address、RSP 等于 entry_rsp+8 后，才读取保存的 buffer_address。它不能改用返回时的 RDX，因为非易失约定不保证它仍保存该参数。返回值为上表唯一 capture 对象。
+进入寄存器映射须恰含 `rcx`、`rdx`、`r8`、`r9`、`rsp`；返回映射须恰含 `rax`、`rip`、`rsp`。所有值是无符号 64 位精确整数。begin 只通过回调读取 entry_rsp 处 8 字节返回地址，保留调用状态；finish 验证 RIP 等于保存的 return_address、RSP 等于 entry_rsp+8 后，才读取保存的 buffer_address。它不能改用返回时的 RDX，因为 Win64 ABI 将 RDX 作为易失寄存器，返回时不保证仍保存该参数。返回值为上表唯一 capture 对象。
 
 `read_memory(address, size)` 的回调结果必须恰含 `data`（原 bytes）和 `complete`（严格 bool）。请求不超过上述明确范围，回调短读／失败不能被补齐或重新解释为成功。返回地址读取要求 complete=true 且恰为 8 字节，否则 begin 拒绝并保留调用者的失败记录。缓冲读取允许 complete=false 或较短数据进入 capture，随后由审计器拒绝不完整回执；`complete=true` 是回调声明，不要求填满 read_limit，但不能超请求。回调异常保持失败，不生成伪造快照。
 
@@ -58,5 +58,7 @@ finish_shell_folder_call(entry, registers, *, read_memory)
 ## 验收与后续
 
 协调验收两个独立提交的代码、拒绝边界和有意义的合成测试，统一补主题与索引，再用提取核心实际输出构造 v2 事件送入审计器，核对原字节和解码结果的对应关系。跨模块验证属于离线集成，不能写成目标运行或联合采集通过。
+
+纯提取核心已交付并经协调审源及20项父树测试，见[接口与失败边界](legacy-source-call-capture.md#interfaces)；实际实现按本协议输出14字段，不读取真实进程。审计v2的接收与跨模块数据链仍待验收，本协议本身不替代这些测试。
 
 用户最新要求“如果有需要控制电脑跟我说先”。需要桌面控制时必须先说明具体操作并等待用户确认，本轮不进行这些动作；真实目标启动、调试连接和隔离试验亦不在本轮执行范围。EX-003／EX-005 与原完成条件继续保留。
