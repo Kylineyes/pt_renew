@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-本文件是协调agent的唯一接手入口。用户最新明确“运行，这次有8个小时的控制时间，你可以控制电脑”。按本协调首次核表登记 **UTC2026-11-12 21:14:51.2986127–2026-11-13 05:14:51.2986127**，**05:04:51.2986127起总最后10分钟只收尾**；准备、工具修正和审核计入8小时，单段仍最多60分钟且至少7分钟正常收尾。范围接续 **先EX-003、后EX-005**，不开展EX-007／编辑保存。沿原Pi／Task／Dispatch，先完成第五离线文档与投递链修正；`3da62d1` 已由父审查、独立集成并在协调树46/46复测通过，下一步按已批准全新第六EX-003候选执行；**第六新GO已签并交原Pi：UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480，00:18:59.260480起仅收尾**。第六已正常完成Information进入／唯一Esc返回，50图本轮回执及四原wait0／投递线程join已父独立核实，最晚UTC00:12:06结束，早于业务截止。本次第六有限成功的专题／待办交付 `daa481334c950bf247b72b098ffa5a7fbccb989c` 已由父审查集成，结论见[第六有限导航](docs/native-menu-calibration.md#sixth-navigation-conclusion)。EX-005原逐Down路径约19–20轮、保守57–65分钟超53分钟；现已定向证明固定菜单首项Up会环绕至末项Status，公开命名up假回放为VK_UP，父独立核原451行字节／菜单7项支持14–15轮最小方案，真实消费仍需新guest。原Pi正在做显式named-status／七CONFIG探针／上下文门及假driver回归，完成后父审新候选／GO；不假定End/Home或省read，当前无EX-005新候选／GO。
+本文件是协调agent的唯一接手入口。用户最新明确“运行，这次有8个小时的控制时间，你可以控制电脑”。按本协调首次核表登记 **UTC2026-11-12 21:14:51.2986127–2026-11-13 05:14:51.2986127**，**05:04:51.2986127起总最后10分钟只收尾**；准备、工具修正和审核计入8小时，单段仍最多60分钟且至少7分钟正常收尾。范围接续 **先EX-003、后EX-005**，不开展EX-007／编辑保存。沿原Pi／Task／Dispatch，先完成第五离线文档与投递链修正；`3da62d1` 已由父审查、独立集成并在协调树46/46复测通过，下一步按已批准全新第六EX-003候选执行；**第六新GO已签并交原Pi：UTC2026-11-12 23:25:59.260480–2026-11-13 00:25:59.260480，00:18:59.260480起仅收尾**。第六已正常完成Information进入／唯一Esc返回，50图本轮回执及四原wait0／投递线程join已父独立核实，最晚UTC00:12:06结束，早于业务截止。本次第六有限成功的专题／待办交付 `daa481334c950bf247b72b098ffa5a7fbccb989c` 已由父审查集成，结论见[第六有限导航](docs/native-menu-calibration.md#sixth-navigation-conclusion)。EX-005原逐Down路径约19–20轮、保守57–65分钟超53分钟；现已定向证明固定菜单首项Up会环绕至末项Status，公开命名up假回放为VK_UP，父独立核原451行字节／菜单7项支持14–15轮最小方案，真实消费仍需新guest。原Pi交付的显式named-status／七CONFIG探针／上下文门及假driver修正 `768dd07cdf73422007296b8dd22591f1ce42d802` 已父审并在协调树32/32通过，源文本及旧400／安装99一致；下一步准备全新EX-005独立候选待父审GO。不假定End/Home或省read，当前无EX-005新候选／GO。
 
 新主对话 Pi **`01a1d184-26bc-7092-be0b-362193a84c8c`**，实际环境 **`deng/gpt-6.1-sol/high`**，Orca 聊天 `pi_126b6fef_e05d_4978_a15b_9c2f146bba59`，已自身绑定原 Run，旧协调者已停止调度。上一三小时已到期的历史不改写：第五原客体只到Block→Current→Delete；第三Down已发，迟后宿主可辨Edit但新客体缺，未到Information。120.003507秒静默后四链原wait0不证明正常X／退出原因；helper无原创建者持柄wait，后续方案必须补齐新链，不能追补旧证据。EX-003／EX-005及原Task继续未结。
 
@@ -81,7 +81,7 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 
 原Pi定向核固定PT.EXE `324e:0650`／`16bb`，原报告 `ex-003-live/ex005-status-offline/selector-disassembly.json` 及公开Shortcut假回放只读保存。父00:32核451行指令均匹配原PT.EXE字节及MZ header `0x3de0`／分析段换算，目标SHA `abc56e2e8467e608c68a0ddf0b0705e8270c5c60f83f193fa991f10293ece968`。`17b0`初始化当前行1，`19a1`比较内部键码c8，`19ba`减1后`19be`若零，`19c4..19ca`从当前菜单结构首字取总行数赋回；MNU INFORMATION七项，首Board Dimensions、末Status，支持首项Up环绕末项。公开命名`up`原AST假回放为VK_UP（38）down/up flags1/3；假scan72不作真实宿主扫描码证明。End/Home不纳本方案。
 
-新方案仅在新guest确认Information内Board Dimensions首项后单次Up，随后新guest必须明确Status高亮才单次Enter；Status页只Esc返回，不Enter触发报告文件名询问。主菜单Down7、status_position Up1、status_confirm Enter1、status_return Esc1及必要菜单Esc各有独立预算，14轮／必要15轮，上限16；原七CONFIG只读探针复用，输出限本槽runtime根。按第六实耗保守45–50分钟业务，仍须工具／协议回归和独立候选预算复核，不因静态支持称真实Up消费或EX-005完成。遇未知立即停／120秒静默，不改用Down6赶时，不放宽每键新图或60分钟段长。父静态证据 `config-path-incident-20261112/ex005-status-parent-static-review.json`，指令消息 `msg_3fe66776ee72`；当前仅授权必要离线实现／测试，候选和新GO待父审。
+新方案仅在新guest确认Information内Board Dimensions首项后单次Up，随后新guest必须明确Status高亮才单次Enter；Status页只Esc返回，不Enter触发报告文件名询问。主菜单Down7、status_position Up1、status_confirm Enter1、status_return Esc1及必要菜单Esc各有独立预算，14轮／必要15轮，上限16；原七CONFIG只读探针复用，输出限本槽runtime根。按第六实耗保守45–50分钟业务，仍须工具／协议回归和独立候选预算复核，不因静态支持称真实Up消费或EX-005完成。遇未知立即停／120秒静默，不改用Down6赶时，不放宽每键新图或60分钟段长。父静态证据 `config-path-incident-20261112/ex005-status-parent-static-review.json`，指令消息 `msg_3fe66776ee72`；原Pi交付 `768dd07cdf73422007296b8dd22591f1ce42d802` 后，父完整审查状态门／阶段／marker／探针与8项新测试，在 `feat/integrate-named-status` 合入并协调复测32/32（新8＋隔离21＋预算3），无skip／ResourceWarning；旧400／安装99及交付源文本一致，文档153／1061链／41事项／111来源／137报告零错。父证据 `config-path-incident-20261112/named-status-parent-validation.json` 和三组parent日志。已通过离线集成，允许同步已验dev后准备全新EX-005候选，未批准现场／GO；真实Up消费及Status文件名计数仍待新客体。
 
 ### 第五槽历史离线审计（不改写为新授权下成功）
 
@@ -126,10 +126,10 @@ EX-005客体底栏曾被误读，经父及原Pi复读纠正为 `1:Top Layer / P:
 | 原 Pi／模型 | `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／`deng/gpt-6.1-sol / high` |
 | 当前终端／旧终端 | `term_cb09ddcf-d398-4302-b953-639d97951adf`；旧`term_896ab8d5-51f6-4082-b741-6eec0625269e`已失效，不再投递 |
 | 工作树／显示名 | `C:/Users/rikideng/orca/workspaces/pt_renew/explore-ex001-observer`／EX-003-输入导航 |
-| 分支／检查点 | `research/ex003-live-navigation`，owner线程交付 `3da62d12755765e7e30c9c89eb3b2590ba278fc7`，交付时干净；父独立集成46/46通过，允许同步新dev后仅生成新第六候选待审。历史第五 `63ee71c`、第四 `73cef6d`及离线 `b14245c`／`955d476`已集成，不重复研究 |
+| 分支／检查点 | `research/ex003-live-navigation`，当前交付 `768dd07cdf73422007296b8dd22591f1ce42d802`，交付时干净；父审named-status及协调32/32通过，下一步同步新dev并准备EX-005全新候选待父新GO。历史owner线程 `3da62d1`46项、第六 `daa4813`现场有限结论及第五旧缺口均已集成，保留原范围 |
 | 修复验证边界 | 协调树隔离21/21、PowerShell／时段4/4、预算3/3，共28/28。跨树测试根先检查归属再初始化；耗时语义预检后、两条PowerShell正式创建边界前重核实时时段。原树双Python21/21仍按原候选范围保留，不累加为产品覆盖；新profile真实兼容、敌对TOCTOU、完整输入映射未验证 |
 | 本Task证据 | 活动树 `.local-analysis/ex-003-live/` |
-| 当前检查点 | 第六 `daa4813` 已集成，50图／四wait0／线程join父审通过，Task／EX-003完整条件未结。EX-005已据原指令及公开Up假回放核首项环绕末项，可缩为14–15轮；原Pi实现显式named-status／七CONFIG探针／上下文门及假driver验证，尚无EX-005新候选／GO，真实Up消费／GUI文件名计数／完整来源仍缺 |
+| 当前检查点 | 第六 `daa4813`已父审集成；EX-005单Up最小方案 `768dd07`父审及协调32/32通过，下一步全新独立候选／配置／28冻结／预算父审及新GO，当前无EX-005新现场。真实Up消费、GUI文件名计数、完整配置来源覆盖仍未核，Task／EX-003完整条件未结 |
 
 先加载实时 orchestration／orca-cli 技能。当前用 `orca orchestration worker-show --dispatch ctx_ed7b7e9ec944 --json`／`worker-read` 核状态；通过 `orca orchestration send --to dispatch:ctx_ed7b7e9ec944 --subject ... --body ...` 协调，不给终端追加业务。恢复前核验的旧Dispatch状态及消息只作历史，当前恢复结果见下段。新协调者若需绑定Run，先看 `orca orchestration run-use --help`，按实际权限 `run-use --id run_3efe904a98f0`；绑定／身份拒绝时保留资源和回执，不reset、不stop/restart规避。先核最后回执，避免重复已执行动作。多个旧Dispatch共享失效终端，不算多个活agent。
 
