@@ -89,6 +89,7 @@
 - [无 PT 的 CONFIG 两键离线查询消费契约](legacy-config-query-consumer.md#offline-query-consumer)
 - [EX-005实际用户源继承：隔离与观测前置设计](legacy-source-observation-plan.md#known-and-missing)
 - [目录 API 返回缓冲的纯数据解码组件](legacy-source-api-buffers.md#result-contract)
+- [联合观测记录的离线完整性审计 v1](legacy-source-observation-audit.md#schema-v1)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)
