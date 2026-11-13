@@ -300,3 +300,34 @@ owner不等自身owner-exit文件。原driver.wait返回后在finally明确stop�
 离线验证**46/46**：新增owner线程18项、原隔离21项、真实PowerShell-File／时段4项、60分钟边界3项，无跳过，启用ResourceWarning错误检查。正向实际调用冻结gate／submit及owner main，driver/Popen为假对象；覆盖错tool／nonce／缺SHA、链接／硬链接、多packet、driver退出／stop、预检耗时跨截止、坏／过期／错身份零driver及线程、线程内部错误／启动错误／identity或保存失败、原wait中断、晚join见证异常及生命周期保留。新增字段坏queue经真实PowerShell两条正式入口在owner／driver创建前拒绝。预算首跑旧表达式eval依赖重构后的now变量，3项中两子例NameError；改为内存文件／假时钟执行完整approval_window后3/3，原失败日志不覆盖。证据 `.local-analysis/ex-003-live/owner-thread-repair/validation.json`及各组stdout/stderr，先前14／16项阶段回执也保留。协调者随后完整审查交付 `3da62d12755765e7e30c9c89eb3b2590ba278fc7`，在 `main-2` 独立分支合入并完成相同四组46/46复测：新线程18、隔离21、真实PowerShell/时段4、预算3，无跳过／ResourceWarning；交付源文本与原研究树一致。测试后只读复核旧包400项、原安装99项完整集合／大小／SHA均匹配，文档检查153份／1053链／41事项／109来源／137报告零错，diff通过。父证据 `config-path-incident-20261112/owner-thread-parent-validation.json`、code-review及四组parent日志；这是离线集成通过，尚无第六候选／GO或现场兼容结论。
 
 测试不证明真实现场调度、新profile全部兼容或DOS消费，不消除检查与写入之间敌对并发换链／driver退出竞态的全部TOCTOU；后续仍须父审新冻结与新GO及逐图实机验收。
+
+<a id="sixth-navigation-conclusion"></a>
+
+## 第六槽：Information命名导航与Esc返回的有限成功
+
+本段接续[EX-003](exploration-backlog.md#ex-003)，原Pi／Task／Dispatch及指定模型high不变。owner线程修正经父审和协调46项通过后，新建唯一 `.local-analysis/ex-003-live/candidate-sixth/slot`，plan SHA `1307e9f301e45aa6d5a63eea649ca45cc2fcb88b4074f9402c276054b3c807c0`，父核24冻结／runtime99／input1、四路径／profile／queue及原Pi只读JSONL后签GO：UTC2026-11-12 **23:25:59.260480–次日00:25:59.260480**，00:18:59起仅收尾。真实PowerShell-File PreflightOnly通过后唯一Detach启动；无外部helper、第二driver或控制连接，冻结未改。
+
+新目标PID32356、FILETIME134390002952223314、HWND13963040，33兼容样本无失败且join。宿主图持续黑底白横条，菜单栏和X可辨，客体Capture可辨；沿用[EX-002](exploration-backlog.md#ex-002)限制，不猜统一根因。实际逐图路径如下，每键之后均先read新host，再read新Capture菜单host、按当下native矩形／virtual映射选Take screenshot，取得恰一张本槽新640×480 PNG并read，才发下一键。
+
+| 新guest | 指定模型实际观察及随后动作 |
+| --- | --- |
+| pt_000／001 | AUTOTRAX1.57／PRESS ANY KEY TO START → 唯一startup Enter → 红框短线板图 → 唯一main_menu Enter |
+| pt_002 | 主菜单Block蓝条高亮，随后才Down1 |
+| pt_003至008 | 各次新图依次确认Current／Delete／Edit／File／Grid／Highlight高亮，每次仅下一次Down，未进入编辑／文件子菜单 |
+| pt_009 | 第7次Down后Information当前高亮，才唯一information_confirm Enter；SHA `21908e8bc31b2678932e0d97498bdc47bcb28a186d2dc74eff0e5f75a07ccd82` |
+| pt_010 | UTC00:05:29确认INFORMATION子菜单、Board Dimensions高亮，Components／Highlighted Pins／Library Components／Nets／Pwr-Gnd Pins／Status可见未选；SHA `3292e5459c8c9aa078c59f2ee8dbd442a29938f400433938e0086ab2f00ce156` |
+| pt_011 | 唯一Esc后确认菜单关闭、返回红框短线板图；底栏P/T/S/G只作标签，不作文件名／计数 |
+
+共12轮guest、38host，50PNG逐一匹配带本第六候选状态文本的当轮原Pi JSONL image SHA与审核，避免同字节历史guest代本轮read。40packet全部经owner线程调用冻结原submit先validate／排他x写唯一inbox，计Launch1／App1／Shortcut11（startup1、main1、Down7、confirm1、Esc1）／Capture Click24／CloseX、WaitExit、Stop各1；Up0，无预排或直接write业务inbox，无Shift字母／IME修改／编辑／Status子项。没有stopped-error，不伪造失败静默。
+
+| 原创建者持柄链 | PID | wait_return／UTC记录 |
+| --- | --- | --- |
+| target | 32356 | 0／00:11:29.357734 |
+| control | 43568 | 0／00:12:06.200872 |
+| driver | 24572 | 0／00:12:06.210752 |
+| owner | 49876 | 0／00:12:06.2225241 |
+| owner自有投递线程 | thread_ident49232 | joined=true、五秒内true、error=null／00:12:06.209251 |
+
+00:10:58依当前原图与精确rect正常宿主X一次，原WaitExit、Stop后上述各原身份／HANDLE／FILETIME／映像逐项匹配，observer join真，全部早于本段业务截止；不由下层外推外层隐藏PowerShell自身退出。新线程真实join不追补第五helper的旧wait缺口。本树 `sixth-live-audit.json`保存50当轮原图回执、12次captures集合差、40次提交结果、原四wait及线程join；原安装99／事故后旧包400／既有EX001、004、005与离线003材料、本槽runtime99／input1完整集合／大小／SHA不变，NEWFT.PCB不存在，旧五槽失败／日志／PNG／JSONL不刷新。父独立 `sixth-parent-final-audit.json`与首guest审计核同结论，父另实read pt009／010／011。
+
+**此命名Enter／Down／Esc到Information及正常退出的有限通道成功，EX-003整体仍未闭环。** IME实际消费、SDL／队列／INT33鼠标坐标的完整根因未证，不把回执或时间先后当全通道因果。此次为后续[EX-005](exploration-backlog.md#ex-005)提供可靠导航依据，但未取得Status文件名／图元计数或配置来源覆盖，不能称EX-005完成；其后续须独立离线方案／协议测试／候选及新GO，不在本槽扩大范围。原Task保持未结。
