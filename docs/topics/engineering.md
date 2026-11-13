@@ -1,5 +1,7 @@
 # 架构、构建与验证
 
+[v0.12.0-alpha GUI验收](../releases/v0.12.0-alpha-verification.md#gui-matrix)：当前固定候选完成48项本机合成场景，原始截图、动作、身份、退出及材料摘要经父审；干净Windows、所有格式和无限并发不在此结论范围。
+
 [文档导航](../README.md) · [接手步骤](../../HANDOFF.md) · [完整资料索引](../reference-index.md)
 
 ## 先看结论
