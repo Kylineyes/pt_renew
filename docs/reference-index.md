@@ -89,7 +89,7 @@
 - [无 PT 的 CONFIG 两键离线查询消费契约](legacy-config-query-consumer.md#offline-query-consumer)
 - [EX-005实际用户源继承：隔离与观测前置设计](legacy-source-observation-plan.md#known-and-missing)
 - [目录 API 返回缓冲的纯数据解码组件](legacy-source-api-buffers.md#result-contract)
-- [联合观测记录的离线完整性审计 v1](legacy-source-observation-audit.md#schema-v1)
+- [联合观测记录审计 v1／v2及离线互通](legacy-source-observation-audit.md#capture-v2-integration)
 - [EX-005 Shell32 调用快照与审计 v2 的字段绑定](legacy-source-capture-binding.md#shell32-capture-binding)
 - [Shell32 调用快照的纯提取核心](legacy-source-call-capture.md#interfaces)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)

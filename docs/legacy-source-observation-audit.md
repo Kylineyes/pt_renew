@@ -51,7 +51,7 @@ v1明确只支持文件事件在**打开线程及所属parse仍活动时**发生
 
 phase和name仅为必须保留的有界文字，v1不检查phase是否覆盖[既有全部解析阶段](legacy-source-observation-plan.md#observation-contract)，也不验证RVA、实际模块基址、目录返回、输入文件身份、F表、Property或GET副作用。当前[查询契约](legacy-config-query-contract.md#minimal-contract)区分属性值、输出送达和CONFIG环境更新；这些语义并未被本审计器实现，不能用call_return替代其验收。
 
-另外两个已验收的离线接口分别提供[两键命令数据](legacy-config-query-consumer.md#offline-query-consumer)和[目录API原缓冲解释](legacy-source-api-buffers.md#result-contract)。前者不执行查询；后者的bytes、BOOL和解码结果不在v1事件字段集合中，不能直接追加到data或塞进name／phase绕过校验。下方v2已增加显式快照绑定，v1仍拒绝这些新字段；本轮仅用手造快照验证消费端，实际生产者输出的离线互通由协调后续验收，尚未接成运行器或完成联合运行验证。
+另外两个已验收的离线接口分别提供[两键命令数据](legacy-config-query-consumer.md#offline-query-consumer)和[目录API原缓冲解释](legacy-source-api-buffers.md#result-contract)。前者不执行查询；后者的bytes、BOOL和解码结果不在v1事件字段集合中，不能直接追加到data或塞进name／phase绕过校验。下方v2已增加显式快照绑定，v1仍拒绝这些新字段；子代理交付时仅用手造快照验证消费端；随后协调已用[提取核心](legacy-source-call-capture.md#interfaces)的实际输出完成下方6项离线互通验收，尚未接成真实运行器或完成联合采集验证。
 
 <a id="usage-and-results"></a>
 
@@ -145,4 +145,21 @@ git diff --check
 
 文档检查实际exit0：164份Markdown／1335链接／41开放事项／137来源细节／148索引报告零错。首次git diff --check因本文EOF多一空行exit1，原diff-check.json保留，修正后另存最终差异回执；v1测试文件差异检查exit0且无改动。
 
-**仍未覆盖：** 真实采集后端及ABI现场验证、实际用户根隔离、模块／编码来源真实性、Property、windir、GET输出及CONFIG环境、完整Host IO与原创建者退出见证。共同协议的生产者仍由另一独立worker开发，当前仅手造有限fixture；协调收到两者后再以实际提取输出完成离线互通验收。本轮无真实API／进程内存／目标或桌面调用，没有现场配置、plan或GO；通过仍恒source_attribution=null、execution_ready=false，EX-003／005不结。
+**仍未覆盖：** 真实采集后端及ABI现场验证、实际用户根隔离、模块／编码来源真实性、Property、windir、GET输出及CONFIG环境、完整Host IO与原创建者退出见证。本子代理交付时仅手造有限fixture，生产者由另一独立worker交付；随后协调已完成下述离线互通验收。本轮无真实API／进程内存／目标或桌面调用，没有现场配置、plan或GO；通过仍恒source_attribution=null、execution_ready=false，EX-003／005不结。
+
+<a id="capture-v2-integration"></a>
+
+## 协调验收：提取输出到v2审计的离线互通
+
+本节继续[EX-005](exploration-backlog.md#ex-005)。协调审阅原工具增量、完整372行v2测试、本文和首轮CLI导入失败／EOF差异失败及最终回执，确认原v1测试未改。首轮CLI失败由固定同级导入修正后通过，原失败保持；父树没有再修改子代理实现。
+
+协调新增[6项跨模块测试](../tests/test_legacy_source_capture_integration.py)，实际调用begin_shell_folder_call／finish_shell_folder_call，将返回的完整14字段对象直接放入api_snapshot，再调用审计器及既有解码组件。测试没有手造capture替代生产者，也不重新实现提取或解码逻辑；仅外层运行／调用身份、时间和覆盖声明为合成数据。覆盖：
+
+- 两站点、两线程交错的提取输出能被消费，精确FILETIME、signed BOOL及NUL后尾部原字节保持。
+- 提取端保留不完整读取，消费端按incomplete_snapshot拒绝；成功但无NUL／解码失败按unknown_snapshot拒绝，BOOL失败残留保持api_failed且path_text为空。
+- 成功空串、259字节加NUL的260字节边界和INT_MIN通过相应局部检查；原返回事件与capture BOOL不符仍拒绝。
+- 原JSONL含完整capture及CRLF，审计SHA对应全部原字节，输入文件未修改。
+
+父树命令 `python -B -m unittest discover -s tests -p 'test_legacy_source_*.py' -v` 实际100项全过：解码20、提取20、v1回归35、v2共19及跨模块6。父证 `.local-analysis/ex005-capture-binding-0174/observation-v2-parent-review.json`；这是当前集成树一次合成回归的数量，不与历史重复测试累加作新增能力。
+
+因此，Shell32有界快照的**纯提取→v2绑定→既有解码**离线数据链已通过；真实内存读取、模块／编码来源、ABI现场、丢失检测真实性、用户根隔离、Property、windir、完整Host IO、GET输出及退出链仍缺。这6项测试的覆盖声明是夹具输入，不能当从首次目标指令到退出的采集证据。用户要求控制电脑前先说明，本轮未操作电脑。

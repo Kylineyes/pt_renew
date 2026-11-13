@@ -12,6 +12,6 @@
 
 EX-001及EX-004已闭环；EX-003已核Shift／VK／Unicode离线语义，并在第六／第八新槽逐图到达Information，第八另进入Status并Esc返回。EX-005在同一第八场景交叉确认`SYN1.PCB`、Tracks=5及其余七计数为0，静态来源／写值／DFT／AUTOEXEC机制已有专题；完整配置继承归因与实际API／I/O仍缺。EX-003／005整体及EX-006／008／017未闭环，EX-007未启动。
 
-EX-005另已提供[两键离线命令消费](docs/legacy-config-query-consumer.md#offline-query-consumer)、[目录API缓冲解释](docs/legacy-source-api-buffers.md#result-contract)和[单运行观测记录审计v1](docs/legacy-source-observation-audit.md#schema-v1)，分别通过14／20／35项父树合成测试。三者不启动目标；真实隔离、采集器、输出送达及联合运行仍缺，审计v1尚不含原缓冲和Property字段。
+EX-005另已提供[两键离线命令消费](docs/legacy-config-query-consumer.md#offline-query-consumer)、[目录API缓冲解释](docs/legacy-source-api-buffers.md#result-contract)和[单运行观测记录审计v1](docs/legacy-source-observation-audit.md#schema-v1)，分别通过14／20／35项父树合成测试。后续[Shell32纯提取核心](docs/legacy-source-call-capture.md#interfaces)和[审计v2离线互通](docs/legacy-source-observation-audit.md#capture-v2-integration)已接通原缓冲，完整解码／提取／v1／v2与6项跨模块回归共100项通过。所有测试均为合成输入，不启动目标；真实隔离、采集器、输出送达及联合运行仍缺，Property、windir及全部Host IO尚未接入v2。
 
 配置隔离预检、owner投递线程与后续文件适配已修复并分别验证；第三槽事故、第四／第五／第七未达目标的记录保持。当前能力与剩余未知见[原软件主题](docs/topics/legacy.md)和[EX-005证据缺口](docs/legacy-dosbox-configuration.md#ex005-evidence-gap-matrix)；实时任务、授权与下一步只看[HANDOFF.md](HANDOFF.md)，本页不保存现场执行安排。
