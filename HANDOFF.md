@@ -1,5 +1,17 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前交付：v0.12.0-alpha当前候选48项GUI已父审通过
+
+用户要求“你进行真实窗口的验收，务必全部覆盖”。唯一Pi操作者沿Task `task_53ab4ca7f0d1`／Dispatch `ctx_e76d36e67edb`交报告HEAD `1886c24538c16d36d46fefd3263c624daefbc2f2`，子树干净、仅新增docs/releases/v0.12.0-alpha-verification.md；已worker_done succeeded。实际Pi `01a1d4e9-ce67-756e-8b4e-17d0dd926e95`仍为deng／gpt-6.1-sol／high，父从原会话最新事件及工具回执核定，不换模型。协调在`feat/integrate-release-alpha12-gui-review`纳报告、完整父审并统一入链；最终48项结果见[当前C矩阵及父验收](docs/releases/v0.12.0-alpha-verification.md#parent-final-review)。
+
+**已验产品固定为C：** release源码`98fa1a087bfcd6e309f4be22fc43db9a1d5cc127`，EXE SHA `09d75c1aa648c71f331534ecc30dd41e086de1cac0b3afa604cf4185705da316`，ZIP SHA `27ed0626411d61cd4811b41d048f01db7d72f41f709a07c8545a1bb469c292a7`，119文件部署在协调树`.local-analysis/release-v0.12.0-alpha/artifacts-g46-status/pt-renew-v0.12.0-alpha-windows-x64/`。完整Release24/24组通过31.15秒；库29、NET34、编辑35项定向回归通过。GUI由C-status/current同SHA串行实例组成，未用A/B图替代当前C。正式新增、CtrlS覆盖、元件编辑／布线／生产及完整DRC仍未开放。
+
+**父审证据：** G01–G48齐全，144份引用材料存在，128张矩阵图与155次成功截图动作SHA及原进程存活区间独立核验；四产品／两控制器／唯一C观察器原Popen wait0，七组before/after全集相等，三个新PCB严格重解析wait0。父流审原Pi会话985条，128张矩阵图均出现在实际read工具调用，图像回执不输出base64；初版父脚本按含.bmp字面计只得3张，修正识别实际循环stem后128齐全，原派生不足记录保留，不误称原worker未看图。父分阶段实际看关键图确认测量捕捉、库NET保留、铜覆盖/未知、保存与拒绝、dirty提示、禁用及G46有限序列等相符。父证gui-final-quantitative-review.json／gui-worker-read-call-review-final.json／gui-final-parent-review.json及此前stage1–7均在协调证据根，原失败不覆盖。
+
+**结论边界：** 当前C冻结48项本机合成场景通过。G46只支持采样到加载态后实际CtrlW与约5秒空板后验，不证后台Read指令精确界线／所有并发。144DPI小窗裁切／省略保持；干净Windows、安装器、原AUTOTRAX完整往返未验。A控制器／B旧观察器原父wait缺口、A夹具249→247及首次成功载入前未另冻摘要、A的G22/G25失败与两次G46受阻均永久保留，不能追补或改成历史通过。EX003／005整体不结。现场全部已正常收尾，不再启动无变化GUI。验收工作树证据约2.03GB（以实际delivery为准），必要冻结图/输入/失败保留，无未收尾产品或观察器。
+
+**发布下一步：** 产品与选择性release分支仍经[PR #17](https://github.com/Kylineyes/pt_renew/pull/17)进入main，已验收后准备改为可审阅；main由用户执行的项目约定保持，本轮不合／提交／推main、不打tag、不上传发行附件。报告／清单／发布说明可选择进入release而不并入研究工具，文档变化不改变C产品字节。实际PR状态、release/dev最终HEAD看Git与gh回执；tag只能指向最终main。若之后改产品源码，必须重新评估受影响测试与GUI，不以本报告自动覆盖。下方全部“待验／未执行”为历史阶段，不覆盖本节。
+
 ## 当前授权与验收：v0.12.0-alpha独占真实窗口，G22／G25修复待统一复验
 
 用户明确要求“你进行真实窗口的验收，务必全部覆盖”。本授权已覆盖上一阶段“先确认再控制电脑”的等待点，允许当前发布候选及合成资料的实际窗口／文件框／菜单／键鼠／截图和正常退出验证；**不需要就同一范围再次索权**。不扩大到原DOSBox/PT、用户板库、旧现场、身份／VM／隔离试验或main合并。当前协调仍Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`／deng／gpt-6.1-sol／high，Run沿`run_1946e80ba9fe`保留worker归属；Run旧objective“零桌面”仅为原阶段范围，本次用户明确授权优先。

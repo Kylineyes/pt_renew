@@ -1,6 +1,6 @@
 # PT Renew
 
-**v0.12.0-alpha 轻量编辑发布候选已准备**，见[候选范围与验证](docs/releases/v0.12.0-alpha.md)：独立Release构建和24/24组自动测试通过，正式新增仍禁用；真实新包窗口验收、main合并与新标签尚待完成。下方v0.11.0-alpha下载仍指向原只读发行包。
+**v0.12.0-alpha 轻量编辑发布候选已准备**，见[候选范围与验证](docs/releases/v0.12.0-alpha.md)：独立Release构建、24/24组自动测试及[48项当前候选GUI验收](docs/releases/v0.12.0-alpha-verification.md#gui-matrix)通过，正式新增仍禁用；main合并与新标签尚待完成。下方v0.11.0-alpha下载仍指向原只读发行包。
 
 使用 **C++ + Qt 6** 重建 DOS 版 Protel AUTOTRAX 的 Windows 桌面工程。当前支持旧 PCB / LIB / NET 资料查看、选择定位、测量及受限铜层分析；dev 另有自由走线编辑和保留原件的另存为。
 
