@@ -8,7 +8,7 @@
 
 ## 调用实参与影响边界
 
-固定目标为 `C:/Users/rikideng/scoop/apps/dosbox-x/2026.10.01/dosbox-x.exe`，SHA-256 始终为 `a82adcfa7af2784566cfeff74c077cefed08505396db2948b7e6aa7d4cee0832`，首选基址为 `0x140000000`。以下无前缀短地址表示 RVA，例如 `a667c0` 表示静态 VA `0x140a667c0`；字面、全局和虚表用完整 VA，不当作实际运行地址。
+本节继续[EX-005](exploration-backlog.md#ex-005)，区分属性读取、输出与shell环境更新。固定目标为 `C:/Users/rikideng/scoop/apps/dosbox-x/2026.10.01/dosbox-x.exe`，SHA-256 始终为 `a82adcfa7af2784566cfeff74c077cefed08505396db2948b7e6aa7d4cee0832`，首选基址为 `0x140000000`。以下无前缀短地址表示 RVA，例如 `a667c0` 表示静态 VA `0x140a667c0`；字面、全局和虚表用完整 VA，不当作实际运行地址。
 
 GET 命中当前属性且返回串不等于 `PROP_NOT_EXIST` 时，普通路径为：
 
@@ -114,5 +114,7 @@ CONFIG -get sdl waitonerror
 本轮原失败保留：第一次复核器按不带换行的解析器标记切分定义，误中字符串内的相同标记而发生 SyntaxError，退出 1，`verify-query-first.txt` 保留 PowerShell UTF-16 原输出；改成行首分隔后通过。初次手算两个诊断字面地址落到空串／字符串尾部，原探测 JSON 保留，最终以指令 RIP 实际目标取字面并校验；没有把这些初次探测称为正确绑定。技能引用的两个附属文件本机不存在，沿用已验证 Python／Capstone 和已有分诊证据，没有安装或下载。
 
 文档检查 `python tools/check_exploration_docs.py` 实际退出 1，检查 158 份 Markdown／1244 个本地链接／41 个事项／130 处来源／142 份报告，唯一错误为本新报告尚未在完整资料索引中恰好出现一次，原回执为 `docs-check-first.json`。按本子任务独占范围，共享索引及主专题入链交协调统一处理，没有擅改共享文件；该失败未写成零错。`git diff --check` 退出 0，后续暂存区内容另以 `git diff --cached --check` 核对，实际回执随交付保存。
+
+协调已完整审文，并独立对5784缓存行／1880引用／65点、GET参数／输出表、PSP环境来源、旧条目前移及两次容量门、调用方不查结果的连续窗口核原PE映射／bytes／解码，均通过；同时核对原诊断字面和普通直接跳转边界。父证据为协调树`.local-analysis/ex005-parallel-6951/query-and-source-parent-review.json`，未执行子代理的旧输出入口或任何目标。报告已由协调统一入链；子代理原未索引失败保持。
 
 仍缺两键实际查询与输出送达、实际 shell／PSP／环境容量及 SetEnv 结果、locale／流实际状态、必要隔离和来源／阶段 Host I/O 回执；完整异常、损坏环境、所有内存处理器／输出设备和日志后端不展开。原查询失败、原 EX-005 完成标准及真实用户源归因缺口保持，不以本次静态正常路径补写历史通过。
