@@ -84,7 +84,7 @@ log console=true
 
 <a id="explore-ex-005"></a>
 
-**尚未证实的加载规则**：本机范围内没有足够说明或源码，无法精确确认显式 `-conf` 成功/失败时对当前目录、程序目录、用户目录默认配置的搜索与继承条件，也不能确认多个文件的属性覆盖和 `[autoexec]` 是替换还是追加。未指定的键不能简单认为继承 I 或 U；F/R 中的参考值也不能直接视为本次有效值。这些未知应由下一轮实际启动的配置来源记录、可用的有效配置查询或后续获准的对应版本源码核对来收敛，不扩大本任务搜索范围。
+**本段形成时尚未证实的加载规则**，已有后续有界结论：[默认根与三阶段守卫](dosbox-default-roots-static.md#final-explicit-and-eight)现列明显式 `-conf`、cwd、程序／用户目录和默认候选的条件；[parser／setter与autoexec](#fixed-config-parser-setter)核定文件登记、属性写入和同一对象的行文本追加。未指定键不能简单认为继承 I 或 U，F/R 参考值也不直接等于本次有效值；特殊词法、类型／回调效果和历史实际来源仍按 [EX-005](exploration-backlog.md#ex-005) 保留。
 
 [探索 EX-005](exploration-backlog.md#ex-005)。
 
@@ -376,9 +376,9 @@ Status页没有再按Enter，没有报告或SAVE FILE NAME，返回图明确无�
 | 七CONFIG结果、early stderr和独立日志 | 当前几个有效值、autoexec及已观察的显式加载来源 | `config`只是帮助；`-l`说明为列参数，不能据帮助臆造来源枚举能力 |
 | 无DFT隔离PT输入／真实Status | 当前合成板、文件名／计数与日志对应 | DFT尝试不证明成功，底栏不证明原新建FT默认值 |
 
-源代码还显示，本第八原target Popen与控制服务都使用 [service_environment](../tools/legacy_runtime_config.py) 传入新槽 `service-profile` 下的USERPROFILE／APPDATA／LOCALAPPDATA／XDG_CONFIG_HOME及缓存／临时目录。该函数只改变子进程环境，未改系统持久配置。**不能直接把真实用户U路径当成本次目标读取路径；也不能仅凭环境变量断定Windows已知目录API一定使用重定向路径**。实际配置解析用了哪类路径API仍是待核条件，这也是不能把“U已冻结”写成“U已加载／未加载”的原因。
+源代码还显示，本第八原target Popen与控制服务都使用 [service_environment](../tools/legacy_runtime_config.py) 传入新槽 `service-profile` 下的USERPROFILE／APPDATA／LOCALAPPDATA／XDG_CONFIG_HOME及缓存／临时目录。该函数只改变子进程环境，未改系统持久配置。**不能直接把真实用户U路径当成本次目标读取路径；也不能仅凭环境变量断定Windows已知目录API一定使用重定向路径**。**后续静态进展：** 已定位固定PE的Shell32目录API和回退分支，见[路径静态结论](#fixed-config-path-static)；当次API的实际返回及瞬时I/O仍缺，这也是不能把“U已冻结”写成“U已加载／未加载”的原因。
 
-下一步只需复用既有30项冻结和来源表，形成同版本的定向调用证据：先核命令行单-conf分支，沿其默认／用户／程序／cwd路径选择及实际目录API，接到每次解析调用；再核同键覆盖顺序与autoexec追加／替换。若已有本地同commit实现或分析库可用，只读精确分支并保存偏移／摘要与适用条件，不重新扫描已确认PT菜单、不下载新依赖或把别版文档推为实现。若本地证据不足，就把具体缺失的分支／来源列清；今后需要新来源材料或隔离对照时另由协调审阅，不在本次退出场景运行新命令、改conf或动用户文件。完成条件仍是来源／覆盖规则与固定GUI状态共同可核验，未达则保留事项。
+上述离线方案现已有[三阶段默认根](dosbox-default-roots-static.md#final-explicit-and-eight)及[parser／setter／autoexec](#fixed-config-parser-setter)的有界静态结果，复用这些结论，不重做菜单或遍历同一批根。余下先定向核autoexec文本到初始化消费者的调用、`-noautoexec`守卫及取样时点；仅给已有静态入口，不补作旧现场的实际执行证明。特殊词法／类型／回调效果和历史实际来源仍保留，不下载新依赖、不运行目标或改conf。确需新材料或实机时先列具体缺口与最小方案，再按现行授权审核；完成条件不因阶段交付降低。
 
 <a id="fixed-config-path-static"></a>
 
@@ -429,7 +429,7 @@ rabin2实际提取完整692项导入并分类留为`E-triage-imports`，保留PE
 
 ## Parser返回、Property写入与autoexec合并：有界静态结论
 
-本段接续同一固定SHA原PE研究，只读原字节及既有缓存，未执行目标、GUI、窗口查询或配置变更，没有候选／GO。用户授权已延长到UTC2026-11-13 **12:45:01.1736239**，12:35:01起总最后10分钟只收尾；没有恢复旧八槽GO。当前只交parser／setter／autoexec的已证机制；完整默认根／两轮守卫复用[已父审根报告](dosbox-default-roots-static.md#final-explicit-and-eight)，PT命令行／工作文件候选复用[DFT报告](pt-dft-load-static.md#working-name-and-cli)，不重复研究或把已证部分继续笼统列为未知。
+本段接续同一固定SHA原PE研究，继续[EX-005](exploration-backlog.md#ex-005)，只读原字节及既有缓存，未执行目标、GUI、窗口查询或配置变更，没有候选／GO。用户授权已延长到UTC2026-11-13 **12:45:01.1736239**，12:35:01起总最后10分钟只收尾；没有恢复旧八槽GO。当前只交parser／setter／autoexec的已证机制；完整默认根／两轮守卫复用[已父审根报告](dosbox-default-roots-static.md#final-explicit-and-eight)，PT命令行／工作文件候选复用[DFT报告](pt-dft-load-static.md#working-name-and-cli)，不重复研究或把已证部分继续笼统列为未知。
 
 ### 文件打开登记与配置项接受分开
 
@@ -496,5 +496,7 @@ Bool局部转换比较中可见 `0/disabled/false/off`与 `1/enabled/true/on`分
 本树 `.local-analysis/ex-005-config-source/parser-setter-proofs.json`于06:08:59核 **21份来源／3107缓存行、58关键点、12份虚表记录**的原PE字节／映射，工具返回0；缓存行含内嵌表，只作完整性计量，不等于3107条可达指令。材料含Section／Property／Multival虚表、输入handler／写值／Value复制／append／规范化及原注册片段，本文已展开关键条件，不要求远端读者仅凭忽略路径推断。
 
 新增r2小窗口汇总在已产stdout／stderr解析后，因窗口未覆盖某关键地址报KeyError；保存 `parser-critical-stdout.json-stream`、stderr及 `parser-setter-decoder-tool-result.json`原失败，本提交**不声称58点已全部独立r2复核通过**，也没有为此重跑全程序。此前独立r2的28点／14直接目标仍只按前节范围成立。首个无unwind完整函数请求的拒绝、codemode语法／文档拼接失败且零工具调用也保留；未改目标、旧报告或原会话。
+
+协调d38b独立重算PE节映射，复核上述21源／3107缓存行、58关键点、12组虚槽和27连续窗671条指令，另核Bool辅助217行及字符串原bytes、外引号和空白处理上下文。父只读解析原r2输出的27个数组，共671个地址，覆盖58点中的57点，唯一未覆盖为 `0x140a8dfab`；这与原KeyError相符，不把原汇总改成通过，也未重新执行r2。父证据为协调树 `.local-analysis/config-path-incident-20261112/parser-setter-d38b-parent-review.json` 和 `parser-setter-d38b-delivery-review.json`，原失败不覆盖。
 
 本段有界交付完成，不结[EX-005](exploration-backlog.md#ex-005)或[EX-003](exploration-backlog.md#ex-003)。剩余为实际Shell32返回／历史瞬时I/O来源、全部回调效果和上述特殊词法／类型边界；没有补录运行或设计新现场。下一步先由协调合并各已核报告，按需要选择具体剩余键／回调及已有解码输出覆盖继续核验，避免重做已证根和DFT；需要新材料或实机时另由协调界定方案与授权。

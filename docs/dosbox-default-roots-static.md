@@ -1,6 +1,6 @@
 # 固定 DOSBox-X 默认配置根与启动守卫静态核验
 
-本报告补齐固定 DOSBox-X 启动线中的配置候选构造、调用顺序与守卫。**最早的版本化用户配置探读、供工作目录决策使用的预解析、最终解析是不同阶段；`-defaultconf` 不阻止最早探读，也不阻止最终显式 `-conf` 列表。** 最终默认回退有八个候选，逐项受已打开／登记文件表为空及候选字符串非空约束。这里只核解析器的调用接口，不解释 Property setter、同键覆盖或 autoexec 内容合并。
+本报告补齐固定 DOSBox-X 启动线中的配置候选构造、调用顺序与守卫。解析返回与属性写入的后续有界结论见[parser／setter及autoexec](legacy-dosbox-configuration.md#fixed-config-parser-setter)，两者结合时仍须保留特殊输入及回调边界。**最早的版本化用户配置探读、供工作目录决策使用的预解析、最终解析是不同阶段；`-defaultconf` 不阻止最早探读，也不阻止最终显式 `-conf` 列表。** 最终默认回退有八个候选，逐项受已打开／登记文件表为空及候选字符串非空约束。这里只核解析器的调用接口，不解释 Property setter、同键覆盖或 autoexec 内容合并。
 
 本文是 [EX-005](exploration-backlog.md#ex-005) 的有界离线子题，接续[已有两阶段证据](legacy-dosbox-configuration.md#fixed-config-path-static)；不是 EX-005 或原 Task 的整体结算。第八场景的[真实 Status 与退出事实](legacy-dosbox-configuration.md#eighth-status-conclusion)保持原范围，本次没有运行目标或补录当时文件 I/O。
 
