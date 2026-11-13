@@ -1,5 +1,22 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前派发：有界内存读取适配与观测事件组装
+
+用户再次要求“继续分配子agent开发，如果有需要控制电脑跟我说先”。本轮协调Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`实核为deng／gpt-6.1-sol／high，已用自身身份绑定既有Run `run_1946e80ba9fe`，不恢复旧主provider。fetch后dev／origin/dev均为`733b977730506f80427368ba3ce6e4fed1da4a64`且干净，上一轮100项合成测试和165文档／1358链接检查复核通过。本轮登记分支`chore/ex005-backend-session-dispatch`，协调证据`.local-analysis/ex005-backend-session-49f8/`。
+
+复核当前两个最新Dispatch均succeeded／live／retained，沿现有Pi会话及独立工作树派发后续Task，不重启原abandoned worker；旧派发尚存的unverifiable状态不作退出证明。
+
+| 复用工作树／上一Dispatch | 本轮分支及独占新增文件 | 开发与验收边界 |
+| --- | --- | --- |
+| ex005-query-effects／ctx_9a40bb02d3a6 | feat/ex005-memory-reader；tools/legacy_source_memory_reader.py、tests/test_legacy_source_memory_reader.py、docs/legacy-source-memory-reader.md | 借用显式HANDLE的有界ReadProcessMemory适配；注入函数验证BOOL／SIZE_T／部分读取，接已有二字段内存回调；真实API工厂只编写不调用 |
+| ex005-source-observation／ctx_6736dc7cbbba | feat/ex005-observation-session；tools/legacy_source_observation_session.py、tests/test_legacy_source_observation_session.py、docs/legacy-source-observation-session.md | 实际复用begin／finish和v2审计，按线程组装事件、失败封存；身份／时点／覆盖与丢失计数必须外部显式提供 |
+
+指定仍为Pi／deng／gpt-6.1-sol／high，各先核本轮环境／会话model与thinking事件、干净Git及工具成功，按新Dispatch回报。各从含本登记的最新origin/dev建独立分支，20–30分钟先交有界代码、合成测试、中文报告及原失败回执；只写独占文件和本树忽略任务证据。协调独占共享文档、待办、索引和集成，不共写源码、构建或证据；新Task／Dispatch以实际送达回执补记，未送达不称已启动。完整派发正文在本证据目录spec-memory-reader.txt与spec-event-session.txt。
+
+本轮只运行注入原生函数／寄存器／内存回调的合成测试，禁止调用真实Windows API、连接或读取真实进程、枚举进程／窗口、启动目标／控制服务／GUI、截图键鼠／桌面、身份／VM／隔离试验、实时用户配置、下载安装及现场conf／plan／GO。**需要控制电脑时先说明具体动作并等待用户确认**；当前两项不需要控制电脑。允许编写未来显式调用的WinDLL适配工厂，但导入和测试不加载真实DLL，不把未实测的代码说成Windows能力回执。
+
+协调审阅有界读取、错误码取样、失败诊断、线程栈及错误后不可凑成功等拒绝边界，针对缺口做父树和实际reader→提取→组装→v2离线互通验证，再统一入链、独立分支no-ff合dev普通推送。真实后端运行、权限／模块／编码／ABI来源、隔离、Property／windir／完整Host IO、GET与退出见证继续缺；EX003／005及原完成条件保持。下方各“本轮”为此前已验收阶段。
+
 ## 当前交付：提取核心与审计v2已父审，离线数据链通过
 
 用户最新要求“继续分配子agent开发，如果有需要控制电脑跟我说先”。当前协调Pi `01a1d501-a17d-7611-9f62-3c490fba0174`，环境仍为deng／gpt-6.1-sol／high；本轮fetch后dev／origin/dev均为`22d479eabfd41a60c516835e3e4ea266399c6121`、干净。继续自身已绑定Run `run_1946e80ba9fe`，不恢复原主provider。复核两个待复用worker为succeeded／settled／live／idle、独立工作树保留；通过其当前Dispatch派发后续新Task，不重启旧abandoned worker。
