@@ -1,12 +1,16 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前协调6951：按用户续作，定向核见证键绑定
+## 当前协调6951：两键类型已核，实际查询与隔离前置仍缺
 
 用户在本会话要求“继续推进工作，今日和昨日总计推进了哪些事项”。2026-11-13本机约20:01（UTC12:01），当前Pi `01a1d4c6-823f-7671-ba29-0f0a96cc6951`实际为`deng/gpt-6.1-sol/high`；接手核dev／远端均`dcc87a9cb7b7e1fd78aeb0fc3d5d5e6b30030fe8`且干净，既有文档检查157／1231／41／129／141零错。保存聊天快照只读，原主会话不恢复。
 
 本次具体接续EX-005：协调在独立分支`research/ex005-witness-key-binding`直接只读核固定PE的`fulldouble`／`waitonerror`注册名称、构造类型、默认／合法值及CONFIG查询静态入口，限定已有两候选，不找第四键；复用既有PE映射、字符串及setter证据，只在本树`.local-analysis/config-path-incident-20261112/`新增本阶段证据。用户本轮继续授权覆盖此前矩阵停准备的离线停点，不扩大到目标运行／隔离试验／配置制作／候选GO／升级下载；总窗仍UTC12:35起只收尾、12:45截止。
 
 当前Orca `worker-show ctx_ed7b7e9ec944`实际返回`state=abandoned, stage=terminal_missing, liveness=unverifiable`，lastError为原分配终端不再live；这是当前调度记录，不据此推断OS进程已退出。四已完成离线子Task为succeeded/exited。保留原Task／Dispatch及证据，不重启、不新派，不冒称原worker仍在执行；当前增量由本协调直接完成。下方d3c8及更早“当前”均为历史阶段。
+
+**本轮结果：** 已在[两键具体绑定及查询局部链](docs/legacy-dosbox-configuration.md#ex005-witness-key-binding)证明sdl节两键均经`a8a600`构造成`Prop_bool`，当前／回退Value初值分别false／true，内部具名getter查类型2并读+44；原U*值与构造初值相同，相符仍不能归因用户预读。UTC12:10:20派生`key-binding-proof-6951.json`核2348新缓存行／740复用行、33点及两类RTTI／虚表，exit0。随后从-get指针表第22项→返回index+2→case24原跳表→a6f822分支，在规范化为节名和属性名的两参数条件下，接上Section查名／Section_prop首槽／当前Value转文本／输出调用；12:19:42的`key-binding-query-proof-6951.json`另核六来源4299缓存行／24点和相关表项，exit0。输出后还以CONFIG字面和值调用a667c0，效果未展开，不称整个命令零副作用。一条原.byte只按数据核，首ValueError、一次PS内嵌Python引号SyntaxError和有限-get零命中均留`key-binding-validation-note-6951.json`及原工具回执。原PE前后摘要一致，原证据未覆写。
+
+**剩余与下一步：** 具体类型及规范化两参数的-get局部连接不再未知；两键的实际查询、完整参数语法／异常／命令CFG与后续a667c0效果仍缺，静态输出调用不冒充实测回执。真实用户根隔离、API返回／阶段Host IO能力回执亦缺，本轮没有目标／GUI／试隔离／配置／候选GO。后续若继续，仅可针对这些具体前置形成有证方案；原EX003／005及41事项未结。已修PROGRESS将仍缺Information／Status和只做第三槽事故修复的旧表述转为当前有限能力，保存第三／四／五／七槽失败。按本机+08:00口径核11月12／13日dev实际集成：EX001／004闭环，EX003／005与EX006／008／017有阶段推进，交接提交不当新增功能计数。实际合并推送结果以实时Git为准。本阶段最终文档检查157份／1239链／41事项／130来源／141报告零错，diff检查通过；早期新增EOF空行已修，不覆盖原失败回执。本轮忽略证据25文件约1.31MB，无新下载／构建树／目标或控制服务进程；所有自有短时Python检查已返回，无需现场收尾。
 
 ## 当前主协调d3c8：见证矩阵已父审，停在准备边界
 
