@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.24)
-project(PtRenew VERSION 0.11.0 LANGUAGES CXX)
+project(PtRenew VERSION 0.12.0 LANGUAGES CXX)
 set(PT_RENEW_VERSION "${PROJECT_VERSION}-alpha")
 configure_file(src/application/Version.h.in generated/application/Version.h @ONLY)
 
