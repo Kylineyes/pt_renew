@@ -54,6 +54,7 @@
 - [冻结配置文字见证工具](../legacy-config-witness-tool.md#ex005-text-witness-tool)：只读显式给定的两配置，保留最多三候选的全部原文出现及歧义；19项测试和原冻结两文件父核通过，不以值或SHA相符判断加载来源。
 - [无PT两键离线查询消费契约](../legacy-config-query-consumer.md#offline-query-consumer)：精确生成／消费一至两条查询命令，拒绝重复和shell变体；14项父树测试通过，不执行命令或放宽旧白名单，运行就绪状态恒为false。
 - [目录API返回缓冲解码](../legacy-source-api-buffers.md#result-contract)：只解释显式原快照，保留BOOL／原字节／NUL及未知，失败残留不作路径；20项父树测试通过，不采集真实API或验证隔离。
+- [Win64有界读取适配](../legacy-source-memory-reader.md#parent-review)：借用外部显式HANDLE，注入native验证BOOL／SIZE_T、部分读取及错误码；20项父树测试通过，并接已有提取和v2核短读拒绝。真实Windows工厂未调用，状态化组装器及联合链路仍待验收。
 - [联合观测记录审计v1](../legacy-source-observation-audit.md#schema-v1)：检查精确运行身份、序号、覆盖声明、线程内嵌套调用及parse内文件生命周期；35项父树测试通过，记录内部自洽不证明真实采集无遗漏。后续[快照提取与v2字段绑定](../legacy-source-capture-binding.md#shell32-capture-binding)已固定共同格式，其中[Win64纯提取核心](../legacy-source-call-capture.md#interfaces)已父审且20项合成测试通过，只用模拟寄存器及内存回调；[审计v2与离线互通](../legacy-source-observation-audit.md#capture-v2-integration)现已父审，以实际提取输出核6项跨模块测试，完整解码／提取／v1／v2集成回归100项通过；不作真实采集能力。
 - [配置parser、Property写值与autoexec文本](../legacy-dosbox-configuration.md#fixed-config-parser-setter)：文件登记、共同读终止返回、转换失败／回退赋值／范围截限分开；同对象追加与阶段清文本不等于最终执行，特殊输入和回调效果仍缺。
 - [autoexec初始化取样、自有复制与本地开关门](../legacy-dosbox-configuration.md#autoexec-initial-consumer)：securemode先保存、noautoexec后读取，跳过Section内容段不等于禁止全部来源；后续[BOOT调用与动态槽](../legacy-dosbox-configuration.md#autoexec-boot-upstream)已补同表安装／派发，[普通启动顺序](../legacy-dosbox-configuration.md#autoexec-main-conditional-order)又接上最终解析入口、VM事件0构造和主桥的模型内顺序；异常重入、中间配置变化及DOS实际执行仍缺。
