@@ -76,7 +76,7 @@
 
 ## 原软件行为与兼容研究
 
-先读[主题概览或接手入口](topics/legacy.md)。本组 39 篇，以下保留原报告标题。
+先读[主题概览或接手入口](topics/legacy.md)。本组 40 篇，以下保留原报告标题。
 
 - [固定 DOSBox-X 默认配置根与启动守卫静态核验](dosbox-default-roots-static.md)
 - [原 PT 的 DFT 载入、历史路径与命令行消费](pt-dft-load-static.md)
@@ -84,6 +84,7 @@
 - [历史只读挂载：菜单打开探测与固定 DOSBox-X 拒绝链](legacy-readonly-open-static.md)
 - [PT 现状调查与 Windows 迁移建议](initial-assessment.md)
 - [DOSBox-X 配置与AUTOEXEC证据链、见证键类型及能力前置](legacy-dosbox-configuration.md#ex005-witness-key-binding)
+- [冻结配置文字见证工具](legacy-config-witness-tool.md#ex005-text-witness-tool)
 - [DOSBox 启动日志核验：verification-34](legacy-dosbox-startup-validation.md)
 - [原菜单、宏与键盘分派的静态路径](legacy-menu-keypath.md)
 - [verification-35：菜单、工作文件名与启动日志现场验证](legacy-menu-live-verification.md)
