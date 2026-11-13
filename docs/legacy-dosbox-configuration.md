@@ -542,7 +542,7 @@ flowchart LR
 
 主启动缓存 `8397d3`确有调用 `abe8f0`。但这个包含 `Initializing AUTOEXEC.BAT emulation`日志的51行范围，所见是把带 `AUTOEXEC_ShutDown`名的函数指针送入列表及数值1／12／14／16的注册接口；不能据日志名把它当作分配器已经触发，也未把接口数值套成完整事件枚举。
 
-**精确缺口：** `abe7c0`分配范围的完整实际调用上游、`833ab0`另一路的上游及初始化事件实际触发时点仍未闭合；`ab2620`生成辅助到DOS shell何时读取／执行也未研究。定向引用结果只作候选，不以线性扫描未返回引用证明调用者不存在；不按函数地址先后推执行时间，不用本段补录第八真实字段或瞬时I/O。
+**后续[BOOT上游阶段](#autoexec-boot-upstream)已补833ab0的直接BOOT调用、动态槽安装与同表派发；最终解析到该消费的连续启动时序，以及abe7c0其它上游／完整生命周期仍缺。** `ab2620`生成辅助到DOS shell何时读取／执行也未研究。定向引用结果只作候选，不以线性扫描未返回引用证明调用者不存在；不按函数地址先后推执行时间，不用本段补录第八真实字段或瞬时I/O。
 
 | 本段关键锚点 | 首选VA／行为 |
 | --- | --- |
@@ -561,13 +561,13 @@ flowchart LR
 
 协调d3c8独立父审复用先前9来源906行／252引用核验，并补核注册片段6行，合计10输入912缓存行、35关键点及13直接相对目标，原PE节映射／bytes／解码一致；另从PE异常目录核10个运行时函数范围，短字符串赋值辅助`14c090`的首范围原指令只作局部补核，不称全部扩容／异常路径已证。父证据为协调树 `.local-analysis/config-path-incident-20261112/autoexec-consumer-d3c8-parent-review.json`及`autoexec-consumer-d3c8-delivery-review.json`。父首轮字符串校验对缓存显示作了过强假设，先后在反斜杠、UTF16、`set `尾空格和转义LF处失败，核原bytes后修正派生校验，原失败和缓存均保留。前父检查点简称“ret0”仅指反汇编立即数，不代表已证明返回值为0。
 
-本段按有证范围交付，继续保留[EX-005](exploration-backlog.md#ex-005)、[EX-003](exploration-backlog.md#ex-003)和原Task。下一步只需由协调在这两个构造入口的具体上游／既有调度表中选择一个最小缺口续核；当前不扩全DOS shell、视频模式、控制适配器、截图或新现场方案。
+本段按有证范围交付，继续保留[EX-005](exploration-backlog.md#ex-005)、[EX-003](exploration-backlog.md#ex-003)和原Task。后续已核[BOOT调用与槽派发](#autoexec-boot-upstream)，其与最终解析的连续时序仍待核；当前不扩全DOS shell、视频模式、控制适配器、截图或新现场方案。
 
 <a id="autoexec-boot-upstream"></a>
 
 ## BOOT路径中的消费上游与动态回调槽
 
-本段接续[初始化消费](#autoexec-initial-consumer)，在原会话中新开约07:51至08:36的有界离线段，限定 `833ab0`上游、紧邻槽分配／安装及必要派发。新增文件均以 `.local-analysis/ex-005-autoexec-consumer/upstream-`等独立名称保存，前段交付和旧缓存只读。**已核定BOOT直接call、同表安装与间接派发之间的静态连接；与最终显式解析的完整启动相对顺序仍有具体缺口，不以地址大小补结论。**
+本段接续[初始化消费](#autoexec-initial-consumer)，继续[EX-005](exploration-backlog.md#ex-005)，在原会话中新开约07:51至08:36的有界离线段，限定 `833ab0`上游、紧邻槽分配／安装及必要派发。新增文件均以 `.local-analysis/ex-005-autoexec-consumer/upstream-`等独立名称保存，前段交付和旧缓存只读。**已核定BOOT直接call、同表安装与间接派发之间的静态连接；与最终显式解析的完整启动相对顺序仍有具体缺口，不以地址大小补结论。**
 
 ### 直接BOOT调用及条件
 
@@ -603,5 +603,7 @@ BIOS构造范围 `9e91e0..9eafdb`在 `9ea81a`检查条目 `+0x70`的已安装标
 最小剩余是：已定位 `9ebad4→9e91e0`构造调用的主启动连接，以及 `144d592c8`运行槽选择／主桥之前的必要正常路径；这些与 `836011`的先后和条件仍待核。缓存过滤未直接匹配已知目标，不是不存在间接调用的证明。无需为此扩全部BOOT来源、`abe7c0`生命周期、`ab2620`到DOS shell或全部命令组合。
 
 本段 `upstream-proof.json`于 **08:28:31**核6个新定向范围 **2273缓存行**、4个复用main点、3条有界短叶及 **32关键点／11直接相对目标**，原PE字节／映射和目标一致，工具返回0。缓存行不等于全部可达指令。参数化引用脚本曾把9e8ce0报告的scope文字遗留为833ab0；selected_entry与目标计算正确，原报告／回执保留，`upstream-scope-correction.json`另记更正，不覆写旧输出。
+
+协调d3c8读完整43行增量，并独立重算六来源2273缓存行的PE节映射／原bytes／解码及657个直接或RIP引用；另核32关键点、11个含短跳的相对目标、3条15字节短叶和8个异常表范围。安装比较RCX、派发比较EAX却以RAX索引的宽度逐原指令保持，不补全64位范围保证。父证据为协调树 `.local-analysis/config-path-incident-20261112/autoexec-boot-d3c8-delivery-review.json`。父脚本初假设复用点都有rva而KeyError、随后漏计短跳导致计数断言失败，均修正派生校验后通过；原回执及已交证据不改。
 
 研究树在修改本段文档前已干净快进共享 `ffdc15c`；只追加本专题，不改共享待办／HANDOFF／索引。全段零目标／GUI／窗口查询／配置写入／候选GO，无安装升级，原Pi／Task持续，[EX-005](exploration-backlog.md#ex-005)仍保留上述时序缺口。
