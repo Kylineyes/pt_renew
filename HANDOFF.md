@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前主协调d3c8：已接原Run，正在审消费者阶段
+
+UTC2026-11-13约07:22，用户指定的新主Pi `01a1d3c8-be1a-7776-9011-d5d96f9065ce`／Orca聊天 `pi_a1a94051_b0b2_4973_abe5_9ce2e0796885` 已实际核环境为 `deng/gpt-6.1-sol/high`，以自身身份成功 `run-use --id run_3efe904a98f0`。父d38b原历史尾部已见新聊天创建、`prompt.outcome=journaled`及07:22:07停止调度声明。本主不再创建接手链。已完整读AGENTS、本文件、探索规则和清理通知；实时fetch／ls-remote确认接手dev与远端均为 `e43860617405a093668c056abf919c83c3ac581f`、干净。下方d38b与更早的“当前／最新”均按各自历史检查点理解，不覆盖本节。
+
+**完整原历史核验：** 只调用既有 `audit_history_stream.py` 的scan，未运行其旧主入口。父d38b完整147条／1344012字节／SHA `c21c5466e255844f36c63f2a618278708325fc8caa1634aac6892f7b047ce3ea`，含全部用户／assistant／工具及最终创建送达／停止回执；原worker完整读至3134条／147689441字节／SHA `ebb292d030297bdedfe4a20edc693364d978ad1ece11802aaaa9c3fa782cc3ff`，235image均解码核SHA。活动历史后续追加不据旧SHA判污染。派生计量 `.local-analysis/config-path-incident-20261112/coordinator-d3c8-history-audit.json`，不代完整原件，不打印base64、不复制整套现场。
+
+**原worker与当前工作：** 同Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`／终端 `term_cb09ddcf-d398-4302-b953-639d97951adf` 为ready/live；研究树 `explore-ex001-observer`／`research/ex003-live-navigation` 在接手时HEAD `b6c02818bdc1913d29dc588a5525edfaf32e7141`、干净。接续消息 `msg_2c729fc88af1` 与审查反馈 `msg_71e473bd029b` 沿原Dispatch送达，仍按原06:55起30–45分钟先交有证阶段，不因换主重计。四新增子Task保持succeeded／retained，unverifiable不证明退出，不重启／再派；原Task不整体worker_done。
+
+**新增父审：** `.local-analysis/config-path-incident-20261112/autoexec-consumer-d3c8-parent-review.json`独立核9来源906缓存行／252直接或RIP引用，原PE节映射、bytes和解码一致。支持直接初始化`833fd1`全局对象空守卫→`8340a3`构造→`8340a9`保存，`securemode`的`8318c2`写Control+17f，`ab2499`对辅助自有字符串字段调用复制。`abe8f0`现见登记AUTOEXEC_ShutDown，不能冒称它调用分配器`abe7c0`；完整调度入口与Shell执行仍待限定。首轮字符串校验失败后核原bytes，区分反斜杠双显、UTF16源码路径、原`set `尾空格和转义LF，四条原失败回执保留，缓存与冻结材料不改。技能引用的两个附属文件在本机缺失，未bootstrap／下载，沿已核692导入及工具环境继续，不影响此次只读原bytes父审。
+
+**下一步：** 取得原Pi消费者专题精确提交，读完整增量并按新增原bytes／连续分支／必要虚槽父审，再统一EX-005双向链接、主题／索引、旧未知和本HANDOFF。在独立分支文档检查后no-ff合dev并普通推送；未集成的新消费者阶段不能称dev已有。不为穷尽扩展所有-c／prerun／exit、完整shell或视频／截图工具方案。四子题、parser阶段及第八59图／四原wait和join按既有验收复用；EX003／005与41事项保留。
+
+**持续授权：** 全部Pi／deng／gpt-6.1-sol／high，含原worker最多5子agent；本主不占子agent名额。总窗仍UTC2026-11-13 **03:45:01.1736239–12:45:01.1736239**，**12:35:01.1736239起只收尾**，准备／审核／交接计时不重计。当前仅EX003／005定向静态，无新候选／GO／现场；实机须先具体缺口、最小隔离方案／预算／必要工具审，再全新候选及独立GO，唯一原Pi操作者、60分钟／至少7分钟收尾、公开门／逐键新图actual read／拒绝120秒／原创建者四wait和join／FILETIME原整数保持。原安装板库与旧八槽conf／plan／driver／gate／submit／PNG／日志／manifest／JSONL冻结只读；无EX007／编辑保存／升级下载／归档精简，main仅用户。
+
 ## 最新要求：d38b立即交接新主协调并续作
 
 用户UTC约07:17明确“总结当前进度和下一步计划，交接给新agent，让其推进下一步工作”。此授权覆盖本父此前“不再创建接手链”的默认安排；现在在原main-2创建新Pi主协调，送达回执报告后父Pi `01a1d38b-f3ec-77ad-bcc3-808205e370e6`／Orca聊天 `pi_a71bf3a3_9c5e_4db0_ad45_10189a4b5c6d` 停止调度。新主不得再自行交接。第一步核实际PI_SESSION_ID／PI_PROVIDER／PI_MODEL／PI_REASONING_LEVEL，必须 `deng/gpt-6.1-sol/high`。本版Orca Pi启动--model曾创建前拒绝，沿Pi自身配置创建聊天，实际不符先停报告、不换模型。用自身身份 `run-use --id run_3efe904a98f0`；拒绝保回执，不reset／冒用旧父／重启worker。
