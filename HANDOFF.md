@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前主协调d38b已接续并开始父审
+
+UTC2026-11-13约06:16，新主Pi `01a1d38b-f3ec-77ad-bcc3-808205e370e6`／Orca聊天 `pi_a71bf3a3_9c5e_4db0_ad45_10189a4b5c6d` 已实核环境为 `deng/gpt-6.1-sol/high`，以自身身份成功 `run-use --id run_3efe904a98f0`。父d34c最后创建回执 `prompt.outcome=journaled`，其原JSONL末条UTC06:15:42明确停止调度；本主已接手，不再创建接手链。完整读本树AGENTS、本HANDOFF、探索流程和清理通知；接手fetch／ls-remote实核dev与远端同为 `9cdf26b4ecb0dcc51706cae55933db51dc34987d`、干净。下方“最新要求d34c立即交接”等为已完成的交接记录，当前事实以本节为准。
+
+**历史原件核验：** 只调用既有 `audit_history_stream.py` 的scan函数，未运行其旧主入口。父d34c完整原JSONL **218条／1501245字节／SHA `504f9a83a8515812ecaacfe9d80af92c264e623edb0fa928561b9656720f9a45`**，含完整用户、assistant、工具、最终创建送达回执及停止声明；原worker读至 **3066条／146718067字节／SHA `67cb6c1cef89d30f3f330d4602e5da296ce23e48c08f87fb2998218567b13397`**，235个image块解码核SHA。活动记录后续可追加，不据旧边界SHA判污染。派生计量 `.local-analysis/config-path-incident-20261112/coordinator-d38b-history-audit.json`；原JSONL只读，未复制整套现场或打印base64。
+
+**实时原Task：** `task_db06ca9d4229`／`ctx_ed7b7e9ec944`／原Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`／终端 `term_cb09ddcf-d398-4302-b953-639d97951adf` 仍ready/live；研究树 `explore-ex001-observer` 的 `research/ex003-live-navigation` 实核HEAD `9769936334ad4ec3fad1b2ab78ecf0de2ba82dbd`、干净。worker-read为终端投影且标记不完整，不代完整原历史。四新增子Task实核succeeded、structured会话保留且liveness unverifiable，不推为退出、不重启或自动再派；原Task继续未结。接续消息 `msg_1491becf0fa9` 已沿原Dispatch发送，要求立即把已有parser／setter／autoexec有证阶段写现有配置专题并交精确HEAD，不为穷尽边界拖延，不扩视频模式／适配器／截图或现场方案。
+
+**已开始独立父审，尚无新专题提交：** 原Pi06:08的 `parser-setter-proofs.json` 已完整加载，SHA `ec41f391f9cfbfaf9fd8b1443d9ebcf306e32d58cc1f29ef6f526422274bf883`。父独立从固定PE头重算映射，21源／3107缓存行、58关键点、12虚表组及27连续窗671指令的原bytes／映射／解码一致，关键直接目标另按原相对位移核算；父又读共同收尾、空输入、整数范围前提及Multival回退连续上下文。证据 `.local-analysis/config-path-incident-20261112/parser-setter-d38b-parent-review.json`，不执行worker生产脚本或改写其原报告。父首轮leaf缓存无rva字段引发KeyError，已按字段是否存在修正、VA仍独立计算，失败工具回执保留；PS5.1的Get-Date -AsUTC失败已改DateTime.UtcNow。技能precedent-reverse／tool-index仍缺，复用现有triage／692导入／PE材料，不bootstrap或下载。
+
+**下一步：** 等原Pi交本阶段精确提交，父审专题全文与证据一致性，再在独立集成分支补EX-005及相关主题链接、更新已有未知并文档检查、no-ff合dev普通推送。当前只完成证据父审，不把parser阶段称dev已集成。共同mask6终止返回1不区分EOF与同掩码读错误；转换失败、回退赋值false、范围clamp true、Path空值及Multival父子状态各自限定；autoexec同对象LF后append与阶段清文本分开。完整词法／locale／溢出／尾字符／异常流、Double／Hex、Path规范化、Multival一致性与回调效果保留EX-005，不删事项或整体结Task。
+
+**持续授权：** 总窗仍UTC2026-11-13 **03:45:01.1736239–12:45:01.1736239**，**12:35:01.1736239起只收尾**，交接和审核计时，不重计；仅EX-003／005、定向静态，无当前候选／GO／现场。含原worker最多5子agent，全部Pi／deng／gpt-6.1-sol／high覆盖默认GLM，桌面唯一原操作者且当前无GO。若须实机先具体缺口／最小隔离方案／预算／必要工具审核，再全新候选与独立GO；不恢复旧八槽、不升级下载、不归档精简、不做EX007或编辑保存，原件及冻结材料只读。四已集成子题与第八已验范围复用，main仅用户处理。
+
 ## 最新要求：d34c立即交接新主Pi并开始续作
 
 用户UTC约06:12明确“总结当前进度和下一步计划，开一个新agent接手，让他开始工作”。现在在原main-2创建新Pi主协调，不等待parser阶段提交；提示送达并报告回执后，本父Pi `01a1d34c-bdc5-716a-b72c-af116dd07d3a`／Orca聊天 `pi_9a242725_a53a_489d_b1e9_a1d9943b42ad` 停止调度。新主第一步核自身实际PI_SESSION_ID／PI_PROVIDER／PI_MODEL／PI_REASONING_LEVEL，必须 `deng/gpt-6.1-sol/high`；本版Orca Pi模型参数曾创建前拒绝，沿Pi自身已核配置创建聊天，不符先停报告、不换模型。使用自身身份 `run-use --id run_3efe904a98f0`，拒绝保回执，不reset／冒用旧父／重启worker。不继续创建接手链。
