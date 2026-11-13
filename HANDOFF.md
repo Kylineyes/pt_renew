@@ -1,5 +1,19 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 最新覆盖：立即交接新Pi，电脑控制延长4小时
+
+用户UTC约05:04最新明确“你创建新agent交接过去，电脑控制时间延长4个小时”。**立即创建新Pi主协调，不再等待当前parser／setter阶段完成。** 在已登记03:45:01.1736239–08:45:01.1736239的5小时基础上延长4小时，当前总窗口为 **UTC2026-11-13 03:45:01.1736239–12:45:01.1736239**，**12:35:01.1736239起最后10分钟只收尾**；准备／审核／交接计入总时长，不从现在另起4小时，不复活任何旧槽／GO。下述08:35／08:45及“阶段完成后再创建”仅为历史安排，受本节覆盖。
+
+即将交接父Pi `01a1d2e8-fabe-7285-9ddd-e858ff2195de`／Orca聊天 `pi_f1825819_80dc_4d71_8ea7_f11cf8c6b27a`，实际 `deng/gpt-6.1-sol/high`。新主第一步核PI实际四字段必须同覆盖；本版Orca Pi启动--model曾创建前拒绝，沿Pi自身配置创建聊天，实际不符先停报告、不擅换模型。新主用自身身份 `run-use --id run_3efe904a98f0`，拒绝保回执，不reset／冒用本父／重启worker。送达提示回执报告后本父停止调度；新主不要再创建接手agent或新现场worker。立即完整读取AGENTS／本HANDOFF／探索规则／清理通知，核实时Git／远端及原worker；未集成成果不当dev已有。
+
+UTC05:04接手前核：协调dev `03a49bb4cc43502b4aa40bcf5aef48ce51f791a3`、研究HEAD `8af90a180a089db5bfb0078109f3a9ec66a2c600`均干净，原worker ready/live；本次交接更新将另以独立分支no-ff合dev普通推送，实际HEAD以Git为准。原Task `task_db06ca9d4229`／Dispatch `ctx_ed7b7e9ec944`／终端 `term_cb09ddcf-d398-4302-b953-639d97951adf`／Pi `01a1cb98-e57e-75d0-9b06-c40a941eaaf0`保持，树 `explore-ex001-observer`、分支 `research/ex003-live-navigation`。最新消息 `msg_f06fa181e9d1` 已通知立即交接／新截止，仅继续当前parser／setter／autoexec定向静态和阶段文档交付；未结Task不worker_done，自动finished不证明退出、不重启。
+
+本父完整原JSONL：`C:/Users/rikideng/.pi/agent/sessions/--C--Users-rikideng-orca-workspaces-pt_renew-main-2--/2026-11-13T03-17-26-334Z_01a1d2e8-fabe-7285-9ddd-e858ff2195de.jsonl`。新主必须程序化完整流读全部用户／assistant／工具，image.data解码核SHA或筛字段，不全文打印base64；父最后送达回执会追加，核边界和尾部即可。不以本HANDOFF／压缩摘要代完整原历史，不改原记录，不复制整套忽略现场。上一父完整181条／1500385字节／SHA62b0a33a…fd4与原worker2834条边界及235图片核摘要见下文及 `coordinator-d2e8-history-audit.json`；活动worker追加不据旧SHA判污染。
+
+**当前成果与下一步：** 第八59图／Status文件名八计数／四原wait和join已父最终验收，离线交付3acc5ed已集成；适配器25/25／准备器10/10复用。配置路径静态阶段8af90a1已父审并集成至6fd0551，入口守卫／早期用户源预读及条件序列化／后续显式和最终回退部分已沉淀，windir只判断null指针的修正已入dev。EX-005的Property保留、有效无效覆盖、autoexec和完整默认根条件仍待worker正在研究；下一步先核其最新原回执／精确提交与有证未知，审阅现有专题／待办增量，文档检查后独立分支no-ff合dev普通推送。固定PE SHA a82adc…0832，r2／Capstone只读原字节定向，REA后端因Ghidra12.2／JDK21不匹配12.1.x／JDK25门不可用，用户仅询问含义，**未授权具体升级或安装方案**；module5.0.7与metadata5.0.9分字段保留。不重复已验菜单／59图／25／10项。
+
+EX-003／EX-005整体与41事项保留。当前无新候选／GO／现场；若静态缺证确需实机对照，先审最小隔离方案／预算／必要工具，再全新候选／独立GO，延时不自动签GO。每段最多60分钟至少7分钟收尾；单操作者／公开门／每键新图实际read／拒绝120秒／原创建者四wait和join／FILETIME原整数保持。旧八槽和原conf／plan／driver／gate／submit／PNG／日志／manifest／JSONL及原安装板库不改；无EX007／编辑保存／归档精简，main由用户处理。
+
 ## 当前有效授权：新5小时继续EX-003／EX-005
 
 用户最新明确“继续推进事项，你可以控制电脑5个小时”。按主协调首次核表登记 **UTC2026-11-13 03:45:01.1736239–08:45:01.1736239**，**08:35:01.1736239起总最后10分钟只收尾**；准备、审核和工具修正计入，不叠加或恢复此前8小时／旧GO。当前协调仍为Pi `01a1d2e8-fabe-7285-9ddd-e858ff2195de`／`deng/gpt-6.1-sol/high`。首次核协调与远端dev `f0cfb307acdbc2a034739c3ebfb052f0eb624bc9`、研究HEAD `3acc5ede7d9750351ef2d8f060da20d625ac2db3`均干净，原Dispatch ready/live。
