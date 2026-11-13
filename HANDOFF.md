@@ -8,7 +8,7 @@
 
 复用已安装Qt6.12／MSVC，不下载。新建本树独立`build/release-alpha12`，预估产物小于1GiB，开始C盘空闲约209GB；配置与140个编译／链接步骤通过，offscreen CTest 24/24通过（42.15秒），CLI `pt-renew 0.12.0-alpha`退出0。证据`.local-analysis/release-v0.12.0-alpha/`的build-result.json、build.log、ctest.log；首次后台PS5无BOM中文脚本解析失败且未编译，补BOM后通过，原runner-stderr.log保留。自有编译／测试进程已完成，无可见窗口、原软件、真实用户文件或桌面操作；构建目录保留供新包验收复用。
 
-当前通过`chore/integrate-release-alpha12`将版本与材料同步dev；README／PROGRESS因main与dev文档重组发生冲突，保留dev完整当前能力和研究说明，仅补候选入口。准备main草稿PR供审阅，实际URL及送达以回执补记。按照AGENTS的main由用户合并流程，尚未修改／推送main，也未创建／推送新tag或发行附件。候选说明见[发布范围与验证](docs/releases/v0.12.0-alpha.md)。
+已通过`chore/integrate-release-alpha12`将版本与材料同步并普通推送dev `793c6f0`；README／PROGRESS因main与dev文档重组发生冲突，保留dev完整当前能力和研究说明，仅补候选入口。main草稿[PR #17](https://github.com/Kylineyes/pt_renew/pull/17)已创建并核为OPEN／draft，base=main、head=release/v0.12.0-alpha／`0ad5b3e842448bd9c8c0192f80380251e3282ac5`，33文件；release分支已推送。此次dev文档检查168份／1394链／41事项零错，远端无v0.12.0-alpha标签。按照AGENTS的main由用户合并流程，尚未修改／推送main，也未创建／推送新tag或发行附件。候选说明见[发布范围与验证](docs/releases/v0.12.0-alpha.md)。
 
 **下一项需要用户先确认的实际动作**：只运行本项目新候选及合成PCB，检查版本／载入、自由走线移动或删除、撤销重做、另存新目标和重开、正常关闭及原创建者退出；预计10–15分钟，单一操作者，截图验收使用指定Pi／deng／gpt-6.1-sol／high，不启动原软件、不访问用户板库、不覆盖已有文件。用户此前要求控制电脑前先说明，尚无本轮桌面确认，因此当前只完成离线准备。若仅需源代码tag仍应绑定最终main提交，不能把dev、release HEAD或旧GUI证据冒充已验收main发布。
 
