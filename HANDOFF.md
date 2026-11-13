@@ -1,6 +1,6 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前授权与验收：v0.12.0-alpha独占真实窗口，48项待验
+## 当前授权与验收：v0.12.0-alpha独占真实窗口，G22已发现并修复待复验
 
 用户明确要求“你进行真实窗口的验收，务必全部覆盖”。本授权已覆盖上一阶段“先确认再控制电脑”的等待点，允许当前发布候选及合成资料的实际窗口／文件框／菜单／键鼠／截图和正常退出验证；**不需要就同一范围再次索权**。不扩大到原DOSBox/PT、用户板库、旧现场、身份／VM／隔离试验或main合并。当前协调仍Pi `01a1d562-abdc-7041-980c-050cd8cd49f8`／deng／gpt-6.1-sol／high，Run沿`run_1946e80ba9fe`保留worker归属；Run旧objective“零桌面”仅为原阶段范围，本次用户明确授权优先。
 
@@ -12,7 +12,11 @@
 
 检查已知本机源码缓存未找到后，从Qt官方来源下载qtbase/qtsvg对应源码约54MB，固定SHA分别a951bd…31307／e4ab395…29331，与既有packager官方固定值一致；qtbase两次45秒传输超时后断点续传完成，原回执保留，不重复全量下载。源码缓存`.local-analysis/qt-sources/`与本次发行附件各一份有明确用途，无新依赖安装。构建／部署／归档总估小于1GiB，开始C盘空闲约209GB；必要现场证据与产品保留用于验收，临时输出由创建者清理。
 
-worker身份核验完成，正在准备冻结部署与矩阵；尚无产品启动或任何G项通过回执，包核验不是GUI通过。派发正文／送达回执保存在协调证据根spec-gui-verification.txt及receipt-gui-verification.json；本轮工作树证据见上，不轮询／另开操作者。发布PR仍#17草稿，main与tag未改。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
+worker身份核验完成，正在准备冻结部署与矩阵；尚无产品启动或任何G项通过回执，包核验不是GUI通过。派发正文／送达回执保存在协调证据根spec-gui-verification.txt及receipt-gui-verification.json；本轮工作树证据见上，不轮询／另开操作者。发布PR仍#17草稿，main与tag未改。worker已启动真实窗口，原实例1已wait0，当前实例2为PID47656／FILETIME134390634363237161／HWND2820648由原Popen控制器持有；TLS EPROTO已沿原Dispatch恢复工具exit0，未重启。父阶段证据gui-stage1-parent-review.json、gui-stage2-parent-review.json和gui-tls-recovery.json保留。
+
+G22实测失败：非法LIB打开会清空原库预览（主板保留），worker原g22两图已由协调实际read确认。协调在fix/library-load-preserve-preview修复成功验证后再替换，同步／异步失败保留原库／筛选／选择／预览，明确关闭仍清空并使旧代无效；提交`dd615f9`只改LibraryBrowser.cpp和LibraryTests.cpp。Release目标库测试29项通过，原有缺文件清空的测试断言已据新用户流程改为保留；新增非法／不存在／成功恢复和关闭竞争回归。不得称G22通过，仍需更新候选并同Pi真实复验。worker可沿原固定SHA继续其它独立场景，未退出前不启动新版本。
+
+修复与证据专题见[LIB失败保留](docs/library-analysis.md#failed-replacement-preserves-preview)；旧初版部署只读，修正版另建新输出目录，禁止覆盖旧119文件。当前准备把修复纳入release分支和dev、重建与打包；真实G20–22及主板编辑／保存必要回归待收到原实例正常wait后串行派给同worker。下方“尚待用户确认”的文字为已由本次用户覆盖的历史状态。
 
 ## 当前候选：v0.12.0-alpha轻量编辑版，尚未合main或打标签
 
