@@ -6,11 +6,13 @@
 
 | 子任务／指定分支 | 独占修改文件 | Task／Dispatch／实际会话 |
 | --- | --- | --- |
-| 冻结配置文字见证工具；`feat/ex005-config-witness` | `tools/inspect_legacy_config_witness.py`、`tests/test_legacy_config_witness.py`、`docs/legacy-config-witness-tool.md` | 尚未建立，派发回执后补 |
-| GET查询影响与最小契约；`research/ex005-query-effects` | `docs/legacy-config-query-contract.md`及本树忽略证据 | 尚未建立，派发回执后补 |
-| 实际来源隔离／观测前置；`research/ex005-source-observation` | `docs/legacy-source-observation-plan.md`及本树忽略证据 | 尚未建立，派发回执后补 |
+| 冻结配置文字见证工具；`feat/ex005-config-witness` | `tools/inspect_legacy_config_witness.py`、`tests/test_legacy_config_witness.py`、`docs/legacy-config-witness-tool.md` | `task_7dcacec88e89`／`ctx_b56fa2735e32`；Pi `01a1d4e9-572b-702c-9e89-def55fdfb0ec`；工作树`ex005-config-witness` |
+| GET查询影响与最小契约；`research/ex005-query-effects` | `docs/legacy-config-query-contract.md`及本树忽略证据 | `task_818715fc469d`／`ctx_5e2d356468b7`；Pi `01a1d4e9-989e-71e2-b4f9-f52f961a53f7`；工作树`ex005-query-effects` |
+| 实际来源隔离／观测前置；`research/ex005-source-observation` | `docs/legacy-source-observation-plan.md`及本树忽略证据 | `task_c2952287f2e6`／`ctx_755c0c2b2a20`；Pi `01a1d4e9-ce67-756e-8b4e-17d0dd926e95`；工作树`ex005-source-observation` |
 
 每项新建独立Orca子工作树，各自只读父树／旧研究树证据，新增证据只写自己的`.local-analysis/ex005-任务名/`，不共写构建目录、不复制整套现场。三项禁止运行DOSBox／PT／Qt GUI／控制服务、窗口查询、截图键鼠、调试注入、实际目录隔离实验、实时用户配置访问、依赖安装／下载和候选GO；工具仅标准库及合成fixture验证。共享`HANDOFF`／待办／专题／索引／能力门由协调独占，不让子agent合dev／push。
+
+三个worker-start均实际ready／structured，各自新建Orca子工作树；父已只读核三个原JSONL的model_change、thinking_level_change、实际assistant及成功工具回执，全为deng／gpt-6.1-sol／high，证据`.local-analysis/ex005-parallel-6951/startup-identity.json`。完整派发正文在同目录三个spec-*.txt中，不修改原provider会话。
 
 子agent先20–30分钟交有界可审结果；缺材料写准确缺口。交付须有实际模型身份、精确HEAD、文件清单、验证和限制，以本子Task为单位worker_done，不能结算原EX003／005整体。协调审源／原bytes／有意义测试与失败回执后统一入链、no-ff合dev普通推送；不将子报告或离线测试自动当现场通过。未验收内容不称完成。
 
