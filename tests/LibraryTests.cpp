@@ -166,7 +166,81 @@ private slots:
         search->setText(QStringLiteral("axial")); QVERIFY(canvas->document());
         QVERIFY(browser.findChild<QPlainTextEdit*>(QStringLiteral("libraryDetails"))->isReadOnly());
         QVERIFY(file.open(QIODevice::ReadOnly)); QCOMPARE(file.readAll(),bytes); file.close();
-        QVERIFY(!browser.loadLibrary(directory.filePath(QStringLiteral("missing.lib")))); QVERIFY(!canvas->document()); QVERIFY(!browser.library());
+        const auto* currentLibrary=browser.library(); const auto* currentDocument=canvas->document();
+        QVERIFY(!browser.loadLibrary(directory.filePath(QStringLiteral("missing.lib"))));
+        QCOMPARE(browser.library(),currentLibrary); QCOMPARE(canvas->document(),currentDocument);
+        QCOMPARE(search->text(),QStringLiteral("axial"));
+        QVERIFY(browser.findChild<QLabel*>(QStringLiteral("libraryStatus"))->text().contains(QStringLiteral("已保留")));
+        browser.clearLibrary(); QVERIFY(!canvas->document()); QVERIFY(!browser.library());
+    }
+    void failedLibraryReplacementPreservesSelectionAndCanRecover_data() {
+        QTest::addColumn<bool>("asynchronous");
+        QTest::newRow("synchronous") << false;
+        QTest::newRow("asynchronous") << true;
+    }
+    void failedLibraryReplacementPreservesSelectionAndCanRecover() {
+        QFETCH(bool,asynchronous);
+        QTemporaryDir directory;
+        const auto valid=directory.filePath(QStringLiteral("valid.lib"));
+        const auto invalid=directory.filePath(QStringLiteral("invalid.lib"));
+        const auto replacement=directory.filePath(QStringLiteral("replacement.lib"));
+        const auto put=[](const QString& path,const QByteArray& bytes) {
+            QFile file(path); if (!file.open(QIODevice::WriteOnly)) return false;
+            return file.write(bytes)==bytes.size();
+        };
+        QVERIFY(put(valid,library({{0,"ALL_TYPES",6,allPrimitives()},{1,"TRACK_ONLY",1,track()}})));
+        QVERIFY(put(invalid,"invalid"));
+        QVERIFY(put(replacement,library({{0,"REPLACEMENT",1,track()}})));
+        pt::LibraryBrowser browser; QVERIFY(browser.loadLibrary(valid));
+        auto* search=browser.findChild<QLineEdit*>(QStringLiteral("librarySearch"));
+        auto* entries=browser.findChild<QListWidget*>(QStringLiteral("libraryEntries"));
+        auto* canvas=browser.findChild<pt::BoardCanvas*>(QStringLiteral("libraryPreview"));
+        auto* details=browser.findChild<QPlainTextEdit*>(QStringLiteral("libraryDetails"));
+        auto* status=browser.findChild<QLabel*>(QStringLiteral("libraryStatus"));
+        search->setText(QStringLiteral("ALL"));
+        QVERIFY(canvas->focusPrimitive({pt::PrimitiveKind::Pad,0}));
+        const auto* oldLibrary=browser.library(); const auto* oldDocument=canvas->document();
+        const auto selection=canvas->selection(); const auto oldDetails=details->toPlainText();
+        const auto oldRow=entries->currentRow();
+        QSignalSpy loaded(&browser,&pt::LibraryBrowser::libraryLoaded);
+        const auto load=[&](const QString& path) {
+            const auto before=loaded.size();
+            if (asynchronous) browser.requestLibrary(path);
+            else browser.loadLibrary(path);
+            QTRY_COMPARE(loaded.size(),before+1);
+        };
+        for (const auto& path : {invalid,directory.filePath(QStringLiteral("missing.lib"))}) {
+            load(path); QVERIFY(!loaded.last()[0].toBool());
+            QCOMPARE(browser.library(),oldLibrary); QCOMPARE(canvas->document(),oldDocument);
+            QCOMPARE(canvas->selection(),selection); QCOMPARE(details->toPlainText(),oldDetails);
+            QCOMPARE(search->text(),QStringLiteral("ALL")); QCOMPARE(entries->count(),2);
+            QCOMPARE(entries->currentRow(),oldRow); QVERIFY(!entries->item(0)->isHidden());
+            QVERIFY(entries->item(1)->isHidden()); QVERIFY(!canvas->isHidden());
+            QVERIFY(status->text().contains(QStringLiteral("库载入失败")));
+            QVERIFY(status->text().contains(QStringLiteral("已保留")));
+            QVERIFY(browser.findChild<QPushButton*>(QStringLiteral("libraryOpen"))->isEnabled());
+            QVERIFY(browser.findChild<QPushButton*>(QStringLiteral("libraryClose"))->isEnabled());
+        }
+        load(replacement); QVERIFY(loaded.last()[0].toBool());
+        QCOMPARE(browser.library()->filePath,replacement); QCOMPARE(entries->count(),1);
+        QVERIFY(search->text().isEmpty()); QVERIFY(!canvas->selection());
+        QCOMPARE(canvas->document()->tracks.size(),1);
+        QCOMPARE(browser.library()->entries[0].name,QStringLiteral("REPLACEMENT"));
+        browser.clearLibrary(); QVERIFY(!browser.library()); QVERIFY(!canvas->document());
+    }
+    void closingCurrentLibraryDuringReplacementDropsBothAndIgnoresResult() {
+        QTemporaryDir directory;
+        const auto path=directory.filePath(QStringLiteral("fixture.lib"));
+        QFile file(path); QVERIFY(file.open(QIODevice::WriteOnly));
+        file.write(library({{0,"OWN_TEST",1,track()}})); file.close();
+        pt::LibraryBrowser browser; QVERIFY(browser.loadLibrary(path));
+        QSignalSpy loaded(&browser,&pt::LibraryBrowser::libraryLoaded);
+        const auto* previous=browser.library();
+        browser.requestLibrary(path); QCOMPARE(browser.library(),previous);
+        browser.clearLibrary(); QVERIFY(!browser.library());
+        QTRY_VERIFY(browser.findChild<QPushButton*>(QStringLiteral("libraryOpen"))->isEnabled());
+        QCOMPARE(loaded.size(),0); QVERIFY(!browser.library());
+        QVERIFY(!browser.findChild<pt::BoardCanvas*>(QStringLiteral("libraryPreview"))->document());
     }
     void asynchronousCancelCannotRestoreOldLibrary() {
         QTemporaryDir directory; const auto path=directory.filePath(QStringLiteral("fixture.lib"));

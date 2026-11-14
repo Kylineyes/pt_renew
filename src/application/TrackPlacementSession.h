@@ -46,6 +46,10 @@ public:
     // 检查当前文档身份、修订和目标层可见性；失效时取消活动放置并返回 false。
     bool checkContext(const std::shared_ptr<const BoardDocument>& currentDocument,
                       quint64 currentRevision, bool targetLayerVisible);
+    // 准备请求不清除有效预览；上下文失效仍会取消，供编辑后端成功后再结束放置。
+    std::optional<TrackPlacementRequest> prepareRequest(
+        const std::shared_ptr<const BoardDocument>& currentDocument,
+        quint64 currentRevision, bool targetLayerVisible, QString* error = nullptr);
     // 只在上下文和完整几何均有效时返回一次请求，并回到 Idle。
     std::optional<TrackPlacementRequest> confirm(
         const std::shared_ptr<const BoardDocument>& currentDocument,

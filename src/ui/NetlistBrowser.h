@@ -32,6 +32,7 @@ signals:
 private:
     void rebuild();
     void filter();
+    void updateStatus();
     void showCurrent();
     bool apply(const NetlistReadResult& result);
     std::shared_ptr<const BoardDocument> m_board;

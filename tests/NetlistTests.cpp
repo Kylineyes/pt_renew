@@ -13,6 +13,7 @@
 #include <QJsonObject>
 #include <QFile>
 #include <QImage>
+#include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
@@ -141,13 +142,14 @@ private slots:
         canvas.setDocument(nullptr);QVERIFY(canvas.netPads().isEmpty());
     }
 
-    void missingFileAndExplicitCancelClearPreviousExternalNetwork() {
+    void missingFilePreservesNetworkAndExplicitCancelClearsIt() {
         const auto board=pt::LegacyPcbReader::parse(pcb());QVERIFY(board.succeeded());
         QTemporaryDir dir;QFile file(dir.filePath(QStringLiteral("fixture.net")));
         QVERIFY(file.open(QIODevice::WriteOnly));file.write(net());file.close();
         pt::NetlistBrowser browser;browser.setBoard(board.document);
         QVERIFY(browser.loadFile(file.fileName()));QVERIFY(browser.netlist());
-        QVERIFY(!browser.loadFile(dir.filePath(QStringLiteral("missing.net"))));QVERIFY(!browser.netlist());
+        const auto* previous=browser.netlist();
+        QVERIFY(!browser.loadFile(dir.filePath(QStringLiteral("missing.net"))));QCOMPARE(browser.netlist(),previous);
         QSignalSpy loaded(&browser,&pt::NetlistBrowser::netlistLoaded);
         browser.requestFile(file.fileName());browser.clearExternal();
         QTRY_VERIFY(browser.findChild<QPushButton*>(QStringLiteral("netlistOpen"))->isEnabled());
@@ -157,7 +159,77 @@ private slots:
         QVERIFY(!browser.netlist());
     }
 
-    void embeddedFallbackAndFailedExternalClearStaleData() {
+    void failedReplacementPreservesSourceSelectionAndCopper_data() {
+        QTest::addColumn<bool>("asynchronous");QTest::addColumn<bool>("useInternal");
+        QTest::newRow("sync-external") << false << false;
+        QTest::newRow("async-external") << true << false;
+        QTest::newRow("sync-internal") << false << true;
+        QTest::newRow("async-internal") << true << true;
+    }
+    void failedReplacementPreservesSourceSelectionAndCopper() {
+        QFETCH(bool,asynchronous);QFETCH(bool,useInternal);
+        const auto board=pt::LegacyPcbReader::parse(pcb("NETDEF\nINTERNAL\n(\nU1-1\nU1-2\n)\n"));
+        QVERIFY(board.succeeded());QTemporaryDir directory;
+        const auto valid=directory.filePath(QStringLiteral("valid.net"));
+        const auto invalid=directory.filePath(QStringLiteral("invalid.net"));
+        const auto replacement=directory.filePath(QStringLiteral("replacement.net"));
+        const auto put=[](const QString& path,const QByteArray& bytes) {
+            QFile file(path);if (!file.open(QIODevice::WriteOnly)) return false;
+            return file.write(bytes)==bytes.size();
+        };
+        QVERIFY(put(valid,net()));QVERIFY(put(invalid,"invalid"));
+        QVERIFY(put(replacement,"(\nREPLACEMENT\nU1-1\n)\n"));
+        pt::NetlistBrowser browser;browser.setBoard(board.document);QVERIFY(browser.loadFile(valid));
+        auto* source=browser.findChild<QComboBox*>(QStringLiteral("netlistSource"));
+        auto* search=browser.findChild<QLineEdit*>(QStringLiteral("netlistSearch"));
+        auto* nets=browser.findChild<QListWidget*>(QStringLiteral("netlistNets"));
+        auto* nodes=browser.findChild<QListWidget*>(QStringLiteral("netlistNodes"));
+        auto* details=browser.findChild<QPlainTextEdit*>(QStringLiteral("netlistDetails"));
+        auto* status=browser.findChild<QLabel*>(QStringLiteral("netlistStatus"));
+        source->setCurrentIndex(source->findData(useInternal?0:1));
+        search->setText(useInternal?QStringLiteral("INTERNAL"):QStringLiteral("GND"));
+        nodes->setCurrentRow(1);
+        QSignalSpy analyzed(&browser,&pt::NetlistBrowser::copperAnalysisFinished);
+        browser.runCopperAnalysis();QTRY_COMPARE(analyzed.size(),1);
+        const auto* previous=browser.netlist();const auto text=details->toPlainText();
+        const auto query=search->text();const auto sourceIndex=source->currentIndex();
+        const auto netRow=nets->currentRow();const auto nodeRow=nodes->currentRow();
+        const auto nodeText=nodes->item(0)->text();
+        QSignalSpy loaded(&browser,&pt::NetlistBrowser::netlistLoaded);
+        QSignalSpy highlights(&browser,&pt::NetlistBrowser::padsHighlighted);
+        const auto load=[&](const QString& path) {
+            const auto before=loaded.size();
+            if (asynchronous) browser.requestFile(path);else browser.loadFile(path);
+            QTRY_COMPARE(loaded.size(),before+1);
+        };
+        for (const auto& path : {invalid,directory.filePath(QStringLiteral("missing.net"))}) {
+            load(path);QVERIFY(!loaded.last()[0].toBool());
+            QCOMPARE(browser.netlist(),previous);QCOMPARE(source->count(),2);
+            QCOMPARE(source->currentIndex(),sourceIndex);QCOMPARE(search->text(),query);
+            QCOMPARE(nets->currentRow(),netRow);QCOMPARE(nodes->currentRow(),nodeRow);
+            QCOMPARE(nodes->count(),2);QCOMPARE(nodes->item(0)->text(),nodeText);
+            QCOMPARE(browser.mapping().resolved,2);QCOMPARE(details->toPlainText(),text);
+            QCOMPARE(highlights.size(),0);
+            QVERIFY(status->text().contains(QStringLiteral("载入失败")));
+            QVERIFY(status->text().contains(QStringLiteral("已保留")));
+            QVERIFY(browser.findChild<QPushButton*>(QStringLiteral("netlistOpen"))->isEnabled());
+            QVERIFY(browser.findChild<QPushButton*>(QStringLiteral("netlistClear"))->isEnabled());
+            QVERIFY(browser.findChild<QPushButton*>(QStringLiteral("copperAnalyze"))->isEnabled());
+        }
+        // 失败时仍保留另一来源，可切换；明确移除才删除外部网表。
+        source->setCurrentIndex(source->findData(useInternal?1:0));
+        QCOMPARE(browser.netlist()->embedded,!useInternal);
+        source->setCurrentIndex(source->findData(useInternal?0:1));
+        load(replacement);QVERIFY(loaded.last()[0].toBool());
+        QVERIFY(!browser.netlist()->embedded);QCOMPARE(browser.netlist()->filePath,replacement);
+        QCOMPARE(browser.netlist()->nets[0].name,QStringLiteral("REPLACEMENT"));
+        QVERIFY(search->text().isEmpty());QCOMPARE(nodes->count(),1);
+        QVERIFY(!details->toPlainText().contains(QStringLiteral("当前工作文档修订")));
+        browser.clearExternal();QVERIFY(browser.netlist()->embedded);QCOMPARE(source->count(),1);
+        QVERIFY(!status->text().contains(QStringLiteral("已保留")));
+    }
+
+    void embeddedFallbackAndFailedExternalPreserveActiveData() {
         const auto board=pt::LegacyPcbReader::parse(pcb("NETDEF\nINTERNAL\n(\nU1-1\n)\n"));QVERIFY(board.succeeded());
         QTemporaryDir dir;QFile file(dir.filePath(QStringLiteral("external.net")));QVERIFY(file.open(QIODevice::WriteOnly));file.write(net());file.close();
         pt::NetlistBrowser browser;browser.setBoard(board.document);QVERIFY(browser.netlist()->embedded);

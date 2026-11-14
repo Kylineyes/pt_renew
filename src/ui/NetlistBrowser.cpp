@@ -73,7 +73,8 @@ void NetlistBrowser::chooseFile() {
 }
 void NetlistBrowser::requestFile(const QString& path) {
     if (m_loading) return;
-    ++m_generation;const auto generation=m_generation;m_error.clear();m_notice.clear();rebuild();
+    // 候选读取期间保留当前来源、筛选、节点选择及铜分析结果。
+    const auto generation=++m_generation;
     m_loading=true;m_copper->setEnabled(false);m_open->setEnabled(false);m_clear->setEnabled(true);m_status->setText(QStringLiteral("正在后台读取网表；移除外部网表可放弃结果。"));
     auto* watcher=new QFutureWatcher<NetlistReadResult>(this);
     connect(watcher,&QFutureWatcher<NetlistReadResult>::finished,this,[this,watcher,generation] {
@@ -84,10 +85,18 @@ void NetlistBrowser::requestFile(const QString& path) {
 }
 bool NetlistBrowser::loadFile(const QString& path) { if (m_loading) return false; ++m_generation;return apply(LegacyNetlistReader::readFile(path)); }
 bool NetlistBrowser::apply(const NetlistReadResult& result) {
+    if (!result.succeeded()) {
+        m_error=result.error;
+        m_notice=m_active ? QStringLiteral("当前网表、筛选与映射已保留。") : QString();
+        updateStatus();
+        m_clear->setEnabled(m_external!=nullptr);
+        m_copper->setEnabled(m_board!=nullptr && m_active!=nullptr && !m_analyzing && !m_loading);
+        emit netlistLoaded(false);return false;
+    }
     m_external=result.netlist; m_useExternal=true;
-    m_error=result.error;m_notice.clear();rebuild();emit netlistLoaded(result.succeeded());return result.succeeded();
+    m_error.clear();m_notice.clear();rebuild();emit netlistLoaded(true);return true;
 }
-void NetlistBrowser::clearExternal() { ++m_generation;m_external.reset();m_error.clear();rebuild(); }
+void NetlistBrowser::clearExternal() { ++m_generation;m_external.reset();m_error.clear();m_notice.clear();rebuild(); }
 void NetlistBrowser::focusSearch() { show();raise();m_search->setFocus(Qt::ShortcutFocusReason);m_search->selectAll(); }
 void NetlistBrowser::clearHighlight() {
     m_nets->setCurrentRow(-1);m_nodes->clear();emit padsHighlighted({});
@@ -144,12 +153,19 @@ void NetlistBrowser::rebuild() {
     m_search->clear();filter();showCurrent();
 }
 void NetlistBrowser::filter() {
-    int count=0;QListWidgetItem* first=nullptr;
+    QListWidgetItem* first=nullptr;
     for (int i=0;i<m_nets->count();++i) {
         auto* item=m_nets->item(i);const auto index=item->data(Qt::UserRole).toLongLong();
         const bool match=m_mapping.nets[index].name.contains(m_search->text(),Qt::CaseInsensitive);
-        item->setHidden(!match);if (match) { ++count;if (!first) first=item; }
+        item->setHidden(!match);if (match && !first) first=item;
     }
+    updateStatus();
+    if (!first) { m_nets->setCurrentRow(-1);showCurrent(); }
+    else if (!m_nets->currentItem() || m_nets->currentItem()->isHidden()) m_nets->setCurrentItem(first);
+}
+void NetlistBrowser::updateStatus() {
+    int count=0;
+    for (int i=0;i<m_nets->count();++i) if (!m_nets->item(i)->isHidden()) ++count;
     QString text;
     if (m_active) text=QStringLiteral("%1：%2\n网络匹配 %3 / %4；唯一映射 %5，缺失 %6，歧义 %7，冲突节点 %8。\n仅引脚归属映射，不是铜线连通性检查。")
         .arg(m_active->embedded?QStringLiteral("内嵌 NETDEF"):QStringLiteral("外部 NET"),m_active->filePath).arg(count).arg(m_mapping.nets.size())
@@ -159,8 +175,6 @@ void NetlistBrowser::filter() {
     if (!m_error.isEmpty()) text.prepend(QStringLiteral("载入失败：%1\n").arg(m_error));
     if (!m_notice.isEmpty()) text.prepend(m_notice+QLatin1Char('\n'));
     m_status->setText(text);
-    if (!first) { m_nets->setCurrentRow(-1);showCurrent(); }
-    else if (!m_nets->currentItem() || m_nets->currentItem()->isHidden()) m_nets->setCurrentItem(first);
 }
 void NetlistBrowser::showCurrent() {
     m_nodes->clear();emit padsHighlighted({});

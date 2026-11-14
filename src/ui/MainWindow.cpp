@@ -33,6 +33,8 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSessionManager>
+#include <QScopedValueRollback>
+#include <QKeyEvent>
 
 namespace pt {
 
@@ -105,6 +107,51 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     statusBar()->addPermanentWidget(m_viewStatus);
     m_libraryBrowser=new LibraryBrowser(this);
     createMenus();
+    m_trackDock = new QDockWidget(QStringLiteral("走线取点（整数 mil）"), this);
+    m_trackDock->setObjectName(QStringLiteral("trackPlacementDock"));
+    auto* trackPanel = new QWidget(m_trackDock);
+    auto* trackLayout = new QFormLayout(trackPanel);
+    m_trackStatus = new QLabel(trackPanel); m_trackStatus->setWordWrap(true);
+    m_trackStatus->setObjectName(QStringLiteral("trackPlacementStatus"));
+    trackLayout->addRow(m_trackStatus);
+    auto* x = new QLineEdit(trackPanel); x->setObjectName(QStringLiteral("trackPointX"));
+    auto* y = new QLineEdit(trackPanel); y->setObjectName(QStringLiteral("trackPointY"));
+    trackLayout->addRow(QStringLiteral("X（整数 mil）："), x);
+    trackLayout->addRow(QStringLiteral("Y（整数 mil）："), y);
+    auto* pick = new QPushButton(QStringLiteral("使用此点（起点 / 终点预览）"), trackPanel);
+    pick->setObjectName(QStringLiteral("trackPointPick")); trackLayout->addRow(pick);
+    auto* commit = new QPushButton(QStringLiteral("确认提交预览"), trackPanel);
+    commit->setObjectName(QStringLiteral("trackPlacementCommit")); commit->setEnabled(false);
+    trackLayout->addRow(commit);
+    connect(commit, &QPushButton::clicked, this, [this] {
+        QString error;
+        if (!commitTrackPlacement(&error)) m_trackStatus->setText(error);
+    });
+    auto* cancel = new QPushButton(QStringLiteral("取消放置"), trackPanel);
+    cancel->setObjectName(QStringLiteral("trackPlacementCancel")); trackLayout->addRow(cancel);
+    connect(cancel, &QPushButton::clicked, this, &MainWindow::cancelInteraction);
+    connect(x, &QLineEdit::textChanged, commit, [commit] { commit->setEnabled(false); });
+    connect(y, &QLineEdit::textChanged, commit, [commit] { commit->setEnabled(false); });
+    connect(pick, &QPushButton::clicked, this, [this, x, y, commit] {
+        bool xOk = false, yOk = false;
+        const auto px = x->text().toLongLong(&xOk), py = y->text().toLongLong(&yOk);
+        QString error;
+        if (!xOk || !yOk || px < -1000000 || px > 1000000 || py < -1000000 || py > 1000000)
+            error = QStringLiteral("请输入 ±1000000 范围内的整数 mil，不接受小数或非有限值。");
+        else if (trackPlacement().state() == TrackPlacementState::WaitingForStart)
+            setTrackPlacementStart({qreal(px), qreal(py)}, &error);
+        else previewTrackPlacementEnd({qreal(px), qreal(py)}, &error);
+        if (!error.isEmpty()) {
+            syncTrackPlacement();
+            m_trackStatus->setText(m_trackStatus->text() + QLatin1Char('\n') + error);
+            commit->setEnabled(false);
+        }
+    });
+    m_trackDock->setWidget(trackPanel); addDockWidget(Qt::RightDockWidgetArea, m_trackDock);
+    m_trackDock->hide();
+    connect(m_trackDock, &QDockWidget::visibilityChanged, this, [this](bool visible) {
+        if (!visible) cancelTrackPlacement();
+    });
     clearFileInfo();
     updateViewStatus();
     updateSelectionInfo();
@@ -115,22 +162,178 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
             statusBar()->showMessage(QStringLiteral("已定位元件，仅改变视图，不移动元件。"),8000);
         }
     });
+    connect(m_canvas, &BoardCanvas::interactionCancelRequested, this, &MainWindow::cancelTrackPlacement);
+    connect(m_canvas, &BoardCanvas::trackPlacementContextChanged, this, [this] {
+        if (trackPlacement().state() != TrackPlacementState::Idle) checkTrackPlacementContext(nullptr);
+    });
+    connect(m_canvas, &BoardCanvas::trackPlacementPointPicked, this, [this](QPointF point) {
+        QString error;
+        if (!pickTrackPlacementPoint(point, &error)) {
+            const auto message = error + QStringLiteral(" 请在走线取点面板输入明确的整数 mil；画布没有网格捕捉或取整。");
+            m_trackStatus->setText(message); statusBar()->showMessage(message, 10000);
+        }
+    });
+    connect(m_canvas, &BoardCanvas::trackPlacementEndPreviewed, this, [this](QPointF point) {
+        if (trackPlacement().state() == TrackPlacementState::WaitingForEnd) previewTrackPlacementEnd(point);
+    });
     connect(m_canvas,&BoardCanvas::measurementChanged,this,&MainWindow::updateMeasurementInfo);
     connect(m_canvas, &BoardCanvas::selectionChanged, this, &MainWindow::updateSelectionInfo);
     connect(m_canvas, &BoardCanvas::legacyMenuRequested, this, &MainWindow::showLegacyMenu);
     connect(m_canvas, &BoardCanvas::viewChanged, this, &MainWindow::updateViewStatus);
     connect(qApp, &QGuiApplication::commitDataRequest, this, [this](QSessionManager& manager) {
         if (!m_editSession.dirty()) return;
-        ++m_loadGeneration;
+        invalidatePendingLoad();
         if (!manager.allowsInteraction() || !confirmDiscard()) manager.cancel();
     });
-    connect(qApp, &QApplication::focusChanged, this, [this] { updateEditingActions(); });
+    connect(qApp, &QApplication::focusChanged, this, [this] {
+        if (QApplication::activeModalWidget() || m_libraryBrowser->isActiveWindow()) cancelTrackPlacement();
+        updateEditingActions();
+    });
+    qApp->installEventFilter(this);
     m_canvas->setFocus();
 }
 
 MainWindow::~MainWindow() {
     // QWidget 析构会改变全局焦点；成员销毁前先解除依赖编辑会话和菜单的回调。
+    qApp->removeEventFilter(this);
     disconnect(qApp, nullptr, this, nullptr);
+    disconnect(m_trackDock, nullptr, this, nullptr);
+    disconnect(m_canvas, nullptr, this, nullptr);
+}
+
+bool MainWindow::eventFilter(QObject* watched, QEvent* event) {
+    if (trackPlacement().state() != TrackPlacementState::Idle && event->type() == QEvent::KeyPress
+        && (qobject_cast<QMenu*>(watched) || watched == menuBar())) {
+        auto* key = static_cast<QKeyEvent*>(event);
+        if (key->key() == Qt::Key_Escape && key->modifiers() == Qt::NoModifier) cancelInteraction();
+    }
+    if (trackPlacement().state() != TrackPlacementState::Idle) {
+        auto* widget = qobject_cast<QWidget*>(watched);
+        if (event->type() == QEvent::Show && widget && widget->isWindow()
+            && widget->windowModality() != Qt::NonModal) cancelTrackPlacement();
+    }
+    return QMainWindow::eventFilter(watched, event);
+}
+
+void MainWindow::cancelTrackPlacement() {
+    if (trackPlacement().state() == TrackPlacementState::Idle && !m_canvas->trackPlacementMode()) return;
+    m_trackPlacement.cancel();
+    syncTrackPlacement();
+}
+
+void MainWindow::cancelInteraction() {
+    cancelTrackPlacement();
+    m_canvas->setMeasurementMode(false);
+    m_canvas->clearSelection();
+}
+
+void MainWindow::syncTrackPlacement() {
+    const auto& placement = trackPlacement();
+    const bool active = placement.state() != TrackPlacementState::Idle;
+    m_canvas->setTrackPlacementPreview(active, placement.width(), placement.layer(),
+                                      placement.startPoint(), placement.previewEndPoint());
+    if (m_trackStatus) {
+        QString text = active ? QStringLiteral("宽度 %1 mil；目标层 %2。%3\n画布不取整；也可输入整数坐标。")
+            .arg(placement.width()).arg(placement.layer())
+            .arg(placement.state() == TrackPlacementState::WaitingForStart
+                ? QStringLiteral("等待起点") : QStringLiteral("输入终点预览后确认提交；画布第二次单击直接提交"))
+            : QStringLiteral("放置已结束；没有待提交预览。");
+        const auto pointText = [](QPointF p) { return QStringLiteral("(%1, %2) mil").arg(p.x(), 0, 'f', 0).arg(p.y(), 0, 'f', 0); };
+        if (placement.startPoint()) text += QStringLiteral("\n起点：") + pointText(*placement.startPoint());
+        if (placement.previewEndPoint()) text += QStringLiteral("\n预览终点：") + pointText(*placement.previewEndPoint());
+        m_trackStatus->setText(text);
+    }
+    if (m_trackDock) {
+        auto* commit = m_trackDock->findChild<QPushButton*>(QStringLiteral("trackPlacementCommit"));
+        commit->setEnabled(active && placement.previewEndPoint().has_value());
+    }
+    updateEditingActions(); updateViewStatus();
+}
+
+bool MainWindow::checkTrackPlacementContext(QString* error) {
+    const bool visible = m_canvas->document() == m_editSession.document().get()
+        && !m_loading && !QApplication::activeModalWidget() && !m_libraryBrowser->isActiveWindow()
+        && m_canvas->layerVisible(trackPlacement().layer());
+    const bool valid = m_trackPlacement.checkContext(visible);
+    if (!valid && error) *error = QStringLiteral("放置上下文已失效，预览已取消。");
+    if (!valid) syncTrackPlacement();
+    return valid;
+}
+
+bool MainWindow::beginTrackPlacement(int width, int layer, QString* error) {
+    if (error) error->clear();
+    if (m_loading || QApplication::activeModalWidget() || m_libraryBrowser->isActiveWindow()
+        || m_canvas->document() != m_editSession.document().get()) {
+        if (error) *error = QStringLiteral("请在当前板图工作区、无模态窗口且读取结束后开始放置。");
+        return false;
+    }
+    if (!m_trackPlacement.begin(width, layer, m_canvas->layerVisible(layer), error)) return false;
+    m_canvas->setMeasurementMode(false); m_canvas->clearMeasurement(); m_canvas->clearSelection();
+    syncTrackPlacement();
+    m_trackDock->show(); m_trackDock->raise();
+    m_canvas->setFocus(Qt::ShortcutFocusReason);
+    return true;
+}
+
+bool MainWindow::setTrackPlacementStart(QPointF point, QString* error) {
+    if (error) error->clear();
+    if (!checkTrackPlacementContext(error)) return false;
+    const bool success = m_trackPlacement.setStart(point, true, error);
+    syncTrackPlacement(); return success;
+}
+
+bool MainWindow::previewTrackPlacementEnd(QPointF point, QString* error) {
+    if (error) error->clear();
+    if (!checkTrackPlacementContext(error)) return false;
+    const bool success = m_trackPlacement.previewEnd(point, true, error);
+    syncTrackPlacement(); return success;
+}
+
+bool MainWindow::commitTrackPlacement(QString* error) {
+    if (error) error->clear();
+    if (!checkTrackPlacementContext(error)) return false;
+    const bool success = m_trackPlacement.commit(true, error);
+    syncTrackPlacement();
+    if (success) publishWorkingDocument();
+    return success;
+}
+
+bool MainWindow::pickTrackPlacementPoint(QPointF point, QString* error) {
+    if (trackPlacement().state() == TrackPlacementState::WaitingForStart) return setTrackPlacementStart(point, error);
+    return previewTrackPlacementEnd(point, error) && commitTrackPlacement(error);
+}
+
+void MainWindow::trackPlacementDialog() {
+    if (!trackPlacementUserEntryAvailable()) return;
+    cancelInteraction();
+    QDialog dialog(this); dialog.setObjectName(QStringLiteral("trackPlacementDialog"));
+    dialog.setWindowTitle(QStringLiteral("放置自由走线：明确参数"));
+    auto* layout = new QFormLayout(&dialog);
+    auto* width = new QLineEdit(&dialog); width->setObjectName(QStringLiteral("trackWidth"));
+    auto* layer = new QLineEdit(&dialog); layer->setObjectName(QStringLiteral("trackLayer"));
+    layout->addRow(QStringLiteral("宽度（整数 mil，1..1000000）："), width);
+    layout->addRow(QStringLiteral("铜层（顶层 1 / 底层 6）："), layer);
+    auto* message = new QLabel(QStringLiteral("没有默认参数；请明确填写宽度与目标层。"), &dialog);
+    message->setWordWrap(true); layout->addRow(message);
+    auto* buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dialog);
+    buttons->button(QDialogButtonBox::Ok)->setText(QStringLiteral("开始取点"));
+    buttons->button(QDialogButtonBox::Cancel)->setText(QStringLiteral("取消")); layout->addRow(buttons);
+    int selectedWidth = 0, selectedLayer = 0;
+    connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+    connect(buttons, &QDialogButtonBox::accepted, &dialog, [&] {
+        bool widthOk = false, layerOk = false;
+        selectedWidth = width->text().toInt(&widthOk); selectedLayer = layer->text().toInt(&layerOk);
+        if (!widthOk || selectedWidth < 1 || selectedWidth > 1000000 || !layerOk
+            || (selectedLayer != 1 && selectedLayer != 6) || !m_canvas->layerVisible(selectedLayer)) {
+            message->setText(QStringLiteral("宽度须为 1..1000000 整数 mil，层须为可见的 1 或 6。")); return;
+        }
+        dialog.accept();
+    });
+    const auto document = m_editSession.document(); const auto revision = m_editSession.revision();
+    if (dialog.exec() != QDialog::Accepted) return;
+    if (document != m_editSession.document() || revision != m_editSession.revision()) return;
+    QString error;
+    if (!beginTrackPlacement(selectedWidth, selectedLayer, &error)) statusBar()->showMessage(error, 10000);
 }
 
 void MainWindow::createMenus() {
@@ -154,7 +357,7 @@ void MainWindow::createMenus() {
                 }
                 action->setShortcuts(keys);
                 action->setShortcutContext(Qt::WindowShortcut);
-                if (command.id.startsWith(QStringLiteral("selection.")) || command.id==QStringLiteral("measure.toggle") || command.id==QStringLiteral("measure.snap") || command.id==QStringLiteral("jump.origin") || command.id==QStringLiteral("delete.track") || command.id==QStringLiteral("edit.undo") || command.id==QStringLiteral("edit.redo")) {
+                if (command.id.startsWith(QStringLiteral("selection.")) || command.id==QStringLiteral("measure.toggle") || command.id==QStringLiteral("measure.snap") || command.id==QStringLiteral("jump.origin") || command.id==QStringLiteral("delete.track") || command.id==QStringLiteral("edit.undo") || command.id==QStringLiteral("edit.redo") || command.id==QStringLiteral("place.track")) {
                     action->setShortcutContext(Qt::WidgetShortcut);
                     m_canvas->addAction(action);
                 }
@@ -179,7 +382,14 @@ void MainWindow::showLegacyMenu(const QString& key) {
 
 void MainWindow::executeCommand(const QString& id) {
     emit commandInvoked(id);
-    if (id == QStringLiteral("file.open")) {
+    if (id == QStringLiteral("file.open") || id == QStringLiteral("file.close")
+        || id == QStringLiteral("file.save_as") || id == QStringLiteral("library.file")
+        || id == QStringLiteral("library.browse") || id == QStringLiteral("netlist.load")
+        || id == QStringLiteral("app.about") || id == QStringLiteral("app.exit")) cancelTrackPlacement();
+    if (id == QStringLiteral("place.track")) {
+        if (!trackPlacementUserEntryAvailable()) return;
+        trackPlacementDialog();
+    } else if (id == QStringLiteral("file.open")) {
         const QString file = QFileDialog::getOpenFileName(this, QStringLiteral("打开旧 PCB 的工作副本（保留原件）"), {},
             QStringLiteral("AUTOTRAX 板图 (*.pcb *.PCB *.abk *.ABK);;所有文件 (*)"));
         if (!file.isEmpty()) requestOpenFile(file);
@@ -187,16 +397,18 @@ void MainWindow::executeCommand(const QString& id) {
         saveAsDialog();
     } else if (id == QStringLiteral("file.close")) {
         // 先撤销待载入结果，避免读取完成在放弃确认框内再弹出换图确认。
-        ++m_loadGeneration;
+        invalidatePendingLoad();
         if (confirmDiscard()) clearFileInfo();
     } else if (id == QStringLiteral("move.track")) {
         moveTrackDialog();
     } else if (id == QStringLiteral("delete.track")) {
         deleteSelectedTrack();
     } else if (id == QStringLiteral("edit.undo")) {
-        if (m_editSession.undo()) publishWorkingDocument();
+        cancelInteraction();
+        if (m_trackPlacement.undo()) publishWorkingDocument();
     } else if (id == QStringLiteral("edit.redo")) {
-        if (m_editSession.redo()) publishWorkingDocument();
+        cancelInteraction();
+        if (m_trackPlacement.redo()) publishWorkingDocument();
     } else if (id == QStringLiteral("app.exit")) {
         close();
     } else if (id == QStringLiteral("view.grid")) {
@@ -242,7 +454,7 @@ void MainWindow::executeCommand(const QString& id) {
     } else if (id == QStringLiteral("measure.info")) {
         m_measureDock->show(); m_measureDock->raise();
     } else if (id == QStringLiteral("selection.clear")) {
-        m_canvas->clearSelection();
+        cancelInteraction();
     } else if (id == QStringLiteral("selection.next")) {
         m_canvas->selectNextOverlap();
     } else if (id == QStringLiteral("info.selection")) {
@@ -259,18 +471,22 @@ void MainWindow::executeCommand(const QString& id) {
                            "文字与部分轮廓为近似显示；不支持新增图元、布线和生产输出。")
                 .arg(QString::fromLatin1(ApplicationVersion)));
     }
-    statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
+    // 后台读取期间保留用户可见且可访问的加载状态，不能被通用命令提示立即覆盖。
+    if (!m_loading) statusBar()->showMessage(QStringLiteral("命令：%1").arg(id), 4000);
 }
 
 void MainWindow::openNetlist(const QString& path) {
+    cancelTrackPlacement();
     m_netlistBrowser->show();m_netlistBrowser->raise();m_netlistBrowser->requestFile(path);
 }
 
 void MainWindow::openLibrary(const QString& path) {
+    cancelTrackPlacement();
     m_libraryBrowser->showBrowser(); m_libraryBrowser->requestLibrary(path);
 }
 
 void MainWindow::requestOpenFile(const QString& path) {
+    cancelTrackPlacement();
     // 保留当前工作副本直至读取成功；失败、取消或迟到的结果不能丢弃修改。
     if (m_loading) return;
     const quint64 generation = ++m_loadGeneration;
@@ -283,30 +499,41 @@ void MainWindow::requestOpenFile(const QString& path) {
     connect(watcher, &QFutureWatcher<BoardReadResult>::finished, this, [this, watcher, generation, path] {
         const auto result = watcher->result();
         watcher->deleteLater();
+        // 过期任务只回收自身，不能解锁后续载入或改写其动作状态。
+        if (generation != m_loadGeneration) return;
         m_loading = false;
         updateEditingActions();
         m_actions.value(QStringLiteral("file.open"))->setEnabled(true);
-        if (generation == m_loadGeneration) {
-            const bool success = applyReadResult(result, path);
-            emit boardLoadFinished(success);
-        }
+        const bool success = applyReadResult(result, path, generation);
+        if (generation == m_loadGeneration) emit boardLoadFinished(success);
     });
     watcher->setFuture(QtConcurrent::run([path] { return LegacyPcbReader::readFile(path); }));
 }
 
-bool MainWindow::inspectFile(const QString& path) {
+void MainWindow::invalidatePendingLoad() {
     ++m_loadGeneration;
-    return applyReadResult(LegacyPcbReader::readFile(path), path);
+    m_loading = false;
+    m_actions.value(QStringLiteral("file.open"))->setEnabled(true);
+    updateEditingActions();
 }
 
-bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& path) {
+bool MainWindow::inspectFile(const QString& path) {
+    cancelTrackPlacement();
+    invalidatePendingLoad();
+    const auto generation = m_loadGeneration;
+    return applyReadResult(LegacyPcbReader::readFile(path), path, generation);
+}
+
+bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& path, quint64 generation) {
+    if (generation != m_loadGeneration) return false;
     if (!result.succeeded()) {
         statusBar()->showMessage(QStringLiteral("读取失败：%1；当前工作副本和历史已保留。").arg(result.error), 15000);
         if (!m_editSession.document()) m_infoText->setPlainText(QStringLiteral("探测失败：%1\n未载入板图。").arg(result.error));
         m_actions.value(QStringLiteral("file.close"))->setEnabled(m_editSession.document()!=nullptr);
         return false;
     }
-    if (!confirmDiscard()) return false;
+    // 放弃确认会进入嵌套事件循环，返回后仍须属于同一次载入。
+    if (!confirmDiscard() || generation != m_loadGeneration) return false;
     m_editSession.reset(result.document);
     m_savedPath.clear(); m_savedSha256.clear(); m_savedBytes = 0;
     m_canvas->setDocument(m_editSession.document());
@@ -323,7 +550,8 @@ bool MainWindow::applyReadResult(const BoardReadResult& result, const QString& p
 }
 
 void MainWindow::clearFileInfo() {
-    ++m_loadGeneration;
+    cancelTrackPlacement();
+    invalidatePendingLoad();
     m_editSession.reset();
     m_savedPath.clear(); m_savedSha256.clear(); m_savedBytes = 0;
     m_canvas->setDocument(nullptr);
@@ -340,7 +568,13 @@ void MainWindow::clearFileInfo() {
 }
 
 bool MainWindow::confirmDiscard() {
+    if (m_confirmingDiscard) return false;
+    cancelTrackPlacement();
     if (!m_editSession.dirty()) return true;
+    QScopedValueRollback<bool> confirming(m_confirmingDiscard, true);
+    const auto generation = m_loadGeneration;
+    const auto revision = m_editSession.revision();
+    const auto document = m_editSession.document();
     QMessageBox box(QMessageBox::Warning, QStringLiteral("放弃工作副本更改？"),
         QStringLiteral("工作副本有尚未另存为的更改。\n如需保留，请取消并使用“文件 → 另存为新 PCB”。\n放弃后无法恢复这些更改。"), QMessageBox::NoButton, this);
     box.setObjectName(QStringLiteral("discardChangesDialog"));
@@ -348,11 +582,12 @@ bool MainWindow::confirmDiscard() {
     auto* cancel = box.addButton(QStringLiteral("取消"), QMessageBox::RejectRole);
     box.setDefaultButton(cancel); box.setEscapeButton(cancel);
     box.exec();
-    return box.clickedButton() == discard;
+    return box.clickedButton() == discard && generation == m_loadGeneration
+        && revision == m_editSession.revision() && document == m_editSession.document();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-    ++m_loadGeneration;
+    invalidatePendingLoad();
     if (confirmDiscard()) event->accept();
     else event->ignore();
 }
@@ -365,12 +600,17 @@ bool MainWindow::selectedTrackEditable() const {
 }
 
 void MainWindow::updateEditingActions() {
+    const bool placing = trackPlacement().state() != TrackPlacementState::Idle;
+    m_actions.value(QStringLiteral("place.track"))->setEnabled(trackPlacementUserEntryAvailable()
+        && m_editSession.document() && !m_loading && !m_libraryBrowser->isActiveWindow());
+    m_actions.value(QStringLiteral("selection.clear"))->setEnabled(placing || m_canvas->measurementMode()
+        || m_canvas->selection().has_value() || m_canvas->focusedComponent().has_value());
     const bool editable = selectedTrackEditable();
     m_actions.value(QStringLiteral("move.track"))->setEnabled(editable);
     m_actions.value(QStringLiteral("delete.track"))->setEnabled(editable);
     const bool boardContext = !m_libraryBrowser->isActiveWindow();
-    m_actions.value(QStringLiteral("edit.undo"))->setEnabled(boardContext && m_editSession.canUndo());
-    m_actions.value(QStringLiteral("edit.redo"))->setEnabled(boardContext && m_editSession.canRedo());
+    m_actions.value(QStringLiteral("edit.undo"))->setEnabled(boardContext && (placing || m_editSession.canUndo()));
+    m_actions.value(QStringLiteral("edit.redo"))->setEnabled(boardContext && (placing || m_editSession.canRedo()));
     const auto& original = m_editSession.original();
     m_actions.value(QStringLiteral("file.save_as"))->setEnabled(boardContext && !m_loading && original
         && original->sourceContext.isEmpty() && !original->sourceBytes.isEmpty());
@@ -389,6 +629,7 @@ bool MainWindow::deleteSelectedTrack() {
 }
 
 void MainWindow::publishWorkingDocument() {
+    cancelTrackPlacement();
     m_canvas->setDocument(m_editSession.document(), true);
     m_componentBrowser->setDocument(m_editSession.document());
     m_netlistBrowser->setBoard(m_editSession.document(), true);
@@ -397,13 +638,24 @@ void MainWindow::publishWorkingDocument() {
 }
 
 bool MainWindow::saveAsFile(const QString& path, QString* error) {
+    return saveAsFileImpl(path, nullptr, error);
+}
+
+bool MainWindow::saveAsFileWithCreated(const QString& path, const LegacyFreeTrackCodec::Options& options, QString* error) {
+    return saveAsFileImpl(path, &options, error);
+}
+
+bool MainWindow::saveAsFileImpl(const QString& path, const LegacyFreeTrackCodec::Options* options, QString* error) {
+    cancelTrackPlacement();
     if (error) error->clear();
     const auto& original = m_editSession.original();
     if (m_loading || !original || m_libraryBrowser->isActiveWindow()) {
         if (error) *error = QStringLiteral("请先载入板图并等待读取结束，在主板窗口另存为。");
         return false;
     }
-    const auto result = LegacyPcbWriter::saveAs(path, *original, *m_editSession.document());
+    const auto result = options
+        ? LegacyPcbWriter::saveAsWithCreated(path, *original, *m_editSession.document(), *options)
+        : LegacyPcbWriter::saveAs(path, *original, *m_editSession.document());
     if (!result.succeeded()) {
         if (error) *error = result.error;
         statusBar()->showMessage(QStringLiteral("另存为失败：%1；工作副本和历史已保留。").arg(result.error), 15000);
@@ -417,16 +669,21 @@ bool MainWindow::saveAsFile(const QString& path, QString* error) {
 }
 
 void MainWindow::saveAsDialog() {
+    cancelTrackPlacement();
     if (!m_actions.value(QStringLiteral("file.save_as"))->isEnabled()) return;
     const auto revision = m_editSession.revision();
+    const auto document = m_editSession.document();
+    const auto original = m_editSession.original();
+    const auto generation = m_loadGeneration;
     const auto previous = m_savedPath.isEmpty() ? m_editSession.original()->filePath : m_savedPath;
     const QFileInfo info(previous);
     const auto path = QFileDialog::getSaveFileName(this, QStringLiteral("另存为新 PCB（不覆盖已有文件）"),
         info.dir().filePath(info.completeBaseName() + QStringLiteral("-edited.pcb")),
         QStringLiteral("AUTOTRAX 板图 (*.pcb)"), nullptr, QFileDialog::DontConfirmOverwrite);
     if (path.isEmpty()) return;
-    if (revision != m_editSession.revision()) {
-        QMessageBox::warning(this, QStringLiteral("尚未另存为"), QStringLiteral("选择路径期间板图已变化，请重新另存为。"));
+    if (revision != m_editSession.revision() || document != m_editSession.document()
+        || original != m_editSession.original() || generation != m_loadGeneration || m_loading) {
+        QMessageBox::warning(this, QStringLiteral("尚未另存为"), QStringLiteral("选择路径期间板图已变化或正在载入，请重新另存为。"));
         return;
     }
     QString error;
@@ -434,6 +691,7 @@ void MainWindow::saveAsDialog() {
 }
 
 void MainWindow::moveTrackDialog() {
+    cancelTrackPlacement();
     if (!selectedTrackEditable()) return;
     const auto revision = m_editSession.revision();
     QDialog dialog(this); dialog.setObjectName(QStringLiteral("moveTrackDialog"));
@@ -491,7 +749,8 @@ void MainWindow::updateFileInfo() {
 void MainWindow::updateSelectionInfo() {
     updateEditingActions();
     const auto id=m_canvas->selection();
-    m_actions.value(QStringLiteral("selection.clear"))->setEnabled(id.has_value() || m_canvas->focusedComponent().has_value());
+    m_actions.value(QStringLiteral("selection.clear"))->setEnabled(id.has_value() || m_canvas->focusedComponent().has_value()
+        || m_canvas->measurementMode() || trackPlacement().state() != TrackPlacementState::Idle);
     m_actions.value(QStringLiteral("selection.next"))->setEnabled(m_canvas->overlapCount()>1);
     if (m_canvas->focusedComponent() && m_canvas->document()) {
         m_selectionText->setPlainText(componentDescription(*m_canvas->document(),*m_canvas->focusedComponent()));
@@ -515,6 +774,7 @@ void MainWindow::updateSelectionInfo() {
 }
 
 void MainWindow::updateMeasurementInfo() {
+    updateEditingActions();
     const auto result=m_canvas->measurement();
     const auto start=m_canvas->measurementStart();
     const bool active=m_canvas->measurementMode();
@@ -552,7 +812,8 @@ void MainWindow::updateMeasurementInfo() {
 void MainWindow::updateViewStatus() {
     m_viewStatus->setText(QStringLiteral("缩放 %1%　网格%2　%3　工作副本%4 · 另存为新文件")
         .arg(qRound(m_canvas->zoom() * 100)).arg(m_canvas->gridVisible() ? QStringLiteral("开") : QStringLiteral("关"))
-        .arg(m_canvas->measurementMode()?QStringLiteral("测量取点中"):QStringLiteral("选择模式"))
+        .arg(trackPlacement().state() != TrackPlacementState::Idle ? QStringLiteral("走线取点中")
+             : m_canvas->measurementMode()?QStringLiteral("测量取点中"):QStringLiteral("选择模式"))
         .arg(m_editSession.dirty()?QStringLiteral("已修改"):QStringLiteral("未修改")));
 }
 
