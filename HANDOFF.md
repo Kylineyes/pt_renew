@@ -1,10 +1,12 @@
 # PT Renew 唯一交接：当前进度与下一步
 
-## 当前现场准备：原 AUTOTRAX 单线保存和产品输出重开
+## 当前现场准备受阻：原 AUTOTRAX 单线保存和产品输出重开
 
 用户本轮明确授权“你控制电脑，把上面列出的都进行推进”。覆盖 [EX-007](docs/exploration-backlog.md#ex-007) 原 AUTOTRAX 在隔离空板新建一段、另存全新 8.3 文件并重开，以及 [EX-009](docs/exploration-backlog.md#ex-009) 的合成移动／删除对照。仅允许单一操作者、一个新的 DOSBox-X 窗口；不操作用户板图、库、原安装或既有产品窗口，不改系统或用户配置。拟定现场最多 60 分钟，最后至少 5 分钟仅收尾；协调先核本轮模型、挂载隔离、窗口归属、实际读图和原创建者退出准备再下达现场 GO。无图、归属或状态不明、控制门拒绝则停止业务输入。对同一范围无需再次向用户索权，不恢复旧 provider 会话或旧 GO。
 
-新 Run `run_bfc81ec87978`／Task `task_b44b3b10bedf`。首派发 `ctx_31a7688e4ec3` 在 `dispatch_input` 因旧 `deng/gpt-6.1-sol` 路由 `Model not found`，未执行，原终端已确认释放。Pi 清单提供支持图像的同名项目指定模型 `magpie/cyxbmw-gpt/gpt-6.1-sol`，以 `high` 沿同 Task 重派 `ctx_68992348d8c2`，独占分支 `Kylineyes/verify-native-ft-alpha12`，实际身份原事件待审。已回报干净工作树及开始离线准备；**尚未启动或操作 DOSBox-X**。现场证据写独占树 `.local-analysis/native-ft-alpha12/`；协调派发正文在本树同名目录。
+新 Run `run_bfc81ec87978`／Task `task_b44b3b10bedf`。首派发 `ctx_31a7688e4ec3` 在 `dispatch_input` 因旧 `deng/gpt-6.1-sol` 路由 `Model not found`，未执行，原终端已确认释放。Pi 清单提供支持图像的同名项目指定模型 `magpie/cyxbmw-gpt/gpt-6.1-sol`，以 `high` 沿同 Task 重派 `ctx_68992348d8c2`，独占分支 `Kylineyes/verify-native-ft-alpha12`。已审 Pi `01a1f06d-a36d-719b-9315-11fdd82ea5b1` 原模型／high 与成功工具 `d10c2f8b` 的核验回执。独占树 `.local-analysis/native-ft-alpha12/preflight-20261118-205119/preparation-receipt.md` 保存固定 DOSBox-X、原安装 99 项、合成输入和隔离方案的只读校验。**协调明确不发现场 GO；没有启动目标、控制服务或发送桌面输入，两项现场均未执行。**
+
+阻点不是样本：固定 DOSBox-X 普通单 `-conf` 启动在显式配置列表之前，仍可能经 Shell32 访问真实用户目录；最早解析未登记且路径非空时存在配置写出分支。槽内环境变量和旧现场摘要均不证明 OS 隔离。协调只读确认 Hyper-V 已安装、服务运行，但当前 `Get-VM` 权限不足；Windows Sandbox 未启用。未创建／启动 VM、启用功能或改权限。下一步优先采用已授权的独立测试 Windows，先核无宿主盘映射及文件拒绝能力，再复用本轮样本方案；这不要求先闭环完整配置观测 [EX-005](docs/exploration-backlog.md#ex-005)。
 
 协调已用当前候选 `pt-pcb-check` 严格核对历史核心生成的 212／180 字节合成源与输出，SHA-256 与原报告一致、无内嵌 NETDEF、走线 6→5：宽 20／层 1 的指定横线从 y=1800 移至 y=2200，短竖线删除，四外框不变。既有第八槽只直接证到 SYN1 文件名与五线计数，不替代本次几何对照或原软件写出。截至本节，PR #17 已合到远端 `main=61bddbd`；预发行尚未创建，与本轮现场授权独立。
 
