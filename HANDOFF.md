@@ -1,5 +1,13 @@
 # PT Renew 唯一交接：当前进度与下一步
 
+## 当前现场准备：原 AUTOTRAX 单线保存和产品输出重开
+
+用户本轮明确授权“你控制电脑，把上面列出的都进行推进”。覆盖 [EX-007](docs/exploration-backlog.md#ex-007) 原 AUTOTRAX 在隔离空板新建一段、另存全新 8.3 文件并重开，以及 [EX-009](docs/exploration-backlog.md#ex-009) 的合成移动／删除对照。仅允许单一操作者、一个新的 DOSBox-X 窗口；不操作用户板图、库、原安装或既有产品窗口，不改系统或用户配置。拟定现场最多 60 分钟，最后至少 5 分钟仅收尾；协调先核本轮模型、挂载隔离、窗口归属、实际读图和原创建者退出准备再下达现场 GO。无图、归属或状态不明、控制门拒绝则停止业务输入。对同一范围无需再次向用户索权，不恢复旧 provider 会话或旧 GO。
+
+新 Run `run_bfc81ec87978`／Task `task_b44b3b10bedf`。首派发 `ctx_31a7688e4ec3` 在 `dispatch_input` 因旧 `deng/gpt-6.1-sol` 路由 `Model not found`，未执行，原终端已确认释放。Pi 清单提供支持图像的同名项目指定模型 `magpie/cyxbmw-gpt/gpt-6.1-sol`，以 `high` 沿同 Task 重派 `ctx_68992348d8c2`，独占分支 `Kylineyes/verify-native-ft-alpha12`，实际身份原事件待审。已回报干净工作树及开始离线准备；**尚未启动或操作 DOSBox-X**。现场证据写独占树 `.local-analysis/native-ft-alpha12/`；协调派发正文在本树同名目录。
+
+协调已用当前候选 `pt-pcb-check` 严格核对历史核心生成的 212／180 字节合成源与输出，SHA-256 与原报告一致、无内嵌 NETDEF、走线 6→5：宽 20／层 1 的指定横线从 y=1800 移至 y=2200，短竖线删除，四外框不变。既有第八槽只直接证到 SYN1 文件名与五线计数，不替代本次几何对照或原软件写出。截至本节，PR #17 已合到远端 `main=61bddbd`；预发行尚未创建，与本轮现场授权独立。
+
 ## 当前交付：v0.12.0-alpha当前候选48项GUI已父审通过
 
 用户要求“你进行真实窗口的验收，务必全部覆盖”。唯一Pi操作者沿Task `task_53ab4ca7f0d1`／Dispatch `ctx_e76d36e67edb`交报告HEAD `1886c24538c16d36d46fefd3263c624daefbc2f2`，子树干净、仅新增docs/releases/v0.12.0-alpha-verification.md；已worker_done succeeded。实际Pi `01a1d4e9-ce67-756e-8b4e-17d0dd926e95`仍为deng／gpt-6.1-sol／high，父从原会话最新事件及工具回执核定，不换模型。协调在`feat/integrate-release-alpha12-gui-review`纳报告、完整父审并统一入链；最终48项结果见[当前C矩阵及父验收](docs/releases/v0.12.0-alpha-verification.md#parent-final-review)。

@@ -134,7 +134,7 @@
 
 ### EX-007 原 AUTOTRAX 自建单线保存重开与默认 FT 编码
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：唯一现场 Pi（Task `task_b44b3b10bedf`／Dispatch `ctx_68992348d8c2`）；分支：`Kylineyes/verify-native-ft-alpha12`；会话／证据：本轮Pi会话原事件待核，独占工作树 `.local-analysis/native-ft-alpha12/`，准备中、尚未收到现场 GO。
 - 类型：兼容证据。依赖：[EX-003](#ex-003)、[两轮客体捕获结论](native-capture-checkpoint.md#continuous-capture-conclusion)、[EX-005](#ex-005)。
 - 原文细节：[topics/editing.md：细节1](topics/editing.md#explore-ex-007)；[free-track-creation-design.md：细节2](free-track-creation-design.md#explore-ex-007)；[native-ft-created-roundtrip.md：细节3](native-ft-created-roundtrip.md#explore-ex-007)；[track-explicit-output.md：细节4](track-explicit-output.md#explore-ex-007)；[native-ft-sample-verification.md：细节5](native-ft-sample-verification.md#explore-ex-007)；[free-track-history-core.md：细节6](free-track-history-core.md#explore-ex-007)。
 - 已知：内部显式六／七字段编码与新增另存闭环已完成；NEWFT 尚未生成，不能由合成样例推默认值。
@@ -156,7 +156,7 @@
 
 ### EX-009 产品移动／删除及新增输出的原软件兼容
 
-- 状态：待领取；负责人：无；分支：无；会话／证据：无。
+- 状态：研究中；负责人：唯一现场 Pi（Task `task_b44b3b10bedf`／Dispatch `ctx_68992348d8c2`，仅领合成移动／删除子范围）；分支：`Kylineyes/verify-native-ft-alpha12`；会话／证据：本轮Pi会话原事件待核，独占工作树 `.local-analysis/native-ft-alpha12/`，准备中、尚未收到现场 GO。
 - 类型：兼容证据。依赖：[两轮客体捕获结论](native-capture-checkpoint.md#continuous-capture-conclusion)、[EX-005](#ex-005)。
 - 原文细节：[pcb-legacy-native-verification.md：细节1](pcb-legacy-native-verification.md#explore-ex-009)；[pcb-mouse-keyboard-verification.md：细节2](pcb-mouse-keyboard-verification.md#explore-ex-009)；[pcb-compat-continuation.md：细节3](pcb-compat-continuation.md#explore-ex-009)。
 - 已知：Qt 自重开、原字节保护和原生文件框往返已有证据；原软件打开合成输出及真实输出的完整兼容闭环未过。
